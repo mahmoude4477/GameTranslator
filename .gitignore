@@ -19,3 +19,4 @@ mac/GameTranslatorBinary
 # IDE & Agent local settings
 .claude/
 .gemini/
+mac/Helpers/

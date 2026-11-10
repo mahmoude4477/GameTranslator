@@ -1456,6 +1456,79 @@ final class AppState {
         }
     }
 
+    // MARK: - Chiaki Eşleştirme & Yönetim Servisleri
+
+    func findChiakiAppURL() -> URL? {
+        let candidates = [
+            Bundle.main.bundleURL.appendingPathComponent("Contents/Helpers/Chiaki.app"),
+            URL(fileURLWithPath: "/Applications/GameTranslator.app/Contents/Helpers/Chiaki.app"),
+            URL(fileURLWithPath: "/Applications/Chiaki.app"),
+            URL(fileURLWithPath: "/Applications/chiaki-ng.app"),
+            URL(fileURLWithPath: ("~/Applications/Chiaki.app" as NSString).expandingTildeInPath)
+        ]
+        return candidates.first { FileManager.default.fileExists(atPath: $0.path) }
+    }
+
+    func openChiakiGUI() {
+        if let appURL = findChiakiAppURL() {
+            let config = NSWorkspace.OpenConfiguration()
+            config.activates = true
+            NSWorkspace.shared.openApplication(at: appURL, configuration: config) { _, err in
+                if let err = err {
+                    DispatchQueue.main.async {
+                        self.ps5Error = "Chiaki başlatılamadı: \(err.localizedDescription)"
+                    }
+                }
+            }
+        } else {
+            self.ps5Error = "Dahili Chiaki motoru bulunamadı. Lütfen GameTranslator'ın tam paketini kullandığınızdan emin olun."
+        }
+    }
+
+    func checkChiakiIsRegistered() -> Bool {
+        let plistPath = ("~/Library/Preferences/com.chiaki.Chiaki.plist" as NSString).expandingTildeInPath
+        if let data = try? Data(contentsOf: URL(fileURLWithPath: plistPath)),
+           let dict = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any] {
+            if let size = dict["registered_hosts.size"] as? Int, size > 0 {
+                return true
+            }
+            if dict["registered_hosts.1.server_nickname"] != nil || dict["registered_hosts.1.rp_regist_key"] != nil {
+                return true
+            }
+        }
+        return false
+    }
+
+    func getChiakiRegisteredNickname() -> String? {
+        let plistPath = ("~/Library/Preferences/com.chiaki.Chiaki.plist" as NSString).expandingTildeInPath
+        if let data = try? Data(contentsOf: URL(fileURLWithPath: plistPath)),
+           let dict = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any] {
+            if let nick = dict["registered_hosts.1.server_nickname"] as? String, !nick.isEmpty {
+                return nick
+            }
+        }
+        return nil
+    }
+
+    func checkAndVerifyPairing() {
+        if checkChiakiIsRegistered() {
+            self.ps5Paired = true
+            self.ps5Connected = true
+            self.psnLinked = true
+            UserDefaults.standard.set(true, forKey: "gt_ps5_paired")
+            self.ps5SuccessMessage = "✓ PS5 Konsolu Chiaki ile Başarıyla Eşleşti!"
+            self.ps5Error = nil
+            if self.ps5Host.isEmpty {
+                self.ps5Host = UserDefaults.standard.string(forKey: "gt_ps5_host") ?? "192.168.1.109"
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                self.setupStep = 3
+            }
+        } else {
+            self.ps5Error = "Chiaki'de henüz kayıtlı bir konsol bulunamadı. Lütfen 'Chiaki'yi Başlat & Eşleştir' butonuna basıp konsolunuzu Chiaki'ye kaydedin."
+        }
+    }
+
 
     
     // MARK: - Chiaki & Remote Play Streaming & Live OCR
@@ -1584,11 +1657,13 @@ final class AppState {
 
         syncChiakiConfig(cx: cx, cy: cy)
 
-        let host = ps5Host.isEmpty ? (UserDefaults.standard.string(forKey: "gt_ps5_host") ?? "192.168.1.108") : ps5Host
+        let host = ps5Host.isEmpty ? (UserDefaults.standard.string(forKey: "gt_ps5_host") ?? "192.168.1.109") : ps5Host
+        let nick = getChiakiRegisteredNickname() ?? "PS5-sefflex"
         let chiakiCandidates = [
+            Bundle.main.bundlePath + "/Contents/Helpers/Chiaki.app/Contents/MacOS/chiaki",
+            "/Applications/GameTranslator.app/Contents/Helpers/Chiaki.app/Contents/MacOS/chiaki",
             "/Applications/Chiaki.app/Contents/MacOS/chiaki",
-            "/Applications/chiaki-ng.app/Contents/MacOS/chiaki",
-            Bundle.main.bundlePath + "/Contents/Helpers/Chiaki.app/Contents/MacOS/chiaki"
+            "/Applications/chiaki-ng.app/Contents/MacOS/chiaki"
         ]
         
         var chiakiPath: String? = nil
@@ -1613,7 +1688,7 @@ final class AppState {
                 p.arguments = [
                     "--qwindowgeometry", geom,
                     "--exit-app-on-stream-exit",
-                    "stream", "PS5-sefflex", host
+                    "stream", nick, host
                 ]
                 try? p.run()
                 self.streamProcess = p
@@ -2004,12 +2079,14 @@ final class AppState {
         server.start()
         syncStyleToTV()
         syncChiakiConfig()
-        if psnLinked && ps5Paired {
+        if ps5Paired || checkChiakiIsRegistered() {
+            ps5Paired = true
+            psnLinked = true
             showSetup = false
             isOnboarded = true
         } else {
             showSetup = true
-            setupStep = !psnLinked ? 1 : (!ps5Paired ? 3 : 4)
+            setupStep = 1
         }
     }
     
@@ -2042,11 +2119,13 @@ final class AppState {
     }
     
     func toggle() {
-        if !psnLinked {
+        if !ps5Paired && !checkChiakiIsRegistered() {
             setupStep = 2
             showSetup = true
             return
         }
+        ps5Paired = true
+        psnLinked = true
         isRunning.toggle()
         if isRunning {
             ps5Connected = true
@@ -2358,11 +2437,11 @@ struct MainWindowView: View {
                     .font(.system(size: 11.5, weight: .semibold))
                     .foregroundStyle(Color.white.opacity(0.9))
                 Spacer()
-                Text(state.ps5Paired ? "Eşleşti (\(state.ps5Host.isEmpty ? "192.168.1.108" : state.ps5Host))" : "Eşleşmedi")
+                Text(state.ps5Paired ? "Eşleşti (\(state.ps5Host.isEmpty ? "192.168.1.109" : state.ps5Host))" : "Eşleşmedi")
                     .font(.system(size: 10))
                     .foregroundStyle(state.ps5Paired ? Color.white.opacity(0.85) : Color.white.opacity(0.45))
                 Button(state.ps5Paired ? "Ayarla" : "Eşle") {
-                    state.setupStep = 3
+                    state.setupStep = 2
                     state.showSetup = true
                 }
                 .font(.system(size: 9, weight: .medium))
@@ -2386,7 +2465,7 @@ struct MainWindowView: View {
                     .font(.system(size: 10))
                     .foregroundStyle(state.tvConnected ? Color.white.opacity(0.85) : Color(hex: "#FF9F0A"))
                 Button(state.tvConnected ? "Değiştir" : "Ayarla") {
-                    state.setupStep = 4
+                    state.setupStep = 3
                     state.showSetup = true
                 }
                 .font(.system(size: 9, weight: .medium))
@@ -3359,10 +3438,9 @@ struct SetupWizardView: View {
                 VStack(spacing: 16) {
                     switch state.setupStep {
                     case 1: step1Welcome
-                    case 2: step2SecondAccount
-                    case 3: step3Console
-                    case 4: step4TV
-                    case 5: step5TestAndFinish
+                    case 2: step2ConsoleAndPairing
+                    case 3: step4TV
+                    case 4: step5TestAndFinish
                     default: step1Welcome
                     }
                 }
@@ -3395,14 +3473,14 @@ struct SetupWizardView: View {
             }
             Spacer()
             HStack(spacing: 6) {
-                Text("Adım \(state.setupStep) / 5")
+                Text("Adım \(state.setupStep) / 4")
                     .font(.system(size: 11, weight: .bold, design: .monospaced))
                     .foregroundStyle(Color(hex: "#38BDF8"))
                     .padding(.horizontal, 9)
                     .padding(.vertical, 3)
                     .background(Color(hex: "#0A84FF").opacity(0.15), in: Capsule())
                 
-                if state.psnLinked || state.bypassSetup {
+                if state.ps5Paired || state.bypassSetup {
                     Button {
                         state.showSetup = false
                     } label: {
@@ -3420,7 +3498,7 @@ struct SetupWizardView: View {
 
     private var stepProgressBar: some View {
         HStack(spacing: 8) {
-            ForEach(1...5, id: \.self) { step in
+            ForEach(1...4, id: \.self) { step in
                 Button {
                     state.setupStep = step
                 } label: {
@@ -3443,10 +3521,9 @@ struct SetupWizardView: View {
     private func stepTitle(for step: Int) -> String {
         switch step {
         case 1: "1. Başlangıç"
-        case 2: "2. İkinci Hesap"
-        case 3: "3. PS5 Konsolu"
-        case 4: "4. Akıllı TV"
-        case 5: "5. Test & Bitti"
+        case 2: "2. PS5 Konsolu"
+        case 3: "3. Akıllı TV"
+        case 4: "4. Test & Başla"
         default: ""
         }
     }
@@ -3501,155 +3578,220 @@ struct SetupWizardView: View {
         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.white.opacity(0.08), lineWidth: 1))
     }
 
-    // ADIM 2: İkinci Hesap & PSN Girişi
-    private var step2SecondAccount: some View {
+    // ADIM 2: PS5 Konsolu & Chiaki Eşleştirme (Tek Seferlik)
+    private var step2ConsoleAndPairing: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 12) {
                 ZStack {
-                    Circle().fill(Color(hex: "#38BDF8").opacity(0.2)).frame(width: 44, height: 44)
-                    Image(systemName: "person.2.fill")
-                        .font(.system(size: 18))
-                        .foregroundStyle(Color(hex: "#38BDF8"))
+                    Circle().fill(Color(hex: "#0A84FF").opacity(0.2)).frame(width: 44, height: 44)
+                    Image(systemName: "gamecontroller.fill")
+                        .font(.system(size: 20))
+                        .foregroundStyle(Color(hex: "#0A84FF"))
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("İkinci PSN Hesabı Girişi")
+                    Text("PlayStation 5 Konsol Eşleştirme (Tek Seferlik)")
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(Color.white)
-                    Text("GameTranslator oyunu Remote Play ile izler. İkinci hesap sayesinde ana hesabınızın kumandası hiç kapanmaz.")
+                    Text("PS5 görüntüsünü Mac'e aktarmak için dahili Chiaki motorunu eşleştirin.")
                         .font(.system(size: 11.5))
                         .foregroundStyle(Color.white.opacity(0.7))
                 }
             }
 
+            // Bilgilendirme Kartı: Chiaki Motoru & Tek Seferlik Otomasyon
             VStack(alignment: .leading, spacing: 8) {
-                numberedStep(num: "1", text: "playstation.com adresinden farklı bir e-posta ile ücretsiz bir 2. PSN hesabı açın.")
-                numberedStep(num: "2", text: "PS5'inizde 'Kullanıcı Ekle' deyip bu 2. hesapla bir kez giriş yapın.")
-                numberedStep(num: "3", text: "Yeni kullanıcıdayken Ayarlar › Sistem › Uzaktan Oynatma'yı açın.")
-                numberedStep(num: "4", text: "Ana kullanıcınıza geri dönün. Bu işlemi yalnızca 1 kez yaparsınız.")
+                HStack(alignment: .top, spacing: 8) {
+                    Text("💡").font(.system(size: 16))
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("Bunu Kurmanız / Eşlemeniz Neden Gerekiyor?")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundStyle(Color.white)
+                        Text("GameTranslator, PS5 oyun görüntüsünü ultra düşük gecikmeyle yakalamak için dahili Chiaki Remote Play motorunu kullanır. Bu eşleştirme yalnızca İLK KURULUMDA BİR KEZ yapılır. TV kumandanızın kopmaması için PS5'te ikinci bir yan hesap açık olmalıdır.")
+                            .font(.system(size: 10.5))
+                            .foregroundStyle(Color.white.opacity(0.75))
+                            .lineSpacing(2)
+                    }
+                }
+                
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("✨ Tam Otomasyon:")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundStyle(Color(hex: "#38BDF8"))
+                    Text("• Bir kez eşleştikten sonra bir daha asla PIN kodu veya hesap girmeniz gerekmez.")
+                        .font(.system(size: 10))
+                        .foregroundStyle(Color.white.opacity(0.85))
+                    Text("• Ana ekrandan 'Çeviriyi Başlat' dediğiniz an bağlantı ve Chiaki otomatik açılır.")
+                        .font(.system(size: 10))
+                        .foregroundStyle(Color.white.opacity(0.85))
+                    Text("• 'Çeviriyi Durdur' dediğinizde bağlantı ve Chiaki otomatik kapatılır!")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(Color(hex: "#10B981"))
+                }
+                .padding(9)
+                .background(Color.white.opacity(0.05), in: RoundedRectangle(cornerRadius: 6))
+            }
+            .padding(12)
+            .background(Color.black.opacity(0.35), in: RoundedRectangle(cornerRadius: 8))
+
+            // Adımlar
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Eşleştirme Adımları (1 Dakika):")
+                    .font(.system(size: 11.5, weight: .bold))
+                    .foregroundStyle(Color.white)
+                numberedStep(num: "1", text: "PS5'te 2. kullanıcıdayken Ayarlar › Sistem › Uzaktan Oynatma bölümüne gidin.")
+                numberedStep(num: "2", text: "'Uzaktan Oynatmayı Etkinleştir'i açın ve 'Cihaz Eşleştir'e tıklayın.")
+                numberedStep(num: "3", text: "Aşağıdaki '🎮 Chiaki'yi Başlat & Eşleştir' butonuna basın, açılan pencerede PS5'e tıklayıp PSN Login ve 8 haneli PIN'i girin.")
             }
             .padding(12)
             .background(Color.black.opacity(0.25), in: RoundedRectangle(cornerRadius: 8))
 
-            // Gerçek PSN Bağlantı Alanı
-            VStack(alignment: .leading, spacing: 12) {
-                Text("PlayStation Network Bağlantısı:")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(Color.white)
-
-                if state.psnLinked {
+            // Durum / Eşleşme Alanı
+            VStack(alignment: .leading, spacing: 10) {
+                if state.ps5Paired || state.checkChiakiIsRegistered() {
                     HStack(spacing: 10) {
                         Image(systemName: "checkmark.circle.fill")
-                            .font(.system(size: 20))
+                            .font(.system(size: 22))
                             .foregroundStyle(Color.green)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("PlayStation Network Hesabı Başarıyla Bağlandı")
-                                .font(.system(size: 12, weight: .bold))
+                            Text("✓ PS5 Konsolu Başarıyla Eşleşti!")
+                                .font(.system(size: 13, weight: .bold))
                                 .foregroundStyle(Color.green)
-                            Text("Hesap Kimliği (PSN ID): \(state.psnAccountId ?? "Bağlı")")
-                                .font(.system(size: 10.5, design: .monospaced))
-                                .foregroundStyle(Color.white.opacity(0.7))
+                            Text("IP: \(state.ps5Host.isEmpty ? "192.168.1.109" : state.ps5Host) — 'Devam Et →' butonuna basarak Akıllı TV adımına geçin.")
+                                .font(.system(size: 10.5))
+                                .foregroundStyle(Color.white.opacity(0.75))
                         }
                         Spacer()
-                        Button("Çıkış Yap") {
-                            state.psnLinked = false
-                            state.psnAccountId = nil
-                            state.psnAccountBase64 = nil
-                            state.psnRedirectInput = ""
-                        }
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundStyle(Color.red.opacity(0.9))
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
-                        .background(Color.red.opacity(0.12), in: RoundedRectangle(cornerRadius: 5))
-                        .buttonStyle(.plain)
                     }
                     .padding(12)
                     .background(Color.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.green.opacity(0.3), lineWidth: 1))
                 } else {
+                    // IP Girişi & Ağ Taraması
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("PS5 IP Adresi (Yerel Ağ):")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(Color.white.opacity(0.8))
+                        HStack {
+                            TextField("örn: 192.168.1.109", text: $state.ps5Host)
+                                .textFieldStyle(.plain)
+                                .padding(8)
+                                .background(Color.black.opacity(0.4), in: RoundedRectangle(cornerRadius: 6))
+                                .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.white.opacity(0.15), lineWidth: 1))
+                            
+                            Button(state.isSearchingPS5 ? "Aranıyor..." : "Ağda Tara") {
+                                Task { await state.scanLocalPS5() }
+                            }
+                            .font(.system(size: 11))
+                            .foregroundStyle(Color.white.opacity(0.85))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 6))
+                            .buttonStyle(.plain)
+                            .disabled(state.isSearchingPS5)
+                        }
+                    }
+
+                    // Eşleştirme Butonları
                     HStack(spacing: 10) {
-                        // Seçenek 1: Tarayıcıda yeni sekme aç
                         Button {
-                            NSWorkspace.shared.open(PSNAccount.authorizeURL)
+                            state.openChiakiGUI()
                         } label: {
                             HStack(spacing: 6) {
-                                Image(systemName: "safari.fill")
-                                Text("Sony Giriş Sayfasını Aç (Yeni Sekme)")
+                                Image(systemName: "play.circle.fill")
+                                Text("🎮 Chiaki'yi Başlat & Eşleştir")
                             }
-                            .font(.system(size: 11.5, weight: .semibold))
+                            .font(.system(size: 12, weight: .bold))
                             .foregroundStyle(Color.white)
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 9)
+                            .frame(maxWidth: .infinity, minHeight: 36)
                             .background(Color(hex: "#0A84FF"), in: RoundedRectangle(cornerRadius: 6))
                         }
                         .buttonStyle(.plain)
 
-                        // Seçenek 2: Uygulama içi pencere
                         Button {
-                            state.showInAppPSNLogin = true
+                            state.checkAndVerifyPairing()
                         } label: {
                             HStack(spacing: 6) {
-                                Image(systemName: "macwindow")
-                                Text("Uygulama İçi Giriş Yap")
+                                Image(systemName: "checkmark.shield.fill")
+                                Text("Eşleştirmeyi Doğrula ➔")
                             }
-                            .font(.system(size: 11.5, weight: .medium))
-                            .foregroundStyle(Color.white.opacity(0.9))
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 9)
-                            .background(Color.white.opacity(0.1), in: RoundedRectangle(cornerRadius: 6))
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(Color.white)
+                            .frame(maxWidth: .infinity, minHeight: 36)
+                            .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 6))
                         }
                         .buttonStyle(.plain)
                     }
 
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Tarayıcıda giriş yaptıktan sonra açılan sayfanın adresini (URL) veya kodunu yapıştırın:")
-                            .font(.system(size: 11))
-                            .foregroundStyle(Color.white.opacity(0.7))
+                    if let err = state.ps5Error {
+                        Text(err)
+                            .font(.system(size: 10.5))
+                            .foregroundStyle(Color(hex: "#FF453A"))
+                    }
+                    if let success = state.ps5SuccessMessage {
+                        Text(success)
+                            .font(.system(size: 10.5))
+                            .foregroundStyle(Color.green)
+                    }
 
-                        HStack(spacing: 8) {
-                            TextField("https://remoteplay.dl.playstation.net/remoteplay/redirect?code=...", text: $state.psnRedirectInput)
-                                .textFieldStyle(.plain)
-                                .font(.system(size: 11, design: .monospaced))
-                                .padding(8)
-                                .background(Color.black.opacity(0.4), in: RoundedRectangle(cornerRadius: 6))
-                                .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.white.opacity(0.15), lineWidth: 1))
-
-                            Button {
-                                Task {
-                                    await state.processPSNRedirect(state.psnRedirectInput)
+                    // İsteğe Bağlı Manuel PIN & PSN Girişi
+                    DisclosureGroup("İsteğe Bağlı: Uygulama İçi Doğrudan Kod ile Eşle") {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(spacing: 10) {
+                                Button {
+                                    state.showInAppPSNLogin = true
+                                } label: {
+                                    Text("Sony Giriş Penceresini Aç")
+                                        .font(.system(size: 10.5, weight: .medium))
+                                        .foregroundStyle(Color.white)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 5)
+                                        .background(Color(hex: "#0A84FF"), in: RoundedRectangle(cornerRadius: 5))
                                 }
-                            } label: {
-                                HStack(spacing: 5) {
-                                    if state.isConnectingPSN {
-                                        ProgressView().controlSize(.small)
-                                    } else {
-                                        Image(systemName: "link")
-                                    }
-                                    Text("Bağlantıyı Doğrula")
+                                .buttonStyle(.plain)
+
+                                if state.psnLinked {
+                                    Text("✓ PSN Bağlı")
+                                        .font(.system(size: 10.5, weight: .bold))
+                                        .foregroundStyle(Color.green)
+                                }
+                            }
+                            
+                            HStack {
+                                TextField("8 Haneli PIN Kodu", text: $state.ps5Pin)
+                                    .textFieldStyle(.plain)
+                                    .font(.system(size: 12, weight: .bold, design: .monospaced))
+                                    .padding(6)
+                                    .background(Color.black.opacity(0.4), in: RoundedRectangle(cornerRadius: 5))
+                                
+                                Button("Eşle") {
+                                    state.pairPS5()
                                 }
                                 .font(.system(size: 11, weight: .semibold))
                                 .foregroundStyle(Color.white)
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 8)
-                                .background(Color(hex: "#0A84FF"), in: RoundedRectangle(cornerRadius: 6))
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(state.ps5Pin.filter(\.isNumber).count == 8 ? Color(hex: "#0A84FF") : Color.gray.opacity(0.4), in: RoundedRectangle(cornerRadius: 5))
+                                .buttonStyle(.plain)
+                                .disabled(state.ps5Pin.filter(\.isNumber).count != 8)
                             }
-                            .buttonStyle(.plain)
-                            .disabled(state.psnRedirectInput.trimmingCharacters(in: .whitespaces).isEmpty || state.isConnectingPSN)
                         }
-
-                        if let err = state.psnError {
-                            Text(err)
-                                .font(.system(size: 10.5))
-                                .foregroundStyle(Color(hex: "#FF453A"))
-                                .padding(.top, 2)
-                        }
+                        .padding(.top, 6)
                     }
-                    .padding(10)
-                    .background(Color.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 6))
+                    .font(.system(size: 10.5))
+                    .foregroundStyle(Color.white.opacity(0.6))
                 }
             }
             .padding(12)
             .background(Color.black.opacity(0.25), in: RoundedRectangle(cornerRadius: 8))
+            .onAppear {
+                if state.ps5Host.isEmpty && !state.ps5Paired {
+                    Task { await state.scanLocalPS5() }
+                }
+                if state.checkChiakiIsRegistered() {
+                    state.ps5Paired = true
+                    state.psnLinked = true
+                }
+            }
         }
         .sheet(isPresented: $state.showInAppPSNLogin) {
             VStack(spacing: 0) {
@@ -3694,147 +3836,6 @@ struct SetupWizardView: View {
                 .font(.system(size: 11))
                 .foregroundStyle(Color.white.opacity(0.8))
             Spacer()
-        }
-    }
-
-    // ADIM 3: PS5 Konsol Eşleştirme
-    private var step3Console: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(spacing: 12) {
-                ZStack {
-                    Circle().fill(Color(hex: "#34C759").opacity(0.2)).frame(width: 44, height: 44)
-                    Image(systemName: "gamecontroller.fill")
-                        .font(.system(size: 18))
-                        .foregroundStyle(Color(hex: "#34C759"))
-                }
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("PS5 Konsolunuzu Eşleştirin")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(Color.white)
-                    Text("PS5'te Ayarlar › Sistem › Uzaktan Oynatma › Cihaz Eşle yolunu açın.")
-                        .font(.system(size: 11.5))
-                        .foregroundStyle(Color.white.opacity(0.7))
-                }
-            }
-
-            VStack(alignment: .leading, spacing: 10) {
-                if state.ps5Paired {
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack(spacing: 10) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 20))
-                                .foregroundStyle(Color.green)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("PS5 Başarıyla Eşleşti")
-                                    .font(.system(size: 12, weight: .bold))
-                                    .foregroundStyle(Color.green)
-                                Text("IP: \(state.ps5Host.isEmpty ? "192.168.1.108" : state.ps5Host) (1080p 60 FPS)")
-                                    .font(.system(size: 10.5))
-                                    .foregroundStyle(Color.white.opacity(0.7))
-                            }
-                            Spacer()
-                            Button("Yeniden Eşle") {
-                                state.ps5Paired = false
-                                state.ps5Connected = false
-                            }
-                            .font(.system(size: 11))
-                            .foregroundStyle(Color.white.opacity(0.6))
-                            .buttonStyle(.plain)
-                        }
-
-                        Text("✓ PS5 ekranının kod sayfasından otomatik olarak çıkması, konsolun bilgisayarınızı başarıyla kaydettiğini gösterir. Tekrar kod girmenize gerek yoktur. 'Devam Et →' butonuna basarak Akıllı TV adımına geçin.")
-                            .font(.system(size: 10.5))
-                            .foregroundStyle(Color.white.opacity(0.75))
-                            .lineSpacing(3)
-                    }
-                    .padding(12)
-                    .background(Color.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
-                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.green.opacity(0.3), lineWidth: 1))
-                } else {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("PS5 IP Adresi (Yerel Ağ):")
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundStyle(Color.white.opacity(0.8))
-                        HStack {
-                            TextField("örn: 192.168.1.100", text: $state.ps5Host)
-                                .textFieldStyle(.plain)
-                                .padding(8)
-                                .background(Color.black.opacity(0.4), in: RoundedRectangle(cornerRadius: 6))
-                                .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.white.opacity(0.15), lineWidth: 1))
-                            
-                            Button(state.isSearchingPS5 ? "Aranıyor..." : "Ağda Tara") {
-                                Task { await state.scanLocalPS5() }
-                            }
-                            .font(.system(size: 11))
-                            .foregroundStyle(Color.white.opacity(0.85))
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                            .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 6))
-                            .buttonStyle(.plain)
-                            .disabled(state.isSearchingPS5)
-                        }
-                    }
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("PS5 Ekranındaki 8 Haneli Eşleşme PIN Kodu:")
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundStyle(Color.white.opacity(0.8))
-                        TextField("8 haneli PIN kodu", text: $state.ps5Pin)
-                            .font(.system(size: 14, weight: .bold, design: .monospaced))
-                            .textFieldStyle(.plain)
-                            .padding(8)
-                            .background(Color.black.opacity(0.4), in: RoundedRectangle(cornerRadius: 6))
-                            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.white.opacity(0.15), lineWidth: 1))
-                    }
-
-                    Button {
-                        state.pairPS5()
-                    } label: {
-                        HStack(spacing: 8) {
-                            if state.isPairingPS5 {
-                                ProgressView()
-                                    .scaleEffect(0.7)
-                                    .frame(width: 14, height: 14)
-                                Text("PS5 Eşleştiriliyor (Paket Gönderiliyor)...")
-                            } else {
-                                Image(systemName: "link.badge.plus")
-                                Text("Konsolu Eşle ve Doğrula")
-                            }
-                        }
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(Color.white)
-                        .frame(maxWidth: .infinity, minHeight: 34)
-                        .background(state.ps5Pin.filter(\.isNumber).count == 8 && !state.isPairingPS5 ? Color(hex: "#0A84FF") : Color.gray.opacity(0.4), in: RoundedRectangle(cornerRadius: 6))
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(state.ps5Pin.filter(\.isNumber).count != 8 || state.isPairingPS5)
-
-                    if let success = state.ps5SuccessMessage {
-                        HStack(spacing: 6) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 12))
-                                .foregroundStyle(Color.green)
-                            Text(success)
-                                .font(.system(size: 11, weight: .semibold))
-                                .foregroundStyle(Color.green)
-                        }
-                        .padding(.vertical, 2)
-                    }
-
-                    if let err = state.ps5Error {
-                        Text(err)
-                            .font(.system(size: 10.5))
-                            .foregroundStyle(Color(hex: "#FF453A"))
-                    }
-                }
-            }
-            .padding(12)
-            .background(Color.black.opacity(0.25), in: RoundedRectangle(cornerRadius: 8))
-            .onAppear {
-                if state.ps5Host.isEmpty && !state.ps5Paired {
-                    Task { await state.scanLocalPS5() }
-                }
-            }
         }
     }
 
@@ -4339,7 +4340,7 @@ struct SetupWizardView: View {
                 .buttonStyle(.plain)
             }
 
-            if !state.psnLinked {
+            if !state.ps5Paired {
                 Button("Tasarımı İncele (Geliştirici Modu)") {
                     state.bypassSetup = true
                     state.showSetup = false
@@ -4362,7 +4363,7 @@ struct SetupWizardView: View {
 
             Spacer()
 
-            if state.setupStep < 5 {
+            if state.setupStep < 4 {
                 Button("Devam Et →") {
                     state.setupStep += 1
                 }
