@@ -51,22 +51,40 @@ public sealed class LiveServices : IAppServices
         if (tv.Brand == TvBrand.AndroidTv) return new TvPairing("", true);
         if (tv.Brand == TvBrand.Samsung)
         {
-            using var samsung = new SamsungClient(tv, key);
-            var token = await samsung.ConnectAsync();
-            try { await samsung.LaunchAsync(SamsungClient.AppId, new Dictionary<string, string> { ["server"] = server }); }
-            catch (Exception) { /* TV uygulaması bilgisayarı kendisi de bulabilir */ }
-            return new TvPairing(token, true);
+            try
+            {
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                using var samsung = new SamsungClient(tv, key);
+                var token = await samsung.ConnectAsync(cts.Token);
+                try { await samsung.LaunchAsync(SamsungClient.AppId, new Dictionary<string, string> { ["server"] = server }); }
+                catch (Exception) { /* TV uygulaması bilgisayarı kendisi de bulabilir */ }
+                return new TvPairing(token, true);
+            }
+            catch (Exception)
+            {
+                // TV kapalı, IP farklı veya kumanda izni henüz verilmemiş olsa bile
+                // TV uygulamasının (veya tarayıcının) bilgisayara bağlanabilmesi için eşleşmeyi tamamla
+                return new TvPairing(key ?? "", false);
+            }
         }
-        using var client = new SsapClient(tv, key);
-        var newKey = await client.ConnectAsync();
         try
         {
-            await client.LaunchAsync(AppController.TvAppId, new Dictionary<string, string> { ["server"] = server });
-            return new TvPairing(newKey, true);
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            using var client = new SsapClient(tv, key);
+            var newKey = await client.ConnectAsync(cts.Token);
+            try
+            {
+                await client.LaunchAsync(AppController.TvAppId, new Dictionary<string, string> { ["server"] = server });
+                return new TvPairing(newKey, true);
+            }
+            catch (Exception)
+            {
+                return new TvPairing(newKey, false);
+            }
         }
         catch (Exception)
         {
-            return new TvPairing(newKey, false);
+            return new TvPairing(key ?? "", false);
         }
     }
 

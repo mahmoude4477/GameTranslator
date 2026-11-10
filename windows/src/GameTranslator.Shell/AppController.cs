@@ -253,18 +253,30 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
 
     public async Task PairAsync(LgTv target)
     {
-        await StartServerAsync();
-        var pairing = await services.PairTvAsync(target, store.Load<string>(StoreKeys.TvKey), ServerAddress(target));
+        try { await StartServerAsync(); } catch { }
+        TvPairing pairing;
+        try
+        {
+            pairing = await services.PairTvAsync(target, store.Load<string>(StoreKeys.TvKey), ServerAddress(target));
+        }
+        catch
+        {
+            pairing = new TvPairing("", false);
+        }
         if (tv?.Brand != target.Brand || (target.Brand != TvBrand.AndroidTv && tv?.Host != target.Host))
             store.Remove(StoreKeys.TvAppVersion);
         tv = target;
         store.Save(StoreKeys.Tv, target);
-        store.Save(StoreKeys.TvKey, pairing.Key);
+        if (!string.IsNullOrEmpty(pairing.Key))
+            store.Save(StoreKeys.TvKey, pairing.Key);
         tvAppMissing = !pairing.Launched;
         Changed(nameof(Tv), nameof(CanAdvance), nameof(CanInstallTvApp), nameof(TvStatusText), nameof(TvTone));
-        if (target.Brand == TvBrand.Lg) await RefreshTvAppAsync();
-        // Samsung girişi ya da Android onayı dakikalar sürebilir; eşleşme beklemesin.
-        else _ = RefreshTvAppAsync();
+        try
+        {
+            if (target.Brand == TvBrand.Lg) await RefreshTvAppAsync();
+            else _ = RefreshTvAppAsync();
+        }
+        catch { }
     }
 
     // --- TV uygulamasını kurma ---

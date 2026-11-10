@@ -209,12 +209,17 @@ public partial class OnboardingView : UserControl
     // ==========================================
     // Adım 4: Akıllı TV Platform Seçimi & Eşleştirme
     // ==========================================
-    private void OnSelectTvPc(object sender, RoutedEventArgs e)
+    private async void OnSelectTvPc(object sender, RoutedEventArgs e)
     {
         selectedTvPlatform = "PC";
         UpdateTvPlatformSelection();
-        _ = controller.PairAsync(new LgTv("PC & OBS", "127.0.0.1", TvBrand.AndroidTv));
+        try
+        {
+            await controller.PairAsync(new LgTv("PC & OBS", "127.0.0.1", TvBrand.AndroidTv));
+        }
+        catch { }
         TvStatusFeedback.Text = "✓ Bilgisayar & OBS modu kaydedildi.";
+        TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
     }
 
     private void OnSelectTvSamsung(object sender, RoutedEventArgs e)
@@ -268,7 +273,14 @@ public partial class OnboardingView : UserControl
     private async void OnSaveSamsung(object sender, RoutedEventArgs e)
     {
         var host = SamsungHostInput.Text.Trim();
-        await controller.PairAsync(new LgTv("Samsung Smart TV", host, TvBrand.Samsung));
+        if (string.IsNullOrWhiteSpace(host)) return;
+        TvStatusFeedback.Text = $"Samsung TV ({host}) kaydediliyor...";
+        TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
+        try
+        {
+            await controller.PairAsync(new LgTv("Samsung Smart TV", host, TvBrand.Samsung));
+        }
+        catch { }
         TvStatusFeedback.Text = $"✓ Samsung TV kaydedildi ({host}). TV'nizde GameTranslator uygulamasını açın.";
         TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
     }
@@ -276,7 +288,14 @@ public partial class OnboardingView : UserControl
     private async void OnSaveLg(object sender, RoutedEventArgs e)
     {
         var host = LgHostInput.Text.Trim();
-        await controller.PairAsync(new LgTv("LG webOS TV", host, TvBrand.Lg));
+        if (string.IsNullOrWhiteSpace(host)) return;
+        TvStatusFeedback.Text = $"LG TV ({host}) kaydediliyor...";
+        TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
+        try
+        {
+            await controller.PairAsync(new LgTv("LG webOS TV", host, TvBrand.Lg));
+        }
+        catch { }
         TvStatusFeedback.Text = $"✓ LG webOS TV kaydedildi ({host}). TV'nizde GameTranslator uygulamasını açın.";
         TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
     }
@@ -284,7 +303,14 @@ public partial class OnboardingView : UserControl
     private async void OnSaveAndroid(object sender, RoutedEventArgs e)
     {
         var host = AndroidHostInput.Text.Trim();
-        await controller.PairAsync(new LgTv("Android TV", host, TvBrand.AndroidTv));
+        if (string.IsNullOrWhiteSpace(host)) return;
+        TvStatusFeedback.Text = $"Android TV ({host}) kaydediliyor...";
+        TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
+        try
+        {
+            await controller.PairAsync(new LgTv("Android TV", host, TvBrand.AndroidTv));
+        }
+        catch { }
         TvStatusFeedback.Text = $"✓ Android TV kaydedildi ({host}). TV'nizde GameTranslator uygulamasını açın.";
         TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
     }
