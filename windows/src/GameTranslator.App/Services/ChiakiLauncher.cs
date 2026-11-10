@@ -79,6 +79,7 @@ public static class ChiakiLauncher
             if (exePath == null) return false;
 
             var dir = Path.GetDirectoryName(exePath) ?? string.Empty;
+            StartupGuard.UnblockFiles(dir);
             var psi = new ProcessStartInfo
             {
                 FileName = exePath,
@@ -127,6 +128,7 @@ public static class ChiakiLauncher
             if (exePath == null) return false;
 
             var dir = Path.GetDirectoryName(exePath) ?? string.Empty;
+            StartupGuard.UnblockFiles(dir);
             var psi = new ProcessStartInfo
             {
                 FileName = exePath,
@@ -207,6 +209,44 @@ public static class ChiakiLauncher
         catch { }
 
         return false;
+    }
+
+    /// <summary>
+    /// Chiaki'nin INI dosyalarında daha önce girilmiş olan host IP'sini okur.
+    /// </summary>
+    public static string? GetSavedHost()
+    {
+        try
+        {
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            if (string.IsNullOrEmpty(appData)) return null;
+
+            foreach (var folder in new[] { "chiaki-ng", "Chiaki" })
+            {
+                var iniPath = Path.Combine(appData, folder, $"{folder}.ini");
+                if (File.Exists(iniPath))
+                {
+                    var lines = File.ReadAllLines(iniPath);
+                    foreach (var line in lines)
+                    {
+                        if (line.Contains("\\host="))
+                        {
+                            var parts = line.Split('=', 2);
+                            if (parts.Length == 2 && !string.IsNullOrWhiteSpace(parts[1]))
+                            {
+                                var h = parts[1].Trim();
+                                if (System.Net.IPAddress.TryParse(h, out _))
+                                {
+                                    return h;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch { }
+        return null;
     }
 
     /// <summary>

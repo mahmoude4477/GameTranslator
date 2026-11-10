@@ -40,6 +40,19 @@ jobs:
           Remove-Item -Path "release-win/chiaki_temp" -Recurse -Force
           Remove-Item "chiaki.zip"
 
+          Write-Host "Unblocking all files to prevent Windows 11 Smart App Control 0xc0e90002..."
+          Get-ChildItem -Path "release-win" -Recurse | Unblock-File -ErrorAction SilentlyContinue
+
+          $launcherBat = @"
+@echo off
+chcp 65001 >nul
+title GameTranslator
+cd /d "%~dp0"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-ChildItem -Path '%~dp0' -Recurse | Unblock-File" >nul 2>&1
+start "" "%~dp0GameTranslator.exe"
+"@
+          Set-Content -Path "release-win/GameTranslator-Baslat.bat" -Value $launcherBat -Encoding UTF8
+
           Compress-Archive -Path release-win/* -DestinationPath GameTranslator-Windows-x64.zip
 
       - name: Upload Artifact

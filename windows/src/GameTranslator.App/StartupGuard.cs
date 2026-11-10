@@ -13,6 +13,31 @@ namespace GameTranslator.App;
 /// </summary>
 internal static class StartupGuard
 {
+    [System.Runtime.InteropServices.DllImport("kernel32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode, SetLastError = true)]
+    [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
+    public static extern bool DeleteFile(string name);
+
+    /// <summary>
+    /// İnternetten indirilen zip'ten çıkarılan dosyaların Windows Smart App Control (0xc0e90002)
+    /// ve Mark-of-the-Web (Zone.Identifier) engeline takılmasını önlemek için alternate stream'i kaldırır.
+    /// </summary>
+    public static void UnblockFiles(string folder)
+    {
+        try
+        {
+            if (!Directory.Exists(folder)) return;
+            foreach (var file in Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    DeleteFile(file + ":Zone.Identifier");
+                }
+                catch { }
+            }
+        }
+        catch { }
+    }
+
     static bool Turkish => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "tr";
 
     static string LogPath =>

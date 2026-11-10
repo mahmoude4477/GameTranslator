@@ -76,6 +76,12 @@ public partial class OnboardingView : UserControl
 
         if (currentStep == 3 && PairStatusText != null)
         {
+            var savedHost = ChiakiLauncher.GetSavedHost();
+            if (!string.IsNullOrWhiteSpace(savedHost) && Ps5HostInput != null)
+            {
+                Ps5HostInput.Text = savedHost;
+            }
+
             var host = controller.Console?.Host ?? Ps5HostInput?.Text?.Trim();
             if (!string.IsNullOrWhiteSpace(host) && ChiakiLauncher.IsRegistered(host))
             {

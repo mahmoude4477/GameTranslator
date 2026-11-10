@@ -17,7 +17,8 @@ public static class ThemeManager
 
     public static void Apply(ResourceDictionary resources, bool? forceDark = null)
     {
-        var dark = forceDark ?? IsDarkTheme();
+        // GameTranslator bir oyun uygulamasıdır; her zaman modern ve şık Koyu Temayı (Dark Theme) kullanır.
+        var dark = forceDark ?? true;
         foreach (var (name, pair) in Tokens.Color)
         {
             var color = ToColor(pair.For(dark));
@@ -52,14 +53,13 @@ public static class ThemeManager
         SystemEvents.UserPreferenceChanged += (_, e) =>
         {
             if (e.Category == UserPreferenceCategory.General)
-                Application.Current.Dispatcher.Invoke(() => Apply(resources));
+                Application.Current.Dispatcher.Invoke(() => Apply(resources, true));
         };
     }
 
     public static bool IsDarkTheme()
     {
-        using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
-        return key?.GetValue("AppsUseLightTheme") is int light && light == 0;
+        return true;
     }
 
     private static Color ToColor(string hex)

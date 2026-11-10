@@ -14,6 +14,9 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        // İndirilen dosyalardaki Windows Smart App Control (0xc0e90002) ve Zone.Identifier engellerini otomatik kaldır
+        StartupGuard.UnblockFiles(AppContext.BaseDirectory);
+
         var renderFolder = e.Args is ["--render-screens", var folder] ? folder : null;
         // Eksik bir DLL, onu kullanan yöntem derlenirken hata verir. Bu yüzden denetim ve yakalama burada, uygulamanın
         // kendi türlerine dokunan kod ise ayrı yöntemde (Start) durur.
