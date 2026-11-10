@@ -82,7 +82,10 @@ fi
 
 # 5b. Embedded Chiaki Remote Play Motoru (Helpers)
 mkdir -p "$APP_DIR/Contents/Helpers"
-if [ -d "$DIR/Helpers/Chiaki.app" ]; then
+if [ -f "$DIR/Helpers/Chiaki.app.tar.gz" ]; then
+    echo "🎮 Dahili Chiaki.app motoru pakete ekleniyor..."
+    tar -xzf "$DIR/Helpers/Chiaki.app.tar.gz" -C "$APP_DIR/Contents/Helpers/"
+elif [ -d "$DIR/Helpers/Chiaki.app" ]; then
     echo "🎮 Dahili Chiaki.app motoru pakete ekleniyor..."
     cp -R "$DIR/Helpers/Chiaki.app" "$APP_DIR/Contents/Helpers/"
 fi
