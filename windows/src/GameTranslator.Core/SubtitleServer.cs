@@ -32,7 +32,8 @@ public sealed record SubtitleStyle(
     int BottomPercent = 7,
     SubtitlePlacement Placement = SubtitlePlacement.Cover,
     int Background = 72,
-    bool Bold = false);
+    bool Bold = false,
+    string Color = "#FFFFFF");
 
 /// <summary>Altyazıları TV'ye ileten taraf (gerçekte <see cref="SubtitleServer"/>).</summary>
 public interface ISubtitleSender
@@ -375,6 +376,7 @@ public sealed class SubtitleServer(int port = 8787) : ISubtitleSender, IDisposab
             ["bottomPercent"] = style.BottomPercent,
             ["fontSize"] = style.FontSize,
             ["placement"] = style.Placement.ToString().ToLowerInvariant(),
+            ["color"] = style.Color,
         });
 
     private static string Frame(string name, SortedDictionary<string, object> json) =>

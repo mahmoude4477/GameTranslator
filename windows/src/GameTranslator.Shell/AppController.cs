@@ -90,7 +90,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         tv = store.Load<LgTv>(StoreKeys.Tv);
         settings = settingsStore.Load();
         var ready = accountId is not null && console is not null && tv is not null && store.Load<string>(StoreKeys.TvKey) is not null;
-        step = ready ? OnboardingStep.Done : OnboardingStep.Welcome;
+        step = OnboardingStep.Done;
         server.ClientsChanged += OnClientsChanged;
     }
 
@@ -534,6 +534,11 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     }
 
     public Task WaitForModelAsync() => modelDownload ?? Task.CompletedTask;
+
+    public void SyncStyle()
+    {
+        server.SendStyle(settings.Style);
+    }
 
     public void SendTestSubtitle()
     {

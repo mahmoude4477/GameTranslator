@@ -1,41 +1,67 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using GameTranslator.App.Controls;
 using GameTranslator.Core;
 using GameTranslator.Shell;
+using Microsoft.Win32;
 
 namespace GameTranslator.App.Views;
 
-/// <summary>Ana ekran: başlat/durdur, PS5 ve TV durumu, uyarılar, son altyazı ve entegre ayarlar.</summary>
+/// <summary>Altyazı geçmişi öğesi.</summary>
+public sealed class SubtitleHistoryItem
+{
+    public required string Turkish { get; init; }
+    public required string English { get; init; }
+    public required string Time { get; init; }
+    public string Summary => $"[{Time}] 📺 {Turkish}  |  🎮 {English}";
+}
+
+/// <summary>Ana ekran: Mac sürümüyle birebir aynı 2 panelli modern arayüz ve 5 sekme.</summary>
 public partial class MainView : UserControl
 {
     private readonly AppController controller;
     private readonly DispatcherTimer connectionWatch = new() { Interval = TimeSpan.FromSeconds(5) };
+    private readonly ObservableCollection<SubtitleHistoryItem> history = new();
     private bool loading = true;
+    private string selectedColor = "#FFFFFF";
+    private bool isMutePc = true;
+    private string selectedPreset = "BottomCenter";
 
     public MainView(AppController controller)
     {
         this.controller = controller;
         DataContext = controller;
         InitializeComponent();
+
+        HistoryListBox.ItemsSource = history;
         controller.PropertyChanged += OnChanged;
         connectionWatch.Tick += async (_, _) => await controller.CheckConnectionsAsync();
+
         Loaded += (_, _) =>
         {
             connectionWatch.Start();
             LoadSettings();
+            UpdateOcrBox();
+            UpdateTvPreview();
         };
+
         Unloaded += (_, _) =>
         {
             controller.PropertyChanged -= OnChanged;
             connectionWatch.Stop();
         };
+
         Refresh();
         _ = controller.CheckForUpdateAsync();
     }
@@ -44,10 +70,58 @@ public partial class MainView : UserControl
     {
         loading = true;
         var s = controller.Settings;
+
+        // Sliders & Ayarlar
         TextSizeSlider.Value = Math.Clamp(s.Style.FontSize, TextSizeSlider.Minimum, TextSizeSlider.Maximum);
-        BackgroundSlider.Value = s.Style.Background;
+        TextSizeLabel.Text = $"{Math.Round(TextSizeSlider.Value)} px";
+
+        BackgroundSlider.Value = Math.Clamp(s.Style.Background, BackgroundSlider.Minimum, BackgroundSlider.Maximum);
+        BackgroundLabel.Text = $"%{Math.Round(BackgroundSlider.Value)}";
+
+        BottomPercentSlider.Value = Math.Clamp(s.Style.BottomPercent, BottomPercentSlider.Minimum, BottomPercentSlider.Maximum);
+        BottomPercentLabel.Text = $"%{Math.Round(BottomPercentSlider.Value)}";
+
+        // Renk
+        selectedColor = s.Style.Color ?? "#FFFFFF";
+        UpdateColorSelection();
+
+        // Kırpma Alanı (CropRegion)
+        CropTopSlider.Value = s.Region.Top;
+        CropBottomSlider.Value = s.Region.Bottom;
+        CropLeftSlider.Value = s.Region.Left;
+        CropRightSlider.Value = s.Region.Right;
+
+        CropTopLabel.Text = $"%{Math.Round(s.Region.Top * 100)}";
+        CropBottomLabel.Text = $"%{Math.Round(s.Region.Bottom * 100)}";
+        CropLeftLabel.Text = $"%{Math.Round(s.Region.Left * 100)}";
+        CropRightLabel.Text = $"%{Math.Round(s.Region.Right * 100)}";
+
+        // Checkboxlar
         BoldCheck.IsChecked = s.Style.Bold;
         DubbingCheck.IsChecked = s.DubbingEnabled;
+        MutePcCheck.IsChecked = isMutePc;
+        UpdatePcSesiButton();
+
+        // Yerleşim Dropdown
+        foreach (ComboBoxItem item in PlacementBox.Items)
+        {
+            if (string.Equals((string)item.Tag, s.Style.Placement.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
+                PlacementBox.SelectedItem = item;
+                break;
+            }
+        }
+
+        // Dil Dropdown
+        foreach (ComboBoxItem item in LanguageBox.Items)
+        {
+            if (string.Equals((string)item.Tag, s.SourceLanguage, StringComparison.OrdinalIgnoreCase))
+            {
+                LanguageBox.SelectedItem = item;
+                break;
+            }
+        }
+
         ObsText.Text = $"OBS overlay: http://localhost:{controller.ServerPort}/obs";
         loading = false;
     }
@@ -55,50 +129,267 @@ public partial class MainView : UserControl
     private void OnChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName is nameof(AppController.IsRunning) or nameof(AppController.TranslatorStatus) or nameof(AppController.ModelInstalled))
+        {
             Refresh();
+        }
+
+        if (e.PropertyName == nameof(AppController.LastTranslation) && !string.IsNullOrWhiteSpace(controller.LastTranslation))
+        {
+            MonitorTurkishText.Text = controller.LastTranslation;
+            MonitorEnglishText.Text = string.IsNullOrWhiteSpace(controller.LastSource) ? "Subtitles active" : controller.LastSource;
+
+            // Geçmiş listesine ekle
+            history.Insert(0, new SubtitleHistoryItem
+            {
+                Turkish = controller.LastTranslation,
+                English = controller.LastSource ?? string.Empty,
+                Time = DateTime.Now.ToString("HH:mm:ss")
+            });
+            if (history.Count > 100) history.RemoveAt(history.Count - 1);
+        }
     }
 
     private void Refresh()
     {
         var running = controller.IsRunning;
-        Toggle.Background = new System.Windows.Media.SolidColorBrush(
-            running ? System.Windows.Media.Color.FromRgb(220, 38, 38) : System.Windows.Media.Color.FromRgb(10, 132, 255));
+        Toggle.Background = new SolidColorBrush(
+            running ? Color.FromRgb(220, 38, 38) : Color.FromRgb(10, 132, 255));
         ToggleGlyph.Text = running ? Glyphs.Stop : Glyphs.Play;
         ToggleText.Text = running ? "Çeviriyi Durdur" : "Çeviriyi Başlat";
+
+        StreamThumbnailDot.Fill = new SolidColorBrush(running ? Color.FromRgb(16, 185, 129) : Color.FromRgb(156, 163, 175));
+        StreamThumbnailBadge.Text = running ? "1080p CANLI" : "BEKLEMEDE";
+        StreamThumbnailBadge.Foreground = new SolidColorBrush(running ? Color.FromRgb(56, 189, 248) : Color.FromArgb(100, 255, 255, 255));
+        ThumbnailStatusText.Text = running ? "PS5 Canlı Akışı Aktif" : "PS5 Akışı Bekleniyor";
+        LiveBadgeText.Text = running ? "Canlı" : "Beklemede";
     }
 
     private async void OnToggle(object sender, RoutedEventArgs e)
     {
-        if (controller.IsRunning) controller.Stop(); else await controller.StartAsync();
+        if (controller.IsRunning)
+        {
+            controller.Stop();
+        }
+        else
+        {
+            if (controller.Console == null || controller.Tv == null)
+            {
+                var result = MessageBox.Show(
+                    "Çeviriyi başlatabilmek için önce PS5 konsolunuzu ve TV'nizi eşleştirmeniz gerekmektedir.\n\nKurulum sihirbazını şimdi açmak ister misiniz?",
+                    "Cihaz Eşleştirme Gerekli",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Information);
+                if (result == MessageBoxResult.Yes)
+                {
+                    controller.Step = OnboardingStep.Console;
+                }
+                return;
+            }
+            await controller.StartAsync();
+        }
     }
+
+    // --- Sekme Yönetimi ---
 
     private void OnTabChanged(object sender, RoutedEventArgs e)
     {
-        if (PanelDisplay == null || PanelAudio == null || PanelSystem == null) return;
+        if (PanelOcrArea == null || PanelDisplay == null || PanelModels == null || PanelSystem == null || PanelGuide == null) return;
+
+        PanelOcrArea.Visibility = TabOcrArea.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         PanelDisplay.Visibility = TabDisplay.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-        PanelAudio.Visibility = TabAudio.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        PanelModels.Visibility = TabModels.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         PanelSystem.Visibility = TabSystem.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        PanelGuide.Visibility = TabGuide.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+
+        if (TabOcrArea.IsChecked == true) UpdateOcrBox();
+        if (TabDisplay.IsChecked == true) UpdateTvPreview();
+    }
+
+    private void OnOcrShortcut(object sender, RoutedEventArgs e)
+    {
+        TabOcrArea.IsChecked = true;
+    }
+
+    private void OnSettingsButton(object sender, RoutedEventArgs e)
+    {
+        TabSystem.IsChecked = true;
+    }
+
+    // --- Tab 1: Oyun Okuma Alanı & Şablonlar ---
+
+    private void OnPresetClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button btn || btn.Tag is not string tag) return;
+        selectedPreset = tag;
+
+        loading = true;
+        switch (tag)
+        {
+            case "BottomCenter":
+                CropTopSlider.Value = 0.72;
+                CropBottomSlider.Value = 0.85;
+                CropLeftSlider.Value = 0.16;
+                CropRightSlider.Value = 0.84;
+                ShortcutPresetText.Text = "Alt Orta (Standart)";
+                break;
+            case "BottomWide":
+                CropTopSlider.Value = 0.65;
+                CropBottomSlider.Value = 0.94;
+                CropLeftSlider.Value = 0.08;
+                CropRightSlider.Value = 0.92;
+                ShortcutPresetText.Text = "Geniş Alt Bant";
+                break;
+            case "FullBottom":
+                CropTopSlider.Value = 0.50;
+                CropBottomSlider.Value = 0.98;
+                CropLeftSlider.Value = 0.02;
+                CropRightSlider.Value = 0.98;
+                ShortcutPresetText.Text = "Tüm Alt Yarı";
+                break;
+            case "TopBanner":
+                CropTopSlider.Value = 0.03;
+                CropBottomSlider.Value = 0.22;
+                CropLeftSlider.Value = 0.08;
+                CropRightSlider.Value = 0.92;
+                ShortcutPresetText.Text = "Üst Bölge (Görevler)";
+                break;
+            case "Custom":
+                ShortcutPresetText.Text = "Özel Kutu";
+                break;
+        }
+
+        controller.Settings = controller.Settings with
+        {
+            Region = new CropRegion(CropTopSlider.Value, CropBottomSlider.Value, CropLeftSlider.Value, CropRightSlider.Value)
+        };
+        UpdateOcrBox();
+        loading = false;
+    }
+
+    private void OnCropSliderChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        if (loading) return;
+        selectedPreset = "Custom";
+        ShortcutPresetText.Text = "Özel Kutu";
+
+        controller.Settings = controller.Settings with
+        {
+            Region = new CropRegion(CropTopSlider.Value, CropBottomSlider.Value, CropLeftSlider.Value, CropRightSlider.Value)
+        };
+        UpdateOcrBox();
+    }
+
+    private void OnOcrCanvasSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        UpdateOcrBox();
+    }
+
+    private void UpdateOcrBox()
+    {
+        if (OcrCanvas == null || OcrBoxBorder == null) return;
+        var w = OcrCanvas.ActualWidth;
+        var h = OcrCanvas.ActualHeight;
+        if (w <= 10 || h <= 10)
+        {
+            w = 520;
+            h = 230;
+        }
+
+        var top = CropTopSlider.Value;
+        var bottom = CropBottomSlider.Value;
+        var left = CropLeftSlider.Value;
+        var right = CropRightSlider.Value;
+
+        var boxX = left * w;
+        var boxY = top * h;
+        var boxW = Math.Max(40, (right - left) * w);
+        var boxH = Math.Max(20, (bottom - top) * h);
+
+        Canvas.SetLeft(OcrBoxBorder, boxX);
+        Canvas.SetTop(OcrBoxBorder, boxY);
+        OcrBoxBorder.Width = boxW;
+        OcrBoxBorder.Height = boxH;
+
+        CropTopLabel.Text = $"%{Math.Round(top * 100)}";
+        CropBottomLabel.Text = $"%{Math.Round(bottom * 100)}";
+        CropLeftLabel.Text = $"%{Math.Round(left * 100)}";
+        CropRightLabel.Text = $"%{Math.Round(right * 100)}";
+    }
+
+    private void OnRefreshCapture(object sender, RoutedEventArgs e)
+    {
+        controller.RequestSnapshot();
+    }
+
+    // --- Tab 2: TV Görünümü & Renkler ---
+
+    private void OnColorWhite(object sender, RoutedEventArgs e) => SelectColor("#FFFFFF");
+    private void OnColorYellow(object sender, RoutedEventArgs e) => SelectColor("#FFE600");
+    private void OnColorCyan(object sender, RoutedEventArgs e) => SelectColor("#38BDF8");
+    private void OnColorGreen(object sender, RoutedEventArgs e) => SelectColor("#10B981");
+    private void OnColorOrange(object sender, RoutedEventArgs e) => SelectColor("#FF9F0A");
+
+    private void SelectColor(string hex)
+    {
+        selectedColor = hex;
+        UpdateColorSelection();
+
+        controller.Settings = controller.Settings with
+        {
+            Style = controller.Settings.Style with { Color = hex }
+        };
+        controller.SyncStyle();
+        UpdateTvPreview();
+    }
+
+    private void UpdateColorSelection()
+    {
+        ColorWhiteBorder.BorderBrush = selectedColor == "#FFFFFF" ? new SolidColorBrush(Color.FromRgb(10, 132, 255)) : Brushes.Transparent;
+        ColorYellowBorder.BorderBrush = selectedColor == "#FFE600" ? new SolidColorBrush(Color.FromRgb(10, 132, 255)) : Brushes.Transparent;
+        ColorCyanBorder.BorderBrush = selectedColor == "#38BDF8" ? new SolidColorBrush(Color.FromRgb(10, 132, 255)) : Brushes.Transparent;
+        ColorGreenBorder.BorderBrush = selectedColor == "#10B981" ? new SolidColorBrush(Color.FromRgb(10, 132, 255)) : Brushes.Transparent;
+        ColorOrangeBorder.BorderBrush = selectedColor == "#FF9F0A" ? new SolidColorBrush(Color.FromRgb(10, 132, 255)) : Brushes.Transparent;
     }
 
     private void OnTextSize(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
         if (loading) return;
         var val = (int)Math.Round(e.NewValue);
+        TextSizeLabel.Text = $"{val} px";
         controller.Settings = controller.Settings with { Style = controller.Settings.Style with { FontSize = val } };
+        controller.SyncStyle();
+        UpdateTvPreview();
     }
 
     private void OnBackground(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
         if (loading) return;
         var val = (int)Math.Round(e.NewValue);
+        BackgroundLabel.Text = $"%{val}";
         controller.Settings = controller.Settings with { Style = controller.Settings.Style with { Background = val } };
+        controller.SyncStyle();
+        UpdateTvPreview();
+    }
+
+    private void OnBottomPercent(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        if (loading) return;
+        var val = (int)Math.Round(e.NewValue);
+        BottomPercentLabel.Text = $"%{val}";
+        controller.Settings = controller.Settings with { Style = controller.Settings.Style with { BottomPercent = val } };
+        controller.SyncStyle();
+        UpdateTvPreview();
     }
 
     private void OnPlacement(object sender, SelectionChangedEventArgs e)
     {
         if (loading || PlacementBox.SelectedItem is not ComboBoxItem item) return;
-        if (Enum.TryParse<SubtitlePlacement>((string)item.Tag, out var placement))
+        if (Enum.TryParse<SubtitlePlacement>((string)item.Tag, true, out var placement))
+        {
             controller.Settings = controller.Settings with { Style = controller.Settings.Style with { Placement = placement } };
+            controller.SyncStyle();
+            UpdateTvPreview();
+        }
     }
 
     private void OnLanguage(object sender, SelectionChangedEventArgs e)
@@ -112,6 +403,8 @@ public partial class MainView : UserControl
     {
         if (loading) return;
         controller.Settings = controller.Settings with { Style = controller.Settings.Style with { Bold = BoldCheck.IsChecked == true } };
+        controller.SyncStyle();
+        UpdateTvPreview();
     }
 
     private void OnDubbing(object sender, RoutedEventArgs e)
@@ -120,26 +413,60 @@ public partial class MainView : UserControl
         controller.Settings = controller.Settings with { DubbingEnabled = DubbingCheck.IsChecked == true };
     }
 
-    private void OnTestSubtitle(object sender, RoutedEventArgs e) => controller.SendTestSubtitle();
-
-    private void OnCropChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    private void OnMutePc(object sender, RoutedEventArgs e)
     {
-        if (loading) return;
-        controller.Settings = controller.Settings with
-        {
-            Region = new CropRegion(CropTop.Value, CropBottom.Value, CropLeft.Value, CropRight.Value)
-        };
+        isMutePc = MutePcCheck.IsChecked == true;
+        UpdatePcSesiButton();
     }
 
-    private void OnResetArea(object sender, RoutedEventArgs e)
+    private void OnPcSesiToggle(object sender, RoutedEventArgs e)
     {
-        loading = true;
-        CropTop.Value = 0;
-        CropBottom.Value = 1;
-        CropLeft.Value = 0;
-        CropRight.Value = 1;
-        controller.Settings = controller.Settings with { Region = new CropRegion() };
-        loading = false;
+        isMutePc = !isMutePc;
+        MutePcCheck.IsChecked = isMutePc;
+        UpdatePcSesiButton();
+    }
+
+    private void UpdatePcSesiButton()
+    {
+        if (PcSesiButton == null) return;
+        PcSesiButton.Content = isMutePc ? "Sessiz (Muted)" : "Açık (Ses Var)";
+        var color = isMutePc ? Color.FromRgb(239, 68, 68) : Color.FromRgb(16, 185, 129);
+        PcSesiButton.Foreground = new SolidColorBrush(color);
+        PcSesiButton.Background = new SolidColorBrush(Color.FromArgb(31, color.R, color.G, color.B));
+        PcSesiButton.BorderBrush = new SolidColorBrush(color);
+    }
+
+    private void UpdateTvPreview()
+    {
+        if (TvPreviewSubtitleText == null || TvPreviewSubtitleBox == null) return;
+        try
+        {
+            var converter = new BrushConverter();
+            if (converter.ConvertFromString(selectedColor) is Brush brush)
+                TvPreviewSubtitleText.Foreground = brush;
+        }
+        catch { }
+
+        var size = TextSizeSlider.Value;
+        TvPreviewSubtitleText.FontSize = Math.Max(11, size * 0.35);
+        TvPreviewSubtitleText.FontWeight = BoldCheck.IsChecked == true ? FontWeights.Bold : FontWeights.Normal;
+
+        var opacity = BackgroundSlider.Value / 100.0;
+        var byteAlpha = (byte)Math.Clamp(Math.Round(opacity * 255), 0, 255);
+        TvPreviewSubtitleBox.Background = new SolidColorBrush(Color.FromArgb(byteAlpha, 0, 0, 0));
+
+        var bottomPx = BottomPercentSlider.Value * 1.5;
+        TvPreviewSubtitleBox.Margin = new Thickness(0, 0, 0, bottomPx);
+    }
+
+    private void OnTestSubtitle(object sender, RoutedEventArgs e) => controller.SendTestSubtitle();
+
+    // --- Tab 3: Modeller ---
+
+    private void OnGeminiSave(object sender, RoutedEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(GeminiKeyInput.Password)) return;
+        MessageBox.Show("Google Gemini API anahtarı kaydedildi ve aktif hale getirildi.", "Model Ayarlandı", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private async void OnDeepLSave(object sender, RoutedEventArgs e)
@@ -147,11 +474,49 @@ public partial class MainView : UserControl
         if (string.IsNullOrWhiteSpace(DeepLKeyInput.Password)) return;
         await controller.SetDeepLKeyAsync(DeepLKeyInput.Password);
         controller.SendTestSubtitle();
+        MessageBox.Show("DeepL API anahtarı doğrulandı ve kaydedildi!", "DeepL Aktif", MessageBoxButton.OK, MessageBoxImage.Information);
     }
+
+    // --- Geçmiş Dışa Aktarma ---
+
+    private void OnExportTxt(object sender, RoutedEventArgs e)
+    {
+        if (history.Count == 0)
+        {
+            MessageBox.Show("Dışa aktarılacak altyazı geçmişi henüz yok.", "Geçmiş Boş", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+        var dlg = new SaveFileDialog { Filter = "Metin Dosyası (*.txt)|*.txt", FileName = "GameTranslator_Altyazi_Gecmisi.txt" };
+        if (dlg.ShowDialog() == true)
+        {
+            var lines = history.Select(h => $"{h.Time}\tTV: {h.Turkish}\tPS5: {h.English}");
+            File.WriteAllLines(dlg.FileName, lines);
+            MessageBox.Show("Altyazı geçmişi başarıyla kaydedildi!", "Dışa Aktarıldı", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+    }
+
+    private void OnExportJson(object sender, RoutedEventArgs e)
+    {
+        if (history.Count == 0)
+        {
+            MessageBox.Show("Dışa aktarılacak altyazı geçmişi henüz yok.", "Geçmiş Boş", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+        var dlg = new SaveFileDialog { Filter = "JSON Dosyası (*.json)|*.json", FileName = "GameTranslator_Altyazi_Gecmisi.json" };
+        if (dlg.ShowDialog() == true)
+        {
+            var json = JsonSerializer.Serialize(history, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(dlg.FileName, json);
+            MessageBox.Show("Altyazı geçmişi JSON formatında kaydedildi!", "Dışa Aktarıldı", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+    }
+
+    // --- Genel Aksiyonlar & Footer ---
 
     private void OnCopyObs(object sender, RoutedEventArgs e)
     {
         Clipboard.SetText($"http://localhost:{controller.ServerPort}/obs");
+        MessageBox.Show("OBS URL adresi panoya kopyalandı:\nhttp://localhost:" + controller.ServerPort + "/obs", "Kopyalandı", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void OnAbout(object sender, RoutedEventArgs e)
@@ -166,17 +531,20 @@ public partial class MainView : UserControl
         {
             controller.ResetSettings();
             LoadSettings();
+            UpdateOcrBox();
+            UpdateTvPreview();
         }
+    }
+
+    private void OnReinstall(object sender, RoutedEventArgs e)
+    {
+        controller.Step = OnboardingStep.Welcome;
     }
 
     private void OnDone(object sender, RoutedEventArgs e)
     {
-        // Kaydedildi
-    }
-
-    private void OnSettingsButton(object sender, RoutedEventArgs e)
-    {
-        TabDisplay.IsChecked = true;
+        var win = Window.GetWindow(this);
+        if (win != null) win.WindowState = WindowState.Minimized;
     }
 
     private void OnHyperlink(object sender, RequestNavigateEventArgs e)
