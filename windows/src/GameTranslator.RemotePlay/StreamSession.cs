@@ -320,8 +320,8 @@ public sealed class StreamSession : IStreamSession
             failure = null;
             if (!NativeMethods.IsAvailable)
             {
-                failure = new DisconnectReason(DisconnectKind.Other, "gametranslator_native DLL bulunamadı. Lütfen Chiaki veya ilgili bileşenleri kontrol edin.");
-                return;
+                failure = "gametranslator_native DLL bulunamadı. Lütfen Chiaki veya ilgili bileşenleri kontrol edin.";
+                return null;
             }
             try
             {
