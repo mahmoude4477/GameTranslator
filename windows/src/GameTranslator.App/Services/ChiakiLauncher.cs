@@ -83,7 +83,7 @@ public static class ChiakiLauncher
             // Eğer Chiaki daha önceden bu PS5'e başarıyla kayıt olmuşsa doğrudan yayın komutunu ver
             if (!string.IsNullOrWhiteSpace(host) && IsRegistered(host))
             {
-                var nick = string.IsNullOrWhiteSpace(consoleName) ? "PS5" : consoleName;
+                var nick = GetRegisteredNickname(host) ?? (string.IsNullOrWhiteSpace(consoleName) ? "PS5" : consoleName);
                 psi.Arguments = $"stream \"{nick}\" {host}";
             }
             else
@@ -132,16 +132,59 @@ public static class ChiakiLauncher
     }
 
     /// <summary>
-    /// Chiaki yapılandırmasını hazırlar. Var olan gerçek kayıtları ASLA silmez.
-    /// Manuel host IP'sini ekler ve pencere modunu ayarlar.
+    /// Chiaki'nin INI dosyasında kayıtlı olan konsolun takma adını (nickname) okur.
+    /// Bulunamazsa null döner.
     /// </summary>
-    public static void SyncConfig(string host)
+    public static string? GetRegisteredNickname(string host)
+    {
+        try
+        {
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            if (string.IsNullOrEmpty(appData)) return null;
+
+            foreach (var folder in new[] { "chiaki-ng", "Chiaki" })
+            {
+                var iniPath = Path.Combine(appData, folder, $"{folder}.ini");
+                if (File.Exists(iniPath))
+                {
+                    var lines = File.ReadAllLines(iniPath);
+                    string? lastName = null;
+                    foreach (var line in lines)
+                    {
+                        if (line.Contains("\\name=") || line.Contains("\\server_nickname="))
+                        {
+                            var parts = line.Split('=', 2);
+                            if (parts.Length == 2 && !string.IsNullOrWhiteSpace(parts[1]))
+                            {
+                                lastName = parts[1].Trim();
+                            }
+                        }
+                    }
+                    if (!string.IsNullOrWhiteSpace(lastName))
+                    {
+                        return lastName;
+                    }
+                }
+            }
+        }
+        catch { }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Chiaki yapılandırmasını hazırlar. Var olan gerçek kayıtları ASLA silmez.
+    /// Manuel host IP'sini ve varsa PSN Account ID'sini ekler.
+    /// </summary>
+    public static void SyncConfig(string host, byte[]? accountId = null)
     {
         try
         {
             if (string.IsNullOrWhiteSpace(host)) return;
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (string.IsNullOrEmpty(appData)) return;
+
+            string? b64Account = accountId != null && accountId.Length > 0 ? Convert.ToBase64String(accountId) : null;
 
             foreach (var folder in new[] { "chiaki-ng", "Chiaki" })
             {
@@ -152,9 +195,11 @@ public static class ChiakiLauncher
                 if (File.Exists(iniPath))
                 {
                     var text = File.ReadAllText(iniPath);
+                    var sb = new StringBuilder(text);
+                    bool modified = false;
+
                     if (!text.Contains(host))
                     {
-                        var sb = new StringBuilder(text);
                         if (!text.Contains("[manual_hosts]"))
                         {
                             sb.AppendLine();
@@ -166,12 +211,38 @@ public static class ChiakiLauncher
                         {
                             sb.AppendLine($"1\\host={host}");
                         }
+                        modified = true;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(b64Account) && !text.Contains("user_id="))
+                    {
+                        if (text.Contains("[General]"))
+                        {
+                            sb.Replace("[General]", $"[General]\nuser_id={b64Account}");
+                        }
+                        else
+                        {
+                            sb.AppendLine();
+                            sb.AppendLine("[General]");
+                            sb.AppendLine($"user_id={b64Account}");
+                        }
+                        modified = true;
+                    }
+
+                    if (modified)
+                    {
                         File.WriteAllText(iniPath, sb.ToString(), Encoding.UTF8);
                     }
                 }
                 else
                 {
                     var sb = new StringBuilder();
+                    if (!string.IsNullOrWhiteSpace(b64Account))
+                    {
+                        sb.AppendLine("[General]");
+                        sb.AppendLine($"user_id={b64Account}");
+                        sb.AppendLine();
+                    }
                     sb.AppendLine("[manual_hosts]");
                     sb.AppendLine("size=1");
                     sb.AppendLine($"1\\host={host}");

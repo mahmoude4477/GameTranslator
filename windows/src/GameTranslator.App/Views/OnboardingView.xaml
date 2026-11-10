@@ -243,16 +243,23 @@
 
                             <!-- 8 Haneli Kod -->
                             <TextBlock Text="PS5 Ekranındaki 8 Haneli Eşleşme PIN Kodu:" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,0,4" />
-                            <TextBox x:Name="Ps5PinInput" Text="" MinHeight="36" VerticalContentAlignment="Center" FontFamily="Consolas" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,12" />
+                            <TextBox x:Name="Ps5PinInput" Text="" MinHeight="36" VerticalContentAlignment="Center" FontFamily="Consolas" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,10" />
 
-                            <Button Content="Konsolu Eşle ve Doğrula" Click="OnPairPs5" Background="#0A84FF" Foreground="White" FontWeight="Bold" BorderThickness="0" MinHeight="36" Cursor="Hand">
-                                <Button.Resources>
-                                    <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="6" />
-                                    </Style>
-                                </Button.Resources>
-                            </Button>
-                            <TextBlock x:Name="PairStatusText" Margin="0,8,0,0" FontSize="11" Foreground="#10B981" />
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Button Content="Konsolu Eşle ve Doğrula" Click="OnPairPs5" Background="#0A84FF" Foreground="White" FontWeight="Bold" BorderThickness="0" MinHeight="36" Cursor="Hand" Margin="0,0,8,0">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="6" />
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                                <Button Grid.Column="1" Content="🎮 Chiaki'de Aç" Click="OnOpenChiakiPairing" Style="{StaticResource SecondaryButton}" Padding="12,4" MinHeight="36" />
+                            </Grid>
+                            <TextBlock x:Name="PairStatusText" Margin="0,4,0,0" FontSize="11" Foreground="#10B981" />
                         </StackPanel>
                     </Border>
                 </StackPanel>

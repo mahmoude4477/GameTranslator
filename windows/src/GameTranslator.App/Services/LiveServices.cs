@@ -94,7 +94,7 @@ public sealed class LiveServices : IAppServices
         {
             return new StreamSession(console, accountId);
         }
-        return new WindowCaptureStreamSession(console);
+        return new WindowCaptureStreamSession(console, accountId);
     }
 
     public IKeeper MakeKeeper(LgTv tv, string? key, IReadOnlyDictionary<string, string> parameters, Func<bool> appConnected, Action<LgTv> onMoved)

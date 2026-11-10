@@ -17,13 +17,15 @@ public sealed class WindowCaptureStreamSession : IStreamSession
 #pragma warning restore CS0067
 
     private readonly RegisteredConsole console;
+    private readonly byte[]? accountId;
     private CancellationTokenSource? cts;
     private Task? loopTask;
     private bool running;
 
-    public WindowCaptureStreamSession(RegisteredConsole console)
+    public WindowCaptureStreamSession(RegisteredConsole console, byte[]? accountId = null)
     {
         this.console = console;
+        this.accountId = accountId;
     }
 
     public void Start()
@@ -35,7 +37,7 @@ public sealed class WindowCaptureStreamSession : IStreamSession
 
         if (console != null && !string.IsNullOrWhiteSpace(console.Host))
         {
-            ChiakiLauncher.SyncConfig(console.Host);
+            ChiakiLauncher.SyncConfig(console.Host, accountId);
             ChiakiLauncher.LaunchOrBringToFront(console.Host, console.Name);
         }
 

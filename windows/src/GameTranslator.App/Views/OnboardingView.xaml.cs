@@ -72,6 +72,16 @@ public partial class OnboardingView : UserControl
         UpdatePill(PillBar3, PillText3, 3);
         UpdatePill(PillBar4, PillText4, 4);
         UpdatePill(PillBar5, PillText5, 5);
+
+        if (currentStep == 3 && PairStatusText != null)
+        {
+            var host = controller.Console?.Host ?? Ps5HostInput?.Text?.Trim();
+            if (!string.IsNullOrWhiteSpace(host) && ChiakiLauncher.IsRegistered(host))
+            {
+                PairStatusText.Text = "✓ PS5 Konsolu Chiaki'de zaten eşleşmiş durumda! Doğrudan sonraki adıma geçebilirsiniz.";
+                PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+            }
+        }
     }
 
     private void UpdatePill(Border bar, TextBlock text, int step)
@@ -224,31 +234,51 @@ public partial class OnboardingView : UserControl
         }
     }
 
+    private void OnOpenChiakiPairing(object sender, RoutedEventArgs e)
+    {
+        var host = Ps5HostInput.Text.Trim();
+        if (string.IsNullOrWhiteSpace(host)) host = "192.168.1.105";
+        ChiakiLauncher.SyncConfig(host);
+        _ = controller.RegisterAsync(host, "00000000");
+        ChiakiLauncher.LaunchOrBringToFront(host, "PlayStation 5");
+        PairStatusText.Text = "Chiaki açıldı! PS5'e tıklayıp ekrandaki PIN kodunu girerek eşleştirin.";
+        PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
+    }
+
     private async void OnPairPs5(object sender, RoutedEventArgs e)
     {
-        var pin = Ps5PinInput.Text.Trim();
         var host = Ps5HostInput.Text.Trim();
-        if (pin.Length != 8)
+        if (string.IsNullOrWhiteSpace(host))
         {
-            PairStatusText.Text = "Lütfen PS5 ekranında görünen 8 haneli kodu tam olarak girin.";
+            PairStatusText.Text = "Lütfen PS5 konsolunuzun IP adresini girin.";
             PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(239, 68, 68));
             return;
         }
 
-        PairStatusText.Text = "PS5'e eşleştirme paketi gönderiliyor...";
-        PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
+        var pin = Ps5PinInput.Text.Trim();
 
         try
         {
-            await controller.RegisterAsync(host, pin);
-            PairStatusText.Text = $"✓ PS5 Konsolu Başarıyla Eşleşti! ({host})";
-            PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
-            await Task.Delay(800);
-            SetStep(4);
+            ChiakiLauncher.SyncConfig(host);
+            await controller.RegisterAsync(host, string.IsNullOrWhiteSpace(pin) ? "00000000" : pin);
+
+            if (ChiakiLauncher.IsRegistered(host))
+            {
+                PairStatusText.Text = $"✓ PS5 Konsolu Başarıyla Eşleşti! ({host})";
+                PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+                await Task.Delay(600);
+                SetStep(4);
+            }
+            else
+            {
+                ChiakiLauncher.LaunchOrBringToFront(host, "PlayStation 5");
+                PairStatusText.Text = "Chiaki açıldı! Lütfen PS5'e tıklayıp TV'deki 8 haneli kodu girerek 'Register'a basın.";
+                PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
+            }
         }
         catch (Exception ex)
         {
-            PairStatusText.Text = $"Eşleştirme uyarısı: {ex.Message}";
+            PairStatusText.Text = $"Durum: {ex.Message}";
             PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(245, 158, 11));
         }
     }
