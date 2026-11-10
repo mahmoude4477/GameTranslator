@@ -126,14 +126,17 @@ public final class NativeSubtitleServer: @unchecked Sendable {
         }
     }
 
-    public func sendSubtitle(turkish: String, original: String = "", durationMs: Int = 12000) {
+    public func sendSubtitle(turkish: String, original: String = "", box: [String: Double]? = nil, durationMs: Int = 12000) {
         let at = Int(Date().timeIntervalSince1970 * 1000)
-        let json: [String: Any] = [
+        var json: [String: Any] = [
             "text": turkish,
             "original": original,
             "duration": durationMs,
             "at": at
         ]
+        if let box = box {
+            json["box"] = box
+        }
         broadcast(event: "subtitle", json: json)
     }
 
@@ -1090,6 +1093,7 @@ final class AppState {
     var backgroundOpacity: Double = 72
     var isBold: Bool = true
     var placement: String = "cover"
+    var lastBox: [String: Double]? = nil
     var language: String = "en"
     var isDubbing: Bool = false
     
@@ -1721,17 +1725,55 @@ final class AppState {
                     return
                 }
 
+                var minX: Double = 1.0
+                var maxX: Double = 0.0
+                var minY: Double = 1.0
+                var maxY: Double = 0.0
+                var foundAny = false
+
+                for obs in results {
+                    guard let top = obs.topCandidates(1).first, top.confidence >= 0.35 else { continue }
+                    let bb = obs.boundingBox
+                    minX = min(minX, Double(bb.minX))
+                    maxX = max(maxX, Double(bb.maxX))
+                    minY = min(minY, Double(bb.minY))
+                    maxY = max(maxY, Double(bb.maxY))
+                    foundAny = true
+                }
+
+                let currentBox: [String: Double]
+                if foundAny && maxX > minX && maxY > minY {
+                    let fullLeft = self.cropLeft + minX * (self.cropRight - self.cropLeft)
+                    let fullRight = self.cropLeft + maxX * (self.cropRight - self.cropLeft)
+                    let fullTop = self.cropTop + (1.0 - maxY) * (self.cropBottom - self.cropTop)
+                    let fullBottom = self.cropTop + (1.0 - minY) * (self.cropBottom - self.cropTop)
+                    currentBox = [
+                        "left": max(0.01, min(0.99, fullLeft)),
+                        "right": max(0.01, min(0.99, fullRight)),
+                        "top": max(0.01, min(0.99, fullTop)),
+                        "bottom": max(0.01, min(0.99, fullBottom))
+                    ]
+                } else {
+                    currentBox = [
+                        "left": self.cropLeft,
+                        "right": self.cropRight,
+                        "top": self.cropTop,
+                        "bottom": self.cropBottom
+                    ]
+                }
+
                 DispatchQueue.main.async {
                     self.noTextCounter = 0
                     guard detectedText != self.lastSentText else { return }
                     self.lastSentText = detectedText
                     self.liveEnglish = detectedText
+                    self.lastBox = currentBox
 
                     Task {
                         let turkish = await self.translateText(detectedText)
                         await MainActor.run {
                             self.liveTurkish = turkish
-                            self.server.sendSubtitle(turkish: turkish, original: detectedText)
+                            self.server.sendSubtitle(turkish: turkish, original: detectedText, box: currentBox)
 
                             let entry = SubtitleEntry(turkish: turkish, english: detectedText, timestamp: self.currentTime())
                             self.history.insert(entry, at: 0)
@@ -1947,8 +1989,15 @@ final class AppState {
         let testEn = "GameTranslator live subtitle test successful!"
         let entry = SubtitleEntry(turkish: testTr, english: testEn, timestamp: currentTime())
         history.insert(entry, at: 0)
+        let testBox: [String: Double] = [
+            "left": cropLeft,
+            "right": cropRight,
+            "top": cropTop,
+            "bottom": cropBottom
+        ]
+        lastBox = testBox
         syncStyleToTV()
-        server.sendSubtitle(turkish: testTr, original: testEn)
+        server.sendSubtitle(turkish: testTr, original: testEn, box: testBox)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
             self.testSent = false
         }
@@ -2884,7 +2933,18 @@ struct MainWindowView: View {
                         Text("Ekranda sabit yükseklikte").tag("fixed")
                     }
                     .labelsHidden()
-                    .onChange(of: state.placement) { state.syncStyleToTV() }
+                    .onChange(of: state.placement) {
+                        state.syncStyleToTV()
+                        let textToSend = state.liveTurkish.isEmpty ? "Altyazı Yerleşim Testi" : state.liveTurkish
+                        let origToSend = state.liveEnglish.isEmpty ? "Subtitle Placement Test" : state.liveEnglish
+                        let boxToSend = state.lastBox ?? [
+                            "left": state.cropLeft,
+                            "right": state.cropRight,
+                            "top": state.cropTop,
+                            "bottom": state.cropBottom
+                        ]
+                        state.server.sendSubtitle(turkish: textToSend, original: origToSend, box: boxToSend)
+                    }
                 }
 
                 VStack(alignment: .leading, spacing: 3) {
@@ -2939,16 +2999,71 @@ struct MainWindowView: View {
                 ZStack(alignment: .bottom) {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(Color(hex: "#090A0D"))
-                        .frame(height: 120)
+                        .frame(height: 125)
                         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(hex: "#0A84FF").opacity(0.4), lineWidth: 1.5))
 
-                    Text(state.liveTurkish)
-                        .font(.system(size: CGFloat(max(11, state.fontSize * 0.32)), weight: state.isBold ? .bold : .regular))
-                        .foregroundStyle(Color(hex: state.selectedColor))
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 5)
-                        .background(Color.black.opacity(state.backgroundOpacity / 100.0), in: RoundedRectangle(cornerRadius: 4))
+                    let displayText = state.isRunning ? (state.liveTurkish.isEmpty ? "Altyazı taranıyor..." : state.liveTurkish) : (state.liveTurkish.isEmpty ? "Çeviri Durduruldu" : state.liveTurkish)
+                    let origText = state.liveEnglish.isEmpty ? "Press any button to continue" : state.liveEnglish
+
+                    if state.placement == "cover" {
+                        // İngilizce yazının üstünü örten koyu zemin ve üstünde Türkçe çeviri
+                        VStack(spacing: 0) {
+                            Text(displayText)
+                                .font(.system(size: CGFloat(max(11, state.fontSize * 0.32)), weight: state.isBold ? .bold : .regular))
+                                .foregroundStyle(Color(hex: state.selectedColor))
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 6)
+                                .background(Color.black.opacity(max(0.85, state.backgroundOpacity / 100.0)), in: RoundedRectangle(cornerRadius: 4))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+                                )
+                        }
                         .padding(.bottom, CGFloat(state.bottomPercent * 2.8))
+                    } else if state.placement == "above" {
+                        // Türkçe çeviri ÜSTTE, orijinal İngilizce altyazı ALTIMDA (kapanmadan açıkta kalır)
+                        VStack(spacing: 4) {
+                            Text(displayText)
+                                .font(.system(size: CGFloat(max(11, state.fontSize * 0.32)), weight: state.isBold ? .bold : .regular))
+                                .foregroundStyle(Color(hex: state.selectedColor))
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 4)
+                                .background(Color.black.opacity(state.backgroundOpacity / 100.0), in: RoundedRectangle(cornerRadius: 4))
+
+                            Text(origText)
+                                .font(.system(size: 10, weight: .regular))
+                                .foregroundStyle(Color.white.opacity(0.45))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 1)
+                        }
+                        .padding(.bottom, CGFloat(state.bottomPercent * 2.0))
+                    } else if state.placement == "below" {
+                        // Orijinal İngilizce ÜSTTE, Türkçe çeviri ALTINDA
+                        VStack(spacing: 4) {
+                            Text(origText)
+                                .font(.system(size: 10, weight: .regular))
+                                .foregroundStyle(Color.white.opacity(0.45))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 1)
+
+                            Text(displayText)
+                                .font(.system(size: CGFloat(max(11, state.fontSize * 0.32)), weight: state.isBold ? .bold : .regular))
+                                .foregroundStyle(Color(hex: state.selectedColor))
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 4)
+                                .background(Color.black.opacity(state.backgroundOpacity / 100.0), in: RoundedRectangle(cornerRadius: 4))
+                        }
+                        .padding(.bottom, CGFloat(state.bottomPercent * 2.0))
+                    } else {
+                        // Sabit konum
+                        Text(displayText)
+                            .font(.system(size: CGFloat(max(11, state.fontSize * 0.32)), weight: state.isBold ? .bold : .regular))
+                            .foregroundStyle(Color(hex: state.selectedColor))
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 5)
+                            .background(Color.black.opacity(state.backgroundOpacity / 100.0), in: RoundedRectangle(cornerRadius: 4))
+                            .padding(.bottom, CGFloat(state.bottomPercent * 2.8))
+                    }
                 }
             }
         }

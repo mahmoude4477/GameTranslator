@@ -343,6 +343,8 @@
       var alpha = Math.max(0, Math.min(100, style.background)) / 100;
       $('subtitle-text').style.background = 'rgba(0, 0, 0, ' + alpha + ')';
       $('subtitle-prev-text').style.background = 'rgba(0, 0, 0, ' + (alpha * 0.83).toFixed(2) + ')';
+      var coverEl = $('subtitle-cover');
+      if (coverEl) coverEl.style.background = 'rgba(0, 0, 0, ' + Math.max(0.88, alpha) + ')';
     }
     if (typeof style.bold === 'boolean') {
       $('subtitle-text').style.fontWeight = style.bold ? '700' : '600';
