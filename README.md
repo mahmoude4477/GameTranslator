@@ -132,17 +132,23 @@ dotnet run --project "windows/src/GameTranslator.App/GameTranslator.App.csproj"
     ```
   * Televizyonda uygulamayı açıp PS5'in bağlı olduğu HDMI portunu (örneğin HDMI 1) seçin.
 * **LG TV (webOS):**
-  * **Hazır Paket Dosyası:** `tv/packages/com.gametranslator.tv_1.0.0_all.ipk`
-  * TV'de Developer Mode'u açın. webOS Dev Manager aracıyla veya komut satırından kurun:
-    ```bash
-    ares-install tv/packages/com.gametranslator.tv_1.0.0_all.ipk
-    ```
+  * **Yöntem 1 (Kalıcı Uygulama - Önerilen):**  
+    1. LG TV'nizden LG Content Store'u açıp ücretsiz **"Developer Mode"** uygulamasını kurun ve LG hesabınızla giriş yapın.
+    2. Bilgisayarınıza ücretsiz **[webOS Dev Manager](https://github.com/webosbrew/dev-manager-desktop/releases)** indirin ve TV'nizin IP adresini girip bağlanın.
+    3. GameTranslator'ın TV ekranındaki *"LG IPK Dosyasını Göster"* butonuna basarak çıkan `com.gametranslator.tv_1.0.0_all.ipk` paketini webOS Dev Manager'a sürükleyip TV'ye kurun. TV'de uygulamayı açın.
+  * **Yöntem 2 (Sıfır Kurulum - En Hızlı Yol - TV Web Tarayıcısı):**  
+    1. LG TV kumandasından **Web Tarayıcısı** uygulamasını açın.
+    2. Adres çubuğuna bilgisayarınızın yerel IP adresini yazın:  
+       👉 `http://<BILGISAYAR-IP-ADRESI>:8787` *(Örn: `http://192.168.1.50:8787`)*
+    3. Tarayıcıyı tam ekran yapın. Çeviri başladığı an altyazılar TV ekranınızda canlı olarak akar!
+
 * **Samsung TV (Tizen):**
-  * **Hazır Paket Dosyası:** `tv/packages/gametranslator-samsung_1.0.0.wgt`
-  * TV'de Geliştirici Modunu açın (Uzaktan kumandada 1-2-3-4-5 tuşlayarak). Tizen CLI ile yükleyin:
-    ```bash
-    tizen install -n tv/packages/gametranslator-samsung_1.0.0.wgt
-    ```
+  * **Yöntem 1 (Apps2Samsung ile Kurulum):**  
+    1. TV'de Geliştirici Modunu açın (Uygulamalar menüsünde kumandadan `1-2-3-4-5` tuşlayarak).
+    2. Bilgisayarınızda **Apps2Samsung** programını açıp TV IP'nizi girin.
+    3. `GameTranslator-Samsung-Tizen-v1.0.0.wgt` dosyasını seçip **Install** butonuna basın ve TV'de uygulamayı açın.
+  * **Yöntem 2 (TV Web Tarayıcısı):**  
+    1. Samsung TV'nin dahili web tarayıcısını açıp `http://<BILGISAYAR-IP-ADRESI>:8787` adresini girin ve tam ekran yapın.
 
 ---
 
