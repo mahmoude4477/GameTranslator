@@ -39,51 +39,78 @@ GameTranslator, hem **macOS (Apple SwiftUI)** hem de **Windows (WPF / .NET 10)**
 
 ---
 
-## 🎯 Platform Kurulum Rehberi
+## 🎯 Platform Kurulum Rehberi (Hiç Kodlama Bilmeyenler İçin Adım Adım)
+
+Aşağıdaki adımları takip ederek 2 dakika içinde oyunu Türkçe altyazıyla oynamaya başlayabilirsiniz.
 
 ---
 
-### 1. 🍏 Mac (macOS Yerel Uygulaması)
-> Apple Silicon (M1, M2, M3, M4) Neural Engine NPU çipini ve Vision OCR donanımını kullanarak **0 ms gecikmeyle** çevrimdışı çalışır.
+### 1. 🍏 Mac (macOS Kurulumu - Apple Silicon M1 / M2 / M3 / M4)
+> Apple Silicon Neural Engine NPU çipini ve Vision OCR donanımını kullanarak **0 ms gecikmeyle** çevrimdışı çalışır.
 
-1. **Hızlı Başlatma:** Proje ana dizinindeki **`GameTranslator.command`** dosyasına çift tıklayın.  
-   *(Sıfırdan derlemek veya güncellemek için terminalden `bash mac/build.sh` komutunu çalıştırmanız yeterlidir).*
-2. Karşınıza donanım hızlandırmalı koyu macOS masaüstü arayüzü gelecektir.
-3. Sol üstteki mavi **`▶ Çeviriyi Başlat`** butonuna basarak canlı çeviriyi başlatın.
+#### 🟢 Yöntem A: Tek Tıkla Otomatik Kurulum ve Başlatma (Önerilen)
+1. **GitHub'dan İndirin:** Bu sayfanın yukarısındaki yeşil **`<> Code`** butonuna tıklayın ve **`Download ZIP`** seçeneğini seçin. İnen ZIP dosyasını klasöre çıkartın.
+2. **Başlatıcıya Çift Tıklayın:** Klasörün içindeki **`GameTranslator.command`** dosyasına çift tıklayın.
+   * *İlk Açılışta:* Sistem uygulamanın henüz derlenmediğini otomatik anlar, gerekli motorları derler, Apple Developer sertifikanızla imzalar, `/Applications/GameTranslator.app` olarak kurar ve arayüzü ekrana getirir (yalnızca ilk seferde 10-15 saniye sürer).
+   * *Sonraki Açılışlarda:* Doğrudan 1 saniyede açılır!
+3. **⚠️ Mac Güvenlik İpuçları (İlk Kez Açarken):**
+   * **"Geliştiricisi Doğrulanamadığı İçin Açılamıyor" veya "İzin Yok" derse:**  
+     Dosyaya **sağ tıklayın** (veya iki parmakla dokunun), **`Aç`** seçeneğini seçin ve çıkan uyarıda tekrar **`Aç`** butonuna basın. (veya Terminal'de klasöre gidip `chmod +x GameTranslator.command` yazmanız yeterlidir).
+   * **"swiftc komutu için geliştirici araçları gerekiyor" uyarısı verirse:**  
+     Apple'ın çıkan resmi penceresinde **`Yükle`** butonuna basın; Apple Command Line Tools ücretsiz ve otomatik olarak kurulur.
+   * **Ekran Kaydı İzni (Altyazıyı Okumak İçin Şart):**  
+     Mac'inizde **`Sistem Ayarları` ➔ `Gizlilik ve Güvenlik` ➔ `Ekran ve Sistem Sesi Kaydı`** bölümüne gidin ve listede **`GameTranslator`** anahtarını **AÇIK (Mavi)** yapın.
+
+#### 🛠️ Yöntem B: Manuel Olarak Kendiniz Derlemek İsterseniz (Terminal İle)
+Eğer uygulamayı terminalden kendi ellerinizle derleyip kurmak isterseniz:
+1. Mac'inizde **Terminal** uygulamasını açın (Klavyeden `Command + Boşluk` basıp Spotlight'a `Terminal` yazabilirsiniz).
+2. İndirdiğiniz proje klasörünün içine girin (Terminal penceresine `cd ` yazıp indirdiğiniz klasörü terminale sürükleyip Enter'a basabilirsiniz):
+   ```bash
+   cd /klasorun/yolu/GameTranslate-main
+   ```
+3. Derleme scriptini çalıştırın:
+   ```bash
+   bash mac/build.sh
+   ```
+4. Derleme bittiğinde terminalde `✅ Derleme ve kurulum başarıyla tamamlandı!` yazar ve uygulama otomatik olarak `/Applications/GameTranslator.app` konumuna yüklenir.
+5. Şimdi ister `GameTranslator.command` dosyasına çift tıklayarak, ister `Uygulamalar` (Applications) klasöründen **`GameTranslator`** ikonuna tıklayarak anında açabilirsiniz!
 
 ---
 
-### 2. 🪟 PC (Windows Yerel Masaüstü Uygulaması)
+### 2. 🪟 PC (Windows Yerel Masaüstü Kurulumu)
 > C# / .NET 10, WPF ve DirectML / Windows Media OCR altyapısıyla çalışan yerel Windows uygulamasıdır.
 
-1. Bilgisayarınızda **[.NET 10 SDK](https://dotnet.microsoft.com/download)** kurulu olduğundan emin olun.
-2. Proje ana dizinindeki **`GameTranslator.bat`** dosyasına çift tıklayın.  
-   *(Geliştiriciler için doğrudan komut: `dotnet run --project windows/src/GameTranslator.App/GameTranslator.App.csproj`)*
-3. Karşınıza donanım hızlandırmalı Windows masaüstü arayüzü gelecektir.
-4. **`▶ Çeviriyi Başlat`** butonuna tıklayın.
+1. **.NET 10 Kurulumu:** Bilgisayarınızda Microsoft .NET SDK kurulu değilse **[.NET 10 SDK İndir](https://dotnet.microsoft.com/download)** bağlantısından ücretsiz indirip kurun.
+2. **Başlatıcıya Çift Tıklayın:** Proje klasöründeki **`GameTranslator.bat`** dosyasına çift tıklayın.
+   * Sistem gerekli bağımlılıkları otomatik yükler ve donanım hızlandırmalı Windows masaüstü arayüzünü açar.
+   * *(Geliştiriciler için doğrudan konsol komutu: `dotnet run --project windows/src/GameTranslator.App/GameTranslator.App.csproj`)*
+3. Açılan arayüzde sol üstteki **`▶ Çeviriyi Başlat`** butonuna basarak kullanabilirsiniz.
 
 ---
 
 ### 3. 📺 Akıllı TV (Smart TV Companion Uygulamaları)
-> TV'niz HDMI'daki oyun görüntüsünü oynatırken, üzerine şeffaf bir OSD penceresi açarak Türkçe altyazıyı basar. Hazır paketler `tv/packages/` klasöründedir:
+> TV'niz HDMI'daki oyun görüntüsünü oynatırken, üzerine şeffaf bir OSD penceresi açarak Türkçe altyazıyı basar. Hazır derlenmiş paketler `tv/packages/` klasöründedir:
 
 * **TCL / Google TV / Android TV (Sony, Philips, Xiaomi vb.):**
-  * **Hazır Paket:** `tv/packages/gametranslator-androidtv_1.0.0.apk`
-  * **Kurulum:** USB bellekle televizyona takıp Dosya Yöneticisi'nden yükleyin veya yerel ağ üzerinden tek komutla kurun:
+  * **Hazır Paket Dosyası:** `tv/packages/gametranslator-androidtv_1.0.0.apk`
+  * **Kurulum Yöntemi 1 (USB ile - En Kolayı):**  
+    `gametranslator-androidtv_1.0.0.apk` dosyasını herhangi bir USB flash belleğe kopyalayın, TV'nize takın ve televizyondaki "Dosya Yöneticisi" veya "File Commander" ile APK'ya tıklayıp kurun.
+  * **Kurulum Yöntemi 2 (Wi-Fi / Ağ Üzerinden):**  
+    Bilgisayarınızdan TV'nin IP adresine kablosuz olarak kurabilirsiniz:
     ```bash
     adb connect <TV-IP-ADRESI>
     adb install tv/packages/gametranslator-androidtv_1.0.0.apk
     ```
-  * Televizyonda uygulamayı açıp PS5'in bağlı olduğu HDMI portunu seçin.
+  * Televizyonda uygulamayı açıp PS5'in bağlı olduğu HDMI portunu (örneğin HDMI 1) seçin.
 * **LG TV (webOS):**
-  * **Hazır Paket:** `tv/packages/com.gametranslator.tv_1.0.0_all.ipk`
-  * TV'de Developer Mode'u açın. webOS Dev Manager ile veya komutla kurun:
+  * **Hazır Paket Dosyası:** `tv/packages/com.gametranslator.tv_1.0.0_all.ipk`
+  * TV'de Developer Mode'u açın. webOS Dev Manager aracıyla veya komut satırından kurun:
     ```bash
     ares-install tv/packages/com.gametranslator.tv_1.0.0_all.ipk
     ```
 * **Samsung TV (Tizen):**
-  * **Hazır Paket:** `tv/packages/gametranslator-samsung_1.0.0.wgt`
-  * TV'de Geliştirici Modunu (1-2-3-4-5) açın. Tizen CLI ile yükleyin:
+  * **Hazır Paket Dosyası:** `tv/packages/gametranslator-samsung_1.0.0.wgt`
+  * TV'de Geliştirici Modunu açın (Uzaktan kumandada 1-2-3-4-5 tuşlayarak). Tizen CLI ile yükleyin:
     ```bash
     tizen install -n tv/packages/gametranslator-samsung_1.0.0.wgt
     ```
