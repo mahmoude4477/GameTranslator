@@ -1,0 +1,37 @@
+name: Windows Build & Release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            10.0.x
+            9.0.x
+            8.0.x
+          dotnet-quality: 'preview'
+
+      - name: Build and Publish Self-Contained Windows App
+        shell: pwsh
+        run: |
+          dotnet publish windows/src/GameTranslator.App/GameTranslator.App.csproj -c Release -r win-x64 --self-contained -o release-win
+          Compress-Archive -Path release-win/* -DestinationPath GameTranslator-Windows-x64.zip
+
+      - name: Upload Windows Asset to GitHub Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: GameTranslator-Windows-x64.zip
