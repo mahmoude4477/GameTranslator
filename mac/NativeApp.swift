@@ -557,8 +557,9 @@ struct PSNLoginWebView: NSViewRepresentable {
 
     func makeNSView(context: Context) -> WKWebView {
         let configuration = WKWebViewConfiguration()
-        configuration.websiteDataStore = .nonPersistent()
+        configuration.websiteDataStore = .default()
         let view = WKWebView(frame: .zero, configuration: configuration)
+        view.customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15"
         view.navigationDelegate = context.coordinator
         view.load(URLRequest(url: PSNAccount.authorizeURL))
         return view
@@ -3573,31 +3574,36 @@ struct SetupWizardView: View {
                         Button {
                             NSWorkspace.shared.open(PSNAccount.authorizeURL)
                         } label: {
-                            HStack(spacing: 6) {
+                            HStack(spacing: 7) {
                                 Image(systemName: "safari.fill")
-                                Text("Sony Giriş Sayfasını Aç (Yeni Sekme)")
+                                Text("Sony Giriş Sayfasını Aç (Safari)")
                             }
-                            .font(.system(size: 11.5, weight: .semibold))
+                            .font(.system(size: 12, weight: .semibold))
                             .foregroundStyle(Color.white)
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 9)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 10)
                             .background(Color(hex: "#0A84FF"), in: RoundedRectangle(cornerRadius: 6))
                         }
                         .buttonStyle(.plain)
 
-                        // Seçenek 2: Uygulama içi pencere
+                        // Seçenek 2: Panodan Doğrudan Yapıştır
                         Button {
-                            state.showInAppPSNLogin = true
+                            if let clip = NSPasteboard.general.string(forType: .string)?.trimmingCharacters(in: .whitespacesAndNewlines), !clip.isEmpty {
+                                state.psnRedirectInput = clip
+                                Task {
+                                    await state.processPSNRedirect(clip)
+                                }
+                            }
                         } label: {
                             HStack(spacing: 6) {
-                                Image(systemName: "macwindow")
-                                Text("Uygulama İçi Giriş Yap")
+                                Image(systemName: "doc.on.clipboard")
+                                Text("Panodan Yapıştır & Doğrula")
                             }
                             .font(.system(size: 11.5, weight: .medium))
                             .foregroundStyle(Color.white.opacity(0.9))
                             .padding(.horizontal, 14)
-                            .padding(.vertical, 9)
-                            .background(Color.white.opacity(0.1), in: RoundedRectangle(cornerRadius: 6))
+                            .padding(.vertical, 10)
+                            .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 6))
                         }
                         .buttonStyle(.plain)
                     }
