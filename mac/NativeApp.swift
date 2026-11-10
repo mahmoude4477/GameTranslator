@@ -1618,7 +1618,7 @@ final class AppState {
         for info in windowInfoList {
             if let owner = info[kCGWindowOwnerName as String] as? String,
                (owner.localizedCaseInsensitiveContains("chiaki") ||
-                owner.localizedCaseInsensitiveContains("Remote Play") ||
+                owner.localizedCaseInsensitiveContains("Remote") ||
                 owner.localizedCaseInsensitiveContains("PlayStation")),
                let windowId = info[kCGWindowNumber as String] as? CGWindowID {
                 targetWindowId = windowId
@@ -1804,7 +1804,7 @@ final class AppState {
             for info in windowInfoList {
                 if let owner = info[kCGWindowOwnerName as String] as? String,
                    (owner.localizedCaseInsensitiveContains("chiaki") ||
-                    owner.localizedCaseInsensitiveContains("Remote Play") ||
+                    owner.localizedCaseInsensitiveContains("Remote") ||
                     owner.localizedCaseInsensitiveContains("PlayStation")),
                    let windowId = info[kCGWindowNumber as String] as? CGWindowID {
                     if let rawCg = CGWindowListCreateImage(.null, .optionIncludingWindow, windowId, [.boundsIgnoreFraming, .bestResolution]) {
