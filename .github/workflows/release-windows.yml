@@ -28,7 +28,14 @@ jobs:
         shell: pwsh
         run: |
           dotnet publish windows/src/GameTranslator.App/GameTranslator.App.csproj -c Release -r win-x64 --self-contained -o release-win
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           Compress-Archive -Path release-win/* -DestinationPath GameTranslator-Windows-x64.zip
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GameTranslator-Windows-x64
+          path: GameTranslator-Windows-x64.zip
 
       - name: Upload Windows Asset to GitHub Release
         if: github.event_name == 'release'

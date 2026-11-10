@@ -733,6 +733,12 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         Changed(nameof(HasAccount), nameof(Console), nameof(Tv));
     }
 
+    /// <summary>Tüm kullanıcı ayarlarını varsayılana sıfırlar.</summary>
+    public void ResetSettings()
+    {
+        Settings = new UserSettings();
+    }
+
     // --- Çeviri ---
 
     public async Task StartAsync()

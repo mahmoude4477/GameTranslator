@@ -41,6 +41,11 @@ public sealed record UserSettings
     public string SourceLanguage { get; init; } = "en";
     public string TargetLanguage { get; init; } = "tr";
     public DubbingSettings Dubbing { get; init; } = new();
+    public bool DubbingEnabled
+    {
+        get => Dubbing.Enabled;
+        init => Dubbing = (Dubbing ?? new DubbingSettings()) with { Enabled = value };
+    }
     /// <summary>Anahtar girildiyse çeviri DeepL'le yapılır; kapalıysa ya da DeepL'e ulaşılamazsa cihaz üstü model.</summary>
     public bool OnlineTranslation { get; init; }
 
