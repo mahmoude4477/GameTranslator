@@ -43,6 +43,10 @@ GameTranslator, hem **macOS (Apple SwiftUI)** hem de **Windows (WPF / .NET 10)**
 
 ## 🎯 Platform Kurulum Rehberi (Hiç Kodlama Bilmeyenler İçin Adım Adım)
 
+> ### 📄 Resimli & Adım Adım TV Kurulum Kılavuzu (PDF)
+> Televizyonunuza (Android TV, LG webOS, Samsung Tizen) uygulamanın nasıl kurulacağını anlatan, ekran görüntülü ve detaylı Türkçe rehberimizi doğrudan indirebilirsiniz:
+> 👉 **[GameTranslator TV Kurulum Rehberi (PDF)](GameTranslator_TV_Kurulum_Rehberi.pdf)** *(Masaüstünüzde ve bu depoda hazır olarak yer almaktadır)*
+
 Aşağıdaki adımları takip ederek 2 dakika içinde oyunu Türkçe altyazıyla oynamaya başlayabilirsiniz.
 
 ---
@@ -110,7 +114,10 @@ dotnet run --project "windows/src/GameTranslator.App/GameTranslator.App.csproj"
 ---
 
 ### 3. 📺 Akıllı TV (Smart TV Companion Uygulamaları)
-> TV'niz HDMI'daki oyun görüntüsünü oynatırken, üzerine şeffaf bir OSD penceresi açarak Türkçe altyazıyı basar. Hazır derlenmiş paketler `tv/packages/` klasöründedir:
+> TV'niz HDMI'daki oyun görüntüsünü oynatırken, üzerine şeffaf bir OSD penceresi açarak Türkçe altyazıyı basar. Hazır derlenmiş paketler `tv/packages/` klasöründedir.
+> 
+> 💡 **Tüm TV Modelleri İçin Kapsamlı Görsel Rehber:**  
+> Televizyonunuza yükleme yaparken görsellerle adım adım takip edebileceğiniz **[GameTranslator TV Kurulum Rehberi (PDF)](GameTranslator_TV_Kurulum_Rehberi.pdf)** belgesine göz atabilirsiniz.
 
 * **TCL / Google TV / Android TV (Sony, Philips, Xiaomi vb.):**
   * **Hazır Paket Dosyası:** `tv/packages/gametranslator-androidtv_1.0.0.apk`
