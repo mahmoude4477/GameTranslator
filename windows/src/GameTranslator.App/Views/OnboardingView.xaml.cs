@@ -10,6 +10,7 @@ using System.Windows.Media;
 using GameTranslator.Core;
 using GameTranslator.Core.LgTv;
 using GameTranslator.Shell;
+using GameTranslator.App.Services;
 
 namespace GameTranslator.App.Views;
 
