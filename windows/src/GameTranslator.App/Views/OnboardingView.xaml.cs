@@ -48,33 +48,31 @@ public partial class OnboardingView : UserControl
 
     private void SetStep(int step)
     {
-        currentStep = Math.Clamp(step, 1, 5);
+        currentStep = Math.Clamp(step, 1, 4);
         UpdateStepView();
     }
 
     private void UpdateStepView()
     {
-        StepBadgeText.Text = $"Adım {currentStep} / 5";
+        StepBadgeText.Text = $"Adım {currentStep} / 4";
 
         // Panel Görünürlükleri
         Step1Panel.Visibility = currentStep == 1 ? Visibility.Visible : Visibility.Collapsed;
         Step2Panel.Visibility = currentStep == 2 ? Visibility.Visible : Visibility.Collapsed;
         Step3Panel.Visibility = currentStep == 3 ? Visibility.Visible : Visibility.Collapsed;
         Step4Panel.Visibility = currentStep == 4 ? Visibility.Visible : Visibility.Collapsed;
-        Step5Panel.Visibility = currentStep == 5 ? Visibility.Visible : Visibility.Collapsed;
 
         // Butonlar
         BackButton.Visibility = currentStep == 1 ? Visibility.Hidden : Visibility.Visible;
-        NextButton.Content = currentStep == 5 ? "Kurulumu Tamamla ✓" : "Devam Et ➔";
+        NextButton.Content = currentStep == 4 ? "Kurulumu Tamamla ✓" : "Devam Et ➔";
 
         // Kapsül Renkleri (Progress Pills)
         UpdatePill(PillBar1, PillText1, 1);
         UpdatePill(PillBar2, PillText2, 2);
         UpdatePill(PillBar3, PillText3, 3);
         UpdatePill(PillBar4, PillText4, 4);
-        UpdatePill(PillBar5, PillText5, 5);
 
-        if (currentStep == 3 && PairStatusText != null)
+        if (currentStep == 2 && PairStatusText != null)
         {
             var savedHost = ChiakiLauncher.GetSavedHost();
             if (!string.IsNullOrWhiteSpace(savedHost) && Ps5HostInput != null)
@@ -120,12 +118,12 @@ public partial class OnboardingView : UserControl
 
     private void OnNext(object sender, RoutedEventArgs e)
     {
-        if (currentStep == 4)
+        if (currentStep == 3)
         {
             SaveCurrentTvPlatform();
         }
 
-        if (currentStep < 5)
+        if (currentStep < 4)
         {
             SetStep(currentStep + 1);
         }
@@ -169,7 +167,6 @@ public partial class OnboardingView : UserControl
     private void OnPill2(object sender, RoutedEventArgs e) => SetStep(2);
     private void OnPill3(object sender, RoutedEventArgs e) => SetStep(3);
     private void OnPill4(object sender, RoutedEventArgs e) => SetStep(4);
-    private void OnPill5(object sender, RoutedEventArgs e) => SetStep(5);
 
     // ==========================================
     // Adım 2: PSN Girişi
@@ -274,12 +271,12 @@ public partial class OnboardingView : UserControl
                 PairStatusText.Text = $"✓ PS5 Konsolu Başarıyla Eşleşti! ({host})";
                 PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
                 await Task.Delay(600);
-                SetStep(4);
+                SetStep(3);
             }
             else
             {
-                ChiakiLauncher.LaunchOrBringToFront(host, "PlayStation 5");
-                PairStatusText.Text = "Chiaki açıldı! Lütfen PS5'e tıklayıp TV'deki 8 haneli kodu girerek 'Register'a basın.";
+                ChiakiLauncher.LaunchPairingGui(host);
+                PairStatusText.Text = "Chiaki açıldı! Lütfen PS5'e tıklayıp ekrandaki 8 haneli kodu girerek 'Register'a basın.";
                 PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
             }
         }

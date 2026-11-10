@@ -28,11 +28,9 @@
                     </StackPanel>
                 </Grid>
 
-                <!-- 5 Kademeli Adım Çubuğu (Apple Kapsül Butonlar) -->
+                <!-- 4 Kademeli Adım Çubuğu (Apple Kapsül Butonlar) -->
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="6" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="6" />
                         <ColumnDefinition Width="*" />
@@ -45,35 +43,28 @@
                     <Button x:Name="Pill1" Grid.Column="0" Click="OnPill1" Background="Transparent" BorderThickness="0" Cursor="Hand">
                         <StackPanel>
                             <Border x:Name="PillBar1" Height="4" CornerRadius="2" Background="#0A84FF" Margin="0,0,0,4" />
-                            <TextBlock x:Name="PillText1" Text="1. Başlangıç" FontSize="10" FontWeight="Bold" Foreground="#38BDF8" HorizontalAlignment="Center" />
+                            <TextBlock x:Name="PillText1" Text="1. Başlangıç" FontSize="10.5" FontWeight="Bold" Foreground="#38BDF8" HorizontalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
                     <Button x:Name="Pill2" Grid.Column="2" Click="OnPill2" Background="Transparent" BorderThickness="0" Cursor="Hand">
                         <StackPanel>
                             <Border x:Name="PillBar2" Height="4" CornerRadius="2" Background="#232B3E" Margin="0,0,0,4" />
-                            <TextBlock x:Name="PillText2" Text="2. İkinci Hesap" FontSize="10" Foreground="{DynamicResource textSecondaryBrush}" HorizontalAlignment="Center" />
+                            <TextBlock x:Name="PillText2" Text="2. PS5 Konsolu" FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" HorizontalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
                     <Button x:Name="Pill3" Grid.Column="4" Click="OnPill3" Background="Transparent" BorderThickness="0" Cursor="Hand">
                         <StackPanel>
                             <Border x:Name="PillBar3" Height="4" CornerRadius="2" Background="#232B3E" Margin="0,0,0,4" />
-                            <TextBlock x:Name="PillText3" Text="3. PS5 Konsolu" FontSize="10" Foreground="{DynamicResource textSecondaryBrush}" HorizontalAlignment="Center" />
+                            <TextBlock x:Name="PillText3" Text="3. Akıllı TV" FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" HorizontalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
                     <Button x:Name="Pill4" Grid.Column="6" Click="OnPill4" Background="Transparent" BorderThickness="0" Cursor="Hand">
                         <StackPanel>
                             <Border x:Name="PillBar4" Height="4" CornerRadius="2" Background="#232B3E" Margin="0,0,0,4" />
-                            <TextBlock x:Name="PillText4" Text="4. Akıllı TV" FontSize="10" Foreground="{DynamicResource textSecondaryBrush}" HorizontalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button x:Name="Pill5" Grid.Column="8" Click="OnPill5" Background="Transparent" BorderThickness="0" Cursor="Hand">
-                        <StackPanel>
-                            <Border x:Name="PillBar5" Height="4" CornerRadius="2" Background="#232B3E" Margin="0,0,0,4" />
-                            <TextBlock x:Name="PillText5" Text="5. Test &amp; Bitti" FontSize="10" Foreground="{DynamicResource textSecondaryBrush}" HorizontalAlignment="Center" />
+                            <TextBlock x:Name="PillText4" Text="4. Test &amp; Başla" FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" HorizontalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </Grid>
@@ -162,51 +153,8 @@
                     </Border>
                 </StackPanel>
 
-                <!-- ==================== ADIM 2: İKİNCİ HESAP ==================== -->
+                <!-- ==================== ADIM 2: PS5 KONSOLU & EŞLEŞTİRME ==================== -->
                 <StackPanel x:Name="Step2Panel" Visibility="Collapsed">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
-                        <Border Width="44" Height="44" CornerRadius="22" Background="#1F38BDF8" Margin="0,0,14,0" VerticalAlignment="Center">
-                            <TextBlock Text="👤" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="İkinci PSN Hesabı Girişi" FontWeight="Bold" FontSize="18" Foreground="{DynamicResource textPrimaryBrush}" />
-                            <TextBlock Text="GameTranslator oyunu Remote Play ile izler. İkinci hesap sayesinde ana hesabınızın DualSense kumandası TV'den asla kopmaz." FontSize="12" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,2,0,0" TextWrapping="Wrap" />
-                        </StackPanel>
-                    </StackPanel>
-
-                    <!-- 4 Maddelik Rehber -->
-                    <Border Background="#161B26" BorderBrush="#232B3E" BorderThickness="1" CornerRadius="8" Padding="14" Margin="0,0,0,14">
-                        <StackPanel>
-                            <TextBlock Text="Nasıl Yapılır? (Tek Seferlik İşlem)" FontWeight="Bold" FontSize="12" Foreground="White" Margin="0,0,0,8" />
-                            <TextBlock Text="1. playstation.com adresinden farklı bir e-posta ile ücretsiz 2. bir PSN hesabı açın." FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,0,4" />
-                            <TextBlock Text="2. PS5'inizde 'Kullanıcı Ekle' deyip bu 2. hesapla bir kez oturum açın." FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,0,4" />
-                            <TextBlock Text="3. Yeni kullanıcıdayken Ayarlar › Sistem › Uzaktan Oynatma'yı açık yapın." FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,0,4" />
-                            <TextBlock Text="4. Ana kullanıcınıza geri dönün. Artık hazırsınız!" FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" />
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Giriş Butonu & Yönlendirme URL'si -->
-                    <Border Background="#161B26" BorderBrush="#232B3E" BorderThickness="1" CornerRadius="8" Padding="14">
-                        <StackPanel>
-                            <TextBlock Text="PlayStation Network Bağlantısı:" FontWeight="Bold" FontSize="12.5" Foreground="White" Margin="0,0,0,8" />
-                            <Button Content="🌐 Sony Giriş Sayfasını Aç (Tarayıcıda)" Click="OnOpenSonyLogin" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Padding="14,6" Margin="0,0,0,10" />
-
-                            <TextBlock Text="Giriş yaptıktan sonra açılan sayfanın adresini (URL) veya kodunu yapıştırın:" FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,0,4" />
-                            <Grid Margin="0,0,0,6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBox x:Name="PsnRedirectInput" Text="" MinHeight="32" VerticalContentAlignment="Center" Margin="0,0,8,0" FontFamily="Consolas" FontSize="11" />
-                                <Button Grid.Column="1" Content="Doğrula" Click="OnVerifyPsn" Style="{StaticResource SecondaryButton}" Padding="14,4" />
-                            </Grid>
-                            <TextBlock x:Name="PsnStatusText" Text="✓ İsteğe bağlıdır; kodu girmeden doğrudan 3. adıma da geçebilirsiniz." FontSize="10.5" Foreground="#10B981" />
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
-
-                <!-- ==================== ADIM 3: PS5 KONSOLU ==================== -->
-                <StackPanel x:Name="Step3Panel" Visibility="Collapsed">
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
                         <Border Width="44" Height="44" CornerRadius="22" Background="#1F0A84FF" Margin="0,0,14,0" VerticalAlignment="Center">
                             <TextBlock Text="🎮" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -227,7 +175,7 @@
                             <TextBlock Text="💡" FontSize="22" VerticalAlignment="Top" Margin="0,2,0,0" />
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="Bunu Kurmanız / Eşlemeniz Neden Gerekiyor?" FontWeight="Bold" FontSize="13" Foreground="White" />
-                                <TextBlock Text="GameTranslator, PS5'inizin oyun görüntüsünü ultra düşük gecikmeyle yakalamak için dahili Chiaki Remote Play motorunu kullanır. Bu eşleştirme yalnızca İLK KURULUMDA BİR KEZ yapılır." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,3,0,6" LineHeight="16" />
+                                <TextBlock Text="GameTranslator, PS5 görüntüsünü ultra düşük gecikmeyle yakalamak için dahili Chiaki Remote Play motorunu kullanır. Bu eşleştirme yalnızca İLK KURULUMDA BİR KEZ yapılır. Kumandanızın TV'den kopmaması için PS5'te ikinci bir yan hesap açık olmalıdır." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,3,0,6" LineHeight="16" />
                                 <Border Background="#0E121B" CornerRadius="6" Padding="10">
                                     <StackPanel>
                                         <TextBlock Text="✨ Tam Otomasyon:" FontWeight="Bold" FontSize="11" Foreground="#38BDF8" Margin="0,0,0,3" />
@@ -244,9 +192,9 @@
                     <Border Background="#161B26" BorderBrush="#232B3E" BorderThickness="1" CornerRadius="8" Padding="14" Margin="0,0,0,12">
                         <StackPanel>
                             <TextBlock Text="Eşleştirme Adımları (1 Dakika):" FontWeight="Bold" FontSize="12" Foreground="White" Margin="0,0,0,6" />
-                            <TextBlock Text="1. PS5'te Ayarlar › Sistem › Uzaktan Oynatma bölümüne gidin." FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,0,3" />
+                            <TextBlock Text="1. PS5'te 2. kullanıcıdayken Ayarlar › Sistem › Uzaktan Oynatma bölümüne gidin." FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,0,3" />
                             <TextBlock Text="2. 'Uzaktan Oynatmayı Etkinleştir'i açın ve 'Cihaz Eşleştir'e tıklayın." FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,0,3" />
-                            <TextBlock Text="3. Aşağıdaki '🎮 Chiaki'yi Başlat &amp; Eşleştir' butonuna basın, açılan pencerede PS5'e tıklayıp ekrandaki 8 haneli PIN'i girin." FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" />
+                            <TextBlock Text="3. Aşağıdaki '🎮 Chiaki'yi Başlat &amp; Eşleştir' butonuna basın, açılan pencerede PS5'e tıklayıp PSN Login ve 8 haneli PIN'i girin." FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" />
                         </StackPanel>
                     </Border>
 
@@ -276,12 +224,28 @@
                                 <Button Grid.Column="1" Content="Eşleştirmeyi Doğrula ➔" Click="OnPairPs5" Style="{StaticResource SecondaryButton}" MinHeight="36" Margin="6,0,0,0" />
                             </Grid>
                             <TextBlock x:Name="PairStatusText" Margin="0,4,0,0" FontSize="11" Foreground="#10B981" />
+
+                            <!-- İsteğe Bağlı Manuel Giriş -->
+                            <Expander Header="İsteğe Bağlı: Manuel Sony Giriş Kodu" Foreground="{DynamicResource textSecondaryBrush}" FontSize="10.5" Margin="0,8,0,0">
+                                <StackPanel Margin="0,6,0,0">
+                                    <Button Content="🌐 Sony Giriş Sayfasını Aç (Tarayıcıda)" Click="OnOpenSonyLogin" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Padding="12,4" Margin="0,0,0,6" />
+                                    <Grid Margin="0,0,0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox x:Name="PsnRedirectInput" Text="" MinHeight="30" VerticalContentAlignment="Center" Margin="0,0,8,0" FontFamily="Consolas" FontSize="11" />
+                                        <Button Grid.Column="1" Content="Doğrula" Click="OnVerifyPsn" Style="{StaticResource SecondaryButton}" Padding="12,3" />
+                                    </Grid>
+                                    <TextBlock x:Name="PsnStatusText" Text="İsteğe bağlıdır; Chiaki'de zaten PSN Login yapabiliyorsanız buraya gerek yoktur." FontSize="10" Foreground="#10B981" />
+                                </StackPanel>
+                            </Expander>
                         </StackPanel>
                     </Border>
                 </StackPanel>
 
-                <!-- ==================== ADIM 4: AKILLI TV ==================== -->
-                <StackPanel x:Name="Step4Panel" Visibility="Collapsed">
+                <!-- ==================== ADIM 3: AKILLI TV ==================== -->
+                <StackPanel x:Name="Step3Panel" Visibility="Collapsed">
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
                         <Border Width="44" Height="44" CornerRadius="22" Background="#1F10B981" Margin="0,0,14,0" VerticalAlignment="Center">
                             <TextBlock Text="📺" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -445,8 +409,8 @@
                     </Border>
                 </StackPanel>
 
-                <!-- ==================== ADIM 5: TEST & BİTTİ ==================== -->
-                <StackPanel x:Name="Step5Panel" Visibility="Collapsed">
+                <!-- ==================== ADIM 4: TEST & BİTTİ ==================== -->
+                <StackPanel x:Name="Step4Panel" Visibility="Collapsed">
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
                         <Border Width="44" Height="44" CornerRadius="22" Background="#1F10B981" Margin="0,0,14,0" VerticalAlignment="Center">
                             <TextBlock Text="🎉" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
