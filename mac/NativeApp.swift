@@ -1322,8 +1322,27 @@ final class AppState {
         let testEn = "GameTranslator Live Subtitle Test Successful!"
         let entry = SubtitleEntry(turkish: testTr, english: testEn, timestamp: currentTime())
         history.insert(entry, at: 0)
+
+        let testBox: [String: Double] = [
+            "left": cropLeft,
+            "right": cropRight,
+            "top": cropTop,
+            "bottom": cropBottom
+        ]
+        lastBox = testBox
+
+        if placement != "fixed" {
+            let centerY = (cropTop + cropBottom) / 2.0
+            if placement == "cover" {
+                bottomPercent = max(2.0, min(85.0, (1.0 - centerY) * 100.0))
+            } else if placement == "above" {
+                bottomPercent = max(5.0, min(90.0, (1.0 - cropTop) * 100.0 + 2.0))
+            } else if placement == "below" {
+                bottomPercent = max(2.0, min(85.0, (1.0 - cropBottom) * 100.0 - 5.0))
+            }
+        }
         syncStyleToTV()
-        server.sendSubtitle(turkish: testTr, original: testEn, durationMs: 15000)
+        server.sendSubtitle(turkish: testTr, original: testEn, box: testBox, durationMs: 15000)
 
         let host = self.tvHost.trimmingCharacters(in: .whitespaces)
         if !host.isEmpty {
@@ -1769,6 +1788,21 @@ final class AppState {
                     self.liveEnglish = detectedText
                     self.lastBox = currentBox
 
+                    // Otomatik yerleşim konumunu hesapla
+                    if self.placement != "fixed" {
+                        let top = currentBox["top"] ?? self.cropTop
+                        let bottom = currentBox["bottom"] ?? self.cropBottom
+                        let centerY = (top + bottom) / 2.0
+                        if self.placement == "cover" {
+                            self.bottomPercent = max(2.0, min(85.0, (1.0 - centerY) * 100.0))
+                        } else if self.placement == "above" {
+                            self.bottomPercent = max(5.0, min(90.0, (1.0 - top) * 100.0 + 2.0))
+                        } else if self.placement == "below" {
+                            self.bottomPercent = max(2.0, min(85.0, (1.0 - bottom) * 100.0 - 5.0))
+                        }
+                        self.syncStyleToTV()
+                    }
+
                     Task {
                         let turkish = await self.translateText(detectedText)
                         await MainActor.run {
@@ -1996,6 +2030,16 @@ final class AppState {
             "bottom": cropBottom
         ]
         lastBox = testBox
+        if placement != "fixed" {
+            let centerY = (cropTop + cropBottom) / 2.0
+            if placement == "cover" {
+                bottomPercent = max(2.0, min(85.0, (1.0 - centerY) * 100.0))
+            } else if placement == "above" {
+                bottomPercent = max(5.0, min(90.0, (1.0 - cropTop) * 100.0 + 2.0))
+            } else if placement == "below" {
+                bottomPercent = max(2.0, min(85.0, (1.0 - cropBottom) * 100.0 - 5.0))
+            }
+        }
         syncStyleToTV()
         server.sendSubtitle(turkish: testTr, original: testEn, box: testBox)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
@@ -2934,15 +2978,27 @@ struct MainWindowView: View {
                     }
                     .labelsHidden()
                     .onChange(of: state.placement) {
-                        state.syncStyleToTV()
-                        let textToSend = state.liveTurkish.isEmpty ? "Altyazı Yerleşim Testi" : state.liveTurkish
-                        let origToSend = state.liveEnglish.isEmpty ? "Subtitle Placement Test" : state.liveEnglish
                         let boxToSend = state.lastBox ?? [
                             "left": state.cropLeft,
                             "right": state.cropRight,
                             "top": state.cropTop,
                             "bottom": state.cropBottom
                         ]
+                        if state.placement != "fixed" {
+                            let top = boxToSend["top"] ?? state.cropTop
+                            let bottom = boxToSend["bottom"] ?? state.cropBottom
+                            let centerY = (top + bottom) / 2.0
+                            if state.placement == "cover" {
+                                state.bottomPercent = max(2.0, min(85.0, (1.0 - centerY) * 100.0))
+                            } else if state.placement == "above" {
+                                state.bottomPercent = max(5.0, min(90.0, (1.0 - top) * 100.0 + 2.0))
+                            } else if state.placement == "below" {
+                                state.bottomPercent = max(2.0, min(85.0, (1.0 - bottom) * 100.0 - 5.0))
+                            }
+                        }
+                        state.syncStyleToTV()
+                        let textToSend = state.liveTurkish.isEmpty ? "Altyazı Yerleşim Testi" : state.liveTurkish
+                        let origToSend = state.liveEnglish.isEmpty ? "Subtitle Placement Test" : state.liveEnglish
                         state.server.sendSubtitle(turkish: textToSend, original: origToSend, box: boxToSend)
                     }
                 }
@@ -3004,6 +3060,7 @@ struct MainWindowView: View {
 
                     let displayText = state.isRunning ? (state.liveTurkish.isEmpty ? "Altyazı taranıyor..." : state.liveTurkish) : (state.liveTurkish.isEmpty ? "Çeviri Durduruldu" : state.liveTurkish)
                     let origText = state.liveEnglish.isEmpty ? "Press any button to continue" : state.liveEnglish
+                    let previewPad = CGFloat(state.bottomPercent * 1.05 + 4.0)
 
                     if state.placement == "cover" {
                         // İngilizce yazının üstünü örten koyu zemin ve üstünde Türkçe çeviri
@@ -3017,9 +3074,9 @@ struct MainWindowView: View {
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 4)
                                         .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
-                                )
+                                 )
                         }
-                        .padding(.bottom, CGFloat(state.bottomPercent * 2.8))
+                        .padding(.bottom, previewPad)
                     } else if state.placement == "above" {
                         // Türkçe çeviri ÜSTTE, orijinal İngilizce altyazı ALTIMDA (kapanmadan açıkta kalır)
                         VStack(spacing: 4) {
@@ -3036,7 +3093,7 @@ struct MainWindowView: View {
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 1)
                         }
-                        .padding(.bottom, CGFloat(state.bottomPercent * 2.0))
+                        .padding(.bottom, previewPad)
                     } else if state.placement == "below" {
                         // Orijinal İngilizce ÜSTTE, Türkçe çeviri ALTINDA
                         VStack(spacing: 4) {
@@ -3053,7 +3110,7 @@ struct MainWindowView: View {
                                 .padding(.vertical, 4)
                                 .background(Color.black.opacity(state.backgroundOpacity / 100.0), in: RoundedRectangle(cornerRadius: 4))
                         }
-                        .padding(.bottom, CGFloat(state.bottomPercent * 2.0))
+                        .padding(.bottom, previewPad)
                     } else {
                         // Sabit konum
                         Text(displayText)
@@ -3062,7 +3119,7 @@ struct MainWindowView: View {
                             .padding(.horizontal, 14)
                             .padding(.vertical, 5)
                             .background(Color.black.opacity(state.backgroundOpacity / 100.0), in: RoundedRectangle(cornerRadius: 4))
-                            .padding(.bottom, CGFloat(state.bottomPercent * 2.8))
+                            .padding(.bottom, previewPad)
                     }
                 }
             }
