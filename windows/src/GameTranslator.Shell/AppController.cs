@@ -122,9 +122,9 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
             return "Eşleşmedi";
         }
     }
-    public StatusTone Ps5Tone => isRunning ? Ps5ToneFor(sessionState, isRunning) : (console is not null ? StatusTone.Positive : StatusTone.Neutral);
+    public StatusTone Ps5Tone => isRunning ? Ps5ToneFor(sessionState, isRunning) : (console is not null ? StatusTone.Good : StatusTone.Idle);
     public int TvClients { get => tvClients; private set => Set(ref tvClients, value, [nameof(TvTone), nameof(TvStatusText)]); }
-    public StatusTone TvTone => tvClients > 0 ? StatusTone.Positive : (tv is not null ? StatusTone.Positive : StatusTone.Warning);
+    public StatusTone TvTone => tvClients > 0 ? StatusTone.Good : (tv is not null ? StatusTone.Good : StatusTone.Warning);
     public string TvStatusText
     {
         get

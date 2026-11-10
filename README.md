@@ -84,7 +84,8 @@ Eğer uygulamayı terminalden kendi ellerinizle derleyip kurmak isterseniz:
 ---
 
 ### 2. 🪟 PC (Windows Yerel Masaüstü Kurulumu - Windows 10 / 11)
-> C# / .NET 10, WPF ve DirectML / Windows Media OCR altyapısıyla çalışan yerel, donanım hızlandırmalı Windows masaüstü uygulamasıdır.
+> C# / .NET 10, WPF ve DirectML / Windows Media OCR altyapısıyla çalışan yerel, donanım hızlandırmalı Windows masaüstü uygulamasıdır.  
+> 💡 **Hızlı Başlangıç:** [GitHub Releases](https://github.com/Sefflex/GameTranslator/releases) sayfasından doğrudan **`GameTranslator-Windows-x64.zip`** paketini indirip kullanabilirsiniz. Adım adım kılavuz: **[Windows Manuel Kurulum ve Sorun Giderme Rehberi](docs/WINDOWS_KURULUM.md)**
 
 #### 🟢 Yöntem A: Tek Tıkla Otomatik Kurulum ve Başlatma (Önerilen)
 1. **GitHub'dan İndirin:** Bu sayfanın yukarısındaki yeşil **`<> Code`** butonuna tıklayın ve **`Download ZIP`** seçeneğini seçin. İnen ZIP dosyasını klasöre çıkartın (Örneğin: Masaüstünüze veya Belgelerim klasörüne).

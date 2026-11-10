@@ -85,7 +85,8 @@
                                 <!-- 16:9 Thumbnail Çerçevesi -->
                                 <Border Background="#090A0D" CornerRadius="6" Height="76" ClipToBounds="True" BorderBrush="#232B3E" BorderThickness="1">
                                     <Grid>
-                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <Image x:Name="ThumbnailStreamImage" Stretch="UniformToFill" />
+                                        <StackPanel x:Name="ThumbnailPlaceholder" VerticalAlignment="Center" HorizontalAlignment="Center">
                                             <TextBlock Text="{x:Static c:Glyphs.Controller}" Style="{StaticResource GlyphText}" FontSize="18" Foreground="#33FFFFFF" HorizontalAlignment="Center" />
                                             <TextBlock x:Name="ThumbnailStatusText" Text="PS5 Akışı Bekleniyor" FontSize="9" Foreground="#55FFFFFF" Margin="0,3,0,0" HorizontalAlignment="Center" />
                                         </StackPanel>
@@ -284,8 +285,11 @@
                             <!-- 16:9 GERÇEK OYUN GÖRÜNTÜSÜ & OCR ALGILAMA KUTUSU -->
                             <Border Background="#090A0D" BorderBrush="#33FFFFFF" BorderThickness="1.5" CornerRadius="8" Height="230" ClipToBounds="True" Margin="0,0,0,10">
                                 <Grid>
+                                    <!-- Canlı Video Akışı -->
+                                    <Image x:Name="LiveStreamImage" Stretch="Uniform" />
+
                                     <!-- Canlı Akış Kapalıyken Gösterilecek Kalibrasyon Zemin Deseni -->
-                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <StackPanel x:Name="StreamPlaceholder" VerticalAlignment="Center" HorizontalAlignment="Center">
                                         <TextBlock Text="{x:Static c:Glyphs.Controller}" Style="{StaticResource GlyphText}" FontSize="28" Foreground="#33FFFFFF" HorizontalAlignment="Center" />
                                         <TextBlock Text="PS5 Canlı Akışı Başlatılmadı" FontWeight="SemiBold" FontSize="11.5" Foreground="#AAFFFFFF" HorizontalAlignment="Center" Margin="0,6,0,2" />
                                         <TextBlock Text="PS5 ekranını canlı görmek için sol menüden '▶ Çeviriyi Başlat'a basın." FontSize="10" Foreground="#66FFFFFF" HorizontalAlignment="Center" />

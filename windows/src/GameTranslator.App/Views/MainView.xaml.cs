@@ -140,6 +140,11 @@ public partial class MainView : UserControl
             Refresh();
         }
 
+        if (e.PropertyName == nameof(AppController.LastFrame) && controller.LastFrame != null)
+        {
+            UpdateLiveFrame(controller.LastFrame);
+        }
+
         if (e.PropertyName == nameof(AppController.LastTranslation) && !string.IsNullOrWhiteSpace(controller.LastTranslation))
         {
             MonitorTurkishText.Text = controller.LastTranslation;
@@ -187,6 +192,27 @@ public partial class MainView : UserControl
                 ? $"{controller.TvClients} Cihaz Bağlı (Hazır)"
                 : (controller.Tv != null ? $"{controller.Tv.Name} (Hazır)" : "TV uygulaması bekleniyor");
         }
+
+        if (!running)
+        {
+            if (StreamPlaceholder != null) StreamPlaceholder.Visibility = Visibility.Visible;
+            if (ThumbnailPlaceholder != null) ThumbnailPlaceholder.Visibility = Visibility.Visible;
+        }
+    }
+
+    private void UpdateLiveFrame(GameTranslator.Core.Frame frame)
+    {
+        try
+        {
+            var bitmap = System.Windows.Media.Imaging.BitmapSource.Create(
+                frame.Width, frame.Height, 96, 96, PixelFormats.Bgra32, null, frame.Pixels, frame.Stride);
+            bitmap.Freeze();
+            if (LiveStreamImage != null) LiveStreamImage.Source = bitmap;
+            if (ThumbnailStreamImage != null) ThumbnailStreamImage.Source = bitmap;
+            if (StreamPlaceholder != null) StreamPlaceholder.Visibility = Visibility.Collapsed;
+            if (ThumbnailPlaceholder != null) ThumbnailPlaceholder.Visibility = Visibility.Collapsed;
+        }
+        catch { }
     }
 
     private async void OnToggle(object sender, RoutedEventArgs e)
