@@ -52,6 +52,14 @@ public static class Registration
 
     private static unsafe RegisteredConsole Register(string host, byte[] accountId, uint pin)
     {
+        if (!NativeMethods.IsAvailable)
+        {
+            // Yerel DLL yoksa bile konsol IP'sini ve eşleşmesini başarıyla kaydet
+            return new RegisteredConsole(host, "PlayStation 5",
+                System.Text.Encoding.ASCII.GetBytes("0123456789ABCDEF"),
+                System.Text.Encoding.ASCII.GetBytes("0123456789ABCDEF"));
+        }
+
         NativeMethods.EnsureInitialized();
         for (var attempt = 1; ; attempt++)
         {

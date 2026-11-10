@@ -50,4 +50,9 @@ public partial class OnboardingView : UserControl
     private void OnBack(object sender, RoutedEventArgs e) => controller.Back();
 
     private void OnContinue(object sender, RoutedEventArgs e) => controller.Advance();
+
+    private void OnSkipToMain(object sender, RoutedEventArgs e)
+    {
+        controller.Step = OnboardingStep.Done;
+    }
 }

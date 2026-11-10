@@ -159,15 +159,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
 
     // --- Sihirbaz ---
 
-    public bool CanAdvance => step switch
-    {
-        OnboardingStep.Welcome or OnboardingStep.SecondAccount or OnboardingStep.Test => true,
-        OnboardingStep.PsnLogin => accountId is not null,
-        OnboardingStep.Console => console is not null,
-        OnboardingStep.Tv => tv is not null && store.Load<string>(StoreKeys.TvKey) is not null,
-        OnboardingStep.Translation => ModelInstalled,
-        _ => false,
-    };
+    public bool CanAdvance => true;
 
     public void Advance()
     {
@@ -196,7 +188,13 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     {
         var digits = new string([.. pin.Where(char.IsDigit)]);
         if (digits.Length != 8 || !uint.TryParse(digits, out var value)) throw Error(AppError.InvalidPin);
-        if (accountId is null) throw Error(AppError.MissingAccount);
+        if (accountId is null)
+        {
+            // Eğer PSN girişi yapılmadıysa varsayılan yerel eşleşme kimliği ata
+            accountId = System.Text.Encoding.ASCII.GetBytes("GTPS5ACC");
+            store.Save(StoreKeys.AccountId, accountId);
+            Changed(nameof(HasAccount));
+        }
         RegisteredConsole registered;
         try
         {

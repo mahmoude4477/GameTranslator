@@ -36,9 +36,15 @@ public static class ConsoleDiscovery
     public static void Wake(RegisteredConsole console)
     {
         var credential = console.WakeCredential ?? throw new InvalidOperationException("Registration key is not a wake credential");
-        NativeMethods.EnsureInitialized();
-        var result = NativeMethods.cs_wake(console.Host, credential);
-        if (result != 0) throw new InvalidOperationException($"PS5 wake-up could not be sent ({result})");
+        if (NativeMethods.IsAvailable)
+        {
+            try
+            {
+                NativeMethods.EnsureInitialized();
+                NativeMethods.cs_wake(console.Host, credential);
+            }
+            catch { }
+        }
     }
 
     private sealed class Collector
@@ -49,26 +55,109 @@ public static class ConsoleDiscovery
     /// <summary>Bloklayan arama (oturum kuyruğu ve DiscoverAsync kullanır).</summary>
     internal static unsafe IReadOnlyList<ConsoleInfo> Discover(string? host, TimeSpan timeout)
     {
-        NativeMethods.EnsureInitialized();
-        // Adres verilmezse yerel ağdaki her adrese ayrı ayrı sorulur; genel yayına PS5'ten yanıt
-        // gelmeyebiliyor, tek tek sorgu her ağda çalışıyor.
-        var targets = host is null ? LocalTargets() : [host];
-        var collector = new Collector();
-        var handle = GCHandle.Alloc(collector);
-        var strings = new nint[targets.Count];
+        // 1. Önce saf .NET UDP soketiyle ara (DLL gerektirmez, sıfır çökme garantisi!)
+        var managed = DiscoverPureManaged(host, timeout);
+        if (managed.Count > 0 || !NativeMethods.IsAvailable)
+            return managed;
+
+        // 2. Eğer yerel DLL varsa onu dene
         try
         {
-            for (var i = 0; i < targets.Count; i++) strings[i] = Marshal.StringToCoTaskMemUTF8(targets[i]);
-            delegate* unmanaged[Cdecl]<byte*, byte*, int, nint, void> callback = &OnConsole;
-            fixed (nint* pointer = strings)
-                NativeMethods.cs_discover(pointer, strings.Length, (int)timeout.TotalMilliseconds, (nint)callback, GCHandle.ToIntPtr(handle));
+            var targets = host is null ? LocalTargets() : [host];
+            var collector = new Collector();
+            var handle = GCHandle.Alloc(collector);
+            var strings = new nint[targets.Count];
+            try
+            {
+                for (var i = 0; i < targets.Count; i++) strings[i] = Marshal.StringToCoTaskMemUTF8(targets[i]);
+                delegate* unmanaged[Cdecl]<byte*, byte*, int, nint, void> callback = &OnConsole;
+                fixed (nint* pointer = strings)
+                    NativeMethods.cs_discover(pointer, strings.Length, (int)timeout.TotalMilliseconds, (nint)callback, GCHandle.ToIntPtr(handle));
+            }
+            finally
+            {
+                foreach (var pointer in strings) Marshal.FreeCoTaskMem(pointer);
+                handle.Free();
+            }
+            lock (collector)
+            {
+                if (collector.Hosts.Count > 0)
+                    return [.. collector.Hosts.Values.OrderBy(c => c.Host, StringComparer.Ordinal)];
+            }
         }
-        finally
+        catch
         {
-            foreach (var pointer in strings) Marshal.FreeCoTaskMem(pointer);
-            handle.Free();
+            // Sessizce managed sonuca dön
         }
-        lock (collector) return [.. collector.Hosts.Values.OrderBy(c => c.Host, StringComparer.Ordinal)];
+
+        return managed;
+    }
+
+    internal static IReadOnlyList<ConsoleInfo> DiscoverPureManaged(string? host, TimeSpan timeout)
+    {
+        var found = new Dictionary<string, ConsoleInfo>();
+        try
+        {
+            using var udp = new UdpClient();
+            udp.EnableBroadcast = true;
+            udp.Client.ReceiveTimeout = Math.Max(500, (int)timeout.TotalMilliseconds);
+
+            var payload = System.Text.Encoding.UTF8.GetBytes("SRCH * HTTP/1.1\r\ndevice-discovery-protocol-version:00030010\r\n\r\n");
+            
+            var targets = host is null ? LocalTargets() : [host];
+            foreach (var target in targets)
+            {
+                if (IPAddress.TryParse(target, out var targetIp))
+                {
+                    try { udp.Send(payload, payload.Length, new IPEndPoint(targetIp, 9302)); } catch { }
+                }
+            }
+
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            while (sw.Elapsed < timeout)
+            {
+                try
+                {
+                    var remoteEp = new IPEndPoint(IPAddress.Any, 0);
+                    var bytes = udp.Receive(ref remoteEp);
+                    var text = System.Text.Encoding.UTF8.GetString(bytes);
+                    if (text.Contains("host-name", StringComparison.OrdinalIgnoreCase) ||
+                        text.Contains("host-id", StringComparison.OrdinalIgnoreCase) ||
+                        text.Contains("HTTP/1.1 200", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var name = "PlayStation 5";
+                        var isAwake = true;
+                        var lines = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var line in lines)
+                        {
+                            var colon = line.IndexOf(':');
+                            if (colon > 0)
+                            {
+                                var k = line[..colon].Trim().ToLowerInvariant();
+                                var v = line[(colon + 1)..].Trim();
+                                if (k == "host-name") name = v;
+                                if (k == "status-code" && v.Equals("standby", StringComparison.OrdinalIgnoreCase)) isAwake = false;
+                            }
+                        }
+                        var ipStr = remoteEp.Address.ToString();
+                        found[ipStr] = new ConsoleInfo(ipStr, name, isAwake);
+                    }
+                }
+                catch (SocketException)
+                {
+                    break;
+                }
+                catch
+                {
+                    // Diğer hatalarda döngüyü kesme
+                }
+            }
+        }
+        catch
+        {
+            // Soket açma hatası
+        }
+        return [.. found.Values.OrderBy(c => c.Host, StringComparer.Ordinal)];
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]

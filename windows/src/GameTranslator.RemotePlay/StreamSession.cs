@@ -318,6 +318,11 @@ public sealed class StreamSession : IStreamSession
         {
             var box = new SessionBox(owner, generation);
             failure = null;
+            if (!NativeMethods.IsAvailable)
+            {
+                failure = new DisconnectReason(DisconnectKind.Other, "gametranslator_native DLL bulunamadı. Lütfen Chiaki veya ilgili bileşenleri kontrol edin.");
+                return;
+            }
             try
             {
                 NativeMethods.EnsureInitialized();

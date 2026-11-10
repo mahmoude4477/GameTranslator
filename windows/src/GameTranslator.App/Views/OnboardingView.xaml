@@ -24,6 +24,7 @@
         <Border DockPanel.Dock="Bottom" Background="{DynamicResource surfaceBrush}" BorderBrush="{DynamicResource borderBrush}" BorderThickness="0,1,0,0" Padding="32,16">
             <Grid>
                 <Button x:Name="BackButton" Content="{t:T 'Back'}" Click="OnBack" />
+                <Button x:Name="SkipButton" Content="Ana Ekrana Geç" HorizontalAlignment="Center" Click="OnSkipToMain" Style="{StaticResource SecondaryButton}" />
                 <Button x:Name="ContinueButton" Content="{t:T 'Continue'}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right"
                         IsDefault="True" IsEnabled="{Binding CanAdvance}" Click="OnContinue" />
             </Grid>

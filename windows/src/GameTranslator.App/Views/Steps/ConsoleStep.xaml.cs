@@ -36,16 +36,24 @@ public partial class ConsoleStep : UserControl
     {
         Search.IsEnabled = false;
         Consoles.Children.Clear();
-        var found = await Controller.DiscoverConsolesAsync();
-        selected ??= found.FirstOrDefault()?.Host;
-        foreach (var console in found)
+        try
         {
-            var option = new RadioButton { Content = $"{console.Name} — {console.Host}", IsChecked = console.Host == selected, GroupName = "ps5" };
-            option.Checked += (_, _) => { selected = console.Host; UpdateConnect(); };
-            Consoles.Children.Add(option);
+            var found = await Controller.DiscoverConsolesAsync();
+            selected ??= found.FirstOrDefault()?.Host;
+            foreach (var console in found)
+            {
+                var option = new RadioButton { Content = $"{console.Name} — {console.Host}", IsChecked = console.Host == selected, GroupName = "ps5" };
+                option.Checked += (_, _) => { selected = console.Host; UpdateConnect(); };
+                Consoles.Children.Add(option);
+            }
+            var none = found.Count == 0;
+            NotFound.Visibility = ManualHost.Visibility = none ? Visibility.Visible : Visibility.Collapsed;
         }
-        var none = found.Count == 0;
-        NotFound.Visibility = ManualHost.Visibility = none ? Visibility.Visible : Visibility.Collapsed;
+        catch (Exception ex)
+        {
+            NotFound.Visibility = ManualHost.Visibility = Visibility.Visible;
+            Error.Text = "Ağ taramasında konsol bulunamadı. Lütfen PS5 IP adresini elle girin.";
+        }
         Search.IsEnabled = true;
         UpdateConnect();
     }
