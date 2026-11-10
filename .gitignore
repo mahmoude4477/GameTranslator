@@ -3,7 +3,7 @@
 ._*
 build/
 .build/
-dist/
+/dist/
 *.xcodeproj/xcuserdata/
 *.xcworkspace/xcuserdata/
 mac/GameTranslator.xcodeproj/

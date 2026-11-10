@@ -69,7 +69,7 @@ if [ -d "$ROOT_DIR/tv/packages" ]; then
     cp -R "$ROOT_DIR/tv/packages/"* "$RES_DIR/tv-app/" 2>/dev/null || true
 fi
 
-# 5. Yardımcı Komut Dosyaları
+# 5. Yardımcı Komut Dosyaları ve PS5 Eşleştirme Paketi
 mkdir -p "$RES_DIR/scripts"
 if [ -f "$ROOT_DIR/scripts/android-tv-install.py" ]; then
     cp "$ROOT_DIR/scripts/android-tv-install.py" "$RES_DIR/scripts/android-tv-install.py"
@@ -78,6 +78,15 @@ fi
 if [ -f "$ROOT_DIR/scripts/gametranslator-ps5-register" ]; then
     cp "$ROOT_DIR/scripts/gametranslator-ps5-register" "$MACOS_DIR/gametranslator-ps5-register"
     chmod +x "$MACOS_DIR/gametranslator-ps5-register"
+fi
+
+# PS5 Eşleştiriciyi Resources içine yerleştir
+mkdir -p "$RES_DIR/ps5-register"
+if [ -d "$ROOT_DIR/scripts/ps5-register" ]; then
+    cp -R "$ROOT_DIR/scripts/ps5-register/"* "$RES_DIR/ps5-register/"
+fi
+if [ -f "$ROOT_DIR/scripts/ps5-register.js" ]; then
+    cp "$ROOT_DIR/scripts/ps5-register.js" "$RES_DIR/ps5-register/"
 fi
 
 # 6. Kod İmzalama (Apple Developer Sertifikası veya Ad-hoc)
