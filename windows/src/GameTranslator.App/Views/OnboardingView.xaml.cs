@@ -1,10 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using GameTranslator.Core;
+using GameTranslator.Core.LgTv;
 using GameTranslator.Shell;
 
 namespace GameTranslator.App.Views;
@@ -14,6 +18,7 @@ public partial class OnboardingView : UserControl
 {
     private readonly AppController controller;
     private int currentStep = 1;
+    private string selectedTvPlatform = "PC";
 
     public OnboardingView(AppController controller)
     {
@@ -102,33 +107,50 @@ public partial class OnboardingView : UserControl
     private void OnPill4(object sender, RoutedEventArgs e) => SetStep(4);
     private void OnPill5(object sender, RoutedEventArgs e) => SetStep(5);
 
-    // Adım 2: PSN
+    // ==========================================
+    // Adım 2: PSN Girişi
+    // ==========================================
     private void OnOpenSonyLogin(object sender, RoutedEventArgs e)
     {
-        Process.Start(new ProcessStartInfo("https://ca.account.sony.com/api/authz/v3/oauth/authorize?access_type=offline&client_id=09515139-db77-4948-a192-e352e302e3aa&response_type=code&scope=psn:clientapp&redirect_uri=https://remoteplay.dl.playstation.net/remoteplay/redirect") { UseShellExecute = true });
+        // Resmi Sony Remote Play OAuth URL (Chiaki-ng ve Mac ile birebir aynı)
+        var url = "https://auth.api.sonyentertainmentnetwork.com/2.0/oauth/authorize?service_entity=urn:service-entity:psn&response_type=code&client_id=ba495a24-818c-472b-b12d-ff231c1b5745&redirect_uri=https://remoteplay.dl.playstation.net/remoteplay/redirect&scope=psn:clientapp%20referenceDataService:countryConfig.read%20pushNotification:webSocket.desktop.connect%20sessionManager:remotePlaySession.system.update&request_locale=en_US&ui=pr&service_logo=ps&layout_type=popup&smcid=remoteplay&prompt=always&PlatformPrivacyWs1=minimal";
+        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
     }
 
     private async void OnVerifyPsn(object sender, RoutedEventArgs e)
     {
         var input = PsnRedirectInput.Text.Trim();
         if (string.IsNullOrWhiteSpace(input)) return;
-        if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
+
+        try
         {
-            try
+            if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
             {
                 await controller.CompletePsnLoginAsync(uri);
-                PsnStatusText.Text = "✓ PlayStation Network hesabı başarıyla bağlandı!";
-                PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
             }
-            catch (Exception ex)
+            else
             {
-                PsnStatusText.Text = $"Hata: {ex.Message}";
-                PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(239, 68, 68));
+                var fullUrl = input.StartsWith("code=")
+                    ? $"https://remoteplay.dl.playstation.net/remoteplay/redirect?{input}"
+                    : $"https://remoteplay.dl.playstation.net/remoteplay/redirect?code={input}";
+                await controller.CompletePsnLoginAsync(new Uri(fullUrl));
             }
+
+            PsnStatusText.Text = "✓ PlayStation Network hesabı başarıyla bağlandı!";
+            PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+            await Task.Delay(800);
+            SetStep(3);
+        }
+        catch (Exception ex)
+        {
+            PsnStatusText.Text = $"Doğrulama uyarısı: {ex.Message}";
+            PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(245, 158, 11));
         }
     }
 
-    // Adım 3: PS5
+    // ==========================================
+    // Adım 3: PS5 Eşleştirme
+    // ==========================================
     private async void OnScanPs5(object sender, RoutedEventArgs e)
     {
         PairStatusText.Text = "Yerel ağda PS5 konsolu taranıyor...";
@@ -172,8 +194,9 @@ public partial class OnboardingView : UserControl
         try
         {
             await controller.RegisterAsync(host, pin);
-            PairStatusText.Text = "✓ PS5 Konsolu Başarıyla Eşleşti!";
+            PairStatusText.Text = $"✓ PS5 Konsolu Başarıyla Eşleşti! ({host})";
             PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+            await Task.Delay(800);
             SetStep(4);
         }
         catch (Exception ex)
@@ -183,7 +206,124 @@ public partial class OnboardingView : UserControl
         }
     }
 
-    // Adım 4 & 5: TV Test
+    // ==========================================
+    // Adım 4: Akıllı TV Platform Seçimi & Eşleştirme
+    // ==========================================
+    private void OnSelectTvPc(object sender, RoutedEventArgs e)
+    {
+        selectedTvPlatform = "PC";
+        UpdateTvPlatformSelection();
+        _ = controller.PairAsync(new LgTv("PC & OBS", "127.0.0.1", TvBrand.AndroidTv));
+        TvStatusFeedback.Text = "✓ Bilgisayar & OBS modu kaydedildi.";
+    }
+
+    private void OnSelectTvSamsung(object sender, RoutedEventArgs e)
+    {
+        selectedTvPlatform = "Samsung";
+        UpdateTvPlatformSelection();
+    }
+
+    private void OnSelectTvLg(object sender, RoutedEventArgs e)
+    {
+        selectedTvPlatform = "LG";
+        UpdateTvPlatformSelection();
+    }
+
+    private void OnSelectTvAndroid(object sender, RoutedEventArgs e)
+    {
+        selectedTvPlatform = "Android";
+        UpdateTvPlatformSelection();
+    }
+
+    private void UpdateTvPlatformSelection()
+    {
+        var blueBrush = new SolidColorBrush(Color.FromRgb(10, 132, 255));
+        var defBrush = new SolidColorBrush(Color.FromRgb(35, 43, 62));
+
+        // Kenarlıklar
+        TvBorderPc.BorderBrush = selectedTvPlatform == "PC" ? blueBrush : defBrush;
+        TvBorderSamsung.BorderBrush = selectedTvPlatform == "Samsung" ? blueBrush : defBrush;
+        TvBorderLg.BorderBrush = selectedTvPlatform == "LG" ? blueBrush : defBrush;
+        TvBorderAndroid.BorderBrush = selectedTvPlatform == "Android" ? blueBrush : defBrush;
+
+        // Rozetler
+        TvBadgePc.Visibility = selectedTvPlatform == "PC" ? Visibility.Visible : Visibility.Collapsed;
+        TvBadgeSamsung.Visibility = selectedTvPlatform == "Samsung" ? Visibility.Visible : Visibility.Collapsed;
+        TvBadgeLg.Visibility = selectedTvPlatform == "LG" ? Visibility.Visible : Visibility.Collapsed;
+        TvBadgeAndroid.Visibility = selectedTvPlatform == "Android" ? Visibility.Visible : Visibility.Collapsed;
+
+        // Detay Panelleri
+        TvDetailPc.Visibility = selectedTvPlatform == "PC" ? Visibility.Visible : Visibility.Collapsed;
+        TvDetailSamsung.Visibility = selectedTvPlatform == "Samsung" ? Visibility.Visible : Visibility.Collapsed;
+        TvDetailLg.Visibility = selectedTvPlatform == "LG" ? Visibility.Visible : Visibility.Collapsed;
+        TvDetailAndroid.Visibility = selectedTvPlatform == "Android" ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private void OnCopyObsUrl(object sender, RoutedEventArgs e)
+    {
+        Clipboard.SetText("http://localhost:8787/obs");
+        MessageBox.Show("OBS URL adresi panoya kopyalandı:\nhttp://localhost:8787/obs", "Kopyalandı", MessageBoxButton.OK, MessageBoxImage.Information);
+    }
+
+    private async void OnSaveSamsung(object sender, RoutedEventArgs e)
+    {
+        var host = SamsungHostInput.Text.Trim();
+        await controller.PairAsync(new LgTv("Samsung Smart TV", host, TvBrand.Samsung));
+        TvStatusFeedback.Text = $"✓ Samsung TV kaydedildi ({host}). TV'nizde GameTranslator uygulamasını açın.";
+        TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+    }
+
+    private async void OnSaveLg(object sender, RoutedEventArgs e)
+    {
+        var host = LgHostInput.Text.Trim();
+        await controller.PairAsync(new LgTv("LG webOS TV", host, TvBrand.Lg));
+        TvStatusFeedback.Text = $"✓ LG webOS TV kaydedildi ({host}). TV'nizde GameTranslator uygulamasını açın.";
+        TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+    }
+
+    private async void OnSaveAndroid(object sender, RoutedEventArgs e)
+    {
+        var host = AndroidHostInput.Text.Trim();
+        await controller.PairAsync(new LgTv("Android TV", host, TvBrand.AndroidTv));
+        TvStatusFeedback.Text = $"✓ Android TV kaydedildi ({host}). TV'nizde GameTranslator uygulamasını açın.";
+        TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+    }
+
+    private void OnOpenSamsungWgt(object sender, RoutedEventArgs e)
+    {
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tv-app", "gametranslator-samsung_1.0.0.wgt");
+        if (File.Exists(path))
+            Process.Start("explorer.exe", $"/select,\"{path}\"");
+        else
+            Process.Start(new ProcessStartInfo("https://github.com/Sefflex/GameTranslator/releases") { UseShellExecute = true });
+    }
+
+    private void OnOpenLgIpk(object sender, RoutedEventArgs e)
+    {
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tv-app", "com.gametranslator.tv_1.0.0_all.ipk");
+        if (File.Exists(path))
+            Process.Start("explorer.exe", $"/select,\"{path}\"");
+        else
+            Process.Start(new ProcessStartInfo("https://github.com/Sefflex/GameTranslator/releases") { UseShellExecute = true });
+    }
+
+    private void OnOpenAndroidApk(object sender, RoutedEventArgs e)
+    {
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tv-app", "gametranslator-androidtv_1.0.0.apk");
+        if (File.Exists(path))
+            Process.Start("explorer.exe", $"/select,\"{path}\"");
+        else
+            Process.Start(new ProcessStartInfo("https://github.com/Sefflex/GameTranslator/releases") { UseShellExecute = true });
+    }
+
+    private void OnOpenGuidePdf(object sender, RoutedEventArgs e)
+    {
+        Process.Start(new ProcessStartInfo("https://github.com/Sefflex/GameTranslator/raw/main/docs/GameTranslator_TV_Kurulum_Rehberi.pdf") { UseShellExecute = true });
+    }
+
+    // ==========================================
+    // Adım 5: Test
+    // ==========================================
     private void OnTestTv(object sender, RoutedEventArgs e)
     {
         controller.SendTestSubtitle();

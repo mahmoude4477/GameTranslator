@@ -128,7 +128,14 @@ public partial class MainView : UserControl
 
     private void OnChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName is nameof(AppController.IsRunning) or nameof(AppController.TranslatorStatus) or nameof(AppController.ModelInstalled))
+        if (e.PropertyName is nameof(AppController.IsRunning) 
+            or nameof(AppController.TranslatorStatus) 
+            or nameof(AppController.ModelInstalled)
+            or nameof(AppController.Console)
+            or nameof(AppController.Tv)
+            or nameof(AppController.TvClients)
+            or nameof(AppController.Ps5StatusText)
+            or nameof(AppController.TvStatusText))
         {
             Refresh();
         }
@@ -162,6 +169,24 @@ public partial class MainView : UserControl
         StreamThumbnailBadge.Foreground = new SolidColorBrush(running ? Color.FromRgb(56, 189, 248) : Color.FromArgb(100, 255, 255, 255));
         ThumbnailStatusText.Text = running ? "PS5 Canlı Akışı Aktif" : "PS5 Akışı Bekleniyor";
         LiveBadgeText.Text = running ? "Canlı" : "Beklemede";
+
+        // PS5 Durum Satırı
+        if (Ps5StatusDot != null && Ps5StatusLabel != null)
+        {
+            var paired = controller.Console != null;
+            Ps5StatusDot.Fill = new SolidColorBrush(paired ? Color.FromRgb(16, 185, 129) : Color.FromRgb(156, 163, 175));
+            Ps5StatusLabel.Text = paired ? $"Eşleşti ({controller.Console!.Host})" : "Eşleşmedi";
+        }
+
+        // TV Durum Satırı
+        if (TvStatusDot != null && TvStatusLabel != null)
+        {
+            var tvReady = controller.TvClients > 0 || controller.Tv != null;
+            TvStatusDot.Fill = new SolidColorBrush(tvReady ? Color.FromRgb(16, 185, 129) : Color.FromRgb(245, 158, 11));
+            TvStatusLabel.Text = controller.TvClients > 0
+                ? $"{controller.TvClients} Cihaz Bağlı (Hazır)"
+                : (controller.Tv != null ? $"{controller.Tv.Name} (Hazır)" : "TV uygulaması bekleniyor");
+        }
     }
 
     private async void OnToggle(object sender, RoutedEventArgs e)

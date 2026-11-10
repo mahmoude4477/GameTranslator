@@ -105,11 +105,11 @@
                                 <!-- PS5 Satırı -->
                                 <Grid Margin="0,2">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <Ellipse Width="7" Height="7" Fill="#10B981" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                        <Ellipse x:Name="Ps5StatusDot" Width="7" Height="7" Fill="#10B981" Margin="0,0,6,0" VerticalAlignment="Center" />
                                         <TextBlock Text="PS5" FontWeight="SemiBold" FontSize="11.5" Foreground="{DynamicResource textPrimaryBrush}" VerticalAlignment="Center" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding Ps5StatusText}" FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                        <TextBlock x:Name="Ps5StatusLabel" Text="{Binding Ps5StatusText}" FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,8,0" VerticalAlignment="Center" />
                                         <Button Content="Ayarla" Padding="6,2" FontSize="9.5" Style="{StaticResource SecondaryButton}" Click="OnReinstall" />
                                     </StackPanel>
                                 </Grid>
@@ -119,11 +119,11 @@
                                 <!-- TV Satırı -->
                                 <Grid Margin="0,2">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <Ellipse Width="7" Height="7" Fill="#10B981" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                        <Ellipse x:Name="TvStatusDot" Width="7" Height="7" Fill="#10B981" Margin="0,0,6,0" VerticalAlignment="Center" />
                                         <TextBlock Text="TV" FontWeight="SemiBold" FontSize="11.5" Foreground="{DynamicResource textPrimaryBrush}" VerticalAlignment="Center" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding TvStatusText}" FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                        <TextBlock x:Name="TvStatusLabel" Text="{Binding TvStatusText}" FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,8,0" VerticalAlignment="Center" />
                                         <Button Content="Değiştir" Padding="6,2" FontSize="9.5" Style="{StaticResource SecondaryButton}" Click="OnReinstall" />
                                     </StackPanel>
                                 </Grid>

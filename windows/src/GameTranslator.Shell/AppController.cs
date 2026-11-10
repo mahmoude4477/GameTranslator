@@ -113,11 +113,27 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     public bool IsRunning { get => isRunning; private set => Set(ref isRunning, value, [nameof(Ps5StatusText), nameof(Ps5Tone), nameof(TvTone)]); }
     public bool IsStarting { get => isStarting; private set => Set(ref isStarting, value); }
     public SessionState SessionState { get => sessionState; private set => Set(ref sessionState, value, [nameof(Ps5StatusText), nameof(Ps5Tone)]); }
-    public string Ps5StatusText => StatusText(sessionState, isRunning, text);
-    public StatusTone Ps5Tone => Ps5ToneFor(sessionState, isRunning);
+    public string Ps5StatusText
+    {
+        get
+        {
+            if (isRunning) return StatusText(sessionState, isRunning, text);
+            if (console is not null) return $"Eşleşti ({console.Host})";
+            return "Eşleşmedi";
+        }
+    }
+    public StatusTone Ps5Tone => isRunning ? Ps5ToneFor(sessionState, isRunning) : (console is not null ? StatusTone.Positive : StatusTone.Neutral);
     public int TvClients { get => tvClients; private set => Set(ref tvClients, value, [nameof(TvTone), nameof(TvStatusText)]); }
-    public StatusTone TvTone => TvToneFor(tvClients, isRunning);
-    public string TvStatusText => tvClients > 0 ? text["Connected"] : text["Waiting for the TV app"];
+    public StatusTone TvTone => tvClients > 0 ? StatusTone.Positive : (tv is not null ? StatusTone.Positive : StatusTone.Warning);
+    public string TvStatusText
+    {
+        get
+        {
+            if (tvClients > 0) return $"{tvClients} Cihaz Bağlı (Hazır)";
+            if (tv is not null) return $"{tv.Name} (Hazır)";
+            return "TV uygulaması bekleniyor";
+        }
+    }
     public string LastSource { get => lastSource; private set => Set(ref lastSource, value); }
     public string LastTranslation { get => lastTranslation; private set => Set(ref lastTranslation, value); }
     public TranslatorStatus TranslatorStatus { get => translatorStatus; private set => Set(ref translatorStatus, value); }
@@ -214,7 +230,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         ClearFirewallPrompt();
         console = registered;
         store.Save(StoreKeys.Console, registered);
-        Changed(nameof(Console), nameof(CanAdvance));
+        Changed(nameof(Console), nameof(CanAdvance), nameof(Ps5StatusText), nameof(Ps5Tone));
     }
 
     /// <summary>Kullanıcıya gösterilen hata; destek bildirimleri teşhis edilebilsin diye PS5'in kodu da yazılır.</summary>
@@ -245,7 +261,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         store.Save(StoreKeys.Tv, target);
         store.Save(StoreKeys.TvKey, pairing.Key);
         tvAppMissing = !pairing.Launched;
-        Changed(nameof(Tv), nameof(CanAdvance), nameof(CanInstallTvApp));
+        Changed(nameof(Tv), nameof(CanAdvance), nameof(CanInstallTvApp), nameof(TvStatusText), nameof(TvTone));
         if (target.Brand == TvBrand.Lg) await RefreshTvAppAsync();
         // Samsung girişi ya da Android onayı dakikalar sürebilir; eşleşme beklemesin.
         else _ = RefreshTvAppAsync();

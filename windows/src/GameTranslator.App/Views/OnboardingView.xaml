@@ -197,10 +197,10 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <TextBox x:Name="PsnRedirectInput" Text="https://remoteplay.dl.playstation.net/remoteplay/redirect?code=" MinHeight="32" VerticalContentAlignment="Center" Margin="0,0,8,0" FontFamily="Consolas" FontSize="10.5" />
+                                <TextBox x:Name="PsnRedirectInput" Text="" MinHeight="32" VerticalContentAlignment="Center" Margin="0,0,8,0" FontFamily="Consolas" FontSize="11" />
                                 <Button Grid.Column="1" Content="Doğrula" Click="OnVerifyPsn" Style="{StaticResource SecondaryButton}" Padding="14,4" />
                             </Grid>
-                            <TextBlock x:Name="PsnStatusText" Text="✓ İsteğe bağlıdır; kodu doğrudan 3. adımda da girebilirsiniz." FontSize="10.5" Foreground="#10B981" />
+                            <TextBlock x:Name="PsnStatusText" Text="✓ İsteğe bağlıdır; kodu girmeden doğrudan 3. adıma da geçebilirsiniz." FontSize="10.5" Foreground="#10B981" />
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -265,86 +265,159 @@
                         </Border>
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="Altyazı Nerede Gösterilsin?" FontWeight="Bold" FontSize="18" Foreground="{DynamicResource textPrimaryBrush}" />
-                            <TextBlock Text="Evde TV yoksa veya monitörde oynuyorsanız bilgisayar ekranını / OBS'i seçebilirsiniz." FontSize="12" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,2,0,0" />
+                            <TextBlock Text="Televizyonunuzu seçin ya da harici TV yoksa doğrudan bilgisayar ekranını seçin." FontSize="12" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,2,0,0" />
                         </StackPanel>
                     </StackPanel>
 
-                    <!-- Platform Seçenekleri -->
+                    <!-- Platform Seçim Kartları (Tıklanabilir Butonlar) -->
                     <StackPanel Margin="0,0,0,14">
-                        <Border Background="#161B26" BorderBrush="#2563EB" BorderThickness="1.5" CornerRadius="8" Padding="12" Margin="0,0,0,8">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="32" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="🖥️" FontSize="16" VerticalAlignment="Center" />
-                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                    <TextBlock Text="Bilgisayar Ekranı &amp; OBS Overlay (TV Gerekmez)" FontWeight="Bold" FontSize="12" Foreground="White" />
-                                    <TextBlock Text="Doğrudan bu bilgisayarda veya canlı yayında altyazı gösterimi." FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" />
-                                </StackPanel>
-                                <Border Grid.Column="2" Background="#1F10B981" CornerRadius="10" Padding="8,2" VerticalAlignment="Center">
-                                    <TextBlock Text="Hazır" FontSize="9.5" FontWeight="Bold" Foreground="#10B981" />
-                                </Border>
-                            </Grid>
-                        </Border>
+                        <!-- 1. PC & OBS -->
+                        <Button Click="OnSelectTvPc" Background="Transparent" BorderThickness="0" Margin="0,0,0,8" Cursor="Hand" HorizontalContentAlignment="Stretch">
+                            <Border x:Name="TvBorderPc" Background="#161B26" BorderBrush="#0A84FF" BorderThickness="2" CornerRadius="8" Padding="12">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="32" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="🖥️" FontSize="16" VerticalAlignment="Center" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="Bilgisayar Ekranı &amp; OBS Overlay (TV Gerekmez)" FontWeight="Bold" FontSize="12" Foreground="White" />
+                                        <TextBlock Text="Monitörde oynayanlar için altyazıları doğrudan ekranda ya da OBS canlı yayınında gösterir." FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" />
+                                    </StackPanel>
+                                    <Border x:Name="TvBadgePc" Grid.Column="2" Background="#1F10B981" CornerRadius="10" Padding="8,2" VerticalAlignment="Center">
+                                        <TextBlock Text="Seçildi" FontSize="9.5" FontWeight="Bold" Foreground="#10B981" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Button>
 
-                        <Border Background="#161B26" BorderBrush="#232B3E" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,8">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="32" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="🤖" FontSize="16" VerticalAlignment="Center" />
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="Android TV / Google TV" FontWeight="SemiBold" FontSize="12" Foreground="White" />
-                                    <TextBlock Text="TCL, Philips, Xiaomi, Google TV Box cihazlarına APK ile kurulum." FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" />
-                                </StackPanel>
-                            </Grid>
-                        </Border>
+                        <!-- 2. Samsung Smart TV -->
+                        <Button Click="OnSelectTvSamsung" Background="Transparent" BorderThickness="0" Margin="0,0,0,8" Cursor="Hand" HorizontalContentAlignment="Stretch">
+                            <Border x:Name="TvBorderSamsung" Background="#161B26" BorderBrush="#232B3E" BorderThickness="1" CornerRadius="8" Padding="12">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="32" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="📺" FontSize="16" VerticalAlignment="Center" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="Samsung Smart TV (Tizen)" FontWeight="SemiBold" FontSize="12" Foreground="White" />
+                                        <TextBlock Text="Samsung televizyonlara WGT paketi ile altyazı yansıtma (2018 ve sonrası modeller)." FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" />
+                                    </StackPanel>
+                                    <Border x:Name="TvBadgeSamsung" Grid.Column="2" Background="#1F10B981" CornerRadius="10" Padding="8,2" VerticalAlignment="Center" Visibility="Collapsed">
+                                        <TextBlock Text="Seçildi" FontSize="9.5" FontWeight="Bold" Foreground="#10B981" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Button>
 
-                        <Border Background="#161B26" BorderBrush="#232B3E" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,8">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="32" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="📺" FontSize="16" VerticalAlignment="Center" />
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="LG webOS TV" FontWeight="SemiBold" FontSize="12" Foreground="White" />
-                                    <TextBlock Text="LG OLED ve webOS televizyonlar (IPK paketi)." FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" />
-                                </StackPanel>
-                            </Grid>
-                        </Border>
+                        <!-- 3. LG webOS TV -->
+                        <Button Click="OnSelectTvLg" Background="Transparent" BorderThickness="0" Margin="0,0,0,8" Cursor="Hand" HorizontalContentAlignment="Stretch">
+                            <Border x:Name="TvBorderLg" Background="#161B26" BorderBrush="#232B3E" BorderThickness="1" CornerRadius="8" Padding="12">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="32" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="📺" FontSize="16" VerticalAlignment="Center" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="LG webOS TV (OLED / QNED)" FontWeight="SemiBold" FontSize="12" Foreground="White" />
+                                        <TextBlock Text="LG webOS televizyonlara IPK paketi veya Geliştirici Modu ile doğrudan bağlantı." FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" />
+                                    </StackPanel>
+                                    <Border x:Name="TvBadgeLg" Grid.Column="2" Background="#1F10B981" CornerRadius="10" Padding="8,2" VerticalAlignment="Center" Visibility="Collapsed">
+                                        <TextBlock Text="Seçildi" FontSize="9.5" FontWeight="Bold" Foreground="#10B981" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Button>
 
-                        <Border Background="#161B26" BorderBrush="#232B3E" BorderThickness="1" CornerRadius="8" Padding="12">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="32" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="🖥️" FontSize="16" VerticalAlignment="Center" />
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="Samsung Tizen TV" FontWeight="SemiBold" FontSize="12" Foreground="White" />
-                                    <TextBlock Text="Samsung Smart TV (WGT paketi)." FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" />
-                                </StackPanel>
-                            </Grid>
-                        </Border>
+                        <!-- 4. Android TV / Google TV -->
+                        <Button Click="OnSelectTvAndroid" Background="Transparent" BorderThickness="0" Cursor="Hand" HorizontalContentAlignment="Stretch">
+                            <Border x:Name="TvBorderAndroid" Background="#161B26" BorderBrush="#232B3E" BorderThickness="1" CornerRadius="8" Padding="12">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="32" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="🤖" FontSize="16" VerticalAlignment="Center" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="Android TV / Google TV" FontWeight="SemiBold" FontSize="12" Foreground="White" />
+                                        <TextBlock Text="TCL, Philips, Xiaomi, Google TV Box cihazlarına APK uygulaması ile bağlantı." FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" />
+                                    </StackPanel>
+                                    <Border x:Name="TvBadgeAndroid" Grid.Column="2" Background="#1F10B981" CornerRadius="10" Padding="8,2" VerticalAlignment="Center" Visibility="Collapsed">
+                                        <TextBlock Text="Seçildi" FontSize="9.5" FontWeight="Bold" Foreground="#10B981" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Button>
                     </StackPanel>
 
-                    <!-- TV IP Bağlantısı -->
+                    <!-- Seçilen Platform Detay Paneli -->
                     <Border Background="#161B26" BorderBrush="#232B3E" BorderThickness="1" CornerRadius="8" Padding="14">
                         <StackPanel>
-                            <TextBlock Text="TV IP Adresi (İsteğe Bağlı):" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,0,4" />
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBox x:Name="TvHostInput" Text="192.168.1.108" MinHeight="32" VerticalContentAlignment="Center" Margin="0,0,8,0" FontFamily="Consolas" FontSize="11.5" />
-                                <Button Grid.Column="1" Content="TV'ye Test Gönder" Click="OnTestTv" Style="{StaticResource SecondaryButton}" Padding="12,4" />
-                            </Grid>
-                            <TextBlock Text="* TV uygulaması açıldığında bilgisayarınıza otomatik bağlanır." FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,6,0,0" />
+                            <!-- Panel: PC / OBS -->
+                            <StackPanel x:Name="TvDetailPc" Visibility="Visible">
+                                <TextBlock Text="Bilgisayar Ekranı ve OBS Overlay Seçildi" FontWeight="Bold" FontSize="12" Foreground="#10B981" Margin="0,0,0,4" />
+                                <TextBlock Text="Harici bir TV kurulumu gerekmez. Altyazılar doğrudan bu bilgisayar ekranında ve aşağıdaki OBS linkinde canlı yayınlanır:" FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,0,8" />
+                                <Grid Margin="0,0,0,8">
+                                    <TextBlock Text="http://localhost:8787/obs" FontFamily="Consolas" FontSize="12" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center" />
+                                    <Button Content="OBS Linkini Kopyala" HorizontalAlignment="Right" Click="OnCopyObsUrl" Style="{StaticResource SecondaryButton}" Padding="10,3" FontSize="10.5" />
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Panel: Samsung Tizen TV -->
+                            <StackPanel x:Name="TvDetailSamsung" Visibility="Collapsed">
+                                <TextBlock Text="Samsung Smart TV (Tizen) Yapılandırması" FontWeight="Bold" FontSize="12" Foreground="#38BDF8" Margin="0,0,0,4" />
+                                <TextBlock Text="Samsung TV'nizin IP adresini girin ve TV'ye kurulan GameTranslator uygulamasını açın:" FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,0,8" />
+                                <Grid Margin="0,0,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="SamsungHostInput" Text="192.168.1.108" MinHeight="32" VerticalContentAlignment="Center" Margin="0,0,8,0" FontFamily="Consolas" FontSize="11.5" />
+                                    <Button Grid.Column="1" Content="Samsung TV'yi Kaydet" Click="OnSaveSamsung" Background="#0A84FF" Foreground="White" FontWeight="Bold" BorderThickness="0" Padding="12,4" />
+                                </Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="📁 Samsung WGT Dosyasını Göster" Click="OnOpenSamsungWgt" Style="{StaticResource SecondaryButton}" Padding="10,4" FontSize="10.5" Margin="0,0,8,0" />
+                                    <Button Content="📖 TV Kurulum Rehberi (PDF)" Click="OnOpenGuidePdf" Style="{StaticResource SecondaryButton}" Padding="10,4" FontSize="10.5" />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- Panel: LG webOS TV -->
+                            <StackPanel x:Name="TvDetailLg" Visibility="Collapsed">
+                                <TextBlock Text="LG webOS TV Yapılandırması" FontWeight="Bold" FontSize="12" Foreground="#38BDF8" Margin="0,0,0,4" />
+                                <TextBlock Text="LG TV'nizin IP adresini girin. 'Bağlan' dediğinizde TV ekranında bir onay kodu belirebilir, kumandayla kabul edin:" FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,0,8" />
+                                <Grid Margin="0,0,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="LgHostInput" Text="192.168.1.108" MinHeight="32" VerticalContentAlignment="Center" Margin="0,0,8,0" FontFamily="Consolas" FontSize="11.5" />
+                                    <Button Grid.Column="1" Content="LG TV'ye Bağlan" Click="OnSaveLg" Background="#0A84FF" Foreground="White" FontWeight="Bold" BorderThickness="0" Padding="12,4" />
+                                </Grid>
+                                <Button Content="📁 LG IPK Dosyasını Göster" Click="OnOpenLgIpk" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Padding="10,4" FontSize="10.5" />
+                            </StackPanel>
+
+                            <!-- Panel: Android TV -->
+                            <StackPanel x:Name="TvDetailAndroid" Visibility="Collapsed">
+                                <TextBlock Text="Android TV / Google TV Yapılandırması" FontWeight="Bold" FontSize="12" Foreground="#38BDF8" Margin="0,0,0,4" />
+                                <TextBlock Text="Android TV'nizin IP adresini girin ve TV'nize yüklediğiniz APK uygulamasını açın:" FontSize="11" Foreground="{DynamicResource textSecondaryBrush}" Margin="0,0,0,8" />
+                                <Grid Margin="0,0,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="AndroidHostInput" Text="192.168.1.108" MinHeight="32" VerticalContentAlignment="Center" Margin="0,0,8,0" FontFamily="Consolas" FontSize="11.5" />
+                                    <Button Grid.Column="1" Content="Android TV'yi Kaydet" Click="OnSaveAndroid" Background="#0A84FF" Foreground="White" FontWeight="Bold" BorderThickness="0" Padding="12,4" />
+                                </Grid>
+                                <Button Content="📁 Android APK Dosyasını Göster" Click="OnOpenAndroidApk" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Padding="10,4" FontSize="10.5" />
+                            </StackPanel>
+
+                            <TextBlock x:Name="TvStatusFeedback" Margin="0,8,0,0" FontSize="11" Foreground="#10B981" />
                         </StackPanel>
                     </Border>
                 </StackPanel>

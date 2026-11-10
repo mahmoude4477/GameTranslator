@@ -8,16 +8,16 @@ cd "$(dirname "$0")/.."
 OUT=dist/tv-tizen/app
 rm -rf dist/tv-tizen
 mkdir -p "$OUT"
-cp tv-webos/app.js tv-webos/i18n.js tv-webos/config.js tv-webos/index.html tv-webos/style.css tv-webos/largeIcon.png "$OUT/"
-cp tv-webos/icon.png "$OUT/panel-icon.png"
-cp tv-tizen/platform.js tv-tizen/config.xml tv-tizen/icon.png "$OUT/"
+cp tv/webos/app.js tv/webos/i18n.js tv/webos/config.js tv/webos/style.css tv/webos/largeIcon.png "$OUT/"
+cp tv/webos/icon.png "$OUT/panel-icon.png"
+cp tv/tizen/platform.js tv/tizen/config.xml tv/tizen/icon.png "$OUT/"
 # Panel başlığındaki küçük simge webOS'taki gibi icon.png adını kullanamaz: Tizen'in simgesi büyüktür.
 # Samsung'un ürün API'leri (ekran koruyucuyu kapatmak için webapis.appcommon) platform.js'ten önce yüklenir.
 sed -e 's/src="icon.png"/src="panel-icon.png"/' \
     -e 's|  <script src="platform.js"></script>|  <script src="$WEBAPIS/webapis/webapis.js"></script>\n  <script src="platform.js"></script>|' \
-    tv-webos/index.html > "$OUT/index.html"
+    tv/webos/index.html > "$OUT/index.html"
 # Masaüstü uygulamalarına gömülen imzasız paket: GameTranslator kurarken TV'ye özel sertifikayla imzalar.
-VERSION=$(sed -n 's/.* version="\([0-9.]*\)" viewmodes.*/\1/p' tv-tizen/config.xml | head -1)
+VERSION=$(sed -n 's/.* version="\([0-9.]*\)" viewmodes.*/\1/p' tv/tizen/config.xml | head -1)
 mkdir -p dist/tv-app
 rm -f dist/tv-app/gametranslator-samsung_*.wgt
 PY=$(command -v python3 || command -v python)

@@ -26,9 +26,9 @@
     <Resource Include="Assets\GameTranslator.ico" />
   </ItemGroup>
 
-  <!-- TV uygulaması paketleri (scripts/package-tv.sh, package-tizen.sh ve Android derlemesi üretir); geliştirici modu açık TV'ye kurulur. -->
+  <!-- TV uygulaması paketleri: dist/tv-app ve tv/packages altındaki paketleri tv-app/ klasörüne kopyalar -->
   <ItemGroup>
-    <Content Include="..\..\..\dist\tv-app\*.ipk;..\..\..\dist\tv-app\*.wgt;..\..\..\dist\tv-app\*.apk" Link="tv-app\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="..\..\..\dist\tv-app\*.ipk;..\..\..\dist\tv-app\*.wgt;..\..\..\dist\tv-app\*.apk;..\..\..\tv\packages\*.ipk;..\..\..\tv\packages\*.wgt;..\..\..\tv\packages\*.apk" Link="tv-app\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
