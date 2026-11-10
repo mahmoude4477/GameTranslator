@@ -18,13 +18,30 @@ public partial class OnboardingView : UserControl
 {
     private readonly AppController controller;
     private int currentStep = 1;
-    private string selectedTvPlatform = "PC";
+    private string selectedTvPlatform = "LG";
 
     public OnboardingView(AppController controller)
     {
         this.controller = controller;
         DataContext = controller;
+        if (controller.Tv != null)
+        {
+            selectedTvPlatform = controller.Tv.Brand switch
+            {
+                TvBrand.Lg => "LG",
+                TvBrand.Samsung => "Samsung",
+                TvBrand.AndroidTv when controller.Tv.Name.Contains("PC") => "PC",
+                TvBrand.AndroidTv => "Android",
+                _ => "LG"
+            };
+        }
+        else
+        {
+            selectedTvPlatform = "LG";
+            _ = controller.PairAsync(new LgTv("LG webOS TV", "192.168.1.50", TvBrand.Lg));
+        }
         InitializeComponent();
+        UpdateTvPlatformSelection();
         UpdateStepView();
     }
 
@@ -86,6 +103,11 @@ public partial class OnboardingView : UserControl
 
     private void OnNext(object sender, RoutedEventArgs e)
     {
+        if (currentStep == 4)
+        {
+            SaveCurrentTvPlatform();
+        }
+
         if (currentStep < 5)
         {
             SetStep(currentStep + 1);
@@ -98,7 +120,32 @@ public partial class OnboardingView : UserControl
 
     private void OnSkipToMain(object sender, RoutedEventArgs e)
     {
+        SaveCurrentTvPlatform();
         controller.Step = OnboardingStep.Done;
+    }
+
+    private void SaveCurrentTvPlatform()
+    {
+        try
+        {
+            switch (selectedTvPlatform)
+            {
+                case "LG":
+                    _ = controller.PairAsync(new LgTv("LG webOS TV", string.IsNullOrWhiteSpace(LgHostInput.Text) ? "192.168.1.50" : LgHostInput.Text.Trim(), TvBrand.Lg));
+                    break;
+                case "Samsung":
+                    _ = controller.PairAsync(new LgTv("Samsung Smart TV", string.IsNullOrWhiteSpace(SamsungHostInput.Text) ? "192.168.1.50" : SamsungHostInput.Text.Trim(), TvBrand.Samsung));
+                    break;
+                case "Android":
+                    _ = controller.PairAsync(new LgTv("Android TV", string.IsNullOrWhiteSpace(AndroidHostInput.Text) ? "192.168.1.50" : AndroidHostInput.Text.Trim(), TvBrand.AndroidTv));
+                    break;
+                case "PC":
+                default:
+                    _ = controller.PairAsync(new LgTv("PC & OBS", "127.0.0.1", TvBrand.AndroidTv));
+                    break;
+            }
+        }
+        catch { }
     }
 
     private void OnPill1(object sender, RoutedEventArgs e) => SetStep(1);
@@ -222,22 +269,46 @@ public partial class OnboardingView : UserControl
         TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
     }
 
-    private void OnSelectTvSamsung(object sender, RoutedEventArgs e)
+    private async void OnSelectTvSamsung(object sender, RoutedEventArgs e)
     {
         selectedTvPlatform = "Samsung";
         UpdateTvPlatformSelection();
+        try
+        {
+            var host = string.IsNullOrWhiteSpace(SamsungHostInput.Text) ? "192.168.1.50" : SamsungHostInput.Text.Trim();
+            await controller.PairAsync(new LgTv("Samsung Smart TV", host, TvBrand.Samsung));
+            TvStatusFeedback.Text = "✓ Samsung Smart TV modu seçildi.";
+            TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+        }
+        catch { }
     }
 
-    private void OnSelectTvLg(object sender, RoutedEventArgs e)
+    private async void OnSelectTvLg(object sender, RoutedEventArgs e)
     {
         selectedTvPlatform = "LG";
         UpdateTvPlatformSelection();
+        try
+        {
+            var host = string.IsNullOrWhiteSpace(LgHostInput.Text) ? "192.168.1.50" : LgHostInput.Text.Trim();
+            await controller.PairAsync(new LgTv("LG webOS TV", host, TvBrand.Lg));
+            TvStatusFeedback.Text = "✓ LG webOS TV modu seçildi.";
+            TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+        }
+        catch { }
     }
 
-    private void OnSelectTvAndroid(object sender, RoutedEventArgs e)
+    private async void OnSelectTvAndroid(object sender, RoutedEventArgs e)
     {
         selectedTvPlatform = "Android";
         UpdateTvPlatformSelection();
+        try
+        {
+            var host = string.IsNullOrWhiteSpace(AndroidHostInput.Text) ? "192.168.1.50" : AndroidHostInput.Text.Trim();
+            await controller.PairAsync(new LgTv("Android TV", host, TvBrand.AndroidTv));
+            TvStatusFeedback.Text = "✓ Android TV modu seçildi.";
+            TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+        }
+        catch { }
     }
 
     private void UpdateTvPlatformSelection()
