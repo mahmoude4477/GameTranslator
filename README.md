@@ -27,11 +27,13 @@ GameTranslator, hem **macOS (Apple SwiftUI)** hem de **Windows (WPF / .NET 10)**
 * **Sol Panel (Çeviri Merkezi / Translation Hub):**
   * **▶ Çeviriyi Başlat / ■ Çeviriyi Durdur:** Canlı sistemi tek tıkla başlatan ve durduran yüksek kontrastlı birincil buton.
   * **Connection Status:** PS5 konsolunun ve TV bağlantısının durumunu anlık renkli noktalarla (yeşil/turuncu/gri) bildirir.
+  * **🔊 PC Oyun Sesi (Mute / Açık):** Oyunun sesi zaten HDMI kablosuyla televizyonunuzdan geldiği için, bilgisayarınızın hoparlöründen çift ses gelmesini tek tıkla sessize alır (Mute) veya dilediğinizde sesi açar.
   * **Son Altyazı:** Oyunda konuşulan son altyazıyı anlık olarak gösterir ve tek tıkla panoya kopyalama imkanı sunar.
 
 * **Sağ Panel (Entegre Ayarlar & Kalibrasyon Paneli):**
   * **Üst Sekmeler (Segmented Control):** `[ 🖥️ Oyun Okuma Alanı ]`, `[ 📺 TV Görünümü ]`, `[ 🧠 Çeviri & Modeller ]`, `[ 🔗 Bağlantı & Sistem ]`, `[ 📖 Hızlı Rehber ]`.
   * **Oyun Ekranı Altyazı Okuma Alanı:** 16:9 canlı PS5 oyun görüntüsü üzerinde mavi kalibrasyon çerçevesiyle alt yazının okunacağı koordinatları belirleme.
+  * **Akıllı TV Örtme & Otomatik Yerleşim:** Oyundaki orijinal İngilizce altyazının boyutunu ve koordinatlarını Vision OCR ile anlık hesaplayarak İngilizce yazıyı kapatır (`İngilizce altyazının üstünü örtsün`), üstüne koyar (`İngilizce altyazının üstünde`) veya altına yerleştirir.
   * **Hassas Kaydırıcılar:** Üst/Alt başlangıç sınırları ve Sol/Sağ sınır ayarları.
   * **Hızlı Seçenekler:** `Alt Orta (Standart)`, `Geniş Alt Bant`, `Tüm Alt Yarı`, `Üst Bölge (Görevler)` ve `Özel Kutu`.
   * **TV Özelleştirme:** Yazı tipi boyutu, alt mesafe oranı, arka plan opaklığı, renk paleti ve Türkçe Dublaj (TTS) desteği.
@@ -77,14 +79,33 @@ Eğer uygulamayı terminalden kendi ellerinizle derleyip kurmak isterseniz:
 
 ---
 
-### 2. 🪟 PC (Windows Yerel Masaüstü Kurulumu)
-> C# / .NET 10, WPF ve DirectML / Windows Media OCR altyapısıyla çalışan yerel Windows uygulamasıdır.
+### 2. 🪟 PC (Windows Yerel Masaüstü Kurulumu - Windows 10 / 11)
+> C# / .NET 10, WPF ve DirectML / Windows Media OCR altyapısıyla çalışan yerel, donanım hızlandırmalı Windows masaüstü uygulamasıdır.
 
-1. **.NET 10 Kurulumu:** Bilgisayarınızda Microsoft .NET SDK kurulu değilse **[.NET 10 SDK İndir](https://dotnet.microsoft.com/download)** bağlantısından ücretsiz indirip kurun.
+#### 🟢 Yöntem A: Tek Tıkla Otomatik Kurulum ve Başlatma (Önerilen)
+1. **GitHub'dan İndirin:** Bu sayfanın yukarısındaki yeşil **`<> Code`** butonuna tıklayın ve **`Download ZIP`** seçeneğini seçin. İnen ZIP dosyasını klasöre çıkartın (Örneğin: Masaüstünüze veya Belgelerim klasörüne).
 2. **Başlatıcıya Çift Tıklayın:** Proje klasöründeki **`GameTranslator.bat`** dosyasına çift tıklayın.
-   * Sistem gerekli bağımlılıkları otomatik yükler ve donanım hızlandırmalı Windows masaüstü arayüzünü açar.
-   * *(Geliştiriciler için doğrudan konsol komutu: `dotnet run --project windows/src/GameTranslator.App/GameTranslator.App.csproj`)*
-3. Açılan arayüzde sol üstteki **`▶ Çeviriyi Başlat`** butonuna basarak kullanabilirsiniz.
+   * *İlk Açılışta:* Bilgisayarınızda .NET SDK kuruluysa sistem gerekli kütüphaneleri otomatik yükler ve GameTranslator koyu modern arayüzünü ekrana getirir.
+   * *Bilgisayarınızda .NET Yoksa:* Konsol penceresinde uyarı çıkar, klavyeden `E` tuşlayarak tek tıkla resmi Microsoft indirme sayfasını açabilir ve ücretsiz .NET SDK'yı kurabilirsiniz.
+3. **⚠️ Windows Güvenlik ve İpuçları (İlk Kez Açarken):**
+   * **Windows Defender "Windows kişisel bilgisayarınızı korudu" (SmartScreen) derse:**  
+     Mavi penceredeki **`Ek bilgi`** yazısına tıklayın, ardından altta açılan **`Yine de çalıştır`** butonuna basın. (Açık kaynaklı yeni bağımsız projelerde standarttır, tamamen güvenlidir).
+   * **Windows Güvenlik Duvarı (Ağ İzni) uyarısı çıkarsa:**  
+     PS5 konsolunuzu ve TV uygulamasını yerel ağda otomatik bulabilmesi için çıkan onay penceresinde **"Özel ağlar (Ev veya iş ağı)"** kutucuğunu işaretleyip **`Erişime izin ver`** butonuna basın.
+   * **.NET SDK İndirme Linki:**  
+     Bilgisayarınızda .NET yüklü değilse, resmi **[Microsoft .NET SDK İndir (Ücretsiz)](https://dotnet.microsoft.com/download)** sayfasından indirip birkaç tıkla kurabilirsiniz.
+
+#### 🛠️ Yöntem B: Tek Tıkla Bağımsız `.exe` Olarak Derlemek (İsteğe Bağlı)
+Eğer her seferinde siyah konsol penceresi beklemeden doğrudan masaüstü ikonu gibi tek bir `GameTranslator.exe` dosyası üretmek isterseniz:
+1. Klasördeki **`Derle-Windows.bat`** dosyasına çift tıklayın.
+2. Sistem tüm projeyi tek parça bağımsız (Self-Contained) Windows uygulaması olarak derler ve `bin/` klasörüne **`GameTranslator.exe`** olarak kaydeder.
+3. Artık sadece bu `GameTranslator.exe` dosyasına çift tıklayarak programı 0 saniyede açabilirsiniz!
+
+#### 💻 Yöntem C: Geliştiriciler İçin Konsol Komutları (PowerShell / CMD)
+```cmd
+cd /klasor/yolu/GameTranslate-main
+dotnet run --project "windows/src/GameTranslator.App/GameTranslator.App.csproj"
+```
 
 ---
 

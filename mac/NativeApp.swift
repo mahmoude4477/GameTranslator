@@ -1096,6 +1096,7 @@ final class AppState {
     var lastBox: [String: Double]? = nil
     var language: String = "en"
     var isDubbing: Bool = false
+    var isMuteComputerAudio: Bool = UserDefaults.standard.object(forKey: "gt_mute_computer_audio") as? Bool ?? true
     
     // OCR Okuma Alanı (16:9 PS5 Oyun Ekranı ve Altyazı Koordinatları)
     var cropTop: Double = 0.72
@@ -1511,7 +1512,10 @@ final class AppState {
         dict["registered_hosts.1.ap_bssid"] = ""
         dict["registered_hosts.1.ap_key"] = ""
         dict["registered_hosts.1.ap_name"] = ""
-        dict["settings.audio_volume"] = 0
+        let vol = isMuteComputerAudio ? 0 : 100
+        dict["settings.audio_volume"] = vol
+        dict["settings/audio_volume"] = vol
+        dict["audio_volume"] = vol
         dict["settings.geometry"] = "@Rect(\(cx) \(cy) 640 360)"
         dict["settings.stream_geometry"] = "@Rect(\(cx) \(cy) 640 360)"
         dict["settings.fullscreen"] = false
@@ -1522,6 +1526,47 @@ final class AppState {
             try? outData.write(to: URL(fileURLWithPath: plistPath))
         }
         CFPreferencesSynchronize("com.chiaki.Chiaki" as CFString, kCFPreferencesCurrentUser, kCFPreferencesAnyHost)
+
+        // cfprefsd ve Chiaki önbelleğini doğrudan güncelle
+        let p1 = Process()
+        p1.executableURL = URL(fileURLWithPath: "/usr/bin/defaults")
+        p1.arguments = ["write", "com.chiaki.Chiaki", "settings.audio_volume", "-int", "\(vol)"]
+        try? p1.run()
+        p1.waitUntilExit()
+
+        let p2 = Process()
+        p2.executableURL = URL(fileURLWithPath: "/usr/bin/defaults")
+        p2.arguments = ["write", "com.chiaki.Chiaki", "settings/audio_volume", "-int", "\(vol)"]
+        try? p2.run()
+        p2.waitUntilExit()
+    }
+
+    func toggleComputerAudioMute() {
+        isMuteComputerAudio.toggle()
+        UserDefaults.standard.set(isMuteComputerAudio, forKey: "gt_mute_computer_audio")
+
+        let vol = isMuteComputerAudio ? 0 : 100
+        let p1 = Process()
+        p1.executableURL = URL(fileURLWithPath: "/usr/bin/defaults")
+        p1.arguments = ["write", "com.chiaki.Chiaki", "settings.audio_volume", "-int", "\(vol)"]
+        try? p1.run()
+        p1.waitUntilExit()
+
+        let p2 = Process()
+        p2.executableURL = URL(fileURLWithPath: "/usr/bin/defaults")
+        p2.arguments = ["write", "com.chiaki.Chiaki", "settings/audio_volume", "-int", "\(vol)"]
+        try? p2.run()
+        p2.waitUntilExit()
+
+        // Canlı yayın çalışıyorsa akışı 0.4 sn yenileyerek ses durumunu anında uygula
+        if isRunning {
+            stopStreamAndOCR()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                if self.isRunning {
+                    self.startStreamAndOCR()
+                }
+            }
+        }
     }
 
     func startStreamAndOCR() {
@@ -2351,6 +2396,36 @@ struct MainWindowView: View {
                 .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 4))
                 .buttonStyle(.plain)
             }
+
+            Divider().background(Color.white.opacity(0.08))
+
+            // Bilgisayar Oyun Sesi Kontrolü
+            HStack {
+                Image(systemName: state.isMuteComputerAudio ? "speaker.slash.fill" : "speaker.wave.2.fill")
+                    .font(.system(size: 10))
+                    .foregroundStyle(state.isMuteComputerAudio ? Color(hex: "#EF4444") : Color(hex: "#10B981"))
+                Text("PC Sesi")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(Color.white.opacity(0.9))
+                Spacer()
+                Button {
+                    state.toggleComputerAudioMute()
+                } label: {
+                    HStack(spacing: 4) {
+                        Circle()
+                            .fill(state.isMuteComputerAudio ? Color(hex: "#EF4444") : Color(hex: "#10B981"))
+                            .frame(width: 5.5, height: 5.5)
+                        Text(state.isMuteComputerAudio ? "Sessiz (Muted)" : "Açık (Ses Var)")
+                            .font(.system(size: 9.5, weight: .bold))
+                            .foregroundStyle(state.isMuteComputerAudio ? Color(hex: "#EF4444") : Color(hex: "#10B981"))
+                    }
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2.5)
+                    .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 4))
+                }
+                .buttonStyle(.plain)
+                .help("Oyun sesi zaten TV'den geldiği için bilgisayarınızın hoparlöründen ses gelmesini engeller veya açar.")
+            }
         }
         .padding(9)
         .background(Color.black.opacity(0.25), in: RoundedRectangle(cornerRadius: 8))
@@ -3023,6 +3098,13 @@ struct MainWindowView: View {
                 Toggle("Türkçe Dublaj (Ses)", isOn: $state.isDubbing)
                     .font(.system(size: 11))
                     .toggleStyle(.checkbox)
+
+                Toggle("PC Sesini Kapat (Mute)", isOn: Binding(
+                    get: { state.isMuteComputerAudio },
+                    set: { _ in state.toggleComputerAudioMute() }
+                ))
+                .font(.system(size: 11))
+                .toggleStyle(.checkbox)
 
                 Spacer()
 
