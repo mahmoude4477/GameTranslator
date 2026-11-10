@@ -15,7 +15,9 @@ public sealed class WindowCaptureStreamSession : IStreamSession
 {
     public event Action<Frame>? FrameReceived;
     public event Action<SessionState>? StateChanged;
+#pragma warning disable CS0067
     public event Action<RegisteredConsole>? ConsoleMoved;
+#pragma warning restore CS0067
 
     private readonly RegisteredConsole console;
     private CancellationTokenSource? cts;

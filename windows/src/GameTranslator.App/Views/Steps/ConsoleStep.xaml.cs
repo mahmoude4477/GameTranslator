@@ -49,7 +49,7 @@ public partial class ConsoleStep : UserControl
             var none = found.Count == 0;
             NotFound.Visibility = ManualHost.Visibility = none ? Visibility.Visible : Visibility.Collapsed;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             NotFound.Visibility = ManualHost.Visibility = Visibility.Visible;
             Error.Text = "Ağ taramasında konsol bulunamadı. Lütfen PS5 IP adresini elle girin.";

@@ -74,6 +74,9 @@ internal sealed class SerialQueue : IDisposable
 /// Ses kapalıdır, kol girdisi gönderilmez. Bağlantı koparsa kendiliğinden yeniden bağlanır.</summary>
 public sealed class StreamSession : IStreamSession
 {
+    /// <summary>Yerel CChiaki / gametranslator_native DLL sistemde yüklenebiliyor mu.</summary>
+    public static bool IsNativeAvailable => NativeMethods.IsAvailable;
+
     /// <summary>Saniyede en çok bu kadar kare BGRA'ya çevrilir (Mac'teki gibi).</summary>
     internal const int MaxFps = 20;
 

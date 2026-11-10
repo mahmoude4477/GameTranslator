@@ -90,7 +90,7 @@ public sealed class LiveServices : IAppServices
 
     public IStreamSession MakeStream(RegisteredConsole console, byte[] accountId)
     {
-        if (NativeMethods.IsAvailable)
+        if (StreamSession.IsNativeAvailable)
         {
             return new StreamSession(console, accountId);
         }
