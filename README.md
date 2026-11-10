@@ -22,21 +22,20 @@
 
 ## 🖥️ Ortak Yerel Masaüstü Tasarımı (Mac & PC)
 
-GameTranslator, hem **macOS (Apple SwiftUI)** hem de **Windows (WPF / .NET 10)** platformlarında aynı sade, şık ve modern koyu arayüzü sunar. Tarayıcı veya web sunucusu gerektirmez.
+GameTranslator, hem **macOS (Apple SwiftUI)** hem de **Windows (WPF / .NET 10)** platformlarında aynı sade, şık ve modern koyu arayüzü sunar. Tarayıcı veya harici web sunucusu gerektirmez.
 
 * **Sol Panel (Çeviri Merkezi / Translation Hub):**
   * **▶ Çeviriyi Başlat / ■ Çeviriyi Durdur:** Canlı sistemi tek tıkla başlatan ve durduran yüksek kontrastlı birincil buton.
   * **Connection Status:** PS5 konsolunun ve TV bağlantısının durumunu anlık renkli noktalarla (yeşil/turuncu/gri) bildirir.
   * **Son Altyazı:** Oyunda konuşulan son altyazıyı anlık olarak gösterir ve tek tıkla panoya kopyalama imkanı sunar.
 
-* **Sağ Panel (Entegre Ayarlar Paneli):**
-  * **Üst Sekmeler (Segmented Control):** `[ 🖥️ Görüntü & Dil ]`, `[ 🔊 Çeviri & Ses ]`, `[ 🔗 Bağlantı & Sistem ]`.
-  * **Hassas Kaydırıcılar:** Yazı boyutu (*Kök ➔ Büyük*) ve Arka plan opaklığı (*Yok ➔ Tam*).
-  * **Altyazı Yeri:** İngilizce altyazının üstünü örten dinamik takip veya ekranda sabit konumlandırma.
-  * **Hızlı Seçenekler:** `Kalın yazı`, `Türkçe Dublaj` ve tek tıkla `Test altyazısı gönder`.
-  * **Altyazı Alanı:** 16:9 ekran önizleme kutusu üzerinden altyazı alanını 4 eksende (*Üst, Alt, Sol, Sağ*) ayarlama ve `Alanı sıfırla`.
-  * **DeepL API:** Gelişmiş çevrimiçi motor için API anahtarı girme ve anında deneme.
-  * **Kısayol & OBS:** Ekranı anında çevirme kısayolu (`^⌘⌥T`) ve yayıncılar için OBS Browser Source overlay bağlantısı (`http://localhost:8787/obs`).
+* **Sağ Panel (Entegre Ayarlar & Kalibrasyon Paneli):**
+  * **Üst Sekmeler (Segmented Control):** `[ 🖥️ Oyun Okuma Alanı ]`, `[ 📺 TV Görünümü ]`, `[ 🧠 Çeviri & Modeller ]`, `[ 🔗 Bağlantı & Sistem ]`, `[ 📖 Hızlı Rehber ]`.
+  * **Oyun Ekranı Altyazı Okuma Alanı:** 16:9 canlı PS5 oyun görüntüsü üzerinde mavi kalibrasyon çerçevesiyle alt yazının okunacağı koordinatları belirleme.
+  * **Hassas Kaydırıcılar:** Üst/Alt başlangıç sınırları ve Sol/Sağ sınır ayarları.
+  * **Hızlı Seçenekler:** `Alt Orta (Standart)`, `Geniş Alt Bant`, `Tüm Alt Yarı`, `Üst Bölge (Görevler)` ve `Özel Kutu`.
+  * **TV Özelleştirme:** Yazı tipi boyutu, alt mesafe oranı, arka plan opaklığı, renk paleti ve Türkçe Dublaj (TTS) desteği.
+  * **Kısayol & OBS:** Yayıncılar için yerel OBS Browser Source overlay bağlantısı (`http://localhost:8787/obs`).
 
 ---
 
@@ -47,9 +46,10 @@ GameTranslator, hem **macOS (Apple SwiftUI)** hem de **Windows (WPF / .NET 10)**
 ### 1. 🍏 Mac (macOS Yerel Uygulaması)
 > Apple Silicon (M1, M2, M3, M4) Neural Engine NPU çipini ve Vision OCR donanımını kullanarak **0 ms gecikmeyle** çevrimdışı çalışır.
 
-1. `GameTranslator` klasöründeki **`GameTranslator.app`** uygulamasına çift tıklayın (veya `GameTranslator.command` çalıştırın).
-2. Karşınıza yukarıdaki macOS masaüstü arayüzü gelecektir.
-3. Mavi **`▶ Çeviriyi Başlat`** butonuna basmanız yeterlidir.
+1. **Hızlı Başlatma:** Proje ana dizinindeki **`GameTranslator.command`** dosyasına çift tıklayın.  
+   *(Sıfırdan derlemek veya güncellemek için terminalden `bash mac/build.sh` komutunu çalıştırmanız yeterlidir).*
+2. Karşınıza donanım hızlandırmalı koyu macOS masaüstü arayüzü gelecektir.
+3. Sol üstteki mavi **`▶ Çeviriyi Başlat`** butonuna basarak canlı çeviriyi başlatın.
 
 ---
 
@@ -57,32 +57,43 @@ GameTranslator, hem **macOS (Apple SwiftUI)** hem de **Windows (WPF / .NET 10)**
 > C# / .NET 10, WPF ve DirectML / Windows Media OCR altyapısıyla çalışan yerel Windows uygulamasıdır.
 
 1. Bilgisayarınızda **[.NET 10 SDK](https://dotnet.microsoft.com/download)** kurulu olduğundan emin olun.
-2. `GameTranslator` klasöründeki **`GameTranslator.bat`** dosyasına çift tıklayın.
-   *(Geliştiriciler için doğrudan komut: `dotnet run --project windows\src\GameTranslator.App\GameTranslator.App.csproj`)*
+2. Proje ana dizinindeki **`GameTranslator.bat`** dosyasına çift tıklayın.  
+   *(Geliştiriciler için doğrudan komut: `dotnet run --project windows/src/GameTranslator.App/GameTranslator.App.csproj`)*
 3. Karşınıza donanım hızlandırmalı Windows masaüstü arayüzü gelecektir.
 4. **`▶ Çeviriyi Başlat`** butonuna tıklayın.
 
 ---
 
 ### 3. 📺 Akıllı TV (Smart TV Companion Uygulamaları)
-> TV'niz HDMI'daki oyun görüntüsünü oynatırken, üzerine şeffaf bir OSD penceresi açarak Türkçe altyazıyı basar.
+> TV'niz HDMI'daki oyun görüntüsünü oynatırken, üzerine şeffaf bir OSD penceresi açarak Türkçe altyazıyı basar. Hazır paketler `tv/packages/` klasöründedir:
 
-* **TCL / Google TV / Android TV (Sony, Philips, Vestel vb.):**
-  - `tv/packages/gametranslator-androidtv_1.0.0.apk` dosyasını USB bellek veya Wi-Fi (`adb install`) ile televizyonunuza kurun.
-  - Uygulamayı açıp PS5'in bağlı olduğu HDMI portunu seçin.
+* **TCL / Google TV / Android TV (Sony, Philips, Xiaomi vb.):**
+  * **Hazır Paket:** `tv/packages/gametranslator-androidtv_1.0.0.apk`
+  * **Kurulum:** USB bellekle televizyona takıp Dosya Yöneticisi'nden yükleyin veya yerel ağ üzerinden tek komutla kurun:
+    ```bash
+    adb connect <TV-IP-ADRESI>
+    adb install tv/packages/gametranslator-androidtv_1.0.0.apk
+    ```
+  * Televizyonda uygulamayı açıp PS5'in bağlı olduğu HDMI portunu seçin.
 * **LG TV (webOS):**
-  - TV'de Developer Mode'u açın.
-  - `tv/packages/com.gametranslator.tv_1.0.0_all.ipk` dosyasını `ares-install` veya webOS Dev Manager ile kurun.
+  * **Hazır Paket:** `tv/packages/com.gametranslator.tv_1.0.0_all.ipk`
+  * TV'de Developer Mode'u açın. webOS Dev Manager ile veya komutla kurun:
+    ```bash
+    ares-install tv/packages/com.gametranslator.tv_1.0.0_all.ipk
+    ```
 * **Samsung TV (Tizen):**
-  - TV'de Geliştirici Modunu (1-2-3-4-5) açın.
-  - `tv/packages/gametranslator-samsung_1.0.0.wgt` dosyasını Tizen CLI (`sdb install`) ile yükleyin.
+  * **Hazır Paket:** `tv/packages/gametranslator-samsung_1.0.0.wgt`
+  * TV'de Geliştirici Modunu (1-2-3-4-5) açın. Tizen CLI ile yükleyin:
+    ```bash
+    tizen install -n tv/packages/gametranslator-samsung_1.0.0.wgt
+    ```
 
 ---
 
 ## 🎮 PlayStation 5 Ayarı (Kumanda Neden Kopmaz?)
 
 PlayStation normalde Remote Play açılınca elinizdeki kumandayı televizyondan koparır. Bunu aşmak son derece basittir:
-1. PS5'te `Ayarlar` ➔ `Sistem` ➔ `Uzaktan Oynatma (Remote Play)` ➔ **Etkinleştir** yapın.
+1. PS5'te `Ayarlar` ➔ `Sistem` ➔ `Uzaktan Oynatma (Remote Play)` ➔ **Uzaktan Oynatmayı Etkinleştir** seçeneğini **AÇIK** yapın.
 2. PS5'inizde **ücretsiz ikinci bir kullanıcı / PSN hesabı** ekleyin (örneğin: `oyunceviri@gmail.com`).
 3. **Nasıl Oynayacaksınız?**
    - TV karşısında **kendi ana hesabınızı** açıp kumandanızı elinize alın.
@@ -107,28 +118,35 @@ PlayStation normalde Remote Play açılınca elinizdeki kumandayı televizyondan
 ```text
 GameTranslate/
 ├── mac/                            # 🍏 macOS Yerel Uygulaması (SwiftUI, Apple Vision OCR, NPU)
-│   ├── GameTranslator.xcodeproj    # Xcode Projesi
-│   └── GameTranslator/             # Swift Kaynak Kodları (UI, Pipeline, Dubbing)
+│   ├── NativeApp.swift             # Ana masaüstü arayüzü & altyazı motoru
+│   ├── build.sh                    # Tek komutla Apple Developer imzalı derleme aracı
+│   ├── project.yml                 # XcodeGen proje dosyası
+│   └── GameTranslator/             # Varlıklar, ikonlar ve Info.plist
 │
 ├── windows/                        # 🪟 Windows Yerel Uygulaması (.NET 10, C#, WPF, DirectML)
-│   ├── GameTranslator.Windows.slnx # Visual Studio Çözümü
-│   └── src/GameTranslator.App/     # Windows WPF Arayüzü & OCR Motoru
+│   ├── GameTranslator.Windows.slnx # Visual Studio / Rider Çözümü
+│   ├── src/                        # Modüller (App, Core, RemotePlay, TvInstall)
+│   └── native/                     # C/C++ donanım hızlandırma katmanı
 │
-├── tv-android/                     # 📺 Android TV / TCL Yerel TvView Projesi (Java/Kotlin)
-├── tv-webos/                       # 📺 LG webOS HTML5 Şeffaf Altyazı Katmanı
-├── tv-tizen/                       # 📺 Samsung Tizen TV Katmanı
+├── tv/                             # 📺 Akıllı TV Uygulamaları (Companion Apps)
+│   ├── android/                    # Android TV & Google TV kaynak kodları (Java/Gradle)
+│   ├── webos/                      # LG webOS TV şeffaf altyazı katmanı (HTML5/JS)
+│   ├── tizen/                      # Samsung Tizen TV katmanı (Web App)
+│   └── packages/                   # Doğrudan TV'ye yüklenebilir hazır derlenmiş paketler:
+│       ├── gametranslator-androidtv_1.0.0.apk
+│       ├── com.gametranslator.tv_1.0.0_all.ipk
+│       └── gametranslator-samsung_1.0.0.wgt
 │
-├── core/                           # ⚙️ Çekirdek Swift Kütüphanesi (Ağ, OCR, Altyazı Senkronu)
+├── core/                           # ⚙️ Çekirdek Kütüphane (Ağ, OCR gürültü filtreleme, senkronizasyon)
+├── dictionaries/                   # 📚 Oyun sözlükleri (GTA 6 slang & community pack)
+├── docs/                           # 📖 Detaylı kurulum rehberleri ve mimari dokümanlar
+├── design/                         # 🎨 Vektör logolar, AppIcon ve tasarım bileşenleri
+├── scripts/                        # 🛠️ TV paketleme ve derleme otomasyon araçları
 │
-└── GameTranslator/                 # 🚀 Çift Tıklamayla Çalışan Dağıtım Paketi
-    ├── GameTranslator.app          # macOS Yerel Uygulama Paketi
-    ├── GameTranslator.command      # Mac çift tık başlatıcısı
-    ├── GameTranslator.bat          # Windows çift tık başlatıcısı
-    ├── KULLANIM_KILAVUZU.txt       # Hızlı Türkçe başlangıç rehberi
-    └── tv/
-        ├── gametranslator-androidtv_1.0.0.apk  # Android TV / TCL paketi
-        ├── com.gametranslator.tv_1.0.0_all.ipk # LG webOS paketi
-        └── gametranslator-samsung_1.0.0.wgt   # Samsung Tizen paketi
+├── GameTranslator.command          # 🚀 Mac tek tıkla başlatıcı
+├── GameTranslator.bat              # 🚀 Windows tek tıkla başlatıcı
+├── README.md                       # Açık kaynak proje dokümantasyonu
+└── LICENSE                         # AGPL-3.0 Açık Kaynak Lisansı
 ```
 
 ---
@@ -136,24 +154,23 @@ GameTranslate/
 ## 👨‍💻 Geliştiriciler İçin: Kodları Derleme
 
 ```bash
-# Mac'te Core kütüphanesini derleme:
-export DEVELOPER_DIR="/Library/Developer/CommandLineTools"
-swift build -c release --package-path core
+# 🍏 macOS Uygulamasını Derleme (Apple Silicon):
+bash mac/build.sh
 
-# macOS Yerel Uygulamasını Açma:
-open mac/GameTranslator.xcodeproj
+# 🪟 Windows Projesini Derleme ve Çalıştırma:
+dotnet run --project windows/src/GameTranslator.App/GameTranslator.App.csproj
 
-# Windows Projesini Derleme ve Çalıştırma:
-dotnet run --project windows\src\GameTranslator.App\GameTranslator.App.csproj
+# 📺 Android TV APK'sını Kaynak Kodundan Derleme:
+cd tv/android && ./gradlew assembleRelease
 
-# Android TV APK Derleme:
-cd tv-android && ./gradlew assembleRelease
+# ⚙️ Core Swift Kütüphanesini Derleme:
+swift build --package-path core
 ```
 
 ---
 
 ## ⚖️ Lisans & Telif Hakkı
 
-Bu proje **[GNU AGPL-3.0](LICENSE)** lisansı altında açık kaynak olarak sunulmaktadır.
-Geliştirici: **Sefflex** — Telif Hakkı © 2026 GameTranslator Pro. Tüm hakları saklıdır.
+Bu proje **[GNU AGPL-3.0](LICENSE)** lisansı altında açık kaynak olarak sunulmaktadır.  
+Geliştirici: **Sefflex** — Telif Hakkı © 2026 GameTranslator Pro. Tüm hakları saklıdır.  
 Çekirdek ağ ve video yakalama altyapısında açık kaynaklı [chiaki-ng](https://github.com/chiaki-ng/chiaki-ng) projesinin temellerinden yararlanılmıştır.
