@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -134,11 +135,12 @@ public partial class OnboardingView : UserControl
         PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
         try
         {
-            var found = await controller.DiscoverConsoleAsync();
-            if (found != null)
+            var found = await controller.DiscoverConsolesAsync();
+            var first = found.FirstOrDefault();
+            if (first != null)
             {
-                Ps5HostInput.Text = found.Host;
-                PairStatusText.Text = $"✓ PS5 Bulundu: {found.Host} ({found.Name})";
+                Ps5HostInput.Text = first.Host;
+                PairStatusText.Text = $"✓ PS5 Bulundu: {first.Host} ({first.Name})";
                 PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
             }
             else
@@ -169,7 +171,7 @@ public partial class OnboardingView : UserControl
 
         try
         {
-            await controller.RegisterConsoleAsync(pin, string.IsNullOrEmpty(host) ? null : host);
+            await controller.RegisterAsync(host, pin);
             PairStatusText.Text = "✓ PS5 Konsolu Başarıyla Eşleşti!";
             PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
             SetStep(4);
