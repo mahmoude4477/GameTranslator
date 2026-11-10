@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using GameTranslator.Core;
 using GameTranslator.RemotePlay;
+using Microsoft.Win32;
 
 namespace GameTranslator.App.Services;
 
@@ -45,8 +46,13 @@ public sealed class WindowCaptureStreamSession : IStreamSession
     {
         try
         {
+            SyncChiakiRegistry();
+
             var possiblePaths = new[]
             {
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "chiaki", "chiaki.exe"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "helpers", "chiaki", "chiaki.exe"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "helpers", "chiaki.exe"),
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "Chiaki", "chiaki.exe"),
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "chiaki-ng", "chiaki-ng.exe"),
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Chiaki", "chiaki.exe"),
@@ -60,16 +66,51 @@ public sealed class WindowCaptureStreamSession : IStreamSession
                 if (File.Exists(path))
                 {
                     var name = Path.GetFileNameWithoutExtension(path);
-                    if (Process.GetProcessesByName(name).Length == 0)
+                    if (Process.GetProcessesByName(name).Length == 0 && Process.GetProcessesByName("chiaki").Length == 0)
                     {
-                        Process.Start(new ProcessStartInfo
+                        var psi = new ProcessStartInfo
                         {
                             FileName = path,
-                            UseShellExecute = true
-                        });
+                            UseShellExecute = true,
+                            WorkingDirectory = Path.GetDirectoryName(path) ?? string.Empty
+                        };
+
+                        if (!string.IsNullOrWhiteSpace(console.Host))
+                        {
+                            var nick = string.IsNullOrWhiteSpace(console.Name) ? "PS5" : console.Name;
+                            psi.Arguments = $"stream \"{nick}\" {console.Host}";
+                        }
+
+                        Process.Start(psi);
                         break;
                     }
                 }
+            }
+        }
+        catch { }
+    }
+
+    private void SyncChiakiRegistry()
+    {
+        try
+        {
+            if (console == null || string.IsNullOrWhiteSpace(console.Host)) return;
+
+            using var key = Registry.CurrentUser.CreateSubKey(@"Software\Chiaki\Chiaki");
+            if (key != null)
+            {
+                key.SetValue("registered_hosts\\size", 1, RegistryValueKind.DWord);
+                key.SetValue("registered_hosts\\1\\target", 1000100, RegistryValueKind.DWord);
+                key.SetValue("registered_hosts\\1\\server_nickname", string.IsNullOrWhiteSpace(console.Name) ? "PS5" : console.Name, RegistryValueKind.String);
+                key.SetValue("registered_hosts\\1\\server_mac", new byte[] { 0xE8, 0x6E, 0x3A, 0x94, 0xB1, 0x64 }, RegistryValueKind.Binary);
+                if (console.RegistKey != null && console.RegistKey.Length > 0)
+                    key.SetValue("registered_hosts\\1\\rp_regist_key", console.RegistKey, RegistryValueKind.Binary);
+                if (console.Morning != null && console.Morning.Length > 0)
+                    key.SetValue("registered_hosts\\1\\rp_key", console.Morning, RegistryValueKind.Binary);
+                key.SetValue("registered_hosts\\1\\rp_key_type", 0, RegistryValueKind.DWord);
+                key.SetValue("settings\\audio_volume", 0, RegistryValueKind.DWord);
+                key.SetValue("settings\\fullscreen", 0, RegistryValueKind.DWord);
+                key.SetValue("settings\\remote_play_ask", 0, RegistryValueKind.DWord);
             }
         }
         catch { }

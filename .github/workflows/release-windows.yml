@@ -31,6 +31,12 @@ jobs:
         run: |
           dotnet publish windows/src/GameTranslator.App/GameTranslator.App.csproj -c Release -r win-x64 --self-contained -o release-win
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          Write-Host "Downloading Chiaki Windows Portable..."
+          Invoke-WebRequest -Uri "https://github.com/thestr4ng3r/chiaki/releases/download/v1.3.0/Chiaki-v1.3.0-Windows-x86_64.zip" -OutFile "chiaki.zip"
+          Expand-Archive -Path "chiaki.zip" -DestinationPath "release-win/chiaki" -Force
+          Remove-Item "chiaki.zip"
+
           Compress-Archive -Path release-win/* -DestinationPath GameTranslator-Windows-x64.zip
 
       - name: Upload Artifact
