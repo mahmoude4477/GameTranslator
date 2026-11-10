@@ -290,9 +290,9 @@
 
                                     <!-- Canlı Akış Kapalıyken Gösterilecek Kalibrasyon Zemin Deseni -->
                                     <StackPanel x:Name="StreamPlaceholder" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <TextBlock Text="{x:Static c:Glyphs.Controller}" Style="{StaticResource GlyphText}" FontSize="28" Foreground="#33FFFFFF" HorizontalAlignment="Center" />
-                                        <TextBlock Text="PS5 Canlı Akışı Başlatılmadı" FontWeight="SemiBold" FontSize="11.5" Foreground="#AAFFFFFF" HorizontalAlignment="Center" Margin="0,6,0,2" />
-                                        <TextBlock Text="PS5 ekranını canlı görmek için sol menüden '▶ Çeviriyi Başlat'a basın." FontSize="10" Foreground="#66FFFFFF" HorizontalAlignment="Center" />
+                                        <TextBlock x:Name="StreamPlaceholderIcon" Text="{x:Static c:Glyphs.Controller}" Style="{StaticResource GlyphText}" FontSize="28" Foreground="#33FFFFFF" HorizontalAlignment="Center" />
+                                        <TextBlock x:Name="StreamPlaceholderTitle" Text="PS5 Canlı Akışı Başlatılmadı" FontWeight="SemiBold" FontSize="11.5" Foreground="#AAFFFFFF" HorizontalAlignment="Center" Margin="0,6,0,2" />
+                                        <TextBlock x:Name="StreamPlaceholderSubtitle" Text="PS5 ekranını canlı görmek için sol menüden '▶ Çeviriyi Başlat'a basın." FontSize="10" Foreground="#66FFFFFF" HorizontalAlignment="Center" TextAlignment="Center" />
                                     </StackPanel>
 
                                     <!-- Üst Rozet & Pencereden Yenile Butonu -->

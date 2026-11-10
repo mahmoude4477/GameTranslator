@@ -88,7 +88,14 @@ public sealed class LiveServices : IAppServices
         }
     }
 
-    public IStreamSession MakeStream(RegisteredConsole console, byte[] accountId) => new StreamSession(console, accountId);
+    public IStreamSession MakeStream(RegisteredConsole console, byte[] accountId)
+    {
+        if (NativeMethods.IsAvailable)
+        {
+            return new StreamSession(console, accountId);
+        }
+        return new WindowCaptureStreamSession(console);
+    }
 
     public IKeeper MakeKeeper(LgTv tv, string? key, IReadOnlyDictionary<string, string> parameters, Func<bool> appConnected, Action<LgTv> onMoved)
     {

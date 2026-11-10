@@ -988,6 +988,8 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         }
     }
 
+    public void FeedFrame(Frame frame) => HandleFrame(frame);
+
     private async void HandleFrame(Frame frame)
     {
         post(() => LastFrame = frame);

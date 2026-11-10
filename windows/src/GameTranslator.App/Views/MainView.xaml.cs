@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using GameTranslator.App.Controls;
+using GameTranslator.App.Services;
 using GameTranslator.Core;
 using GameTranslator.Shell;
 using Microsoft.Win32;
@@ -195,8 +196,22 @@ public partial class MainView : UserControl
 
         if (!running)
         {
-            if (StreamPlaceholder != null) StreamPlaceholder.Visibility = Visibility.Visible;
+            if (StreamPlaceholder != null)
+            {
+                StreamPlaceholder.Visibility = Visibility.Visible;
+                if (StreamPlaceholderTitle != null) StreamPlaceholderTitle.Text = "PS5 Canlı Akışı Başlatılmadı";
+                if (StreamPlaceholderSubtitle != null) StreamPlaceholderSubtitle.Text = "PS5 ekranını canlı görmek için sol menüden '▶ Çeviriyi Başlat'a basın.";
+            }
             if (ThumbnailPlaceholder != null) ThumbnailPlaceholder.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            if (LiveStreamImage?.Source == null && StreamPlaceholder != null)
+            {
+                StreamPlaceholder.Visibility = Visibility.Visible;
+                if (StreamPlaceholderTitle != null) StreamPlaceholderTitle.Text = "PS5 Görüntüsü Bekleniyor...";
+                if (StreamPlaceholderSubtitle != null) StreamPlaceholderSubtitle.Text = "Lütfen PC'nizde PlayStation Remote Play veya Chiaki'yi açın.\nOyun penceresi otomatik olarak algılanıp buraya yansıtılacaktır.";
+            }
         }
     }
 
@@ -369,7 +384,35 @@ public partial class MainView : UserControl
 
     private void OnRefreshCapture(object sender, RoutedEventArgs e)
     {
-        controller.RequestSnapshot();
+        try
+        {
+            var hWnd = WindowCaptureService.FindTargetWindow(out var title);
+            if (hWnd != IntPtr.Zero)
+            {
+                var frame = WindowCaptureService.Capture(hWnd);
+                if (frame != null)
+                {
+                    controller.FeedFrame(frame);
+                    UpdateLiveFrame(frame);
+                    return;
+                }
+            }
+
+            var screenFrame = WindowCaptureService.Capture(IntPtr.Zero);
+            if (screenFrame != null)
+            {
+                controller.FeedFrame(screenFrame);
+                UpdateLiveFrame(screenFrame);
+            }
+            else
+            {
+                MessageBox.Show("Chiaki veya PlayStation Remote Play penceresi bulunamadı.\nLütfen bilgisayarınızda açık olduğunu kontrol edin.", "Pencere Bulunamadı", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Ekran yakalama hatası: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
     }
 
     // --- Tab 2: TV Görünümü & Renkler ---
