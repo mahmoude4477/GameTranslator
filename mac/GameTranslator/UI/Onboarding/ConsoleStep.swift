@@ -19,6 +19,17 @@ struct ConsoleStep: View {
         StepLayout(symbol: "gamecontroller.fill", title: "Connect your PS5",
                    message: "Turn on the PS5. As the second user, open Settings › System › Remote Play › Pair Device and enter the 8-digit code shown there.") {
             VStack(alignment: .leading, spacing: Theme.space("l")) {
+                Card {
+                    HStack(alignment: .top, spacing: Theme.space("m")) {
+                        Image(systemName: "info.circle.fill").foregroundStyle(Color.csAccent)
+                        VStack(alignment: .leading, spacing: Theme.space("xs")) {
+                            Text(String(localized: "One-Time Setup")).font(.csHeadline)
+                            Text(String(localized: "This pairing is only required once. When you click 'Start Translation' in GameTranslator, the stream connects automatically; clicking 'Stop Translation' disconnects automatically."))
+                                .font(.csCaption)
+                                .foregroundStyle(Color.csSecondary)
+                        }
+                    }
+                }
                 if let console = model.console {
                     DoneLabel(text: console.name)
                 }

@@ -51,11 +51,15 @@ public static class ChiakiLauncher
                Process.GetProcessesByName("chiaki-ng").Length > 0;
     }
 
-    public static bool LaunchOrBringToFront(string? host = null, string? consoleName = null)
+    /// <summary>
+    /// Çeviri başladığında Chiaki'yi doğrudan konsola bağlanacak şekilde (stream modu) başlatır.
+    /// Zaten yayın penceresi açıksa ön plana getirir. Boşta bekleyen bir Chiaki varsa kapatıp stream komutuyla yeniden başlatır.
+    /// </summary>
+    public static bool LaunchAndStream(string? host = null, string? consoleName = null)
     {
         try
         {
-            // Zaten açık olan bir hedef pencere varsa ön plana getir
+            // Zaten açık ve yayın yapan bir hedef pencere varsa ön plana getir
             var hWnd = WindowCaptureService.FindTargetWindow(out _);
             if (hWnd != IntPtr.Zero)
             {
@@ -63,10 +67,12 @@ public static class ChiakiLauncher
                 return true;
             }
 
-            // Zaten chiaki işlemi çalışıyorsa ancak penceresi henüz yakalanamadıysa tekrar başlatma
+            // Eğer Chiaki işlemi çalışıyor ancak yayın penceresi henüz oluşmamış/boşta ise
+            // CLI stream komutunu kabul edebilmesi için eski boşta kalan işlemi nazikçe kapat
             if (IsRunning())
             {
-                return true;
+                Stop();
+                Thread.Sleep(300);
             }
 
             var exePath = FindChiakiExecutable();
@@ -80,16 +86,15 @@ public static class ChiakiLauncher
                 UseShellExecute = true
             };
 
-            // Eğer Chiaki daha önceden bu PS5'e başarıyla kayıt olmuşsa doğrudan yayın komutunu ver
-            if (!string.IsNullOrWhiteSpace(host) && IsRegistered(host))
+            // Eğer kayıtlı bir takma ad veya konsol varsa doğrudan stream komutunu ver
+            if (!string.IsNullOrWhiteSpace(host))
             {
                 var nick = GetRegisteredNickname(host) ?? (string.IsNullOrWhiteSpace(consoleName) ? "PS5" : consoleName);
                 psi.Arguments = $"stream \"{nick}\" {host}";
             }
             else
             {
-                // Henüz kayıtlı değilse GUI arayüzünü aç; kullanıcı PS5'e çift tıklayıp bağlanabilir
-                psi.Arguments = string.Empty;
+                psi.Arguments = "stream PS5";
             }
 
             Process.Start(psi);
@@ -99,6 +104,79 @@ public static class ChiakiLauncher
         {
             return false;
         }
+    }
+
+    /// <summary>
+    /// Kurulum sihirbazında kullanıcının ilk eşleştirmeyi yapabilmesi için Chiaki arayüzünü açar.
+    /// </summary>
+    public static bool LaunchPairingGui(string? host = null)
+    {
+        try
+        {
+            if (IsRunning())
+            {
+                var hWnd = WindowCaptureService.FindTargetWindow(out _);
+                if (hWnd != IntPtr.Zero)
+                {
+                    WindowCaptureService.RestoreAndActivate(hWnd);
+                    return true;
+                }
+            }
+
+            var exePath = FindChiakiExecutable();
+            if (exePath == null) return false;
+
+            var dir = Path.GetDirectoryName(exePath) ?? string.Empty;
+            var psi = new ProcessStartInfo
+            {
+                FileName = exePath,
+                WorkingDirectory = dir,
+                UseShellExecute = true,
+                Arguments = string.Empty
+            };
+
+            Process.Start(psi);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Geriye uyumluluk için alias: LaunchAndStream çağrısı yapar.
+    /// </summary>
+    public static bool LaunchOrBringToFront(string? host = null, string? consoleName = null)
+    {
+        return LaunchAndStream(host, consoleName);
+    }
+
+    /// <summary>
+    /// Çeviri durdurulduğunda veya uygulama kapatıldığında Chiaki ve bağlantıyı otomatik kapatır.
+    /// </summary>
+    public static void Stop()
+    {
+        try
+        {
+            var procs = Process.GetProcessesByName("chiaki")
+                .Concat(Process.GetProcessesByName("chiaki-ng"))
+                .ToArray();
+
+            foreach (var p in procs)
+            {
+                try
+                {
+                    p.CloseMainWindow();
+                    if (!p.WaitForExit(1000))
+                    {
+                        p.Kill();
+                    }
+                }
+                catch { }
+            }
+        }
+        catch { }
     }
 
     /// <summary>

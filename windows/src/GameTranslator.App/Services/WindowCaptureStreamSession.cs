@@ -38,7 +38,7 @@ public sealed class WindowCaptureStreamSession : IStreamSession
         if (console != null && !string.IsNullOrWhiteSpace(console.Host))
         {
             ChiakiLauncher.SyncConfig(console.Host, accountId);
-            ChiakiLauncher.LaunchOrBringToFront(console.Host, console.Name);
+            ChiakiLauncher.LaunchAndStream(console.Host, console.Name);
         }
 
         loopTask = Task.Run(() => CaptureLoopAsync(cts.Token));
@@ -85,6 +85,7 @@ public sealed class WindowCaptureStreamSession : IStreamSession
         if (!running) return;
         running = false;
         cts?.Cancel();
+        ChiakiLauncher.Stop();
         StateChanged?.Invoke(SessionState.Disconnected(DisconnectKind.Stopped));
     }
 

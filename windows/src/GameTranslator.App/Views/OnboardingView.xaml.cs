@@ -241,8 +241,8 @@ public partial class OnboardingView : UserControl
         if (string.IsNullOrWhiteSpace(host)) host = "192.168.1.105";
         ChiakiLauncher.SyncConfig(host);
         _ = controller.RegisterAsync(host, "00000000");
-        ChiakiLauncher.LaunchOrBringToFront(host, "PlayStation 5");
-        PairStatusText.Text = "Chiaki açıldı! PS5'e tıklayıp ekrandaki PIN kodunu girerek eşleştirin.";
+        ChiakiLauncher.LaunchPairingGui(host);
+        PairStatusText.Text = "Chiaki açıldı! PS5'e tıklayıp ekrandaki 8 haneli PIN kodunu girerek eşleştirin.";
         PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
     }
 

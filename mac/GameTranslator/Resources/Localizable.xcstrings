@@ -1,6 +1,38 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "One-Time Setup": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One-Time Setup"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tek Seferlik Kurulum"
+          }
+        }
+      }
+    },
+    "This pairing is only required once. When you click 'Start Translation' in GameTranslator, the stream connects automatically; clicking 'Stop Translation' disconnects automatically.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This pairing is only required once. When you click 'Start Translation' in GameTranslator, the stream connects automatically; clicking 'Stop Translation' disconnects automatically."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu eşleştirme yalnızca ilk kurulumda bir kez yapılır. GameTranslator'da 'Çeviriyi Başlat' dediğinizde yayın otomatik bağlanır, 'Çeviriyi Durdur' dediğinizde otomatik kapatılır."
+          }
+        }
+      }
+    },
     "%@ was damaged while downloading. Try again.": {
       "localizations": {
         "en": {
