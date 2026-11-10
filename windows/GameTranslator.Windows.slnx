@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/GameTranslator.App/GameTranslator.App.csproj" />
+    <Project Path="src/GameTranslator.Core/GameTranslator.Core.csproj" />
+    <Project Path="src/GameTranslator.RemotePlay/GameTranslator.RemotePlay.csproj" />
+    <Project Path="src/GameTranslator.Shell/GameTranslator.Shell.csproj" />
+    <Project Path="src/GameTranslator.Translation/GameTranslator.Translation.csproj" />
+    <Project Path="src/GameTranslator.TvHelper/GameTranslator.TvHelper.csproj" />
+    <Project Path="src/GameTranslator.TvInstall/GameTranslator.TvInstall.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/GameTranslator.Core.Tests/GameTranslator.Core.Tests.csproj" />
+    <Project Path="tests/GameTranslator.RemotePlay.Tests/GameTranslator.RemotePlay.Tests.csproj" />
+    <Project Path="tests/GameTranslator.Shell.Tests/GameTranslator.Shell.Tests.csproj" />
+    <Project Path="tests/GameTranslator.Translation.Tests/GameTranslator.Translation.Tests.csproj" />
+    <Project Path="tests/GameTranslator.TvInstall.Tests/GameTranslator.TvInstall.Tests.csproj" />
+  </Folder>
+</Solution>

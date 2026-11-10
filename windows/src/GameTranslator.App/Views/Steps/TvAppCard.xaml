@@ -1,0 +1,48 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<UserControl x:Class="GameTranslator.App.Views.Steps.TvAppCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:GameTranslator.App.Controls"
+             xmlns:t="clr-namespace:GameTranslator.App.Theme"
+             Visibility="Collapsed">
+    <c:Card Title="{t:T 'GameTranslator TV app'}">
+        <StackPanel>
+            <TextBlock x:Name="Status" TextWrapping="Wrap" />
+            <TextBlock x:Name="Detail" Style="{StaticResource HintText}" Margin="0,4,0,0" Visibility="Collapsed" />
+            <StackPanel x:Name="LgSteps" Visibility="Collapsed" Margin="0,8,0,0">
+                <TextBlock Style="{StaticResource HintText}" Text="{t:T '1. Create a free account at webostv.developer.lge.com.'}" />
+                <TextBlock Style="{StaticResource HintText}" Text="{t:T '2. On the TV, install Developer Mode from the LG Content Store and sign in.'}" />
+                <TextBlock Style="{StaticResource HintText}" Text="{t:T '3. Turn on Dev Mode Status. The TV restarts and this screen continues by itself.'}" />
+            </StackPanel>
+            <StackPanel x:Name="SamsungSteps" Visibility="Collapsed" Margin="0,8,0,0">
+                <TextBlock Style="{StaticResource HintText}" Text="{t:T '1. On the TV, open Apps.'}" />
+                <TextBlock Style="{StaticResource HintText}" Text="{t:T '2. Press 1 2 3 4 5 on the remote (or type 12345 on the on-screen keypad). The Developer Mode window opens.'}" />
+                <TextBlock x:Name="SamsungHostStep" Style="{StaticResource HintText}" />
+                <TextBlock Style="{StaticResource HintText}" Text="{t:T '4. Restart the TV. This screen continues by itself.'}" />
+                <TextBlock Style="{StaticResource HintText}" Margin="0,4,0,0" Text="{t:T 'Later you sign in once with a free Samsung account; Samsung needs it to sign the app for your TV.'}" />
+            </StackPanel>
+            <StackPanel x:Name="AndroidSteps" Visibility="Collapsed" Margin="0,8,0,0">
+                <TextBlock Style="{StaticResource HintText}" Text="{t:T '1. On the TV, open Settings › Device Preferences › About (Google TV: Settings › System › About).'}" />
+                <TextBlock Style="{StaticResource HintText}" Text="{t:T '2. Press OK on Build 7 times until it says you are a developer.'}" />
+                <TextBlock Style="{StaticResource HintText}" Text="{t:T '3. Go back to Device Preferences (Google TV: System) › Developer options and turn on USB debugging. Turn on Network debugging too if you see it.'}" />
+                <TextBlock Style="{StaticResource HintText}" Margin="0,4,0,0" Text="{t:T 'Looking for the TV on the network…'}" />
+                <TextBlock Style="{StaticResource HintText}" Text="{t:T 'Menu names differ a little by brand. If the app is already on the TV, you can skip this step.'}" />
+                <Button HorizontalAlignment="Left" Margin="0,8,0,0" Content="{t:T 'Install with a USB stick instead'}" Click="OnGuide" />
+            </StackPanel>
+            <StackPanel x:Name="PassphraseArea" Visibility="Collapsed" Margin="0,8,0,0">
+                <TextBlock Style="{StaticResource HintText}" Text="{t:T 'Open the Developer Mode app on the TV, turn on Key Server and keep the app on screen. Type the Passphrase it shows.'}" />
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="Passphrase" />
+                    <Button Grid.Column="1" Margin="8,0,0,0" Style="{StaticResource PrimaryButton}" Content="{t:T 'Install on the TV'}" Click="OnInstall" />
+                </Grid>
+            </StackPanel>
+            <Button x:Name="OpenAgain" Visibility="Collapsed" HorizontalAlignment="Left" Margin="0,8,0,0" Content="{t:T 'Open the page again'}" Click="OnOpenAgain" />
+            <TextBlock x:Name="Problem" Style="{StaticResource ErrorText}" Margin="0,8,0,0" />
+            <Button x:Name="Retry" Visibility="Collapsed" HorizontalAlignment="Left" Margin="0,8,0,0" Content="{t:T 'Try again'}" Click="OnRetry" />
+        </StackPanel>
+    </c:Card>
+</UserControl>

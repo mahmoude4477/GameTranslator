@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>GameTranslator</AssemblyName>
+    <RootNamespace>GameTranslator.App</RootNamespace>
+    <ApplicationIcon>Assets\GameTranslator.ico</ApplicationIcon>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <!-- Velopack kurulum ve güncelleme kancaları WPF başlamadan çalışmalı (Program.Main). -->
+    <StartupObject>GameTranslator.App.Program</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3537.50" />
+    <PackageReference Include="Velopack" Version="1.2.161" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\logo.png" />
+    <!-- ShellWindow.xaml pencere simgesi olarak bunu okur; ApplicationIcon yalnız exe simgesidir. -->
+    <Resource Include="Assets\GameTranslator.ico" />
+  </ItemGroup>
+
+  <!-- TV uygulaması paketleri (scripts/package-tv.sh, package-tizen.sh ve Android derlemesi üretir); geliştirici modu açık TV'ye kurulur. -->
+  <ItemGroup>
+    <Content Include="..\..\..\dist\tv-app\*.ipk;..\..\..\dist\tv-app\*.wgt;..\..\..\dist\tv-app\*.apk" Link="tv-app\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameTranslator.Core\GameTranslator.Core.csproj" />
+    <ProjectReference Include="..\GameTranslator.Translation\GameTranslator.Translation.csproj" />
+    <ProjectReference Include="..\GameTranslator.RemotePlay\GameTranslator.RemotePlay.csproj" />
+    <ProjectReference Include="..\GameTranslator.Shell\GameTranslator.Shell.csproj" />
+    <ProjectReference Include="..\GameTranslator.TvInstall\GameTranslator.TvInstall.csproj" />
+  </ItemGroup>
+
+</Project>

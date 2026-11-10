@@ -1,0 +1,34 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<UserControl x:Class="GameTranslator.App.Views.Steps.ConsoleStep"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:GameTranslator.App.Controls"
+             xmlns:t="clr-namespace:GameTranslator.App.Theme"
+             xmlns:v="clr-namespace:GameTranslator.App.Views">
+    <c:StepLayout Glyph="{x:Static c:Glyphs.Controller}" Title="{t:T 'Connect your PS5'}"
+                  Message="{t:T 'Turn on the PS5. As the second user, open Settings › System › Remote Play › Pair Device and enter the 8-digit code shown there.'}">
+        <StackPanel>
+            <TextBlock x:Name="Done" Style="{StaticResource DoneText}" Margin="0,0,0,16" />
+            <c:Card>
+                <StackPanel>
+                    <Grid Margin="0,0,0,12">
+                        <TextBlock Text="PS5" Style="{StaticResource HeadlineText}" VerticalAlignment="Center" />
+                        <Button x:Name="Search" Content="{t:T 'Search again'}" HorizontalAlignment="Right" Click="OnSearch" />
+                    </Grid>
+                    <TextBlock x:Name="NotFound" Style="{StaticResource HintText}" Margin="0,0,0,8"
+                               Text="{t:T 'No PS5 found. Make sure it is on and on the same network, or enter its IP address.'}" />
+                    <TextBox x:Name="ManualHost" MaxWidth="320" HorizontalAlignment="Left" Width="320" />
+                    <StackPanel x:Name="Consoles" />
+                </StackPanel>
+            </c:Card>
+            <TextBlock Text="{t:T '8-digit code'}" Style="{StaticResource HintText}" Margin="0,20,0,6" />
+            <TextBox x:Name="Pin" Width="240" HorizontalAlignment="Left" FontSize="{DynamicResource codeFontSize}" FontWeight="SemiBold"
+                     MinHeight="52" MaxLength="9" TextChanged="OnPinChanged" />
+            <Button x:Name="Connect" Content="{t:T 'Connect'}" Style="{StaticResource PrimaryButton}" Margin="0,16,0,0"
+                    IsEnabled="False" Click="OnConnect" />
+            <TextBlock x:Name="Error" Style="{StaticResource ErrorText}" Margin="0,12,0,0" />
+            <!-- Eşleştirme başarısızsa ve güvenlik duvarında izin yoksa -->
+            <v:FirewallCard Margin="0,12,0,0" />
+        </StackPanel>
+    </c:StepLayout>
+</UserControl>

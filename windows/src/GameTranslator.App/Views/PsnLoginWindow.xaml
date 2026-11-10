@@ -1,0 +1,18 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<Window x:Class="GameTranslator.App.Views.PsnLoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        xmlns:t="clr-namespace:GameTranslator.App.Theme"
+        Title="PlayStation Network" Width="520" Height="720" ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner" Background="{DynamicResource backgroundBrush}" Foreground="{DynamicResource textPrimaryBrush}">
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Background="{DynamicResource surfaceBrush}" BorderBrush="{DynamicResource borderBrush}" BorderThickness="0,0,0,1" Padding="16,12">
+            <Grid>
+                <TextBlock Text="PlayStation Network" Style="{StaticResource HeadlineText}" VerticalAlignment="Center" />
+                <Button Content="{t:T 'Cancel'}" HorizontalAlignment="Right" IsCancel="True" Click="OnCancel" />
+            </Grid>
+        </Border>
+        <wv2:WebView2 x:Name="Browser" />
+    </DockPanel>
+</Window>

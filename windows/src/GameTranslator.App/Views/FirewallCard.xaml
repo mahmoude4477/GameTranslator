@@ -1,0 +1,15 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<UserControl x:Class="GameTranslator.App.Views.FirewallCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:GameTranslator.App.Controls"
+             xmlns:t="clr-namespace:GameTranslator.App.Theme"
+             Visibility="Collapsed">
+    <c:Card>
+        <StackPanel>
+            <TextBlock x:Name="Headline" FontWeight="SemiBold" Foreground="{DynamicResource warningBrush}" TextWrapping="Wrap" />
+            <TextBlock x:Name="Hint" Style="{StaticResource HintText}" Margin="0,8,0,0" TextWrapping="Wrap" />
+            <Button x:Name="Allow" HorizontalAlignment="Left" Margin="0,12,0,0" Content="{t:T 'Allow GameTranslator through Windows Firewall'}" Click="OnAllow" />
+        </StackPanel>
+    </c:Card>
+</UserControl>

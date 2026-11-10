@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameTranslator.Core\GameTranslator.Core.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="GameTranslator.RemotePlay.Tests" />
+  </ItemGroup>
+
+  <!-- Yerel kütüphane CI'da (windows.yml, native işi) derlenip buraya konur; varsa çıktıya ve
+       yayın klasörüne kopyalanır (bu projeye başvuran uygulama ve testler de alır). -->
+  <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\bin\gametranslator_native.dll')">
+    <None Include="$(MSBuildThisFileDirectory)..\..\native\bin\gametranslator_native.dll" Link="gametranslator_native.dll"
+          CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+
+</Project>

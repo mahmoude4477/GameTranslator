@@ -1,0 +1,15 @@
+<Project>
+  <!-- SPDX-License-Identifier: AGPL-3.0-only -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Version>0.1.0</Version>
+    <Company>Sefflex</Company>
+    <Authors>Sefflex</Authors>
+    <Product>GameTranslator</Product>
+    <Copyright>Telif Hakkı © 2026 Sefflex. AGPL-3.0. Uses chiaki-ng (AGPL-3.0).</Copyright>
+    <!-- WPF projesi Mac'te de derlenebilsin (çalıştırmak için Windows gerekir). -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+</Project>

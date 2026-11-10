@@ -1,0 +1,14 @@
+{
+  "id": "com.gametranslator.tv",
+  "version": "1.0.0",
+  "vendor": "Sefflex",
+  "type": "web",
+  "main": "index.html",
+  "title": "GameTranslator",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png",
+  "bgColor": "#000000",
+  "resolution": "1920x1080",
+  "requiredACG": [],
+  "disableBackHistoryAPI": true
+}

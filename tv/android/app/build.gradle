@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'com.gametranslator.tv'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.gametranslator.tv'
+        minSdk 24
+        targetSdk 35
+        versionCode 100
+        versionName '1.0.0'
+    }
+    // Sürümde imza depo sırrından gelir; yoksa geliştirme anahtarıyla imzalanır.
+    signingConfigs {
+        release {
+            def store = System.getenv('ANDROID_KEYSTORE_FILE')
+            if (store) {
+                storeFile file(store)
+                storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+                keyAlias 'gametranslator'
+                keyPassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig System.getenv('ANDROID_KEYSTORE_FILE') ? signingConfigs.release : signingConfigs.debug
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets.main.assets.srcDirs += layout.buildDirectory.dir('generated/tv-assets')
+}
+
+// Arayüz LG ve Samsung'la ortaktır.
+tasks.register('copyTvAssets', Copy) {
+    into layout.buildDirectory.dir('generated/tv-assets/tv')
+    from('../../tv-webos') { include 'app.js', 'i18n.js', 'config.js', 'index.html', 'style.css', 'icon.png', 'largeIcon.png' }
+    from('..') { include 'platform.js' }
+}
+preBuild.dependsOn 'copyTvAssets'

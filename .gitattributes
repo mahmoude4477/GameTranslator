@@ -1,0 +1,5 @@
+# TV uygulamaları ve betikler her işletim sisteminde LF satır sonuyla çıkar: Windows CI'da paketlenen LG/Samsung
+# uygulaması Linux'takiyle birebir aynı olsun.
+tv-webos/** text=auto eol=lf
+tv-tizen/** text=auto eol=lf
+scripts/*.sh text eol=lf

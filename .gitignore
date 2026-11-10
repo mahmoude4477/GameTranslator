@@ -1,0 +1,20 @@
+# Build & OS artifacts
+.DS_Store
+._*
+build/
+.build/
+dist/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+mac/GameTranslator.xcodeproj/
+mac/GameTranslatorBinary
+bin/
+obj/
+
+# Archives & Temporary files
+*.zip
+*.tar.gz
+
+# IDE & Agent local settings
+.claude/
+.gemini/

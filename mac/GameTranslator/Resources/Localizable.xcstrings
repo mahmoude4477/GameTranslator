@@ -1,0 +1,4400 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "%@ was damaged while downloading. Try again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ was damaged while downloading. Try again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ indirilirken bozuldu. Yeniden deneyin."
+          }
+        }
+      }
+    },
+    "1. Create a free account at webostv.developer.lge.com.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. Create a free account at webostv.developer.lge.com."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. webostv.developer.lge.com adresinde ücretsiz hesap açın."
+          }
+        }
+      }
+    },
+    "1. On the TV, open Apps.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. On the TV, open Apps."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. TV'de Uygulamalar ekranını açın."
+          }
+        }
+      }
+    },
+    "1. On the TV, open Settings › Device Preferences › About (Google TV: Settings › System › About).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. On the TV, open Settings › Device Preferences › About (Google TV: Settings › System › About)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. TV'de Ayarlar › Cihaz Tercihleri › Hakkında'ya girin (Google TV'de Ayarlar › Sistem › Hakkında)."
+          }
+        }
+      }
+    },
+    "2. On the TV, install Developer Mode from the LG Content Store and sign in.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. On the TV, install Developer Mode from the LG Content Store and sign in."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. TV'de LG Content Store'dan Developer Mode uygulamasını kurup giriş yapın."
+          }
+        }
+      }
+    },
+    "2. Press 1 2 3 4 5 on the remote (or type 12345 on the on-screen keypad). The Developer Mode window opens.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. Press 1 2 3 4 5 on the remote (or type 12345 on the on-screen keypad). The Developer Mode window opens."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. Kumandada 1 2 3 4 5 tuşlarına basın (ya da ekran klavyesiyle 12345 yazın). Geliştirici modu penceresi açılır."
+          }
+        }
+      }
+    },
+    "2. Press OK on Build 7 times until it says you are a developer.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. Press OK on Build 7 times until it says you are a developer."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. Yapı numarasının üstünde Tamam'a, geliştirici olduğunuz yazana kadar 7 kez basın."
+          }
+        }
+      }
+    },
+    "3. Go back to Device Preferences (Google TV: System) › Developer options and turn on USB debugging. Turn on Network debugging too if you see it.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Go back to Device Preferences (Google TV: System) › Developer options and turn on USB debugging. Turn on Network debugging too if you see it."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Cihaz Tercihleri (Google TV'de Sistem) › Geliştirici seçenekleri'ne dönüp USB hata ayıklama'yı açın. Ağ hata ayıklama varsa onu da açın."
+          }
+        }
+      }
+    },
+    "3. Turn Developer mode On, type this computer's address as Host PC IP: %@ and press OK.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Turn Developer mode On, type this computer's address as Host PC IP: %@ and press OK."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Developer mode'u On yapın, Host PC IP olarak bu bilgisayarın adresini yazın: %@ ve OK'e basın."
+          }
+        }
+      }
+    },
+    "3. Turn on Dev Mode Status. The TV restarts and this screen continues by itself.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Turn on Dev Mode Status. The TV restarts and this screen continues by itself."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Dev Mode Status'u açın. TV yeniden başlar, bu ekran kendiliğinden devam eder."
+          }
+        }
+      }
+    },
+    "4. Restart the TV. This screen continues by itself.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4. Restart the TV. This screen continues by itself."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4. TV'yi yeniden başlatın. Bu ekran kendiliğinden devam eder."
+          }
+        }
+      }
+    },
+    "8-digit code": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8-digit code"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8 haneli kod"
+          }
+        }
+      }
+    },
+    "A PS5 on the same Wi-Fi network as this Mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A PS5 on the same Wi-Fi network as this Mac"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu Mac ile aynı Wi-Fi ağında bir PS5"
+          }
+        }
+      }
+    },
+    "A PS5 on the same network as this computer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A PS5 on the same network as this computer"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu bilgisayarla aynı ağda bir PS5"
+          }
+        }
+      }
+    },
+    "A free second PlayStation Network account": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A free second PlayStation Network account"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ücretsiz ikinci bir PlayStation Network hesabı"
+          }
+        }
+      }
+    },
+    "A new version of GameTranslator is available: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A new version of GameTranslator is available: %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator'ın yeni sürümü çıktı: %@"
+          }
+        }
+      }
+    },
+    "A second PSN account": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A second PSN account"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İkinci bir PSN hesabı"
+          }
+        }
+      }
+    },
+    "About GameTranslator": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About GameTranslator"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator Hakkında"
+          }
+        }
+      }
+    },
+    "Above the English subtitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Above the English subtitle"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İngilizce altyazının üstünde"
+          }
+        }
+      }
+    },
+    "Accept the request on the TV…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accept the request on the TV…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV'deki isteği onaylayın…"
+          }
+        }
+      }
+    },
+    "Adjust the frame so it covers where the game shows its subtitles.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adjust the frame so it covers where the game shows its subtitles."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çerçeveyi, oyunun altyazıyı gösterdiği alanı kaplayacak şekilde ayarlayın."
+          }
+        }
+      }
+    },
+    "An LG TV with the GameTranslator TV app": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An LG TV with the GameTranslator TV app"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator TV uygulaması kurulu bir LG TV"
+          }
+        }
+      }
+    },
+    "Area 1 (Num 1)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Area 1 (Num 1)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bölge 1 (Num 1)"
+          }
+        }
+      }
+    },
+    "Area 2 (Num 2)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Area 2 (Num 2)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bölge 2 (Num 2)"
+          }
+        }
+      }
+    },
+    "Area 3 (Num 3)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Area 3 (Num 3)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bölge 3 (Num 3)"
+          }
+        }
+      }
+    },
+    "Back": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geri"
+          }
+        }
+      }
+    },
+    "Background": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Background"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arka plan"
+          }
+        }
+      }
+    },
+    "Below the English subtitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Below the English subtitle"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İngilizce altyazının altında"
+          }
+        }
+      }
+    },
+    "Bold text": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bold text"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalın yazı"
+          }
+        }
+      }
+    },
+    "Bottom": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bottom"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alt"
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vazgeç"
+          }
+        }
+      }
+    },
+    "Characters": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Characters"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Karakterler"
+          }
+        }
+      }
+    },
+    "Check for Updates…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check for Updates…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Güncellemeleri denetle…"
+          }
+        }
+      }
+    },
+    "Checking the TV app…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking the TV app…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV uygulaması kontrol ediliyor…"
+          }
+        }
+      }
+    },
+    "Close": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kapat"
+          }
+        }
+      }
+    },
+    "Connect": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bağlan"
+          }
+        }
+      }
+    },
+    "Connect your PS5": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect your PS5"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PS5'inizi bağlayın"
+          }
+        }
+      }
+    },
+    "Connect your TV": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect your TV"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV'nizi bağlayın"
+          }
+        }
+      }
+    },
+    "Connected": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bağlı"
+          }
+        }
+      }
+    },
+    "Connecting…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecting…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bağlanıyor…"
+          }
+        }
+      }
+    },
+    "Continue": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Devam"
+          }
+        }
+      }
+    },
+    "GameTranslator": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator"
+          }
+        }
+      }
+    },
+    "GameTranslator TV app": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator TV app"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator TV uygulaması"
+          }
+        }
+      }
+    },
+    "GameTranslator extends Developer Mode by itself each time you use it.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator extends Developer Mode by itself each time you use it."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator, geliştirici modunun süresini her kullanışınızda kendisi uzatır."
+          }
+        }
+      }
+    },
+    "GameTranslator is not affiliated with Sony Interactive Entertainment. PlayStation and PS5 are trademarks of Sony Interactive Entertainment Inc.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator is not affiliated with Sony Interactive Entertainment. PlayStation and PS5 are trademarks of Sony Interactive Entertainment Inc."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator, Sony Interactive Entertainment ile bağlantılı değildir. PlayStation ve PS5, Sony Interactive Entertainment Inc.'in ticari markalarıdır."
+          }
+        }
+      }
+    },
+    "GameTranslator reads the English subtitles of your PS5 games and shows a Turkish translation on your TV, on top of the game. You keep playing on the TV with your own controller.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator reads the English subtitles of your PS5 games and shows a Turkish translation on your TV, on top of the game. You keep playing on the TV with your own controller."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator, PS5 oyunlarınızın İngilizce altyazısını okur ve Türkçesini TV'de oyunun üstünde gösterir. Siz TV'de kendi kolunuzla oynamaya devam edersiniz."
+          }
+        }
+      }
+    },
+    "GameTranslator translates on this computer, without the internet. The English–Turkish model (about 530 MB) is downloaded once and kept on this computer.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator translates on this computer, without the internet. The English–Turkish model (about 530 MB) is downloaded once and kept on this computer."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator çeviriyi bu bilgisayarda, internetsiz yapar. İngilizce–Türkçe model (yaklaşık 530 MB) bir kez indirilir ve bu bilgisayarda kalır."
+          }
+        }
+      }
+    },
+    "GameTranslator watches the game through Remote Play. If it used your own account, the PS5 would turn off your controller. With a second account you keep playing undisturbed.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator watches the game through Remote Play. If it used your own account, the PS5 would turn off your controller. With a second account you keep playing undisturbed."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator oyunu Uzaktan Oynatma ile izler. Kendi hesabınızı kullansaydı PS5 kolunuzu kapatırdı. İkinci bir hesapla oyununuz hiç bölünmez."
+          }
+        }
+      }
+    },
+    "GameTranslator will send a sample subtitle to your TV. It should appear at the bottom of the screen, on top of the game.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator will send a sample subtitle to your TV. It should appear at the bottom of the screen, on top of the game."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator TV'nize örnek bir altyazı gönderecek. Ekranın altında, oyunun üstünde görünmeli."
+          }
+        }
+      }
+    },
+    "Could not download %@. Check the internet connection and try again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not download %@. Check the internet connection and try again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ indirilemedi. İnternet bağlantısını denetleyip yeniden deneyin."
+          }
+        }
+      }
+    },
+    "Could not translate this area.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not translate this area."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu alan çevrilemedi."
+          }
+        }
+      }
+    },
+    "Create a free account at playstation.com with a different email address.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create a free account at playstation.com with a different email address."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "playstation.com'da farklı bir e-posta adresiyle ücretsiz bir hesap açın."
+          }
+        }
+      }
+    },
+    "Debugging was not allowed on the TV. Try again and choose Allow on the TV.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Debugging was not allowed on the TV. Try again and choose Allow on the TV."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV'de hata ayıklamaya izin verilmedi. Yeniden deneyin ve TV'de İzin ver'i seçin."
+          }
+        }
+      }
+    },
+    "Developer Mode is on. One last step to install the TV app:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Developer Mode is on. One last step to install the TV app:"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geliştirici modu açık. TV uygulamasını kurmak için son bir adım kaldı:"
+          }
+        }
+      }
+    },
+    "Developer Mode: %lld hours left. GameTranslator extends it by itself each time you use it.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Developer Mode: %lld hours left. GameTranslator extends it by itself each time you use it."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geliştirici modu: %lld saat kaldı. GameTranslator süreyi her kullanışınızda kendisi uzatır."
+          }
+        }
+      }
+    },
+    "Do you see it on the TV?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Do you see it on the TV?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV'de görüyor musunuz?"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bitti"
+          }
+        }
+      }
+    },
+    "Download": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İndir"
+          }
+        }
+      }
+    },
+    "Download the model": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download the model"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modeli indir"
+          }
+        }
+      }
+    },
+    "Download the translation model": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download the translation model"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çeviri modelini indirin"
+          }
+        }
+      }
+    },
+    "Download voices": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download voices"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sesleri indir"
+          }
+        }
+      }
+    },
+    "Downloading voices… %lld%%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Downloading voices… %lld%%"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sesler indiriliyor… %%%lld"
+          }
+        }
+      }
+    },
+    "Downloading…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Downloading…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İndiriliyor…"
+          }
+        }
+      }
+    },
+    "Drag on the picture to draw the area where the game shows its subtitles. Drag the edges to resize it, or the inside to move it.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag on the picture to draw the area where the game shows its subtitles. Drag the edges to resize it, or the inside to move it."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oyunun altyazıyı gösterdiği alanı, görüntünün üzerinde fareyi sürükleyerek çizin. Kenarlarından tutup boyutunu, içinden tutup yerini değiştirebilirsiniz."
+          }
+        }
+      }
+    },
+    "Drag over the text you want to translate. Esc or right-click closes.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag over the text you want to translate. Esc or right-click closes."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çevirmek istediğiniz yazının üstünü fareyle sürükleyin. Esc ya da sağ tık kapatır."
+          }
+        }
+      }
+    },
+    "Draw the area to translate, for example a quest panel. While you play, press its key (Num 1, 2 or 3) to read and translate it once. Choose where the result shows. It works even when GameTranslator is in the background.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draw the area to translate, for example a quest panel. While you play, press its key (Num 1, 2 or 3) to read and translate it once. Choose where the result shows. It works even when GameTranslator is in the background."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çevrilecek alanı çizin (ör. görev paneli). Oynarken kendi tuşuna (Num 1, 2 ya da 3) basınca bu alan bir kez okunup çevrilir. Sonucun nerede görüneceğini seçin. GameTranslator arka plandayken de çalışır."
+          }
+        }
+      }
+    },
+    "English": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "English"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İngilizce"
+          }
+        }
+      }
+    },
+    "Extra large": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extra large"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çok büyük"
+          }
+        }
+      }
+    },
+    "Fixed position": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fixed position"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sabit yerde"
+          }
+        }
+      }
+    },
+    "Free and open source under the GNU AGPL-3.0 license.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free and open source under the GNU AGPL-3.0 license."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GNU AGPL-3.0 lisansıyla ücretsiz ve açık kaynak."
+          }
+        }
+      }
+    },
+    "Free area (Num 5)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free area (Num 5)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serbest alan (Num 5)"
+          }
+        }
+      }
+    },
+    "French": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "French"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fransızca"
+          }
+        }
+      }
+    },
+    "Game language": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Game language"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oyunun dili"
+          }
+        }
+      }
+    },
+    "German": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "German"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Almanca"
+          }
+        }
+      }
+    },
+    "IP address, e.g. 192.168.1.20": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "IP address, e.g. 192.168.1.20"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "IP adresi, ör. 192.168.1.20"
+          }
+        }
+      }
+    },
+    "If Windows asks whether GameTranslator may use the network, allow it for private networks.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If Windows asks whether GameTranslator may use the network, allow it for private networks."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows, GameTranslator'ın ağı kullanmasına izin verip vermeyeceğinizi sorarsa özel ağlar için izin verin."
+          }
+        }
+      }
+    },
+    "If you don't see it, make sure the GameTranslator TV app is open and connect the TV again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If you don't see it, make sure the GameTranslator TV app is open and connect the TV again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Görmüyorsanız GameTranslator TV uygulamasının açık olduğundan emin olun ve TV'yi yeniden bağlayın."
+          }
+        }
+      }
+    },
+    "In fixed position you can also move subtitles with the ▲ and ▼ buttons on the TV remote.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In fixed position you can also move subtitles with the ▲ and ▼ buttons on the TV remote."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sabit yerdeyken altyazıyı TV kumandasının ▲ ve ▼ tuşlarıyla da taşıyabilirsiniz."
+          }
+        }
+      }
+    },
+    "In the game's audio settings, turn the dialogue (voice) volume down; keep music and effects. If the game can show speaker names in subtitles, turn them on: every character then speaks with its own voice.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the game's audio settings, turn the dialogue (voice) volume down; keep music and effects. If the game can show speaker names in subtitles, turn them on: every character then speaks with its own voice."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oyunun ses ayarlarından konuşma (diyalog) sesini kısın; müzik ve efektler kalsın. Oyun altyazıda konuşmacı adını gösterebiliyorsa bunu açın: her karakter kendi sesiyle konuşur."
+          }
+        }
+      }
+    },
+    "Install on the TV": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install on the TV"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV'ye kur"
+          }
+        }
+      }
+    },
+    "Install the GameTranslator TV app on this TV using the guide and open it. It finds this computer by itself.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install the GameTranslator TV app on this TV using the guide and open it. It finds this computer by itself."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator TV uygulamasını rehberdeki gibi bu TV'ye kurup açın. Uygulama bu bilgisayarı kendisi bulur."
+          }
+        }
+      }
+    },
+    "Install with a USB stick instead": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install with a USB stick instead"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bunun yerine USB bellekle kur"
+          }
+        }
+      }
+    },
+    "Installing the TV app…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Installing the TV app…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV uygulaması kuruluyor…"
+          }
+        }
+      }
+    },
+    "Japanese": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Japanese"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Japonca"
+          }
+        }
+      }
+    },
+    "Key Server is off. Turn it on in the Developer Mode app and keep the app on screen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Key Server is off. Turn it on in the Developer Mode app and keep the app on screen."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Key Server kapalı. Developer Mode uygulamasından açın ve uygulamayı ekranda bırakın."
+          }
+        }
+      }
+    },
+    "Language": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dil"
+          }
+        }
+      }
+    },
+    "Large": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Büyük"
+          }
+        }
+      }
+    },
+    "Last subtitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last subtitle"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son altyazı"
+          }
+        }
+      }
+    },
+    "Later you sign in once with a free Samsung account; Samsung needs it to sign the app for your TV.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Later you sign in once with a free Samsung account; Samsung needs it to sign the app for your TV."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ardından bir kez ücretsiz bir Samsung hesabıyla giriş yaparsınız; Samsung uygulamayı TV'nize özel imzalamak için bunu ister."
+          }
+        }
+      }
+    },
+    "Left": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Left"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sol"
+          }
+        }
+      }
+    },
+    "Let's test it": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Let's test it"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deneyelim"
+          }
+        }
+      }
+    },
+    "Listen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listen"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dinle"
+          }
+        }
+      }
+    },
+    "Look at the TV: it asks whether to allow debugging from this computer.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Look at the TV: it asks whether to allow debugging from this computer."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV'ye bakın: bu bilgisayardan hata ayıklamaya izin verilip verilmeyeceğini soruyor."
+          }
+        }
+      }
+    },
+    "Looking for the TV on the network…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Looking for the TV on the network…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV ağda aranıyor…"
+          }
+        }
+      }
+    },
+    "Man 1 (calm, deep)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Man 1 (calm, deep)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkek 1 (sakin, kalın)"
+          }
+        }
+      }
+    },
+    "Man 2 (energetic)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Man 2 (energetic)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkek 2 (enerjik)"
+          }
+        }
+      }
+    },
+    "Man 3 (crisp)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Man 3 (crisp)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkek 3 (net)"
+          }
+        }
+      }
+    },
+    "Medium": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medium"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orta"
+          }
+        }
+      }
+    },
+    "Menu names differ a little by brand. If the app is already on the TV, you can skip this step.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menu names differ a little by brand. If the app is already on the TV, you can skip this step."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menü adları markaya göre biraz değişir. Uygulama TV'de zaten kuruluysa bu adımı geçebilirsiniz."
+          }
+        }
+      }
+    },
+    "Narrator and unnamed lines": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Narrator and unnamed lines"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anlatıcı ve adı yazmayan satırlar"
+          }
+        }
+      }
+    },
+    "No": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hayır"
+          }
+        }
+      }
+    },
+    "No LG or Samsung TV found. Make sure the TV is on and on the same network.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No LG or Samsung TV found. Make sure the TV is on and on the same network."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LG ya da Samsung TV bulunamadı. TV'nin açık ve aynı ağda olduğundan emin olun."
+          }
+        }
+      }
+    },
+    "No PS5 found. Make sure it is on and on the same network, or enter its IP address.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No PS5 found. Make sure it is on and on the same network, or enter its IP address."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PS5 bulunamadı. Açık ve aynı ağda olduğundan emin olun ya da IP adresini girin."
+          }
+        }
+      }
+    },
+    "No account? You can create a free one on the same page. If the browser asks to allow access to devices on your network, allow it.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No account? You can create a free one on the same page. If the browser asks to allow access to devices on your network, allow it."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hesabınız yok mu? Aynı sayfadan ücretsiz açabilirsiniz. Tarayıcı ağınızdaki cihazlara erişim izni sorarsa izin verin."
+          }
+        }
+      }
+    },
+    "No text found in this area.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No text found in this area."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu alanda yazı bulunamadı."
+          }
+        }
+      }
+    },
+    "None": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yok"
+          }
+        }
+      }
+    },
+    "Not connected": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not connected"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bağlı değil"
+          }
+        }
+      }
+    },
+    "Num 0 pauses or resumes the live subtitle translation, which helps when you translate areas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Num 0 pauses or resumes the live subtitle translation, which helps when you translate areas."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Num 0, canlı altyazı çevirisini duraklatır ya da devam ettirir; alan çevirirken işe yarar."
+          }
+        }
+      }
+    },
+    "On both": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On both"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İkisinde de"
+          }
+        }
+      }
+    },
+    "On the PC": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the PC"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilgisayarda"
+          }
+        }
+      }
+    },
+    "On the PS5, choose Add User and sign in once with the new account.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the PS5, choose Add User and sign in once with the new account."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PS5'te Kullanıcı Ekle'yi seçin ve yeni hesapla bir kez oturum açın."
+          }
+        }
+      }
+    },
+    "On the TV": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the TV"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV'de"
+          }
+        }
+      }
+    },
+    "Open Language & Region": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Language & Region"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dil ve Bölge'yi aç"
+          }
+        }
+      }
+    },
+    "Open Settings › Time & language › Language & region, add English and select its optical character recognition feature.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings › Time & language › Language & region, add English and select its optical character recognition feature."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayarlar › Saat ve dil › Dil ve bölge'yi açın, İngilizce'yi ekleyin ve optik karakter tanıma özelliğini seçin."
+          }
+        }
+      }
+    },
+    "Open System Settings › General › Language & Region › Translation Languages and download both languages.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open System Settings › General › Language & Region › Translation Languages and download both languages."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistem Ayarları › Genel › Dil ve Bölge › Çeviri Dilleri'ni açıp iki dili de indirin."
+          }
+        }
+      }
+    },
+    "Open language settings": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open language settings"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dil ayarlarını aç"
+          }
+        }
+      }
+    },
+    "Open the Developer Mode app on the TV, turn on Key Server and keep the app on screen. Type the Passphrase it shows.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the Developer Mode app on the TV, turn on Key Server and keep the app on screen. Type the Passphrase it shows."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV'de Developer Mode uygulamasını açın, Key Server'ı açın ve uygulamayı ekranda bırakın. Gösterdiği Passphrase'i buraya yazın."
+          }
+        }
+      }
+    },
+    "Open the guide": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the guide"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rehberi aç"
+          }
+        }
+      }
+    },
+    "Open the page again": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the page again"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfayı yeniden aç"
+          }
+        }
+      }
+    },
+    "Over the English subtitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Over the English subtitle"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İngilizce altyazının üstünü örtsün"
+          }
+        }
+      }
+    },
+    "PS5": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PS5"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PS5"
+          }
+        }
+      }
+    },
+    "Passphrase": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passphrase"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passphrase"
+          }
+        }
+      }
+    },
+    "Placement": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Placement"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeri"
+          }
+        }
+      }
+    },
+    "Play the voice on": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play the voice on"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ses nereden çalsın"
+          }
+        }
+      }
+    },
+    "PlayStation Network": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PlayStation Network"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PlayStation Network"
+          }
+        }
+      }
+    },
+    "Position on screen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Position on screen"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ekrandaki konum"
+          }
+        }
+      }
+    },
+    "Press Num 5 while playing: the picture freezes on the PC, drag over any part of it to translate that part once. Esc closes.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press Num 5 while playing: the picture freezes on the PC, drag over any part of it to translate that part once. Esc closes."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oynarken Num 5'e basın: görüntü bilgisayarda donar, çevirmek istediğiniz yeri fareyle seçin, o kısım bir kez çevrilir. Esc kapatır."
+          }
+        }
+      }
+    },
+    "Reconnecting…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reconnecting…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeniden bağlanıyor…"
+          }
+        }
+      }
+    },
+    "Refresh picture (Num 8)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh picture (Num 8)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Görüntüyü yenile (Num 8)"
+          }
+        }
+      }
+    },
+    "Remote Play connection by chiaki-ng (AGPL-3.0). Thanks to its developers.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remote Play connection by chiaki-ng (AGPL-3.0). Thanks to its developers."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uzaktan Oynatma bağlantısı chiaki-ng (AGPL-3.0) ile. Geliştiricilerine teşekkürler."
+          }
+        }
+      }
+    },
+    "Remote Play is in use on another device": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remote Play is in use on another device"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uzaktan Oynatma başka bir cihazda kullanılıyor"
+          }
+        }
+      }
+    },
+    "Remote Play is in use on another device. Close it there and enter a new code.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remote Play is in use on another device. Close it there and enter a new code."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uzaktan Oynatma başka bir cihazda kullanılıyor. Orada kapatıp yeni kodu girin."
+          }
+        }
+      }
+    },
+    "Reset area": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset area"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alanı sıfırla"
+          }
+        }
+      }
+    },
+    "Right": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sağ"
+          }
+        }
+      }
+    },
+    "Samsung did not issue the signing certificate. Try again in a few minutes.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Samsung did not issue the signing certificate. Try again in a few minutes."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Samsung imza sertifikasını vermedi. Birkaç dakika sonra yeniden deneyin."
+          }
+        }
+      }
+    },
+    "Samsung sign-in did not complete. Try again and finish signing in on the page that opens.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Samsung sign-in did not complete. Try again and finish signing in on the page that opens."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Samsung girişi tamamlanmadı. Yeniden deneyin ve açılan sayfada girişi bitirin."
+          }
+        }
+      }
+    },
+    "Samsung signs the app for your TV. Sign in with your Samsung account on the page that opened in your browser.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Samsung signs the app for your TV. Sign in with your Samsung account on the page that opened in your browser."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Samsung uygulamayı TV'nize özel imzalar. Tarayıcıda açılan sayfada Samsung hesabınızla giriş yapın."
+          }
+        }
+      }
+    },
+    "Search again": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search again"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeniden ara"
+          }
+        }
+      }
+    },
+    "Second speaker in dialogue": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Second speaker in dialogue"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Karşılıklı konuşmada ikinci kişi"
+          }
+        }
+      }
+    },
+    "Select": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seç"
+          }
+        }
+      }
+    },
+    "Send test subtitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send test subtitle"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test altyazısı gönder"
+          }
+        }
+      }
+    },
+    "Set up again": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set up again"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeniden kur"
+          }
+        }
+      }
+    },
+    "Set up again?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set up again?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeniden kurulsun mu?"
+          }
+        }
+      }
+    },
+    "Set up again…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set up again…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeniden kur…"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayarlar"
+          }
+        }
+      }
+    },
+    "Show the result": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show the result"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonucu göster"
+          }
+        }
+      }
+    },
+    "Sign in": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giriş yap"
+          }
+        }
+      }
+    },
+    "Sign in again": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in again"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeniden giriş yap"
+          }
+        }
+      }
+    },
+    "Sign in to PlayStation Network first.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to PlayStation Network first."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Önce PlayStation Network'e giriş yapın."
+          }
+        }
+      }
+    },
+    "Sign in to PlayStation Network with the second account you just created. Your password goes directly to Sony; GameTranslator only keeps the account ID.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to PlayStation Network with the second account you just created. Your password goes directly to Sony; GameTranslator only keeps the account ID."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Az önce açtığınız ikinci hesapla PlayStation Network'e giriş yapın. Şifreniz doğrudan Sony'ye gider; GameTranslator yalnızca hesap kimliğini saklar."
+          }
+        }
+      }
+    },
+    "Sign in with the second account": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in with the second account"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İkinci hesapla giriş yapın"
+          }
+        }
+      }
+    },
+    "Sign-in did not complete. Please try again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign-in did not complete. Please try again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giriş tamamlanmadı. Lütfen tekrar deneyin."
+          }
+        }
+      }
+    },
+    "Signed in": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signed in"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giriş yapıldı"
+          }
+        }
+      }
+    },
+    "Small": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Small"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Küçük"
+          }
+        }
+      }
+    },
+    "Solid": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solid"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tam"
+          }
+        }
+      }
+    },
+    "Source code": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source code"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaynak kodu"
+          }
+        }
+      }
+    },
+    "Spanish": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spanish"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İspanyolca"
+          }
+        }
+      }
+    },
+    "Start translating": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start translating"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çeviriyi başlat"
+          }
+        }
+      }
+    },
+    "Step %lld of %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step %1$lld of %2$lld"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adım %1$lld / %2$lld"
+          }
+        }
+      }
+    },
+    "Still as the new user, go to Settings › System › Remote Play and turn on Enable Remote Play.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Still as the new user, go to Settings › System › Remote Play and turn on Enable Remote Play."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hâlâ yeni kullanıcıdayken Ayarlar › Sistem › Uzaktan Oynatma'ya gidip Uzaktan Oynatmayı Etkinleştir'i açın."
+          }
+        }
+      }
+    },
+    "Stop translating": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop translating"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çeviriyi durdur"
+          }
+        }
+      }
+    },
+    "Subtitle area": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subtitle area"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altyazı alanı"
+          }
+        }
+      }
+    },
+    "Subtitle history": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subtitle history"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altyazı geçmişi"
+          }
+        }
+      }
+    },
+    "Subtitle translation paused": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subtitle translation paused"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altyazı çevirisi duraklatıldı"
+          }
+        }
+      }
+    },
+    "Subtitle translation resumed": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subtitle translation resumed"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altyazı çevirisi devam ediyor"
+          }
+        }
+      }
+    },
+    "Subtitles": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subtitles"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altyazı"
+          }
+        }
+      }
+    },
+    "Subtitles will appear here while you play.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subtitles will appear here while you play."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siz oynarken altyazılar burada görünecek."
+          }
+        }
+      }
+    },
+    "Switch back to your own user. You only do this once.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switch back to your own user. You only do this once."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kendi kullanıcınıza geri dönün. Bunu yalnızca bir kez yaparsınız."
+          }
+        }
+      }
+    },
+    "TV": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV"
+          }
+        }
+      }
+    },
+    "TV says:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV says:"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV'nin yanıtı:"
+          }
+        }
+      }
+    },
+    "Text recognition for the game language is not installed on this computer.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text recognition for the game language is not installed on this computer."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oyun dilinin yazı tanıma özelliği bu bilgisayarda yüklü değil."
+          }
+        }
+      }
+    },
+    "Text size": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text size"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yazı boyutu"
+          }
+        }
+      }
+    },
+    "The %@–%@ language pack is not downloaded yet.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The %@–%@ language pack is not downloaded yet."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@–%@ dil paketi henüz indirilmedi."
+          }
+        }
+      }
+    },
+    "The Num shortcuts work only while translating, so the number keys stay free in other apps. Keep Num Lock on.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Num shortcuts work only while translating, so the number keys stay free in other apps. Keep Num Lock on."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Num kısayolları yalnız çeviri açıkken çalışır; böylece sayı tuşları diğer uygulamalarda serbest kalır. Num Lock açık olmalı."
+          }
+        }
+      }
+    },
+    "The PS5 Remote Play service stopped unexpectedly. Restart the PS5 and enter a new code.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The PS5 Remote Play service stopped unexpectedly. Restart the PS5 and enter a new code."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PS5'in Uzaktan Oynatma hizmeti beklenmedik şekilde durdu. PS5'i yeniden başlatıp yeni kodu girin."
+          }
+        }
+      }
+    },
+    "The PS5 did not answer. Make sure it is on (not in rest mode), on the same network as this computer, and that Remote Play is turned on, then try again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The PS5 did not answer. Make sure it is on (not in rest mode), on the same network as this computer, and that Remote Play is turned on, then try again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PS5 yanıt vermedi. Açık olduğundan (dinlenme modunda olmadığından), bu bilgisayarla aynı ağda bulunduğundan ve Uzaktan Oynatma'nın açık olduğundan emin olup yeniden deneyin."
+          }
+        }
+      }
+    },
+    "The PS5 did not recognise this account. Get the code from the PS5 user signed in with the account you used in GameTranslator, or sign in again with that user's account.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The PS5 did not recognise this account. Get the code from the PS5 user signed in with the account you used in GameTranslator, or sign in again with that user's account."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PS5 bu hesabı tanımadı. Kodu, GameTranslator'ta giriş yaptığınız hesapla oturum açmış PS5 kullanıcısından alın ya da bir önceki adımda o kullanıcının hesabıyla yeniden giriş yapın."
+          }
+        }
+      }
+    },
+    "The PS5 refused the code. Open Pair Device again on the PS5 and enter the new code.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The PS5 refused the code. Open Pair Device again on the PS5 and enter the new code."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PS5 kodu kabul etmedi. PS5'te Cihazı Eşleştir'i yeniden açın ve yeni kodu girin."
+          }
+        }
+      }
+    },
+    "The PS5 refused the connection. Set up the PS5 again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The PS5 refused the connection. Set up the PS5 again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PS5 bağlantıyı reddetti. PS5'i yeniden kurun."
+          }
+        }
+      }
+    },
+    "The TV app could not be installed. Try again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The TV app could not be installed. Try again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV uygulaması kurulamadı. Tekrar deneyin."
+          }
+        }
+      }
+    },
+    "The TV is out of free space. Remove an app you do not use from the TV and try again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The TV is out of free space. Remove an app you do not use from the TV and try again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV'de boş alan kalmadı. TV'den kullanmadığınız bir uygulamayı kaldırıp tekrar deneyin."
+          }
+        }
+      }
+    },
+    "The TV app could not be installed. Try again; if it fails again, send us the reason below.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The TV app could not be installed. Try again; if it fails again, send us the reason below."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV uygulaması kurulamadı. Tekrar deneyin; yine olmazsa aşağıdaki sebebi bize gönderin."
+          }
+        }
+      }
+    },
+    "The TV app is not installed. GameTranslator can install it once Developer Mode is on.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The TV app is not installed. GameTranslator can install it once Developer Mode is on."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV uygulaması kurulu değil. Geliştirici modu açılınca GameTranslator kendisi kurar."
+          }
+        }
+      }
+    },
+    "The TV app is not installed. GameTranslator installs it once Developer Mode is on.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The TV app is not installed. GameTranslator installs it once Developer Mode is on."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV uygulaması kurulu değil. Geliştirici modu açılınca GameTranslator kendisi kurar."
+          }
+        }
+      }
+    },
+    "The TV app is not installed. GameTranslator installs it over the network once debugging is on.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The TV app is not installed. GameTranslator installs it over the network once debugging is on."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV uygulaması kurulu değil. Hata ayıklama açılınca GameTranslator ağ üzerinden kendisi kurar."
+          }
+        }
+      }
+    },
+    "The TV app is ready (version %@).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The TV app is ready (version %@)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV uygulaması hazır (sürüm %@)."
+          }
+        }
+      }
+    },
+    "The TV did not accept this computer. In the TV's Developer Mode window, check that Host PC IP is this computer's address, then restart the TV.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The TV did not accept this computer. In the TV's Developer Mode window, check that Host PC IP is this computer's address, then restart the TV."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV bu bilgisayarı kabul etmedi. TV'deki geliştirici modu penceresinde Host PC IP'nin bu bilgisayarın adresi olduğunu kontrol edip TV'yi yeniden başlatın."
+          }
+        }
+      }
+    },
+    "The TV did not respond. Make sure it is on and on the same network.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The TV did not respond. Make sure it is on and on the same network."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV yanıt vermedi. Açık ve aynı ağda olduğundan emin olun."
+          }
+        }
+      }
+    },
+    "The TV refused the key. Open Key Server and type the passphrase again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The TV refused the key. Open Key Server and type the passphrase again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV anahtarı kabul etmedi. Key Server'ı açıp passphrase'i yeniden yazın."
+          }
+        }
+      }
+    },
+    "The code must be 8 digits.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The code must be 8 digits."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kod 8 haneli olmalı."
+          }
+        }
+      }
+    },
+    "The download did not complete. Check your internet connection and try again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The download did not complete. Check your internet connection and try again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İndirme tamamlanamadı. İnternet bağlantınızı kontrol edip yeniden deneyin."
+          }
+        }
+      }
+    },
+    "The game picture appears here once translating starts.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The game picture appears here once translating starts."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çeviri başlayınca oyun görüntüsü burada görünür."
+          }
+        }
+      }
+    },
+    "The model is ready.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The model is ready."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Model hazır."
+          }
+        }
+      }
+    },
+    "The passphrase is not correct. Check it on the TV screen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The passphrase is not correct. Check it on the TV screen."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passphrase doğru değil. TV ekranındakiyle karşılaştırın."
+          }
+        }
+      }
+    },
+    "The saved PS5, account and TV connection will be removed.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The saved PS5, account and TV connection will be removed."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kayıtlı PS5, hesap ve TV bağlantısı silinecek."
+          }
+        }
+      }
+    },
+    "The second user has a login passcode on the PS5. Turn it off in Settings › Users and Accounts.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The second user has a login passcode on the PS5. Turn it off in Settings › Users and Accounts."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İkinci kullanıcının PS5'te giriş şifresi var. Ayarlar › Kullanıcılar ve Hesaplar'dan kapatın."
+          }
+        }
+      }
+    },
+    "The translation follows where the game shows its own subtitle.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The translation follows where the game shows its own subtitle."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çeviri, oyunun kendi altyazısı nerede çıkarsa oraya yerleşir."
+          }
+        }
+      }
+    },
+    "The translation model is not downloaded yet.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The translation model is not downloaded yet."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çeviri modeli henüz indirilmedi."
+          }
+        }
+      }
+    },
+    "The voice engine did not start.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The voice engine did not start."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ses motoru başlatılamadı."
+          }
+        }
+      }
+    },
+    "The voice engine is missing from the app. Download GameTranslator again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The voice engine is missing from the app. Download GameTranslator again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ses motoru uygulamada yok. GameTranslator'ı yeniden indirin."
+          }
+        }
+      }
+    },
+    "The voices are downloaded once (440 MB).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The voices are downloaded once (440 MB)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sesler bir kez indirilir (440 MB)."
+          }
+        }
+      }
+    },
+    "This Mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This Mac"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu Mac"
+          }
+        }
+      }
+    },
+    "This PS5 system version is not supported yet. Update GameTranslator and try again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This PS5 system version is not supported yet. Update GameTranslator and try again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu PS5 sistem sürümü henüz desteklenmiyor. GameTranslator'ı güncelleyip yeniden deneyin."
+          }
+        }
+      }
+    },
+    "This Samsung TV is too old for the GameTranslator TV app (2019 models and later are supported).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This Samsung TV is too old for the GameTranslator TV app (2019 models and later are supported)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu Samsung TV, GameTranslator TV uygulaması için çok eski (2019 ve sonraki modeller destekleniyor)."
+          }
+        }
+      }
+    },
+    "This computer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This computer"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu bilgisayar"
+          }
+        }
+      }
+    },
+    "This is a test subtitle. Can you see it on top of the game?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is a test subtitle. Can you see it on top of the game?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu bir test altyazısı. Oyunun üstünde görebiliyor musunuz?"
+          }
+        }
+      }
+    },
+    "Tick “Always allow from this computer” and choose Allow. The app then installs by itself.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tick “Always allow from this computer” and choose Allow. The app then installs by itself."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Bu bilgisayardan her zaman izin ver”i işaretleyip İzin ver'i seçin. Uygulama ardından kendiliğinden kurulur."
+          }
+        }
+      }
+    },
+    "Top": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Üst"
+          }
+        }
+      }
+    },
+    "Translating…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Translating…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çevriliyor…"
+          }
+        }
+      }
+    },
+    "Translation from %@ to %@ is not available on this Mac.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Translation from %@ to %@ is not available on this Mac."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu Mac'te %@ dilinden %@ diline çeviri kullanılamıyor."
+          }
+        }
+      }
+    },
+    "Translation from %@ to %@ is not available yet.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Translation from %@ to %@ is not available yet."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ dilinden %@ diline çeviri henüz yok."
+          }
+        }
+      }
+    },
+    "Translation model: OPUS-MT, University of Helsinki (CC BY 4.0).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Translation model: OPUS-MT, University of Helsinki (CC BY 4.0)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çeviri modeli: OPUS-MT, Helsinki Üniversitesi (CC BY 4.0)."
+          }
+        }
+      }
+    },
+    "Try again": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try again"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeniden dene"
+          }
+        }
+      }
+    },
+    "Turkish dubbing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turkish dubbing"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Türkçe dublaj"
+          }
+        }
+      }
+    },
+    "Turn on the PS5. As the second user, open Settings › System › Remote Play › Pair Device and enter the 8-digit code shown there.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on the PS5. As the second user, open Settings › System › Remote Play › Pair Device and enter the 8-digit code shown there."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PS5'i açın. GameTranslator'ta giriş yaptığınız ikinci hesabın kullanıcısıyla Ayarlar › Sistem › Uzaktan Oynatma › Cihazı Eşleştir'i açın ve orada görünen 8 haneli kodu girin."
+          }
+        }
+      }
+    },
+    "Turn on the TV. When you press Connect, the TV asks for permission once — accept it with the remote. If the GameTranslator TV app is missing, this screen helps you install it.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on the TV. When you press Connect, the TV asks for permission once — accept it with the remote. If the GameTranslator TV app is missing, this screen helps you install it."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV'yi açın. Bağlan'a bastığınızda TV bir kez izin ister, kumandayla onaylayın. GameTranslator TV uygulaması kurulu değilse bu ekran kurmanıza yardım eder."
+          }
+        }
+      }
+    },
+    "Turn on your PS5": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on your PS5"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PS5'inizi açın"
+          }
+        }
+      }
+    },
+    "Update now": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Update now"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şimdi güncelle"
+          }
+        }
+      }
+    },
+    "Use this area": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use this area"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu bölgeyi kullan"
+          }
+        }
+      }
+    },
+    "Vestel, Arçelik, Beko, Grundig, Philips and other TVs running Android TV.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vestel, Arçelik, Beko, Grundig, Philips and other TVs running Android TV."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Android TV kullanan Vestel, Arçelik, Beko, Grundig, Philips ve diğer TV'ler."
+          }
+        }
+      }
+    },
+    "Voice the translation in Turkish": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice the translation in Turkish"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çeviriyi Türkçe seslendir"
+          }
+        }
+      }
+    },
+    "Voices: Pocket TTS Turkish (wite-tech, CC BY 4.0) with Kyutai's pocket-tts. The voices are synthetic, not real people.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voices: Pocket TTS Turkish (wite-tech, CC BY 4.0) with Kyutai's pocket-tts. The voices are synthetic, not real people."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sesler: Pocket TTS Turkish (wite-tech, CC BY 4.0) ve Kyutai'nin pocket-tts programı. Sesler yapaydır, gerçek kişilere ait değildir."
+          }
+        }
+      }
+    },
+    "Waiting for sign-in…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for sign-in…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giriş bekleniyor…"
+          }
+        }
+      }
+    },
+    "Waiting for the TV app": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for the TV app"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV uygulaması bekleniyor"
+          }
+        }
+      }
+    },
+    "Waiting for the TV…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for the TV…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TV bekleniyor…"
+          }
+        }
+      }
+    },
+    "Welcome to GameTranslator": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome to GameTranslator"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator'a hoş geldiniz"
+          }
+        }
+      }
+    },
+    "Windows' OpenSSH Client is missing. Add it in Settings › System › Optional features and try again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows' OpenSSH Client is missing. Add it in Settings › System › Optional features and try again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows'un OpenSSH istemcisi eksik. Ayarlar › Sistem › İsteğe bağlı özellikler bölümünden ekleyip tekrar deneyin."
+          }
+        }
+      }
+    },
+    "Woman 1 (bright)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Woman 1 (bright)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kadın 1 (canlı)"
+          }
+        }
+      }
+    },
+    "Woman 2 (warm)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Woman 2 (warm)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kadın 2 (sıcak)"
+          }
+        }
+      }
+    },
+    "Woman 3 (confident)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Woman 3 (confident)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kadın 3 (kendinden emin)"
+          }
+        }
+      }
+    },
+    "Yes, I see it": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yes, I see it"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evet, görüyorum"
+          }
+        }
+      }
+    },
+    "You will need:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You will need:"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerekenler:"
+          }
+        }
+      }
+    },
+    "chiaki-ng": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "chiaki-ng"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "chiaki-ng"
+          }
+        }
+      }
+    },
+    "Without it Windows reads the subtitles with your system language and the translation turns into nonsense. Install it once; Windows asks for permission.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without it Windows reads the subtitles with your system language and the translation turns into nonsense. Install it once; Windows asks for permission."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu olmadan Windows altyazıyı sistem dilinizle okur ve çeviri anlamsızlaşır. Bir kez kurun; Windows izin ister."
+          }
+        }
+      }
+    },
+    "Install text recognition": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install text recognition"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yazı tanımayı kur"
+          }
+        }
+      }
+    },
+    "Voice": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ses"
+          }
+        }
+      }
+    },
+    "Natural": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Natural"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doğal"
+          }
+        }
+      }
+    },
+    "Fast": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fast"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hızlı"
+          }
+        }
+      }
+    },
+    "Windows' own Turkish voice: speaks at once, nothing to download. Sounds more mechanical.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows' own Turkish voice: speaks at once, nothing to download. Sounds more mechanical."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows'un kendi Türkçe sesi: anında konuşur, indirme gerekmez. Daha mekanik duyulur."
+          }
+        }
+      }
+    },
+    "Natural voices, downloaded once. Each line takes a moment to prepare, so the voice can come a little after the subtitle.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Natural voices, downloaded once. Each line takes a moment to prepare, so the voice can come a little after the subtitle."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doğal sesler, bir kez indirilir. Her cümlenin hazırlanması biraz sürdüğü için ses altyazıdan biraz sonra gelebilir."
+          }
+        }
+      }
+    },
+    "Online translation (DeepL)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Online translation (DeepL)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çevrimiçi çeviri (DeepL)"
+          }
+        }
+      }
+    },
+    "Optional. With your own free DeepL key, translations read more naturally. Subtitle text is sent to DeepL; when DeepL cannot be reached, the translation model on this computer takes over.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. With your own free DeepL key, translations read more naturally. Subtitle text is sent to DeepL; when DeepL cannot be reached, the translation model on this computer takes over."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İsteğe bağlı. Kendi ücretsiz DeepL anahtarınızla çeviriler daha doğal olur. Altyazı metni DeepL'e gönderilir; DeepL'e ulaşılamazsa bu bilgisayardaki çeviri modeli devreye girer."
+          }
+        }
+      }
+    },
+    "Save and test": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save and test"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydet ve dene"
+          }
+        }
+      }
+    },
+    "Get a free DeepL API key": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get a free DeepL API key"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ücretsiz DeepL API anahtarı alın"
+          }
+        }
+      }
+    },
+    "Translate with DeepL": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Translate with DeepL"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DeepL ile çevir"
+          }
+        }
+      }
+    },
+    "Remove key": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove key"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anahtarı sil"
+          }
+        }
+      }
+    },
+    "DeepL API key": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DeepL API key"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DeepL API anahtarı"
+          }
+        }
+      }
+    },
+    "This month: %1$@ of %2$@ characters used.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This month: %1$@ of %2$@ characters used."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu ay: %2$@ karakterin %1$@ kadarı kullanıldı."
+          }
+        }
+      }
+    },
+    "This month's DeepL limit is used up. Until it renews, the translation model on this computer translates.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This month's DeepL limit is used up. Until it renews, the translation model on this computer translates."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu ayın DeepL sınırı doldu. Sınır yenilenene kadar bu bilgisayardaki çeviri modeli çevirir."
+          }
+        }
+      }
+    },
+    "DeepL did not accept this key. Copy it again from your DeepL account page.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DeepL did not accept this key. Copy it again from your DeepL account page."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DeepL bu anahtarı kabul etmedi. Anahtarı DeepL hesap sayfanızdan yeniden kopyalayın."
+          }
+        }
+      }
+    },
+    "DeepL could not be reached. Check your internet connection.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DeepL could not be reached. Check your internet connection."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DeepL'e ulaşılamadı. İnternet bağlantınızı kontrol edin."
+          }
+        }
+      }
+    },
+    "Translate the screen (Num 9)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Translate the screen (Num 9)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ekranı çevir (Num 9)"
+          }
+        }
+      }
+    },
+    "Press Num 9 while playing: every text on the screen is translated once and shown on the TV in its own place. Press again to remove the translations.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press Num 9 while playing: every text on the screen is translated once and shown on the TV in its own place. Press again to remove the translations."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oynarken Num 9'a basın: ekrandaki bütün yazılar bir kez çevrilir ve TV'de her biri kendi yerinde gösterilir. Çevirileri kaldırmak için yeniden basın."
+          }
+        }
+      }
+    },
+    "Translate the screen (⌥⌘T)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Translate the screen (⌥⌘T)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ekranı çevir (⌥⌘T)"
+          }
+        }
+      }
+    },
+    "Press ⌥⌘T while playing: every text on the screen is translated once and shown on the TV in its own place. Press again to remove the translations.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press ⌥⌘T while playing: every text on the screen is translated once and shown on the TV in its own place. Press again to remove the translations."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oynarken ⌥⌘T'ye basın: ekrandaki bütün yazılar bir kez çevrilir ve TV'de her biri kendi yerinde gösterilir. Çevirileri kaldırmak için yeniden basın."
+          }
+        }
+      }
+    },
+    "Translating the screen…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Translating the screen…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ekran çevriliyor…"
+          }
+        }
+      }
+    },
+    "No text found on the screen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No text found on the screen."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ekranda yazı bulunamadı."
+          }
+        }
+      }
+    },
+    "macOS can't read the text on the screen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS can't read the text on the screen."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS ekrandaki yazıyı okuyamıyor."
+          }
+        }
+      }
+    },
+    "The disk is almost full (%.1f GB free). macOS needs free space to read text; free up a few GB and start the translation again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The disk is almost full (%.1f GB free). macOS needs free space to read text; free up a few GB and start the translation again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disk neredeyse dolu (%.1f GB boş). macOS'in yazıyı okuyabilmesi için boş yer gerekiyor; birkaç GB yer açıp çeviriyi yeniden başlatın."
+          }
+        }
+      }
+    },
+    "Restart the Mac and start the translation again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart the Mac and start the translation again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac'i yeniden başlatıp çeviriyi yeniden başlatın."
+          }
+        }
+      }
+    },
+    "OBS overlay": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OBS overlay"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OBS katmanı"
+          }
+        }
+      }
+    },
+    "Streaming with a capture card? In OBS add a Browser source with this address (width 1920, height 1080). The Turkish subtitles appear over the game on your screen and on the stream.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Streaming with a capture card? In OBS add a Browser source with this address (width 1920, height 1080). The Turkish subtitles appear over the game on your screen and on the stream."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture card ile yayın mı yapıyorsunuz? OBS'de bu adresle bir Tarayıcı kaynağı ekleyin (genişlik 1920, yükseklik 1080). Türkçe altyazı hem sizin ekranınızda hem yayında oyunun üstünde görünür."
+          }
+        }
+      }
+    },
+    "Copy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopyala"
+          }
+        }
+      }
+    },
+    "Copied": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copied"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopyalandı"
+          }
+        }
+      }
+    },
+    "If OBS runs on another computer, use this Mac's network address instead of localhost. The overlay only shows subtitles while the translation is running.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If OBS runs on another computer, use this Mac's network address instead of localhost. The overlay only shows subtitles while the translation is running."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OBS başka bir bilgisayardaysa localhost yerine bu Mac'in ağ adresini yazın. Katman yalnızca çeviri çalışırken altyazı gösterir."
+          }
+        }
+      }
+    },
+    "If OBS runs on another computer, use the network address of this PC instead of localhost. The overlay only shows subtitles while the translation is running.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If OBS runs on another computer, use the network address of this PC instead of localhost. The overlay only shows subtitles while the translation is running."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OBS başka bir bilgisayardaysa localhost yerine bu bilgisayarın ağ adresini yazın. Katman yalnızca çeviri çalışırken altyazı gösterir."
+          }
+        }
+      }
+    },
+    "Allow GameTranslator through Windows Firewall": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow GameTranslator through Windows Firewall"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator'a Windows Güvenlik Duvarı'nda izin ver"
+          }
+        }
+      }
+    },
+    "Windows Firewall now allows GameTranslator.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows Firewall now allows GameTranslator."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows Güvenlik Duvarı artık GameTranslator'a izin veriyor."
+          }
+        }
+      }
+    },
+    "Windows Firewall may be blocking the connection.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows Firewall may be blocking the connection."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bağlantıyı Windows Güvenlik Duvarı engelliyor olabilir."
+          }
+        }
+      }
+    },
+    "Waiting for Windows…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for Windows…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows bekleniyor…"
+          }
+        }
+      }
+    },
+    "The firewall rule was not added. Try again and choose Yes when Windows asks.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The firewall rule was not added. Try again and choose Yes when Windows asks."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Güvenlik duvarı kuralı eklenmedi. Yeniden deneyin ve Windows sorduğunda Evet'i seçin."
+          }
+        }
+      }
+    },
+    "Open Pair Device again on the PS5 and enter the new code.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Pair Device again on the PS5 and enter the new code."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PS5'te Cihazı Eşleştir'i yeniden açın ve yeni kodu girin."
+          }
+        }
+      }
+    },
+    "GameTranslator needs incoming connections from the PS5 and the TV. Windows asks for permission once.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator needs incoming connections from the PS5 and the TV. Windows asks for permission once."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator'ın PS5'ten ve TV'den gelen bağlantıları alabilmesi gerekiyor. Windows bir kez izin ister."
+          }
+        }
+      }
+    },
+    "Allow GameTranslator, then open Pair Device again on the PS5 and enter the new code.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow GameTranslator, then open Pair Device again on the PS5 and enter the new code."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator'a izin verin, sonra PS5'te Cihazı Eşleştir'i yeniden açın ve yeni kodu girin."
+          }
+        }
+      }
+    },
+    "A compatible TV (LG, Samsung, or Android TV) with the GameTranslator TV app": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameTranslator TV uygulaması kurulu bir TV (LG, Samsung veya Android TV)"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -1,0 +1,17 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<UserControl x:Class="GameTranslator.App.Views.Steps.WelcomeStep"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:GameTranslator.App.Controls"
+             xmlns:t="clr-namespace:GameTranslator.App.Theme">
+    <c:StepLayout Glyph="{x:Static c:Glyphs.Captions}" Title="{t:T 'Welcome to GameTranslator'}"
+                  Message="{t:T 'GameTranslator reads the English subtitles of your PS5 games and shows a Turkish translation on your TV, on top of the game. You keep playing on the TV with your own controller.'}">
+        <c:Card Title="{t:T 'You will need:'}">
+            <StackPanel>
+                <TextBlock Text="{t:T 'A PS5 on the same network as this computer'}" Margin="0,0,0,8" />
+                <TextBlock Text="{t:T 'A compatible TV (LG, Samsung, or Android TV) with the GameTranslator TV app'}" Margin="0,0,0,8" />
+                <TextBlock Text="{t:T 'A free second PlayStation Network account'}" />
+            </StackPanel>
+        </c:Card>
+    </c:StepLayout>
+</UserControl>

@@ -1,0 +1,16 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<UserControl x:Class="GameTranslator.App.Views.Steps.SecondAccountStep"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:GameTranslator.App.Controls"
+             xmlns:t="clr-namespace:GameTranslator.App.Theme">
+    <c:StepLayout Glyph="{x:Static c:Glyphs.People}" Title="{t:T 'A second PSN account'}"
+                  Message="{t:T 'GameTranslator watches the game through Remote Play. If it used your own account, the PS5 would turn off your controller. With a second account you keep playing undisturbed.'}">
+        <StackPanel>
+            <c:NumberedRow Number="1" Text="{t:T 'Create a free account at playstation.com with a different email address.'}" />
+            <c:NumberedRow Number="2" Text="{t:T 'On the PS5, choose Add User and sign in once with the new account.'}" />
+            <c:NumberedRow Number="3" Text="{t:T 'Still as the new user, go to Settings › System › Remote Play and turn on Enable Remote Play.'}" />
+            <c:NumberedRow Number="4" Text="{t:T 'Switch back to your own user. You only do this once.'}" />
+        </StackPanel>
+    </c:StepLayout>
+</UserControl>

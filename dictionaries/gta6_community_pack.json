@@ -1,0 +1,124 @@
+{
+  "author" : "Sefflex & GameTranslator Topluluğu",
+  "description" : "GTA 6 diyalogları ve sokak argosu için elle hazırlanmış özel Türkçe çeviri paketi.",
+  "game" : "Grand Theft Auto VI",
+  "language" : "en-to-tr",
+  "name" : "Grand Theft Auto VI - Türkçe Topluluk Çevirisi",
+  "terms" : [
+    {
+      "en" : "What's going on, Lucia?",
+      "tr" : "Neler oluyor Lucia?",
+      "type" : "dialogue"
+    },
+    {
+      "en" : "Trust?",
+      "tr" : "Güveniyor musun?",
+      "type" : "dialogue"
+    },
+    {
+      "en" : "Trust.",
+      "tr" : "Güveniyorum.",
+      "type" : "dialogue"
+    },
+    {
+      "en" : "The only way we're going to get through this is by sticking together.",
+      "tr" : "Bunu atlatmamızın tek yolu birbirimize bağlı kalmak.",
+      "type" : "dialogue"
+    },
+    {
+      "en" : "Being a team.",
+      "tr" : "Bir takım olmak.",
+      "type" : "dialogue"
+    },
+    {
+      "en" : "Bad luck, I guess.",
+      "tr" : "Kötü şans sanırım.",
+      "type" : "dialogue"
+    },
+    {
+      "en" : "Keep your eyes open.",
+      "tr" : "Gözünü dört aç.",
+      "type" : "dialogue"
+    },
+    {
+      "en" : "Let's make some money.",
+      "tr" : "Hadi biraz para kazanalım.",
+      "type" : "dialogue"
+    },
+    {
+      "en" : "Get in the car!",
+      "tr" : "Arabaya bin!",
+      "type" : "dialogue"
+    },
+    {
+      "en" : "Step on it!",
+      "tr" : "Gaza bas!",
+      "type" : "dialogue"
+    },
+    {
+      "en" : "We've got company!",
+      "tr" : "Peşimizde birileri var!",
+      "type" : "dialogue"
+    },
+    {
+      "en" : "Lose the cops!",
+      "tr" : "Polisleri atlat!",
+      "type" : "dialogue"
+    },
+    {
+      "en" : "Head to the safehouse.",
+      "tr" : "Güvenli eve sür.",
+      "type" : "dialogue"
+    },
+    {
+      "en" : "finna",
+      "tr" : "yapmak üzereyim",
+      "type" : "slang"
+    },
+    {
+      "en" : "no cap",
+      "tr" : "harbiden \/ ciddiyim",
+      "type" : "slang"
+    },
+    {
+      "en" : "cap",
+      "tr" : "yalan \/ tıraş",
+      "type" : "slang"
+    },
+    {
+      "en" : "opps",
+      "tr" : "hasımlar \/ düşmanlar",
+      "type" : "slang"
+    },
+    {
+      "en" : "the feds",
+      "tr" : "federaller \/ polis",
+      "type" : "crime"
+    },
+    {
+      "en" : "five-o",
+      "tr" : "aynasızlar",
+      "type" : "crime"
+    },
+    {
+      "en" : "heist",
+      "tr" : "büyük soygun",
+      "type" : "game"
+    },
+    {
+      "en" : "wasted",
+      "tr" : "öldün",
+      "type" : "game"
+    },
+    {
+      "en" : "busted",
+      "tr" : "yakalandın",
+      "type" : "game"
+    },
+    {
+      "en" : "Let's roll",
+      "tr" : "Hadi baslayalim"
+    }
+  ],
+  "version" : "1.0.0"
+}
