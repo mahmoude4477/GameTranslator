@@ -293,6 +293,14 @@
                                         <TextBlock x:Name="StreamPlaceholderIcon" Text="{x:Static c:Glyphs.Controller}" Style="{StaticResource GlyphText}" FontSize="28" Foreground="#33FFFFFF" HorizontalAlignment="Center" />
                                         <TextBlock x:Name="StreamPlaceholderTitle" Text="PS5 Canlı Akışı Başlatılmadı" FontWeight="SemiBold" FontSize="11.5" Foreground="#AAFFFFFF" HorizontalAlignment="Center" Margin="0,6,0,2" />
                                         <TextBlock x:Name="StreamPlaceholderSubtitle" Text="PS5 ekranını canlı görmek için sol menüden '▶ Çeviriyi Başlat'a basın." FontSize="10" Foreground="#66FFFFFF" HorizontalAlignment="Center" TextAlignment="Center" />
+                                        <Button x:Name="BtnLaunchChiaki" Content="🎮 Chiaki Remote Play'i Başlat" Margin="0,8,0,0" Padding="12,5" FontSize="10" FontWeight="SemiBold"
+                                                Background="#0A84FF" Foreground="White" BorderThickness="0" Cursor="Hand" Click="OnLaunchChiakiManual" Visibility="Collapsed">
+                                            <Button.Resources>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="CornerRadius" Value="5" />
+                                                </Style>
+                                            </Button.Resources>
+                                        </Button>
                                     </StackPanel>
 
                                     <!-- Üst Rozet & Pencereden Yenile Butonu -->
@@ -303,7 +311,10 @@
                                                 <TextBlock Text="PS5 REMOTE PLAY CANLI AKIŞ (1080p 60 FPS)" FontSize="9" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
                                             </StackPanel>
                                         </Border>
-                                        <Button HorizontalAlignment="Right" Content="📷 Pencereden Yenile" Padding="8,3" FontSize="9" Style="{StaticResource SecondaryButton}" Click="OnRefreshCapture" />
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <Button Content="🎮 Chiaki'yi Aç" Margin="0,0,6,0" Padding="8,3" FontSize="9" Style="{StaticResource SecondaryButton}" Click="OnLaunchChiakiManual" />
+                                            <Button Content="📷 Pencereden Yenile" Padding="8,3" FontSize="9" Style="{StaticResource SecondaryButton}" Click="OnRefreshCapture" />
+                                        </StackPanel>
                                     </Grid>
 
                                     <!-- OCR Kutusu Tuvali (Dynamic Viewfinder) -->

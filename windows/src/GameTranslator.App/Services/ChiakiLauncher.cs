@@ -1,0 +1,188 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
+using System.Diagnostics;
+using System.IO;
+using System.Text;
+
+namespace GameTranslator.App.Services;
+
+/// <summary>
+/// Windows'ta Chiaki veya chiaki-ng Remote Play uygulamasını başlatan,
+/// yapılandırmasını güvenle senkronize eden ve ön plana getiren yardımcı servis.
+/// </summary>
+public static class ChiakiLauncher
+{
+    private static readonly string[] PossibleRelativePaths =
+    [
+        Path.Combine("chiaki", "chiaki.exe"),
+        Path.Combine("chiaki", "chiaki-ng-Win", "chiaki.exe"),
+        Path.Combine("helpers", "chiaki", "chiaki.exe"),
+        Path.Combine("helpers", "chiaki.exe")
+    ];
+
+    public static string? FindChiakiExecutable()
+    {
+        var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+        foreach (var rel in PossibleRelativePaths)
+        {
+            var full = Path.Combine(baseDir, rel);
+            if (File.Exists(full)) return full;
+        }
+
+        var localApp = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        var progFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+
+        var systemPaths = new[]
+        {
+            Path.Combine(localApp, "Programs", "Chiaki", "chiaki.exe"),
+            Path.Combine(localApp, "Programs", "chiaki-ng", "chiaki-ng.exe"),
+            Path.Combine(progFiles, "Chiaki", "chiaki.exe"),
+            Path.Combine(progFiles, "chiaki-ng", "chiaki-ng.exe"),
+            @"C:\Chiaki\chiaki.exe",
+            @"C:\chiaki-ng\chiaki-ng.exe"
+        };
+
+        return systemPaths.FirstOrDefault(File.Exists);
+    }
+
+    public static bool IsRunning()
+    {
+        return Process.GetProcessesByName("chiaki").Length > 0 ||
+               Process.GetProcessesByName("chiaki-ng").Length > 0;
+    }
+
+    public static bool LaunchOrBringToFront(string? host = null, string? consoleName = null)
+    {
+        try
+        {
+            // Zaten açık olan bir hedef pencere varsa ön plana getir
+            var hWnd = WindowCaptureService.FindTargetWindow(out _);
+            if (hWnd != IntPtr.Zero)
+            {
+                WindowCaptureService.RestoreAndActivate(hWnd);
+                return true;
+            }
+
+            // Zaten chiaki işlemi çalışıyorsa ancak penceresi henüz yakalanamadıysa tekrar başlatma
+            if (IsRunning())
+            {
+                return true;
+            }
+
+            var exePath = FindChiakiExecutable();
+            if (exePath == null) return false;
+
+            var dir = Path.GetDirectoryName(exePath) ?? string.Empty;
+            var psi = new ProcessStartInfo
+            {
+                FileName = exePath,
+                WorkingDirectory = dir,
+                UseShellExecute = true
+            };
+
+            // Eğer Chiaki daha önceden bu PS5'e başarıyla kayıt olmuşsa doğrudan yayın komutunu ver
+            if (!string.IsNullOrWhiteSpace(host) && IsRegistered(host))
+            {
+                var nick = string.IsNullOrWhiteSpace(consoleName) ? "PS5" : consoleName;
+                psi.Arguments = $"stream \"{nick}\" {host}";
+            }
+            else
+            {
+                // Henüz kayıtlı değilse GUI arayüzünü aç; kullanıcı PS5'e çift tıklayıp bağlanabilir
+                psi.Arguments = string.Empty;
+            }
+
+            Process.Start(psi);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Chiaki'nin INI dosyalarında gerçek bir kayıt anahtarı olup olmadığını kontrol eder.
+    /// Sahte dummy anahtarları kabul etmez.
+    /// </summary>
+    public static bool IsRegistered(string host)
+    {
+        try
+        {
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            if (string.IsNullOrEmpty(appData)) return false;
+
+            foreach (var folder in new[] { "chiaki-ng", "Chiaki" })
+            {
+                var iniPath = Path.Combine(appData, folder, $"{folder}.ini");
+                if (File.Exists(iniPath))
+                {
+                    var content = File.ReadAllText(iniPath);
+                    if ((content.Contains("regist_key=") || content.Contains("rp_regist_key=")) &&
+                        !content.Contains("0123456789ABCDEF"))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        catch { }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Chiaki yapılandırmasını hazırlar. Var olan gerçek kayıtları ASLA silmez.
+    /// Manuel host IP'sini ekler ve pencere modunu ayarlar.
+    /// </summary>
+    public static void SyncConfig(string host)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(host)) return;
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            if (string.IsNullOrEmpty(appData)) return;
+
+            foreach (var folder in new[] { "chiaki-ng", "Chiaki" })
+            {
+                var dir = Path.Combine(appData, folder);
+                Directory.CreateDirectory(dir);
+                var iniPath = Path.Combine(dir, $"{folder}.ini");
+
+                if (File.Exists(iniPath))
+                {
+                    var text = File.ReadAllText(iniPath);
+                    if (!text.Contains(host))
+                    {
+                        var sb = new StringBuilder(text);
+                        if (!text.Contains("[manual_hosts]"))
+                        {
+                            sb.AppendLine();
+                            sb.AppendLine("[manual_hosts]");
+                            sb.AppendLine("size=1");
+                            sb.AppendLine($"1\\host={host}");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"1\\host={host}");
+                        }
+                        File.WriteAllText(iniPath, sb.ToString(), Encoding.UTF8);
+                    }
+                }
+                else
+                {
+                    var sb = new StringBuilder();
+                    sb.AppendLine("[manual_hosts]");
+                    sb.AppendLine("size=1");
+                    sb.AppendLine($"1\\host={host}");
+                    sb.AppendLine();
+                    sb.AppendLine("[settings]");
+                    sb.AppendLine("fullscreen=false");
+                    sb.AppendLine("audio_volume=0");
+                    File.WriteAllText(iniPath, sb.ToString(), Encoding.UTF8);
+                }
+            }
+        }
+        catch { }
+    }
+}

@@ -49,7 +49,10 @@ jobs:
           path: GameTranslator-Windows-x64.zip
 
       - name: Upload Windows Asset to GitHub Release
-        if: github.event_name == 'release'
+        if: github.event_name == 'release' || github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v1.0.0
           files: GameTranslator-Windows-x64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

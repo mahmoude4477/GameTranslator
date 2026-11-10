@@ -8,8 +8,8 @@ using GameTranslator.Core;
 namespace GameTranslator.App.Services;
 
 /// <summary>
-/// Windows'ta Chiaki, PlayStation Remote Play veya oyun pencerelerini yakalayan servis.
-/// Mac'teki CGWindowListCreateImage mekanizmasının Windows (Win32 / GDI / PrintWindow) karşılığıdır.
+/// Windows'ta Chiaki veya PlayStation Remote Play pencerelerini güvenle yakalayan servis.
+/// Sadece uzaktan oynatma süreçlerine ait pencereleri yakalar, masaüstü veya dosya gezgini pencerelerini ASLA yakalamaz.
 /// </summary>
 public static class WindowCaptureService
 {
@@ -23,6 +23,18 @@ public static class WindowCaptureService
 
     [DllImport("user32.dll")]
     private static extern bool IsWindowVisible(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool IsIconic(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
     [DllImport("user32.dll")]
     private static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
@@ -69,6 +81,15 @@ public static class WindowCaptureService
     private const int DIB_RGB_COLORS = 0;
     private const int BI_RGB = 0;
     private const uint PW_RENDERFULLCONTENT = 0x00000002;
+    private const int SW_RESTORE = 9;
+
+    private static readonly HashSet<string> RemotePlayProcessNames = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "chiaki",
+        "chiaki-ng",
+        "RemotePlay",
+        "PlayStationRemotePlay"
+    };
 
     [StructLayout(LayoutKind.Sequential)]
     private struct RECT
@@ -111,38 +132,77 @@ public static class WindowCaptureService
         public uint bmiColors;
     }
 
+    public static void RestoreAndActivate(IntPtr hWnd)
+    {
+        try
+        {
+            if (hWnd != IntPtr.Zero)
+            {
+                if (IsIconic(hWnd))
+                {
+                    ShowWindow(hWnd, SW_RESTORE);
+                }
+                SetForegroundWindow(hWnd);
+            }
+        }
+        catch { }
+    }
+
     /// <summary>
-    /// Açık olan pencereler arasında Chiaki, Remote Play, PlayStation veya PS5 penceresini arar.
+    /// Sadece Chiaki veya Sony Remote Play süreçlerine ait açık oyun pencerelerini arar.
+    /// Explorer, tarayıcı veya masaüstü pencerelerini asla hedef olarak seçmez.
     /// </summary>
     public static IntPtr FindTargetWindow(out string windowTitle)
     {
         IntPtr found = IntPtr.Zero;
         string foundTitle = string.Empty;
+        int bestScore = -1;
 
         EnumWindows((hWnd, _) =>
         {
-            if (!IsWindowVisible(hWnd)) return true;
-
-            var sb = new StringBuilder(256);
-            GetWindowText(hWnd, sb, 256);
-            var title = sb.ToString();
-
-            if (string.IsNullOrWhiteSpace(title)) return true;
-
-            if (title.Contains("Chiaki", StringComparison.OrdinalIgnoreCase) ||
-                title.Contains("Remote Play", StringComparison.OrdinalIgnoreCase) ||
-                title.Contains("PlayStation", StringComparison.OrdinalIgnoreCase) ||
-                title.Contains("PS Remote Play", StringComparison.OrdinalIgnoreCase) ||
-                title.Contains("PS5", StringComparison.OrdinalIgnoreCase))
+            try
             {
-                // GameTranslator'ın kendi penceresini atla
-                if (!title.Contains("GameTranslator", StringComparison.OrdinalIgnoreCase))
+                if (!IsWindowVisible(hWnd) || IsIconic(hWnd)) return true;
+
+                GetWindowThreadProcessId(hWnd, out var pid);
+                if (pid == 0 || pid == Environment.ProcessId) return true;
+
+                string procName;
+                try
                 {
+                    using var proc = Process.GetProcessById((int)pid);
+                    procName = proc.ProcessName;
+                }
+                catch
+                {
+                    return true;
+                }
+
+                // Sadece yetkili PS Remote Play süreçlerini kabul et
+                if (!RemotePlayProcessNames.Contains(procName)) return true;
+
+                if (!GetClientRect(hWnd, out var rect) || rect.Width < 250 || rect.Height < 150)
+                    return true;
+
+                var sb = new StringBuilder(256);
+                GetWindowText(hWnd, sb, 256);
+                var title = sb.ToString();
+
+                // Yayın/oyun penceresine öncelik ver
+                int score = 10;
+                if (title.Contains("Stream", StringComparison.OrdinalIgnoreCase)) score += 50;
+                if (title.Contains("PlayStation", StringComparison.OrdinalIgnoreCase)) score += 30;
+                if (title.Contains("PS5", StringComparison.OrdinalIgnoreCase)) score += 30;
+                if (rect.Width >= 1200 || rect.Height >= 700) score += 20;
+
+                if (score > bestScore)
+                {
+                    bestScore = score;
                     found = hWnd;
-                    foundTitle = title;
-                    return false; // Bulduk, aramayı bitir
+                    foundTitle = string.IsNullOrWhiteSpace(title) ? procName : title;
                 }
             }
+            catch { }
 
             return true;
         }, IntPtr.Zero);
@@ -152,39 +212,31 @@ public static class WindowCaptureService
     }
 
     /// <summary>
-    /// Hedef pencerenin (veya pencere bulunamazsa birincil ekranın) görüntüsünü BGRA Frame olarak yakalar.
+    /// Hedef Chiaki veya Remote Play penceresinin görüntüsünü BGRA Frame olarak yakalar.
+    /// Pencere bulunamazsa veya geçersizse null döner; masaüstünü ASLA yakalamaz.
     /// </summary>
-    public static Frame? Capture(IntPtr hWnd = default)
+    public static Frame? Capture(IntPtr hWnd)
     {
+        if (hWnd == IntPtr.Zero) return null;
+
         try
         {
-            int srcX = 0, srcY = 0, width = 0, height = 0;
+            if (!IsWindowVisible(hWnd) || IsIconic(hWnd)) return null;
 
-            if (hWnd != IntPtr.Zero && IsWindowVisible(hWnd))
-            {
-                if (GetClientRect(hWnd, out var rect) && rect.Width > 100 && rect.Height > 100)
-                {
-                    var pt = new POINT();
-                    ClientToScreen(hWnd, ref pt);
-                    srcX = pt.X;
-                    srcY = pt.Y;
-                    width = rect.Width;
-                    height = rect.Height;
-                }
-            }
+            if (!GetClientRect(hWnd, out var rect) || rect.Width < 100 || rect.Height < 100)
+                return null;
 
-            // Eğer hedef pencere yoksa veya çok küçükse tam ekranı yakala
-            if (width <= 0 || height <= 0)
-            {
-                srcX = 0;
-                srcY = 0;
-                width = GetSystemMetrics(SM_CXSCREEN);
-                height = GetSystemMetrics(SM_CYSCREEN);
-            }
+            var pt = new POINT();
+            ClientToScreen(hWnd, ref pt);
+            int srcX = pt.X;
+            int srcY = pt.Y;
+            int width = rect.Width;
+            int height = rect.Height;
 
-            if (width <= 0 || height <= 0) return null;
+            int screenW = GetSystemMetrics(SM_CXSCREEN);
+            int screenH = GetSystemMetrics(SM_CYSCREEN);
+            if (width <= 0 || height <= 0 || srcX >= screenW || srcY >= screenH) return null;
 
-            // Ekran DC'sini al (tüm masaüstü)
             IntPtr srcDc = GetDC(IntPtr.Zero);
             if (srcDc == IntPtr.Zero) return null;
 
@@ -193,20 +245,19 @@ public static class WindowCaptureService
             IntPtr oldBmp = SelectObject(memDc, hBitmap);
 
             bool captured = false;
-            if (hWnd != IntPtr.Zero)
+            try
             {
-                // Önce PrintWindow ile doğrudan pencereden yakalamayı dene
                 captured = PrintWindow(hWnd, memDc, PW_RENDERFULLCONTENT);
-                if (!captured)
-                {
-                    captured = PrintWindow(hWnd, memDc, 0);
-                }
             }
+            catch { }
 
             if (!captured)
             {
-                // PrintWindow başarısızsa BitBlt ile ekran koordinatlarından kopyala
-                BitBlt(memDc, 0, 0, width, height, srcDc, srcX, srcY, SRCCOPY);
+                try
+                {
+                    captured = PrintWindow(hWnd, memDc, 0);
+                }
+                catch { }
             }
 
             var bi = new BITMAPINFO
@@ -215,7 +266,7 @@ public static class WindowCaptureService
                 {
                     biSize = (uint)Marshal.SizeOf<BITMAPINFOHEADER>(),
                     biWidth = width,
-                    biHeight = -height, // Üstten alta (top-down) DIB
+                    biHeight = -height, // top-down
                     biPlanes = 1,
                     biBitCount = 32,
                     biCompression = BI_RGB
@@ -225,11 +276,23 @@ public static class WindowCaptureService
             var pixels = new byte[width * height * 4];
             GetDIBits(memDc, hBitmap, 0, (uint)height, pixels, ref bi, DIB_RGB_COLORS);
 
-            // Temizlik
+            // Eğer PrintWindow tamamen siyah piksel verdiyse (DirectX/OpenGL pencerelerinde yaygın)
+            // ve pencere ekranda görünüyorsa doğrudan ekran DC'sinden BitBlt yap
+            if (IsFrameBlack(pixels, width, height) && srcX >= 0 && srcY >= 0 && srcX + width <= screenW && srcY + height <= screenH)
+            {
+                BitBlt(memDc, 0, 0, width, height, srcDc, srcX, srcY, SRCCOPY);
+                GetDIBits(memDc, hBitmap, 0, (uint)height, pixels, ref bi, DIB_RGB_COLORS);
+            }
+
             SelectObject(memDc, oldBmp);
             DeleteObject(hBitmap);
             DeleteDC(memDc);
             ReleaseDC(IntPtr.Zero, srcDc);
+
+            if (IsFrameBlack(pixels, width, height))
+            {
+                return null;
+            }
 
             return new Frame(pixels, width, height, width * 4);
         }
@@ -237,5 +300,23 @@ public static class WindowCaptureService
         {
             return null;
         }
+    }
+
+    private static bool IsFrameBlack(byte[] pixels, int width, int height)
+    {
+        if (pixels == null || pixels.Length < 16) return true;
+        int step = Math.Max(1, (width * height) / 40);
+        for (int i = 0; i < width * height; i += step)
+        {
+            int idx = i * 4;
+            if (idx + 2 < pixels.Length)
+            {
+                if (pixels[idx] > 5 || pixels[idx + 1] > 5 || pixels[idx + 2] > 5)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

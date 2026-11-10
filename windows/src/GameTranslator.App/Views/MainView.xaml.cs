@@ -170,11 +170,16 @@ public partial class MainView : UserControl
         ToggleGlyph.Text = running ? Glyphs.Stop : Glyphs.Play;
         ToggleText.Text = running ? "Çeviriyi Durdur" : "Çeviriyi Başlat";
 
-        StreamThumbnailDot.Fill = new SolidColorBrush(running ? Color.FromRgb(16, 185, 129) : Color.FromRgb(156, 163, 175));
-        StreamThumbnailBadge.Text = running ? "1080p CANLI" : "BEKLEMEDE";
-        StreamThumbnailBadge.Foreground = new SolidColorBrush(running ? Color.FromRgb(56, 189, 248) : Color.FromArgb(100, 255, 255, 255));
-        ThumbnailStatusText.Text = running ? "PS5 Canlı Akışı Aktif" : "PS5 Akışı Bekleniyor";
-        LiveBadgeText.Text = running ? "Canlı" : "Beklemede";
+        bool hasFrame = LiveStreamImage?.Source != null;
+        bool isStreaming = running && hasFrame;
+
+        StreamThumbnailDot.Fill = new SolidColorBrush(isStreaming
+            ? Color.FromRgb(16, 185, 129)
+            : (running ? Color.FromRgb(245, 158, 11) : Color.FromRgb(156, 163, 175)));
+        StreamThumbnailBadge.Text = isStreaming ? "1080p CANLI" : (running ? "BAĞLANIYOR" : "BEKLEMEDE");
+        StreamThumbnailBadge.Foreground = new SolidColorBrush(isStreaming ? Color.FromRgb(56, 189, 248) : Color.FromArgb(140, 255, 255, 255));
+        ThumbnailStatusText.Text = isStreaming ? "PS5 Canlı Akışı Aktif" : (running ? "PS5 Yayını Bekleniyor..." : "PS5 Akışı Bekleniyor");
+        LiveBadgeText.Text = isStreaming ? "Canlı" : (running ? "Bekleniyor" : "Beklemede");
 
         // PS5 Durum Satırı
         if (Ps5StatusDot != null && Ps5StatusLabel != null)
@@ -196,11 +201,14 @@ public partial class MainView : UserControl
 
         if (!running)
         {
+            if (LiveStreamImage != null) LiveStreamImage.Source = null;
+            if (ThumbnailStreamImage != null) ThumbnailStreamImage.Source = null;
             if (StreamPlaceholder != null)
             {
                 StreamPlaceholder.Visibility = Visibility.Visible;
                 if (StreamPlaceholderTitle != null) StreamPlaceholderTitle.Text = "PS5 Canlı Akışı Başlatılmadı";
                 if (StreamPlaceholderSubtitle != null) StreamPlaceholderSubtitle.Text = "PS5 ekranını canlı görmek için sol menüden '▶ Çeviriyi Başlat'a basın.";
+                if (BtnLaunchChiaki != null) BtnLaunchChiaki.Visibility = Visibility.Collapsed;
             }
             if (ThumbnailPlaceholder != null) ThumbnailPlaceholder.Visibility = Visibility.Visible;
         }
@@ -209,8 +217,9 @@ public partial class MainView : UserControl
             if (LiveStreamImage?.Source == null && StreamPlaceholder != null)
             {
                 StreamPlaceholder.Visibility = Visibility.Visible;
-                if (StreamPlaceholderTitle != null) StreamPlaceholderTitle.Text = "PS5 Görüntüsü Bekleniyor...";
-                if (StreamPlaceholderSubtitle != null) StreamPlaceholderSubtitle.Text = "Lütfen PC'nizde PlayStation Remote Play veya Chiaki'yi açın.\nOyun penceresi otomatik olarak algılanıp buraya yansıtılacaktır.";
+                if (StreamPlaceholderTitle != null) StreamPlaceholderTitle.Text = "PS5 Canlı Yayını Bekleniyor...";
+                if (StreamPlaceholderSubtitle != null) StreamPlaceholderSubtitle.Text = "Lütfen Chiaki veya PS Remote Play üzerinden PS5'inize bağlanın.\nKonsol bağlandığında görüntü otomatik buraya yansıyacaktır.";
+                if (BtnLaunchChiaki != null) BtnLaunchChiaki.Visibility = Visibility.Visible;
             }
         }
     }
@@ -226,6 +235,15 @@ public partial class MainView : UserControl
             if (ThumbnailStreamImage != null) ThumbnailStreamImage.Source = bitmap;
             if (StreamPlaceholder != null) StreamPlaceholder.Visibility = Visibility.Collapsed;
             if (ThumbnailPlaceholder != null) ThumbnailPlaceholder.Visibility = Visibility.Collapsed;
+
+            if (StreamThumbnailDot != null) StreamThumbnailDot.Fill = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+            if (StreamThumbnailBadge != null)
+            {
+                StreamThumbnailBadge.Text = "1080p CANLI";
+                StreamThumbnailBadge.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
+            }
+            if (ThumbnailStatusText != null) ThumbnailStatusText.Text = "PS5 Canlı Akışı Aktif";
+            if (LiveBadgeText != null) LiveBadgeText.Text = "Canlı";
         }
         catch { }
     }
@@ -382,6 +400,31 @@ public partial class MainView : UserControl
         CropRightLabel.Text = $"%{Math.Round(right * 100)}";
     }
 
+    private void OnLaunchChiakiManual(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var host = controller.Console?.Host;
+            var name = controller.Console?.Name;
+            if (!string.IsNullOrWhiteSpace(host))
+            {
+                ChiakiLauncher.SyncConfig(host);
+            }
+            if (!ChiakiLauncher.LaunchOrBringToFront(host, name))
+            {
+                MessageBox.Show(
+                    "Chiaki uygulaması bulunamadı. Lütfen 'chiaki/chiaki.exe' dosyasının uygulama klasöründe olduğunu kontrol edin.",
+                    "Chiaki Bulunamadı",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Chiaki başlatılamadı: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+    }
+
     private void OnRefreshCapture(object sender, RoutedEventArgs e)
     {
         try
@@ -398,20 +441,17 @@ public partial class MainView : UserControl
                 }
             }
 
-            var screenFrame = WindowCaptureService.Capture(IntPtr.Zero);
-            if (screenFrame != null)
-            {
-                controller.FeedFrame(screenFrame);
-                UpdateLiveFrame(screenFrame);
-            }
-            else
-            {
-                MessageBox.Show("Chiaki veya PlayStation Remote Play penceresi bulunamadı.\nLütfen bilgisayarınızda açık olduğunu kontrol edin.", "Pencere Bulunamadı", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+            MessageBox.Show(
+                "Chiaki veya PlayStation Remote Play penceresi bulunamadı veya henüz görüntü vermiyor.\n\n" +
+                "Lütfen bilgisayarınızda Chiaki veya PS Remote Play uygulamasını açıp konsolunuza bağlandığınızdan emin olun.\n" +
+                "İpucu: '🎮 Chiaki'yi Aç' butonuna tıklayarak Chiaki'yi hemen başlatabilirsiniz.",
+                "PS5 Penceresi Bulunamadı",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ekran yakalama hatası: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show($"Pencere arama hatası: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 
