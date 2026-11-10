@@ -8,8 +8,9 @@ build/
 *.xcworkspace/xcuserdata/
 mac/GameTranslator.xcodeproj/
 mac/GameTranslatorBinary
-bin/
-obj/
+/bin/
+/obj/
+!scripts/bin/
 
 # Archives & Temporary files
 *.zip

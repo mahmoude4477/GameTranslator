@@ -89,6 +89,16 @@ if [ -f "$ROOT_DIR/scripts/ps5-register.js" ]; then
     cp "$ROOT_DIR/scripts/ps5-register.js" "$RES_DIR/ps5-register/"
 fi
 
+# TV Helper ve Pocket TTS yardımcı ikililerini MacOS klasörüne kopyala
+if [ -d "$ROOT_DIR/scripts/bin" ]; then
+    for b in "$ROOT_DIR/scripts/bin"/*; do
+        if [ -f "$b" ]; then
+            cp "$b" "$MACOS_DIR/"
+            chmod +x "$MACOS_DIR/$(basename "$b")"
+        fi
+    done
+fi
+
 # 6. Kod İmzalama (Apple Developer Sertifikası veya Ad-hoc)
 CERT="Apple Development: 21doruksari21@gmail.com (SQH68S5G9V)"
 echo "🔏 Kod imzalanıyor..."
