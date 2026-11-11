@@ -1002,7 +1002,6 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         {
             pipeline?.Reset();
             server.Clear();
-            dubber?.Stop();
         }
     }
 
