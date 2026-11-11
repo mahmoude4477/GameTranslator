@@ -52,76 +52,64 @@ Aşağıdaki adımları takip ederek 2 dakika içinde oyunu Türkçe altyazıyla
 ---
 
 ### 1. 🍏 Mac (macOS Kurulumu - Apple Silicon M1 / M2 / M3 / M4)
-> Apple Silicon Neural Engine NPU çipini ve Apple Vision OCR donanımını kullanarak **0 ms gecikmeyle** çevrimdışı çalışır.
+> Apple Silicon Neural Engine NPU çipini ve Vision OCR donanımını kullanarak **0 ms gecikmeyle** çevrimdışı çalışır.
 
-#### ⚡ Yöntem A: Hazır Paketi Doğrudan İndirme (En Hızlı & Önerilen)
-1. **GitHub Releases'ten İndirin:** **[GitHub Releases (v1.0.0)](https://github.com/Sefflex/GameTranslator/releases/tag/v1.0.0)** sayfasına gidin ve hazır derlenmiş **`GameTranslator-macOS-v1.0.0.zip`** dosyasını indirin.
-2. **Uygulamalar Klasörüne Taşıyın:** İnen ZIP dosyasına çift tıklayarak açın ve içinden çıkan **`GameTranslator.app`** dosyasını Mac'inizin **`Uygulamalar`** (`/Applications`) klasörüne sürükleyin.
-3. **Uygulamayı Açın:** `GameTranslator` ikonuna çift tıklayarak başlatın!
-   * *⚠️ macOS Gatekeeper Uyarısı ("Geliştiricisi Doğrulanamadı" veya "Hasar Görmüş" Uyarısı):*  
-     macOS, internetten indirilen bağımsız uygulamalarda standart olarak bu güvenlik uyarısını verir. Aşmak çok basittir:
-     * Uygulamaya **sağ tıklayın** (veya iki parmakla dokunun), **`Aç`** seçeneğini seçin ve çıkan pencerede tekrar **`Aç`** butonuna basın.
-     * VEYA Terminal'de şu tek satırlık komutu çalıştırıp Enter'a basın:
-       ```bash
-       xattr -cr /Applications/GameTranslator.app
-       ```
-   * *⚠️ Ekran Kaydı İzni (Altyazıyı Okumak İçin Şart):*  
+#### 🟢 Yöntem A: Tek Tıkla Otomatik Kurulum ve Başlatma (Önerilen)
+1. **GitHub'dan İndirin:** Bu sayfanın yukarısındaki yeşil **`<> Code`** butonuna tıklayın ve **`Download ZIP`** seçeneğini seçin. İnen ZIP dosyasını klasöre çıkartın.
+2. **Başlatıcıya Çift Tıklayın:** Klasörün içindeki **`GameTranslator.command`** dosyasına çift tıklayın.
+   * *İlk Açılışta:* Sistem uygulamanın henüz derlenmediğini otomatik anlar, gerekli motorları derler, Apple Developer sertifikanızla imzalar, `/Applications/GameTranslator.app` olarak kurar ve arayüzü ekrana getirir (yalnızca ilk seferde 10-15 saniye sürer).
+   * *Sonraki Açılışlarda:* Doğrudan 1 saniyede açılır!
+3. **⚠️ Mac Güvenlik İpuçları (İlk Kez Açarken):**
+   * **"Geliştiricisi Doğrulanamadığı İçin Açılamıyor" veya "İzin Yok" derse:**  
+     Dosyaya **sağ tıklayın** (veya iki parmakla dokunun), **`Aç`** seçeneğini seçin ve çıkan uyarıda tekrar **`Aç`** butonuna basın. (veya Terminal'de klasöre gidip `chmod +x GameTranslator.command` yazmanız yeterlidir).
+   * **"swiftc komutu için geliştirici araçları gerekiyor" uyarısı verirse:**  
+     Apple'ın çıkan resmi penceresinde **`Yükle`** butonuna basın; Apple Command Line Tools ücretsiz ve otomatik olarak kurulur.
+   * **Ekran Kaydı İzni (Altyazıyı Okumak İçin Şart):**  
      Mac'inizde **`Sistem Ayarları` ➔ `Gizlilik ve Güvenlik` ➔ `Ekran ve Sistem Sesi Kaydı`** bölümüne gidin ve listede **`GameTranslator`** anahtarını **AÇIK (Mavi)** yapın.
 
----
-
-#### 🎮 5 Adımlı Hızlı Kurulum Sihirbazı (İlk Açılış):
-GameTranslator Mac'te ilk kez açıldığında sizi 5 adımlı otomatik bir sihirbaz karşılar (Chiaki gibi harici programlarla uğraşmanıza gerek yoktur, motor arka planda sessizce çalışır):
-1. **1. Hoş Geldiniz:** Genel sistem özeti ve hızlı başlangıç.
-2. **2. İkinci PSN Hesabı:** Ekranda **"🌐 Sony Giriş Sayfasını Aç (Yeni Sekme)"** butonuna tıklayın. Açılan Safari sekmesinde 2. PSN hesabınızla giriş yapın. Giriş bitince sayfa `redirect` adresine yönlenir; Safari'nin adres çubuğundaki o linki kopyalayıp GameTranslator'deki kutuya yapıştırın ve **"Bağlantıyı Doğrula"** deyin. *(Sony'nin bot korumasına takılmamak ve güvenliği sağlamak için giriş işlemi doğrudan resmi Safari üzerinden gerçekleşir).*
-3. **3. PS5 Konsol Eşleştirme:** PS5'inizde `Ayarlar › Sistem › Uzaktan Oynatma › Cihaz Eşle` menüsünü açın. Ekranda görünen 8 haneli PIN kodunu GameTranslator'e girip **"Konsolu Eşle"** butonuna basın. Konsolunuz saniyeler içinde otomatik eşleşir.
-4. **4. Akıllı TV / PC Seçimi:** Televizyonunuzun markasını (Samsung, LG, TCL / Android TV) veya Mac / PC ekranını seçin.
-5. **5. Test & Bitti:** "Örnek Altyazı Gönder" butonuna basarak TV ekranınızdaki şeffaf altyazıyı test edin ve "Kurulumu Tamamla" diyerek ana ekrana geçin.
-
----
-
-#### 🟢 Yöntem B: Kaynak Kodundan Tek Tıkla Otomatik Derleme
-1. Bu sayfanın yukarısındaki yeşil **`<> Code`** butonuna tıklayın ve **`Download ZIP`** seçeneğini seçin. İnen ZIP dosyasını klasöre çıkartın.
-2. Klasörün içindeki **`GameTranslator.command`** dosyasına çift tıklayın.
-   * *İlk Açılışta:* Sistem uygulamanın henüz derlenmediğini otomatik anlar, gerekli motorları derler, `/Applications/GameTranslator.app` olarak kurar ve arayüzü ekrana getirir (yalnızca ilk seferde 10-15 saniye sürer).
-   * *Sonraki Açılışlarda:* Doğrudan 1 saniyede açılır!
-
-#### 🛠️ Yöntem C: Manuel Olarak Kendiniz Derlemek İsterseniz (Terminal İle)
-```bash
-cd /klasorun/yolu/GameTranslate-main
-bash mac/build.sh
-```
+#### 🛠️ Yöntem B: Manuel Olarak Kendiniz Derlemek İsterseniz (Terminal İle)
+Eğer uygulamayı terminalden kendi ellerinizle derleyip kurmak isterseniz:
+1. Mac'inizde **Terminal** uygulamasını açın (Klavyeden `Command + Boşluk` basıp Spotlight'a `Terminal` yazabilirsiniz).
+2. İndirdiğiniz proje klasörünün içine girin (Terminal penceresine `cd ` yazıp indirdiğiniz klasörü terminale sürükleyip Enter'a basabilirsiniz):
+   ```bash
+   cd /klasorun/yolu/GameTranslate-main
+   ```
+3. Derleme scriptini çalıştırın:
+   ```bash
+   bash mac/build.sh
+   ```
+4. Derleme bittiğinde terminalde `✅ Derleme ve kurulum başarıyla tamamlandı!` yazar ve uygulama otomatik olarak `/Applications/GameTranslator.app` konumuna yüklenir.
+5. Şimdi ister `GameTranslator.command` dosyasına çift tıklayarak, ister `Uygulamalar` (Applications) klasöründen **`GameTranslator`** ikonuna tıklayarak anında açabilirsiniz!
 
 ---
 
 ### 2. 🪟 PC (Windows Yerel Masaüstü Kurulumu - Windows 10 / 11)
 > C# / .NET 10, WPF ve DirectML / Windows Media OCR altyapısıyla çalışan yerel, donanım hızlandırmalı Windows masaüstü uygulamasıdır.  
-> 💡 **Hızlı Başlangıç:** [GitHub Releases](https://github.com/Sefflex/GameTranslator/releases) sayfasından doğrudan **`GameTranslator-Windows-x64.zip`** paketini indirip kullanabilirsiniz. Adım adım kılavuz: **[Windows Manuel Kurulum ve Sorun Giderme Rehberi](docs/WINDOWS_KURULUM.md)**
+> 💡 **Hızlı İndirme:** [GitHub Releases](https://github.com/Sefflex/GameTranslator/releases/latest) sayfasından hazır kurulum sihirbazını (**`GameTranslator-Setup-v1.0.0.exe`**) veya tüm paketi içeren **`GameTranslator-Windows-v1.0.0.zip`** dosyasını indirebilirsiniz.
 
-#### 🟢 Yöntem A: Tek Tıkla Otomatik Kurulum ve Başlatma (Önerilen)
-1. **GitHub'dan İndirin:** Bu sayfanın yukarısındaki yeşil **`<> Code`** butonuna tıklayın ve **`Download ZIP`** seçeneğini seçin. İnen ZIP dosyasını klasöre çıkartın (Örneğin: Masaüstünüze veya Belgelerim klasörüne).
-2. **Başlatıcıya Çift Tıklayın:** Proje klasöründeki **`GameTranslator.bat`** dosyasına çift tıklayın.
-   * *İlk Açılışta:* Bilgisayarınızda .NET SDK kuruluysa sistem gerekli kütüphaneleri otomatik yükler ve GameTranslator koyu modern arayüzünü ekrana getirir.
-   * *Bilgisayarınızda .NET Yoksa:* Konsol penceresinde uyarı çıkar, klavyeden `E` tuşlayarak tek tıkla resmi Microsoft indirme sayfasını açabilir ve ücretsiz .NET SDK'yı kurabilirsiniz.
-3. **⚠️ Windows Güvenlik ve İpuçları (İlk Kez Açarken):**
+#### 🟢 Yöntem A: Hazır Kurulum Sihirbazı ile Tek Tıkla Kurulum (Önerilen)
+1. **GitHub Releases'ten İndirin:** [GitHub Releases](https://github.com/Sefflex/GameTranslator/releases/latest) bölümünden **`GameTranslator-Setup-v1.0.0.exe`** dosyasını (veya tüm paketi içeren `GameTranslator-Windows-v1.0.0.zip` arşivini) indirin.
+2. **Kurulum Sihirbazını Çalıştırın:** **`GameTranslator-Setup-v1.0.0.exe`** dosyasına çift tıklayın ve ekrandaki adımları takip ederek *"İleri > Kur"* butonuna basın.
+   * *Neler Yapar:* Gerekli tüm bileşenleri ve Chiaki motorunu güvenli uygulama dizinine kurar, Windows güvenlik izinlerini otomatik ayarlar.
+   * *Kısayollar:* Masaüstünüze ve Başlat Menünüze şık `GameTranslator` ikonunu bırakır.
+   * *Kaldırma (Uninstall):* İstenildiği zaman Windows *Ayarlar › Yüklü Uygulamalar* (Program Ekle/Kaldır) bölümünden veya kurulu dizindeki `unins000.exe` ile tek tıkla sistemden tertemiz kaldırılabilir.
+3. **📦 Taşınabilir (Portable / Kurulumsuz) Seçenek:**
+   * Bilgisayarına hiçbir şey kurmak istemeyenler `GameTranslator-Windows-x64-v1.0.0.zip` arşivini herhangi bir klasöre çıkartıp içindeki **`GameTranslator.exe`** dosyasına çift tıklayarak doğrudan çalıştırabilir!
+4. **⚠️ Windows Güvenlik İpuçları (İlk Kez Açarken):**
    * **Windows Defender "Windows kişisel bilgisayarınızı korudu" (SmartScreen) derse:**  
-     Mavi penceredeki **`Ek bilgi`** yazısına tıklayın, ardından altta açılan **`Yine de çalıştır`** butonuna basın. (Açık kaynaklı yeni bağımsız projelerde standarttır, tamamen güvenlidir).
+     Mavi penceredeki **`Ek bilgi`** yazısına tıklayın, ardından altta açılan **`Yine de çalıştır`** butonuna basın. (Açık kaynaklı ve dijital imza sertifikası satın alınmamış yeni bağımsız projelerde standarttır, %100 güvenlidir).
    * **Windows Güvenlik Duvarı (Ağ İzni) uyarısı çıkarsa:**  
-     PS5 konsolunuzu ve TV uygulamasını yerel ağda otomatik bulabilmesi için çıkan onay penceresinde **"Özel ağlar (Ev veya iş ağı)"** kutucuğunu işaretleyip **`Erişime izin ver`** butonuna basın.
-   * **.NET SDK İndirme Linki:**  
-     Bilgisayarınızda .NET yüklü değilse, resmi **[Microsoft .NET SDK İndir (Ücretsiz)](https://dotnet.microsoft.com/download)** sayfasından indirip birkaç tıkla kurabilirsiniz.
+     PS5 konsolunuzu ve TV uygulamasını yerel ağda otomatik bulabilmesi ve yayını aktarabilmesi için çıkan onay penceresinde **"Özel ağlar (Ev veya iş ağı)"** kutucuğunu işaretleyip **`Erişime izin ver`** butonuna basın.
 
-#### 🛠️ Yöntem B: Tek Tıkla Bağımsız `.exe` Olarak Derlemek (İsteğe Bağlı)
-Eğer her seferinde siyah konsol penceresi beklemeden doğrudan masaüstü ikonu gibi tek bir `GameTranslator.exe` dosyası üretmek isterseniz:
-1. Klasördeki **`Derle-Windows.bat`** dosyasına çift tıklayın.
-2. Sistem tüm projeyi tek parça bağımsız (Self-Contained) Windows uygulaması olarak derler ve `bin/` klasörüne **`GameTranslator.exe`** olarak kaydeder.
-3. Artık sadece bu `GameTranslator.exe` dosyasına çift tıklayarak programı 0 saniyede açabilirsiniz!
-
-#### 💻 Yöntem C: Geliştiriciler İçin Konsol Komutları (PowerShell / CMD)
-```cmd
-cd /klasor/yolu/GameTranslate-main
-dotnet run --project "windows/src/GameTranslator.App/GameTranslator.App.csproj"
-```
+#### 🛠️ Yöntem B: Kaynak Koddan Tek Tıkla Başlatma veya Derleme (Geliştiriciler)
+Eğer GitHub'dan kaynak kodları (`ZIP` veya `git clone`) ile indirdiyseniz:
+1. **Tek Tıkla Başlatma:** Proje klasöründeki **`GameTranslator.bat`** dosyasına çift tıklayın. Bilgisayarınızdaki .NET SDK ile proje saniyeler içinde derlenir ve açılır.
+2. **Tek Tıkla Bağımsız `.exe` Olarak Derlemek:**
+   * Klasördeki **`Derle-Windows.bat`** dosyasına çift tıklayın. Sistem tüm projeyi tek parça bağımsız (Self-Contained) Windows uygulaması olarak derler ve `bin/` klasörüne **`GameTranslator.exe`** olarak kaydeder.
+3. **💻 Konsoldan Çalıştırma (PowerShell / CMD):**
+   ```cmd
+   dotnet run --project "windows/src/GameTranslator.App/GameTranslator.App.csproj" -c Release
+   ```
 
 ---
 
