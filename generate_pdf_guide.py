@@ -237,6 +237,9 @@ html_content = '''<!DOCTYPE html>
     font-size: 10px;
     color: #64748B;
   }
+  .footer-link {
+    white-space: nowrap;
+  }
 </style>
 </head>
 <body>
@@ -263,7 +266,7 @@ html_content = '''<!DOCTYPE html>
     <div class="step-card">
       <ul>
         <li><strong>🍏 Mac (معالجات Apple Silicon: M1 / M2 / M3 / M4):</strong> انقر مرتين على الملف <code dir="ltr">GameTranslator.command</code> في مجلد المشروع. يبني المشغّل التطبيق في المرة الأولى ثم يفتحه مباشرة.</li>
-        <li><strong>🪟 Windows (نظام Windows 10 / 11):</strong> انقر مرتين على الملف <code dir="ltr">GameTranslator.bat</code> في مجلد المشروع (يحتاج إلى .NET 10 SDK، وتفتح بعده واجهة سطح المكتب). وإن أردت ملف EXE مستقلًا فشغّل <code dir="ltr">Build-Windows.bat</code>.</li>
+        <li><strong>🪟 Windows (نظام Windows 10 / 11):</strong> انقر مرتين على الملف <code dir="ltr">GameTranslator.bat</code> في مجلد المشروع (يحتاج إلى <span class="ltr" dir="ltr">.NET 10 SDK</span>، وتفتح بعده واجهة سطح المكتب). وإن أردت ملف EXE مستقلًا فشغّل <code dir="ltr">Build-Windows.bat</code>.</li>
         <li><strong>🔗 مستودع المشروع المفتوح المصدر:</strong> <a class="ltr" dir="ltr" href="https://github.com/mahmoude4477/GameTranslator" style="color:#0A84FF; text-decoration:none; font-weight:600;">https://github.com/mahmoude4477/GameTranslator</a></li>
         <li><strong>المشروع الأصلي:</strong> GameTranslator من تطوير Sefflex — <a class="ltr" dir="ltr" href="https://github.com/Sefflex/GameTranslator" style="color:#0A84FF; text-decoration:none; font-weight:600;">https://github.com/Sefflex/GameTranslator</a></li>
       </ul>
@@ -297,7 +300,7 @@ html_content = '''<!DOCTYPE html>
         <tr>
           <td><strong>Samsung Smart TV</strong><br><small>Tizen OS (كل طرازات QLED و Crystal UHD منذ 2019)</small></td>
           <td class="status-yes">✓ مدعوم بالكامل</td>
-          <td>حزمة WGT مع وضع المطوّر (<span class="ltr" dir="ltr">1-2-3-4-5</span> من الريموت)</td>
+          <td>حزمة WGT مع وضع المطوّر (الأرقام 12345 من الريموت)</td>
         </tr>
         <tr>
           <td><strong>تلفزيونات Linux وغيرها</strong><br><small>طرازات Linux القديمة من Vestel و Beko، و Philips Saphi، و Titan OS وغيرها</small></td>
@@ -435,7 +438,7 @@ html_content = '''<!DOCTYPE html>
       <h3>1. فعّل وضع المطوّر في التلفزيون</h3>
       <ol>
         <li>افتح شاشة <strong>«التطبيقات» (Apps)</strong> في التلفزيون.</li>
-        <li>اضغط بأزرار الأرقام في الريموت <strong><span class="ltr" dir="ltr">1 - 2 - 3 - 4 - 5</span></strong> بالترتيب (إن لم تكن في الريموت أزرار أرقام فاكتبها بلوحة المفاتيح على الشاشة).</li>
+        <li>اضغط بأزرار الأرقام في الريموت <strong>12345</strong> بالترتيب، أي 1 ثم 2 ثم 3 ثم 4 ثم 5 (إن لم تكن في الريموت أزرار أرقام فاكتبها بلوحة المفاتيح على الشاشة).</li>
         <li>تظهر على الشاشة نافذة <strong>Developer Mode</strong>. اجعل <strong>Developer Mode</strong> على <strong>ON</strong>.</li>
         <li>اكتب في خانة <strong>Host PC IP</strong> عنوان IP المحلي للكمبيوتر ثم اضغط <strong>OK</strong> (يعرض تطبيق GameTranslator عنوان IP للكمبيوتر بوضوح في خطوة التلفزيون).</li>
         <li>أعد تشغيل التلفزيون <strong>بالضغط المطوّل على زر التشغيل في الريموت إلى أن يظهر شعار Samsung</strong>. بعد التشغيل ترى في أعلى شاشة التطبيقات عبارة <em>"Develop Mode"</em>.</li>
@@ -471,8 +474,8 @@ html_content = '''<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    <div>🎮 GameTranslator — النسخة العربية | مجاني ومفتوح المصدر (AGPL-3.0) | المشروع الأصلي: GameTranslator من تطوير Sefflex</div>
-    <div>الدعم والمساهمة: <strong class="ltr" dir="ltr">github.com/mahmoude4477/GameTranslator</strong></div>
+    <div>🎮 GameTranslator — النسخة العربية | مجاني ومفتوح المصدر (AGPL-3.0)<br>المشروع الأصلي: GameTranslator من تطوير Sefflex — <span class="ltr" dir="ltr">github.com/Sefflex/GameTranslator</span></div>
+    <div class="footer-link">الدعم والمساهمة: <strong class="ltr" dir="ltr">github.com/mahmoude4477/GameTranslator</strong></div>
   </div>
 
 </body>
