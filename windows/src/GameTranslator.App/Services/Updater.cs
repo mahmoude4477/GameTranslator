@@ -13,7 +13,7 @@ namespace GameTranslator.App.Services;
 /// </summary>
 internal sealed class Updater : IUpdater
 {
-    private const string Repository = "https://github.com/Sefflex/GameTranslate";
+    private const string Repository = "https://github.com/mahmoude4477/GameTranslator";
     private readonly UpdateManager manager = new(new GithubSource(Repository, null, false));
     private UpdateInfo? pending;
 
@@ -42,7 +42,7 @@ internal sealed class Updater : IUpdater
             using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
             http.DefaultRequestHeaders.UserAgent.ParseAdd("GameTranslator");
             using var document = System.Text.Json.JsonDocument.Parse(
-                await http.GetStringAsync("https://api.github.com/repos/Sefflex/gametranslator/releases/latest"));
+                await http.GetStringAsync("https://api.github.com/repos/mahmoude4477/GameTranslator/releases/latest"));
             var tag = document.RootElement.GetProperty("tag_name").GetString()?.TrimStart('v');
             return tag is not null && AppVersion.IsNewer(tag, AppVersion.Current(typeof(Updater).Assembly)) ? tag : null;
         }

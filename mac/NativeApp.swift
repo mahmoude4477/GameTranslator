@@ -1113,7 +1113,6 @@ final class AppState {
     var language: String = "en"
     /// Çevirinin dili (Google ve DeepL'e bu kodla gider). Arapça sağdan sola yazılır; TV ve OBS yönü metinden anlar.
     var targetLanguage: String = UserDefaults.standard.string(forKey: "gt_target_language") ?? "ar"
-    var isDubbing: Bool = false
     var isMuteComputerAudio: Bool = UserDefaults.standard.object(forKey: "gt_mute_computer_audio") as? Bool ?? true
     
     // OCR Okuma Alanı (16:9 PS5 Oyun Ekranı ve Altyazı Koordinatları)
@@ -3112,10 +3111,6 @@ struct MainWindowView: View {
                     .font(.system(size: 11))
                     .toggleStyle(.checkbox)
                     .onChange(of: state.isBold) { state.syncStyleToTV() }
-
-                Toggle("Türkçe Dublaj (Ses)", isOn: $state.isDubbing)
-                    .font(.system(size: 11))
-                    .toggleStyle(.checkbox)
 
                 Toggle("PC Sesini Kapat (Mute)", isOn: Binding(
                     get: { state.isMuteComputerAudio },

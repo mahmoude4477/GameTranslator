@@ -17,7 +17,7 @@
         <TextBlock Text="{t:T 'Remote Play connection by chiaki-ng (AGPL-3.0). Thanks to its developers.'}" Style="{StaticResource SecondaryText}" TextAlignment="Center" Margin="0,12,0,0" />
         <TextBlock Text="{t:T 'Translation model: OPUS-MT, University of Helsinki (CC BY 4.0).'}" Style="{StaticResource SecondaryText}" TextAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,0" />
         <TextBlock TextAlignment="Center" Margin="0,12,0,0">
-            <Hyperlink NavigateUri="https://github.com/Sefflex/GameTranslate" RequestNavigate="OnLink"><Run Text="{t:T 'Source code'}" /></Hyperlink>
+            <Hyperlink NavigateUri="https://github.com/mahmoude4477/GameTranslator" RequestNavigate="OnLink"><Run Text="{t:T 'Source code'}" /></Hyperlink>
             <Run Text="  ·  " />
             <Hyperlink NavigateUri="https://github.com/chiaki-ng/chiaki-ng" RequestNavigate="OnLink">chiaki-ng</Hyperlink>
         </TextBlock>

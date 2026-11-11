@@ -44,7 +44,7 @@ jobs:
           Get-ChildItem -Path "release-win" -Recurse | Unblock-File -ErrorAction SilentlyContinue
 
           $batContent = "@echo off`r`nchcp 65001 >nul`r`ntitle GameTranslator`r`ncd /d `"%~dp0`"`r`npowershell -NoProfile -ExecutionPolicy Bypass -Command `"Get-ChildItem -Path '%~dp0' -Recurse | Unblock-File`" >nul 2>&1`r`nstart `"`" `"%~dp0GameTranslator.exe`""
-          [System.IO.File]::WriteAllText("$PWD/release-win/GameTranslator-Baslat.bat", $batContent)
+          [System.IO.File]::WriteAllText("$PWD/release-win/GameTranslator-Start.bat", $batContent)
 
           Compress-Archive -Path release-win/* -DestinationPath GameTranslator-Windows-x64.zip
 

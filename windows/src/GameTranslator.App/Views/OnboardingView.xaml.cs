@@ -631,7 +631,7 @@ public partial class OnboardingView : UserControl
         if (File.Exists(path))
             Process.Start("explorer.exe", $"/select,\"{path}\"");
         else
-            Process.Start(new ProcessStartInfo("https://github.com/Sefflex/GameTranslator/releases") { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("https://github.com/mahmoude4477/GameTranslator/releases") { UseShellExecute = true });
     }
 
     private void OnOpenLgIpk(object sender, RoutedEventArgs e)
@@ -640,7 +640,7 @@ public partial class OnboardingView : UserControl
         if (File.Exists(path))
             Process.Start("explorer.exe", $"/select,\"{path}\"");
         else
-            Process.Start(new ProcessStartInfo("https://github.com/Sefflex/GameTranslator/releases") { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("https://github.com/mahmoude4477/GameTranslator/releases") { UseShellExecute = true });
     }
 
     private void OnOpenAndroidApk(object sender, RoutedEventArgs e)
@@ -649,12 +649,12 @@ public partial class OnboardingView : UserControl
         if (File.Exists(path))
             Process.Start("explorer.exe", $"/select,\"{path}\"");
         else
-            Process.Start(new ProcessStartInfo("https://github.com/Sefflex/GameTranslator/releases") { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("https://github.com/mahmoude4477/GameTranslator/releases") { UseShellExecute = true });
     }
 
     private void OnOpenGuidePdf(object sender, RoutedEventArgs e)
     {
-        Process.Start(new ProcessStartInfo("https://github.com/Sefflex/GameTranslator/raw/main/docs/GameTranslator_TV_Kurulum_Rehberi.pdf") { UseShellExecute = true });
+        Process.Start(new ProcessStartInfo("https://github.com/mahmoude4477/GameTranslator/raw/main/docs/GameTranslator_TV_Setup_Guide.pdf") { UseShellExecute = true });
     }
 
     // ==========================================
