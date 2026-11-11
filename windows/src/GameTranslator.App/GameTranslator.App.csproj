@@ -11,7 +11,7 @@
     <ApplicationIcon>Assets\GameTranslator.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
-    <!-- Velopack kurulum ve güncelleme kancaları WPF başlamadan çalışmalı (Program.Main). -->
+    <!-- خطافات التثبيت والتحديث في Velopack يجب أن تعمل قبل بدء WPF (Program.Main). -->
     <StartupObject>GameTranslator.App.Program</StartupObject>
   </PropertyGroup>
 
@@ -22,23 +22,23 @@
 
   <ItemGroup>
     <Resource Include="Assets\logo.png" />
-    <!-- ShellWindow.xaml pencere simgesi olarak bunu okur; ApplicationIcon yalnız exe simgesidir. -->
+    <!-- ShellWindow.xaml يقرأ هذا كأيقونة للنافذة؛ أما ApplicationIcon فهو أيقونة ملف exe فقط. -->
     <Resource Include="Assets\GameTranslator.ico" />
   </ItemGroup>
 
-  <!-- TV uygulaması paketleri: dist/tv-app ve tv/packages altındaki paketleri tv-app/ klasörüne kopyalar -->
+  <!-- حزم تطبيق التلفزيون: ينسخ الحزم الموجودة في dist/tv-app و tv/packages إلى المجلد tv-app/ -->
   <ItemGroup>
     <Content Include="..\..\..\dist\tv-app\*.ipk;..\..\..\dist\tv-app\*.wgt;..\..\..\dist\tv-app\*.apk;..\..\..\tv\packages\*.ipk;..\..\..\tv\packages\*.wgt;..\..\..\tv\packages\*.apk" Link="tv-app\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
-  <!-- PS5 Otomatik Eşleştirme Yardımcıları (Node.js & playactor betiği) -->
+  <!-- أدوات الاقتران التلقائي مع PS5 (Node.js وسكربت playactor) -->
   <ItemGroup>
     <Content Include="..\..\..\scripts\bin\node.exe" Link="helpers\node.exe" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="..\..\..\scripts\ps5-register.js" Link="helpers\ps5-register.js" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="..\..\..\scripts\ps5-register\node_modules\**\*" Link="helpers\ps5-register\node_modules\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
-  <!-- Chiaki Taşınabilir Remote Play Motoru -->
+  <!-- محرك Remote Play المحمول Chiaki -->
   <ItemGroup>
     <Content Include="..\..\..\chiaki\**\*" Link="chiaki\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>

@@ -59,7 +59,7 @@ internal sealed class FakeTranslation : ITranslationModel
     public bool Installed { get; set; } = true;
     public int Downloads { get; private set; }
     public TaskCompletionSource? DownloadGate { get; set; }
-    public bool IsSupported(string source, string target) => source == "en" && target == "tr";
+    public bool IsSupported(string source, string target) => source == "en" && target == "ar";
     public bool IsInstalled(string source, string target) => Installed;
     public async Task DownloadAsync(string source, string target, IProgress<double> progress, CancellationToken cancellationToken)
     {
@@ -73,7 +73,7 @@ internal sealed class FakeTranslation : ITranslationModel
 
     private sealed class EchoTranslator : ITextTranslator
     {
-        public Task<string> TranslateAsync(string text, CancellationToken cancellationToken = default) => Task.FromResult("TR: " + text);
+        public Task<string> TranslateAsync(string text, CancellationToken cancellationToken = default) => Task.FromResult("AR: " + text);
     }
 }
 
@@ -93,7 +93,7 @@ internal sealed class FakeServices : IAppServices
     public List<FakeStream> Streams { get; } = [];
     public List<FakeKeeper> Keepers { get; } = [];
     public List<string> ReaderLanguages { get; } = [];
-    /// <summary>Okuyucunun her karede bulduğu satırlar (verilmezse karede yazı yoktur).</summary>
+    /// <summary>السطور التي يجدها القارئ في كل إطار (إن لم تُحدَّد فلا نص في الإطار).</summary>
     public Reading? ReaderLines { get; set; }
     public bool HasOcr { get; set; } = true;
     public bool HasOcrPack { get; set; } = true;
@@ -177,7 +177,7 @@ internal sealed class FakeServices : IAppServices
         return Task.FromResult(RenewedHours);
     }
 
-    // Samsung ve Android TV
+    // Samsung و Android TV
     public Dictionary<TvBrand, BundledTvApp> Bundled { get; } = [];
     public bool SamsungDevMode { get; set; }
     public List<string> AndroidHosts { get; } = [];
@@ -254,7 +254,7 @@ public class AppControllerTests
         Assert.Equal("192.168.1.253", services.Registered?.Host);
     }
 
-    /// PS5 hesabı tanımazsa kullanıcıya kodu hangi kullanıcıdan alacağı söylenmeli.
+    /// إذا لم يتعرّف PS5 على الحساب يجب إخبار المستخدم من أي مستخدم يحصل على الرمز.
     [Fact]
     public async Task WrongAccountRegistrationExplainsWhatToDo()
     {
@@ -322,7 +322,7 @@ public class AppControllerTests
         controller.Dispose();
     }
 
-    /// Çeviri modeli (~534 MB) sihirbazın başında arka planda inmeye başlar; model adımına gelindiğinde çoğunlukla hazırdır.
+    /// يبدأ تنزيل نموذج الترجمة في الخلفية عند بداية معالج الإعداد؛ وعند الوصول إلى خطوة الترجمة يكون جاهزًا في الغالب.
     [Fact]
     public void ModelDownloadStartsInBackgroundAfterWelcome()
     {
@@ -460,7 +460,7 @@ public class AppControllerRunTests
         controller.Dispose();
     }
 
-    /// Oyun dilinin paketi yokken Windows sistemin diliyle okur; okuma sürse de ana ekran uyarır.
+    /// عند غياب حزمة لغة اللعبة يقرأ Windows بلغة النظام؛ وتنبّه الشاشة الرئيسية وإن استمرت القراءة.
     [Fact]
     public async Task OcrFallingBackToSystemLanguageIsReported()
     {
@@ -470,7 +470,7 @@ public class AppControllerRunTests
         controller.Dispose();
     }
 
-    /// DeepL anahtarı yalnız denenip kabul edilirse saklanır; reddedilen anahtar ne saklanır ne çeviriyi açar.
+    /// لا يُحفظ مفتاح DeepL إلا إذا جُرّب وقُبل؛ والمفتاح المرفوض لا يُحفظ ولا يفعّل الترجمة.
     [Fact]
     public async Task RejectedDeepLKeyIsNotSaved()
     {
@@ -484,7 +484,7 @@ public class AppControllerRunTests
         controller.Dispose();
     }
 
-    /// Geçerli anahtarla çeviri DeepL'e geçer; cihaz üstü model inmemiş olsa da çeviri hazır sayılır.
+    /// بمفتاح صالح تنتقل الترجمة إلى DeepL؛ وتُعدّ الترجمة جاهزة حتى لو لم يُنزَّل نموذج الترجمة.
     [Fact]
     public async Task AcceptedDeepLKeyTurnsOnlineTranslationOn()
     {
@@ -499,7 +499,7 @@ public class AppControllerRunTests
         await controller.StartAsync();
         Assert.Equal("key:fx", Assert.Single(services.OnlineTranslators).Key);
         Assert.Null(services.OnlineTranslators[0].Fallback);
-        // Varsayılan çeviri dili Arapçadır; DeepL'e de o gider.
+        // لغة الترجمة الافتراضية هي العربية؛ وهي التي تُرسل إلى DeepL أيضًا.
         Assert.Equal(["ar"], services.OnlineTargets);
 
         controller.RemoveDeepLKey();
@@ -509,7 +509,7 @@ public class AppControllerRunTests
         controller.Dispose();
     }
 
-    /// Windows'ta oyun dilinin OCR paketi yoksa ana ekran bunu söyler.
+    /// إذا لم تكن حزمة OCR للغة اللعبة موجودة في Windows فالشاشة الرئيسية تذكر ذلك.
     [Fact]
     public async Task MissingOcrLanguageIsReported()
     {
@@ -539,13 +539,13 @@ public class AppControllerRunTests
     }
 
     [Fact]
-    public void TurkishStatusTextComesFromSharedCatalog() =>
-        Assert.Equal("Bağlı", AppController.StatusText(SessionState.Streaming, true, Localizer.ForLanguage("tr")));
+    public void ArabicStatusTextComesFromCatalog() =>
+        Assert.Equal("متصل", AppController.StatusText(SessionState.Streaming, true, Localizer.ForLanguage("ar")));
 }
 
 public class StatusToneTests
 {
-    /// Çeviri başlamamışken "bağlı değil" bir uyarı değildir; nokta gri kalır.
+    /// قبل بدء الترجمة «غير متصل» ليس تحذيرًا؛ تبقى النقطة رمادية.
     [Fact]
     public void IdleWhenNotRunning()
     {

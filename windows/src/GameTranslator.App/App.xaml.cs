@@ -14,12 +14,12 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-        // İndirilen dosyalardaki Windows Smart App Control (0xc0e90002) ve Zone.Identifier engellerini otomatik kaldır
+        // أزل تلقائيا حظر Windows Smart App Control (0xc0e90002) و Zone.Identifier عن الملفات المنزّلة
         StartupGuard.UnblockFiles(AppContext.BaseDirectory);
 
         var renderFolder = e.Args is ["--render-screens", var folder] ? folder : null;
-        // Eksik bir DLL, onu kullanan yöntem derlenirken hata verir. Bu yüzden denetim ve yakalama burada, uygulamanın
-        // kendi türlerine dokunan kod ise ayrı yöntemde (Start) durur.
+        // ملف DLL ناقص يسبب خطأ عند تصريف الدالة التي تستخدمه (JIT). لذلك يبقى الفحص والالتقاط هنا، أما الكود
+        // الذي يمسّ أنواع التطبيق نفسه فيبقى في دالة منفصلة (Start).
         var missing = StartupGuard.MissingFiles(AppContext.BaseDirectory);
         if (missing.Count > 0)
         {
@@ -51,7 +51,7 @@ public partial class App : Application
         var controller = new AppController(new LiveServices(), new DpapiAppStore(), new FileSettingsStore(), new WindowsSleepGuard(),
             Localizer.Current, action => Dispatcher.BeginInvoke(action))
         {
-            // Samsung'un sertifika için giriş sayfası varsayılan tarayıcıda açılır.
+            // صفحة تسجيل الدخول لشهادة Samsung تُفتح في المتصفح الافتراضي.
             OpenInBrowser = url => System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url.AbsoluteUri) { UseShellExecute = true }),
         };
         var window = new ShellWindow(controller);

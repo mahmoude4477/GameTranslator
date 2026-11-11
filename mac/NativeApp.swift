@@ -393,28 +393,28 @@ enum TranslationModel: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .appleLocal: "1. Apple Yerel Çeviri (Önerilen)"
+        case .appleLocal: "1. ترجمة Apple المحلية (موصى بها)"
         case .gemini: "2. Google Gemini 2.5 Flash"
         case .deepL: "3. DeepL API"
-        case .marian: "4. Yerel Derin Öğrenme (MarianMT)"
+        case .marian: "4. تعلّم عميق محلي (MarianMT)"
         }
     }
 
     var badge: String {
         switch self {
-        case .appleLocal: "Aktif (0ms)"
-        case .gemini: "Yapay Zeka"
-        case .deepL: "Pro Dilbilgisi"
-        case .marian: "GPU / CPU"
+        case .appleLocal: "الافتراضي"
+        case .gemini: "غير مفعّل بعد"
+        case .deepL: "يتطلب مفتاحًا"
+        case .marian: "غير مفعّل بعد"
         }
     }
 
     var desc: String {
         switch self {
-        case .appleLocal: "Mac'inizin Apple Neural Engine (NPU) çipini kullanır. Tamamen çevrimdışı, internet gerektirmez, 0 ms gecikmeyle anında TV'ye basar."
-        case .gemini: "GTA 6 gibi oyunlardaki diyalogları, sokak argosunu ve hikaye bağlamını en akıllı ve doğal şekilde çevirir."
-        case .deepL: "Dünyanın en yüksek doğruluklu dilbilgisi motoru. DeepL Free veya Pro API anahtarı gerektirir."
-        case .marian: "İnternetsiz açık kaynaklı derin öğrenme çeviri ağı. Bilgisayarınızın donanımını doğrudan kullanır."
+        case .appleLocal: "الخيار الافتراضي. يترجم حاليًا عبر Google على الإنترنت، ويتطلب اتصالًا بالإنترنت."
+        case .gemini: "غير مفعّل بعد؛ عند اختياره تُستخدم حاليًا ترجمة Google على الإنترنت."
+        case .deepL: "يُستخدم عند إدخال مفتاح DeepL API (عبر api-free.deepl.com)، وإلا تُستخدم ترجمة Google على الإنترنت."
+        case .marian: "غير مفعّل بعد؛ عند اختياره تُستخدم حاليًا ترجمة Google على الإنترنت."
         }
     }
 }
@@ -906,7 +906,7 @@ enum TVHelperBridge {
                         if event == "done" {
                             return (true, "✅ تم تثبيت تطبيق GameTranslator TV على التلفزيون وفتحه بنجاح!")
                         } else if event == "approve" {
-                            return (false, "⚠️ Televizyon ekranında 'Bu bilgisayardan hata ayıklamaya her zaman izin verilsin mi?' sorusu belirdi. Lütfen TV kumandasıyla 'İzin Ver' / 'Tamam' seçeneğini işaretleyip tekrar 'TV'ye Otomatik Kur' butonuna basın.")
+                            return (false, "⚠️ ظهر على شاشة التلفزيون السؤال 'هل تسمح دائمًا بتصحيح الأخطاء من هذا الكمبيوتر؟'. يرجى اختيار 'سماح' / 'موافق' بريموت التلفزيون ثم الضغط مجددًا على زر 'ثبّت على التلفزيون تلقائيًا'.")
                         } else if event == "error" {
                             let msg = obj["message"] as? String ?? "تعذّر إكمال التثبيت."
                             let code = obj["code"] as? String ?? ""
@@ -1266,7 +1266,7 @@ final class AppState {
     func connectTV() {
         let trimmed = tvHost.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else {
-            tvError = "Lütfen televizyonunuzun yerel IP adresini girin veya 'Mac Ekranı & OBS' modunu seçin."
+            tvError = "يرجى إدخال عنوان IP المحلي للتلفزيون أو اختيار وضع 'شاشة Mac و OBS'."
             return
         }
         tvConnected = true
@@ -1433,7 +1433,7 @@ final class AppState {
         }
         let trimmedHost = ps5Host.trimmingCharacters(in: .whitespaces)
         guard !trimmedHost.isEmpty else {
-            ps5Error = "Lütfen PS5 konsolunuzun yerel IP adresini girin veya 'Ağda Tara' butonuna basın."
+            ps5Error = "يرجى إدخال عنوان IP المحلي لجهاز PS5 أو الضغط على زر 'ابحث في الشبكة'."
             return
         }
 
@@ -2733,7 +2733,7 @@ struct MainWindowView: View {
                 }
             }
 
-            // 16:9 GERÇEK OYUN GÖRÜNTÜSÜ & OCR ALGILAMA KUTUSU (Tam 16:9 - Siyah Kenarlıksız)
+            // صورة اللعبة الحقيقية 16:9 ومربّع التقاط OCR (16:9 كاملة - بلا حواف سوداء)
             VStack(spacing: 0) {
                 Color.clear
                     .aspectRatio(16.0 / 9.0, contentMode: .fit)
@@ -2748,7 +2748,7 @@ struct MainWindowView: View {
                             let boxY = h * CGFloat(state.cropTop)
 
                             ZStack(alignment: .topLeading) {
-                                // 1. Gerçek PS5 Oyun Ekranı Görüntüsü
+                                // 1. صورة شاشة لعبة PS5 الحقيقية
                                 if state.isRunning, let gameImage = state.gameFrameImage {
                                     Image(nsImage: gameImage)
                                         .resizable()
@@ -2765,10 +2765,10 @@ struct MainWindowView: View {
                                                     Image(systemName: "exclamationmark.shield.fill")
                                                         .font(.system(size: 32))
                                                         .foregroundStyle(Color(hex: "#F59E0B"))
-                                                    Text("macOS Ekran Kaydı İzni Gerekli")
+                                                    Text("إذن تسجيل الشاشة في macOS مطلوب")
                                                         .font(.system(size: 13, weight: .bold))
                                                         .foregroundStyle(Color.white)
-                                                    Text("PS5 oyun görüntüsünü buraya aktarmak ve alt yazıları çevirebilmek için lütfen Sistem Ayarları'ndan GameTranslator'a izin verin.")
+                                                    Text("لعرض صورة لعبة PS5 هنا وترجمة الترجمة النصية، يرجى منح GameTranslator الإذن من إعدادات النظام.")
                                                         .font(.system(size: 10.5))
                                                         .foregroundStyle(Color.white.opacity(0.8))
                                                         .multilineTextAlignment(.center)
@@ -2779,7 +2779,7 @@ struct MainWindowView: View {
                                                         } label: {
                                                             HStack(spacing: 5) {
                                                                 Image(systemName: "gearshape.fill")
-                                                                Text("Sistem Ayarlarını Aç")
+                                                                Text("افتح إعدادات النظام")
                                                             }
                                                             .font(.system(size: 11, weight: .bold))
                                                             .foregroundStyle(Color.black)
@@ -2794,7 +2794,7 @@ struct MainWindowView: View {
                                                         } label: {
                                                             HStack(spacing: 5) {
                                                                 Image(systemName: "arrow.clockwise")
-                                                                Text("İzni Açtım / Yeniden Başlat")
+                                                                Text("منحتُ الإذن / أعد التشغيل")
                                                             }
                                                             .font(.system(size: 11, weight: .semibold))
                                                             .foregroundStyle(Color.white)
@@ -2809,20 +2809,20 @@ struct MainWindowView: View {
                                             } else if state.isRunning {
                                                 ProgressView()
                                                     .controlSize(.regular)
-                                                Text("PS5 Remote Play Canlı Akışına Bağlanılıyor...")
+                                                Text("جارٍ الاتصال ببث PS5 Remote Play المباشر...")
                                                     .font(.system(size: 11, weight: .medium))
                                                     .foregroundStyle(Color.white.opacity(0.8))
-                                                Text("Görüntü ve altyazı taraması saniyeler içinde başlayacak.")
+                                                Text("سيبدأ عرض الصورة والبحث عن الترجمة النصية خلال ثوانٍ.")
                                                     .font(.system(size: 9.5))
                                                     .foregroundStyle(Color.white.opacity(0.45))
                                             } else {
                                                 Image(systemName: "gamecontroller")
                                                     .font(.system(size: 28))
                                                     .foregroundStyle(Color.white.opacity(0.25))
-                                                Text("PS5 Canlı Akışı Başlatılmadı")
+                                                Text("لم يبدأ بث PS5 المباشر")
                                                     .font(.system(size: 11, weight: .semibold))
                                                     .foregroundStyle(Color.white.opacity(0.7))
-                                                Text("PS5 ekranını canlı görmek için sol menüden '▶ Çeviriyi Başlat'a basın.")
+                                                Text("لمشاهدة شاشة PS5 مباشرةً اضغط '▶ ابدأ الترجمة' من القائمة اليسرى.")
                                                     .font(.system(size: 9.5))
                                                     .foregroundStyle(Color.white.opacity(0.4))
                                             }
@@ -2830,11 +2830,11 @@ struct MainWindowView: View {
                                     }
                                 }
 
-                                // 2. Canlı PS5 Akış Bilgi Rozeti & Yenileme Butonu
+                                // 2. شارة معلومات بث PS5 المباشر وزر التحديث
                                 HStack {
                                     HStack(spacing: 5) {
                                         Circle().fill(state.isRunning ? Color.green : Color(hex: "#F59E0B")).frame(width: 6, height: 6)
-                                        Text(state.isRunning ? "PS5 REMOTE PLAY CANLI AKIŞ (1080p 60 FPS)" : "PS5 KALİBRASYON KARESI (1080p 60 FPS)")
+                                        Text(state.isRunning ? "بث PS5 REMOTE PLAY المباشر (1080p 60 FPS)" : "إطار معايرة PS5 (1080p 60 FPS)")
                                             .font(.system(size: 9, weight: .bold))
                                             .foregroundStyle(Color.white)
                                     }
@@ -2849,7 +2849,7 @@ struct MainWindowView: View {
                                     } label: {
                                         HStack(spacing: 4) {
                                             Image(systemName: "camera.viewfinder")
-                                            Text("Pencereden Yenile")
+                                            Text("حدّث من النافذة")
                                         }
                                         .font(.system(size: 8.5, weight: .semibold))
                                         .foregroundStyle(Color.white.opacity(0.9))
@@ -2861,21 +2861,21 @@ struct MainWindowView: View {
                                 }
                                 .padding(8)
 
-                                // 3. VURGULANAN HASSAS OCR BÖLGESİ (Viewfinder)
+                                // 3. منطقة OCR الدقيقة المميَّزة (Viewfinder)
                                 ZStack(alignment: .topLeading) {
-                                    // Şeffaf camgöbeği dolgu
+                                    // تعبئة سماوية شفافة
                                     RoundedRectangle(cornerRadius: 6)
                                         .fill(Color(hex: "#0A84FF").opacity(0.12))
 
-                                    // Kesikli çerçeve
+                                    // إطار متقطّع
                                     RoundedRectangle(cornerRadius: 6)
                                         .stroke(Color(hex: "#38BDF8"), style: StrokeStyle(lineWidth: 2, dash: [7, 3]))
 
-                                    // Üst etiket
+                                    // التسمية العلوية
                                     HStack(spacing: 3) {
                                         Image(systemName: "viewfinder")
                                             .font(.system(size: 7.5))
-                                        Text("OCR OKUMA ALANI")
+                                        Text("منطقة قراءة OCR")
                                             .font(.system(size: 7.5, weight: .heavy))
                                     }
                                     .foregroundStyle(Color(hex: "#38BDF8"))
@@ -2893,39 +2893,39 @@ struct MainWindowView: View {
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.white.opacity(0.2), lineWidth: 1.5))
             }
 
-            // Canlı OCR Doğrulama ve TV Önizleme Kartı
+            // بطاقة التحقق المباشر من OCR ومعاينة التلفزيون
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     HStack(spacing: 4) {
                         Image(systemName: "sparkles")
                             .font(.system(size: 9.5))
                             .foregroundStyle(Color(hex: "#38BDF8"))
-                        Text("Anlık OCR Algılama & TV Çeviri Monitörü:")
+                        Text("مراقبة التقاط OCR الفوري وترجمة التلفزيون:")
                             .font(.system(size: 9.5, weight: .bold))
                             .foregroundStyle(Color.white)
                     }
                     Spacer()
-                    Text(state.isRunning ? "Gecikme: 38ms" : "Beklemede")
+                    Text(state.isRunning ? "مباشر" : "في الانتظار")
                         .font(.system(size: 8.5, weight: .semibold, design: .monospaced))
                         .foregroundStyle(state.isRunning ? Color.green : Color.white.opacity(0.45))
                 }
 
                 HStack(alignment: .top, spacing: 8) {
                     VStack(alignment: .leading, spacing: 1) {
-                        Text("🎮 PS5 Oyunu (İngilizce Altyazı):")
+                        Text("🎮 لعبة PS5 (الترجمة الإنجليزية):")
                             .font(.system(size: 8.5, weight: .semibold))
                             .foregroundStyle(Color.white.opacity(0.6))
-                        Text(state.isRunning ? state.liveEnglish : "Altyazı taranınca burada görünecek")
+                        Text(state.isRunning ? state.liveEnglish : "ستظهر الترجمة النصية هنا عند التقاطها")
                             .font(.system(size: 10, weight: .medium))
                             .foregroundStyle(state.isRunning ? Color.white.opacity(0.95) : Color.white.opacity(0.45))
                             .lineLimit(1)
                     }
                     Spacer()
                     VStack(alignment: .leading, spacing: 1) {
-                        Text("📺 TV Ekranı (Türkçe):")
+                        Text("📺 شاشة التلفزيون (العربية):")
                             .font(.system(size: 8.5, weight: .semibold))
                             .foregroundStyle(Color(hex: "#38BDF8"))
-                        Text(state.isRunning ? state.liveTranslation : "Türkçe çeviri burada görünecek")
+                        Text(state.isRunning ? state.liveTranslation : "ستظهر الترجمة العربية هنا")
                             .font(.system(size: 10, weight: .bold))
                             .foregroundStyle(state.isRunning ? Color.white : Color.white.opacity(0.45))
                             .lineLimit(1)
@@ -2936,12 +2936,12 @@ struct MainWindowView: View {
             .background(Color.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 7))
             .overlay(RoundedRectangle(cornerRadius: 7).stroke(Color.white.opacity(0.1), lineWidth: 1))
 
-            // Koordinat Kontrolleri (Üst, Alt, Sol, Sağ)
+            // عناصر التحكم في الإحداثيات (أعلى، أسفل، يسار، يمين)
             VStack(spacing: 8) {
                 HStack(spacing: 14) {
                     VStack(alignment: .leading, spacing: 2) {
                         HStack {
-                            Text("Üst Başlangıç").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.75))
+                            Text("الحد العلوي").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.75))
                             Spacer()
                             Text("%\(Int(state.cropTop * 100))").font(.system(size: 10, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
                         }
@@ -2950,7 +2950,7 @@ struct MainWindowView: View {
 
                     VStack(alignment: .leading, spacing: 2) {
                         HStack {
-                            Text("Alt Bitiş").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.75))
+                            Text("الحد السفلي").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.75))
                             Spacer()
                             Text("%\(Int(state.cropBottom * 100))").font(.system(size: 10, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
                         }
@@ -2961,7 +2961,7 @@ struct MainWindowView: View {
                 HStack(spacing: 14) {
                     VStack(alignment: .leading, spacing: 2) {
                         HStack {
-                            Text("Sol Sınır").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.75))
+                            Text("الحد الأيسر").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.75))
                             Spacer()
                             Text("%\(Int(state.cropLeft * 100))").font(.system(size: 10, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
                         }
@@ -2970,7 +2970,7 @@ struct MainWindowView: View {
 
                     VStack(alignment: .leading, spacing: 2) {
                         HStack {
-                            Text("Sağ Sınır").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.75))
+                            Text("الحد الأيمن").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.75))
                             Spacer()
                             Text("%\(Int(state.cropRight * 100))").font(.system(size: 10, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
                         }
@@ -2981,23 +2981,23 @@ struct MainWindowView: View {
             .padding(10)
             .background(Color.black.opacity(0.25), in: RoundedRectangle(cornerRadius: 8))
 
-            // Butonlar
+            // الأزرار
             HStack {
-                Toggle("Yalnızca Belirgin Altyazıları Algıla", isOn: $state.filterNoise).font(.system(size: 10.5)).toggleStyle(.checkbox)
+                Toggle("التقط الترجمات الواضحة فقط", isOn: $state.filterNoise).font(.system(size: 10.5)).toggleStyle(.checkbox)
                 Spacer()
-                Button("Varsayılan Yap") { state.applyPreset(.bottomCenter) }
+                Button("استعد الافتراضي") { state.applyPreset(.bottomCenter) }
                     .font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.8)).padding(.horizontal, 10).padding(.vertical, 4)
                     .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 5)).buttonStyle(.plain)
             }
         }
     }
 
-    // MARK: - 2. TV GÖRÜNÜMÜ SEKMESİ
+    // MARK: - 2. تبويب مظهر التلفزيون
     private var displayTabContent: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Renk Seçici
+            // منتقي اللون
             VStack(alignment: .leading, spacing: 5) {
-                Text("Yazı Rengi (TV Ekranı)")
+                Text("لون النص (شاشة التلفزيون)")
                     .font(.system(size: 11.5, weight: .semibold))
                     .foregroundStyle(Color.white.opacity(0.8))
 
@@ -3027,11 +3027,11 @@ struct MainWindowView: View {
                 .padding(.vertical, 2)
             }
 
-            // Sliderlar: Yazı Boyutu & Arka Plan Opaklığı
+            // أشرطة التمرير: حجم النص وعتامة الخلفية
             HStack(spacing: 16) {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text("Yazı boyutu (TV)").font(.system(size: 11, weight: .medium)).foregroundStyle(Color.white.opacity(0.85))
+                        Text("حجم النص (التلفزيون)").font(.system(size: 11, weight: .medium)).foregroundStyle(Color.white.opacity(0.85))
                         Spacer()
                         Text("\(Int(state.fontSize)) px").font(.system(size: 10.5, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
                     }
@@ -3040,7 +3040,7 @@ struct MainWindowView: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text("Arka plan opaklığı").font(.system(size: 11, weight: .medium)).foregroundStyle(Color.white.opacity(0.85))
+                        Text("عتامة الخلفية").font(.system(size: 11, weight: .medium)).foregroundStyle(Color.white.opacity(0.85))
                         Spacer()
                         Text("%\(Int(state.backgroundOpacity))").font(.system(size: 10.5, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
                     }
@@ -3048,25 +3048,25 @@ struct MainWindowView: View {
                 }
             }
 
-            // Ekran Konumu
+            // الموضع على الشاشة
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text("Ekran Konumu (Alttan Yükseklik)").font(.system(size: 11, weight: .medium)).foregroundStyle(Color.white.opacity(0.85))
+                    Text("الموضع على الشاشة (الارتفاع من الأسفل)").font(.system(size: 11, weight: .medium)).foregroundStyle(Color.white.opacity(0.85))
                     Spacer()
                     Text("%\(Int(state.bottomPercent))").font(.system(size: 10.5, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
                 }
                 Slider(value: $state.bottomPercent, in: 2...30, step: 1) { _ in state.syncStyleToTV() }
             }
 
-            // Dropdownlar & Onay Kutuları
+            // القوائم المنسدلة ومربّعات الاختيار
             HStack(spacing: 14) {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Yeri:").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.6))
+                    Text("الموضع:").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.6))
                     Picker("", selection: $state.placement) {
-                        Text("İngilizce altyazının üstünü örtsün").tag("cover")
-                        Text("İngilizce altyazının üstünde").tag("above")
-                        Text("İngilizce altyazının altında").tag("below")
-                        Text("Ekranda sabit yükseklikte").tag("fixed")
+                        Text("تغطية الترجمة الإنجليزية").tag("cover")
+                        Text("فوق الترجمة الإنجليزية").tag("above")
+                        Text("تحت الترجمة الإنجليزية").tag("below")
+                        Text("على ارتفاع ثابت في الشاشة").tag("fixed")
                     }
                     .labelsHidden()
                     .onChange(of: state.placement) {
@@ -3089,30 +3089,30 @@ struct MainWindowView: View {
                             }
                         }
                         state.syncStyleToTV()
-                        let textToSend = state.liveTranslation.isEmpty ? "Altyazı Yerleşim Testi" : state.liveTranslation
+                        let textToSend = state.liveTranslation.isEmpty ? "اختبار موضع الترجمة" : state.liveTranslation
                         let origToSend = state.liveEnglish.isEmpty ? "Subtitle Placement Test" : state.liveEnglish
                         state.server.sendSubtitle(translation: textToSend, original: origToSend, box: boxToSend)
                     }
                 }
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Oyunun dili:").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.6))
+                    Text("لغة اللعبة:").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.6))
                     Picker("", selection: $state.language) {
-                        Text("İngilizce").tag("en")
-                        Text("Japonca").tag("ja")
+                        Text("الإنجليزية").tag("en")
+                        Text("اليابانية").tag("ja")
                     }
                     .labelsHidden()
                 }
             }
 
-            // Checkboxlar & Test Altyazısı Butonu
+            // مربّعات الاختيار وزر ترجمة الاختبار
             HStack(spacing: 16) {
-                Toggle("Kalın yazı (Bold)", isOn: $state.isBold)
+                Toggle("خط عريض (Bold)", isOn: $state.isBold)
                     .font(.system(size: 11))
                     .toggleStyle(.checkbox)
                     .onChange(of: state.isBold) { state.syncStyleToTV() }
 
-                Toggle("PC Sesini Kapat (Mute)", isOn: Binding(
+                Toggle("اكتم صوت الكمبيوتر (Mute)", isOn: Binding(
                     get: { state.isMuteComputerAudio },
                     set: { _ in state.toggleComputerAudioMute() }
                 ))
@@ -3126,7 +3126,7 @@ struct MainWindowView: View {
                 } label: {
                     HStack(spacing: 5) {
                         Image(systemName: "tv.fill")
-                        Text(state.testSent ? "TV'ye İletildi!" : "TV'ye Anında Test Gönder")
+                        Text(state.testSent ? "أُرسل إلى التلفزيون!" : "أرسل اختبارًا فوريًا إلى التلفزيون")
                     }
                     .font(.system(size: 11, weight: .semibold))
                     .foregroundStyle(state.testSent ? Color.green : Color.white)
@@ -3137,10 +3137,10 @@ struct MainWindowView: View {
                 .buttonStyle(.plain)
             }
 
-            // CANLI TV ÖNİZLEME
+            // معاينة التلفزيون المباشرة
             VStack(alignment: .leading, spacing: 5) {
                 HStack {
-                    Text("CANLI TV ÖNİZLEME (ÇEVİRİ YANSITMA ALANI)")
+                    Text("معاينة التلفزيون المباشرة (منطقة عرض الترجمة)")
                         .font(.system(size: 9.5, weight: .bold))
                         .foregroundStyle(Color.white.opacity(0.6))
                     Spacer()
@@ -3153,12 +3153,12 @@ struct MainWindowView: View {
                         .frame(height: 125)
                         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(hex: "#0A84FF").opacity(0.4), lineWidth: 1.5))
 
-                    let displayText = state.isRunning ? (state.liveTranslation.isEmpty ? "Altyazı taranıyor..." : state.liveTranslation) : (state.liveTranslation.isEmpty ? "تم إيقاف الترجمة" : state.liveTranslation)
+                    let displayText = state.isRunning ? (state.liveTranslation.isEmpty ? "جارٍ البحث عن الترجمة النصية..." : state.liveTranslation) : (state.liveTranslation.isEmpty ? "تم إيقاف الترجمة" : state.liveTranslation)
                     let origText = state.liveEnglish.isEmpty ? "Press any button to continue" : state.liveEnglish
                     let previewPad = CGFloat(state.bottomPercent * 1.05 + 4.0)
 
                     if state.placement == "cover" {
-                        // İngilizce yazının üstünü örten koyu zemin ve üstünde Türkçe çeviri
+                        // خلفية داكنة تغطي النص الإنجليزي وفوقها الترجمة العربية
                         VStack(spacing: 0) {
                             Text(displayText)
                                 .font(.system(size: CGFloat(max(11, state.fontSize * 0.32)), weight: state.isBold ? .bold : .regular))
@@ -3173,7 +3173,7 @@ struct MainWindowView: View {
                         }
                         .padding(.bottom, previewPad)
                     } else if state.placement == "above" {
-                        // Türkçe çeviri ÜSTTE, orijinal İngilizce altyazı ALTIMDA (kapanmadan açıkta kalır)
+                        // الترجمة العربية في الأعلى، والترجمة الإنجليزية الأصلية تحتها (تبقى ظاهرة دون تغطية)
                         VStack(spacing: 4) {
                             Text(displayText)
                                 .font(.system(size: CGFloat(max(11, state.fontSize * 0.32)), weight: state.isBold ? .bold : .regular))
@@ -3190,7 +3190,7 @@ struct MainWindowView: View {
                         }
                         .padding(.bottom, previewPad)
                     } else if state.placement == "below" {
-                        // Orijinal İngilizce ÜSTTE, Türkçe çeviri ALTINDA
+                        // الإنجليزية الأصلية في الأعلى، والترجمة العربية تحتها
                         VStack(spacing: 4) {
                             Text(origText)
                                 .font(.system(size: 10, weight: .regular))
@@ -3207,7 +3207,7 @@ struct MainWindowView: View {
                         }
                         .padding(.bottom, previewPad)
                     } else {
-                        // Sabit konum
+                        // موضع ثابت
                         Text(displayText)
                             .font(.system(size: CGFloat(max(11, state.fontSize * 0.32)), weight: state.isBold ? .bold : .regular))
                             .foregroundStyle(Color(hex: state.selectedColor))
@@ -3221,10 +3221,10 @@ struct MainWindowView: View {
         }
     }
 
-    // MARK: - 3. ÇEVİRİ & MODELLER SEKMESİ
+    // MARK: - 3. تبويب الترجمة والنماذج
     private var modelsTabContent: some View {
         VStack(alignment: .leading, spacing: 13) {
-            Text("Hangi Çeviri Modelini Seçmelisiniz?").font(.system(size: 12.5, weight: .bold)).foregroundStyle(Color.white)
+            Text("أي نموذج ترجمة تختار؟").font(.system(size: 12.5, weight: .bold)).foregroundStyle(Color.white)
 
             ForEach(TranslationModel.allCases) { model in
                 VStack(alignment: .leading, spacing: 6) {
@@ -3237,7 +3237,7 @@ struct MainWindowView: View {
                         if state.selectedModel == model {
                             HStack(spacing: 4) {
                                 Circle().fill(Color.green).frame(width: 6, height: 6)
-                                Text("Aktif").font(.system(size: 10.5, weight: .bold)).foregroundStyle(Color.green)
+                                Text("محدَّد").font(.system(size: 10.5, weight: .bold)).foregroundStyle(Color.green)
                             }
                             .padding(.horizontal, 8).padding(.vertical, 3).background(Color.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 5))
                         } else {
@@ -3247,16 +3247,16 @@ struct MainWindowView: View {
 
                     if model == .gemini {
                         HStack {
-                            SecureField("Google Gemini API Anahtarı (AI Studio)", text: $state.geminiApiKey)
+                            SecureField("مفتاح Google Gemini API (AI Studio)", text: $state.geminiApiKey)
                                 .textFieldStyle(.plain).font(.system(size: 10.5)).padding(5).background(Color.black.opacity(0.3), in: RoundedRectangle(cornerRadius: 5))
-                            Button("Kaydet") { state.selectedModel = .gemini }
+                            Button("احفظ") { state.selectedModel = .gemini }
                                 .font(.system(size: 10.5)).padding(.horizontal, 8).padding(.vertical, 3).background(Color.white.opacity(0.1), in: RoundedRectangle(cornerRadius: 5)).buttonStyle(.plain)
                         }
                     } else if model == .deepL {
                         HStack {
                             SecureField("DeepL Auth Key (api-free.deepl.com)", text: $state.deepLApiKey)
                                 .textFieldStyle(.plain).font(.system(size: 10.5)).padding(5).background(Color.black.opacity(0.3), in: RoundedRectangle(cornerRadius: 5))
-                            Button("Kaydet") { state.selectedModel = .deepL }
+                            Button("احفظ") { state.selectedModel = .deepL }
                                 .font(.system(size: 10.5)).padding(.horizontal, 8).padding(.vertical, 3).background(Color.white.opacity(0.1), in: RoundedRectangle(cornerRadius: 5)).buttonStyle(.plain)
                         }
                     }
@@ -3270,10 +3270,10 @@ struct MainWindowView: View {
         }
     }
 
-    // MARK: - 4. BAĞLANTI & SİSTEM SEKMESİ
+    // MARK: - 4. تبويب الاتصال والنظام
     private var systemTabContent: some View {
         VStack(alignment: .leading, spacing: 13) {
-            Text("Konsol ve Ağ Bağlantıları").font(.system(size: 12.5, weight: .bold)).foregroundStyle(Color.white)
+            Text("اتصالات جهاز الألعاب والشبكة").font(.system(size: 12.5, weight: .bold)).foregroundStyle(Color.white)
 
             VStack(alignment: .leading, spacing: 7) {
                 HStack {
@@ -3283,7 +3283,7 @@ struct MainWindowView: View {
                     Text("1080p 60 FPS").font(.system(size: 10, weight: .medium, design: .monospaced)).foregroundStyle(Color.white.opacity(0.5))
                 }
                 HStack {
-                    Text("PSN Hesabı:").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.6))
+                    Text("حساب PSN:").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.6))
                     Text(state.psnEmail).font(.system(size: 10.5, weight: .medium)).foregroundStyle(Color.white.opacity(0.9))
                 }
             }
@@ -3293,12 +3293,12 @@ struct MainWindowView: View {
             VStack(alignment: .leading, spacing: 7) {
                 HStack {
                     Image(systemName: "tv.fill").font(.system(size: 12)).foregroundStyle(Color.green)
-                    Text("Akıllı TV & CouchSubs").font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.white)
+                    Text("التلفزيون الذكي و CouchSubs").font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.white)
                     Spacer()
                     Text("Port 8787 (SSE)").font(.system(size: 10, weight: .medium, design: .monospaced)).foregroundStyle(Color.white.opacity(0.5))
                 }
                 HStack {
-                    Text("Cihaz:").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.6))
+                    Text("الجهاز:").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.6))
                     Text(state.tvDeviceName).font(.system(size: 10.5, weight: .medium)).foregroundStyle(Color.white.opacity(0.9))
                 }
             }
@@ -3307,7 +3307,7 @@ struct MainWindowView: View {
 
             VStack(spacing: 8) {
                 HStack {
-                    Text("Ekranı çevir hotkey kısayolu").font(.system(size: 11)).foregroundStyle(Color.white.opacity(0.75))
+                    Text("اختصار لوحة المفاتيح لترجمة الشاشة").font(.system(size: 11)).foregroundStyle(Color.white.opacity(0.75))
                     Spacer()
                     Text("^⌘⌥T").font(.system(size: 10.5, weight: .bold, design: .monospaced)).foregroundStyle(Color.white.opacity(0.9))
                         .padding(.horizontal, 6).padding(.vertical, 2).background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 4))
@@ -3315,7 +3315,7 @@ struct MainWindowView: View {
                 HStack {
                     Text("OBS overlay:  http://localhost:8787/obs").font(.system(size: 11, design: .monospaced)).foregroundStyle(Color.white.opacity(0.75))
                     Spacer()
-                    Button(state.obsCopied ? "Kopyalandı!" : "Kopyala") {
+                    Button(state.obsCopied ? "تم النسخ!" : "انسخ") {
                         NSPasteboard.general.clearContents()
                         NSPasteboard.general.setString("http://localhost:8787/obs", forType: .string)
                         state.obsCopied = true
@@ -3330,16 +3330,16 @@ struct MainWindowView: View {
         }
     }
 
-    // MARK: - 5. HIZLI REHBER SEKMESİ
+    // MARK: - 5. تبويب الدليل السريع
     private var guideTabContent: some View {
         VStack(alignment: .leading, spacing: 11) {
-            Text("Nasıl Kullanılır? (Hızlı Rehber)").font(.system(size: 12.5, weight: .bold)).foregroundStyle(Color.white)
+            Text("كيفية الاستخدام (دليل سريع)").font(.system(size: 12.5, weight: .bold)).foregroundStyle(Color.white)
             VStack(alignment: .leading, spacing: 9) {
-                guideItem(num: "1", title: "PS5 & TV", text: "PS5 konsolunuzu açın ve TV'deki HDMI portuna geçin. PS5 doğrudan TV'ye bağlı kalır.")
-                guideItem(num: "2", title: "TV Uygulaması", text: "TV'nizde GameTranslator (veya CouchSubs) uygulamasını açın. Mac'e otomatik olarak bağlanır.")
-                guideItem(num: "3", title: "Okuma Alanı", text: "Oyununuzun altyazı konumuna göre 'Oyun Okuma Alanı' sekmesinden altyazı kutusunu ayarlayın.")
-                guideItem(num: "4", title: "Başlat", text: "Ana ekrandaki mavi '▶ Çeviriyi Başlat' butonuna tıklayın. Konsol görüntüsü taranıp altyazılar çevrilmeye başlar.")
-                guideItem(num: "5", title: "TV Görünümü", text: "Altyazı rengini (sarı/beyaz), boyutunu ve konumunu zevkinize göre ayarlayın; TV ekranına anında yansır!")
+                guideItem(num: "1", title: "PS5 والتلفزيون", text: "شغّل جهاز PS5 وانتقل إلى منفذ HDMI في التلفزيون. يبقى PS5 متصلًا بالتلفزيون مباشرة.")
+                guideItem(num: "2", title: "تطبيق التلفزيون", text: "افتح تطبيق GameTranslator (أو CouchSubs) على التلفزيون. يتصل بالـ Mac تلقائيًا.")
+                guideItem(num: "3", title: "منطقة القراءة", text: "اضبط مربّع الترجمة من تبويب 'منطقة قراءة اللعبة' بحسب موضع الترجمة النصية في لعبتك.")
+                guideItem(num: "4", title: "ابدأ", text: "انقر الزر الأزرق '▶ ابدأ الترجمة' في الشاشة الرئيسية. تُقرأ صورة جهاز الألعاب وتبدأ ترجمة الترجمة النصية.")
+                guideItem(num: "5", title: "مظهر التلفزيون", text: "اضبط لون الترجمة (أصفر/أبيض) وحجمها وموضعها كما تحب؛ تظهر التغييرات على شاشة التلفزيون فورًا!")
             }
         }
     }
@@ -3356,7 +3356,7 @@ struct MainWindowView: View {
     }
 }
 
-// MARK: - Setup / Kurulum Wizard (Apple Frosted Glass)
+// MARK: - Setup / معالج الإعداد (Apple Frosted Glass)
 
 struct SetupWizardView: View {
     @Bindable var state: AppState
@@ -3399,16 +3399,16 @@ struct SetupWizardView: View {
                 .font(.system(size: 16, weight: .bold))
                 .foregroundStyle(Color(hex: "#0A84FF"))
             VStack(alignment: .leading, spacing: 2) {
-                Text("GameTranslator Kurulum Sihirbazı")
+                Text("معالج إعداد GameTranslator")
                     .font(.system(size: 14, weight: .bold))
                     .foregroundStyle(Color.white)
-                Text("PlayStation 5 & Akıllı TV Hızlı Yapılandırma")
+                Text("إعداد سريع لـ PlayStation 5 والتلفزيون الذكي")
                     .font(.system(size: 10.5))
                     .foregroundStyle(Color.white.opacity(0.55))
             }
             Spacer()
             HStack(spacing: 6) {
-                Text("Adım \(state.setupStep) / 5")
+                Text("الخطوة \(state.setupStep) / 5")
                     .font(.system(size: 11, weight: .bold, design: .monospaced))
                     .foregroundStyle(Color(hex: "#38BDF8"))
                     .padding(.horizontal, 9)
@@ -3455,16 +3455,16 @@ struct SetupWizardView: View {
 
     private func stepTitle(for step: Int) -> String {
         switch step {
-        case 1: "1. Başlangıç"
-        case 2: "2. İkinci Hesap"
-        case 3: "3. PS5 Konsolu"
-        case 4: "4. Akıllı TV"
-        case 5: "5. Test & Bitti"
+        case 1: "1. البداية"
+        case 2: "2. الحساب الثاني"
+        case 3: "3. جهاز PS5"
+        case 4: "4. التلفزيون الذكي"
+        case 5: "5. الاختبار والإنهاء"
         default: ""
         }
     }
 
-    // ADIM 1: Hoş Geldiniz
+    // الخطوة 1: مرحبًا
     private var step1Welcome: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 12) {
@@ -3475,10 +3475,10 @@ struct SetupWizardView: View {
                         .foregroundStyle(Color(hex: "#0A84FF"))
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("GameTranslator'a Hoş Geldiniz")
+                    Text("مرحبًا بك في GameTranslator")
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(Color.white)
-                    Text("PS5 oyunlarındaki İngilizce altyazıları ekrandan okur ve TV'nize anında Türkçe basar.")
+                    Text("يقرأ الترجمة الإنجليزية لألعاب PS5 من الشاشة ويعرضها بالعربية على تلفزيونك فورًا.")
                         .font(.system(size: 11.5))
                         .foregroundStyle(Color.white.opacity(0.7))
                 }
@@ -3486,13 +3486,13 @@ struct SetupWizardView: View {
             .padding(.bottom, 4)
 
             VStack(alignment: .leading, spacing: 10) {
-                Text("Kurulum İçin Gereken 3 Şey:")
+                Text("3 أشياء مطلوبة للإعداد:")
                     .font(.system(size: 11.5, weight: .bold))
                     .foregroundStyle(Color.white.opacity(0.85))
 
-                requirementCard(icon: "gamecontroller", title: "PlayStation 5 Konsolu", desc: "Bu Mac ile aynı yerel Wi-Fi ağında açık olmalıdır.")
-                requirementCard(icon: "tv", title: "Akıllı TV veya TV Box", desc: "LG (webOS), Samsung (Tizen) veya Android TV / Google TV.")
-                requirementCard(icon: "person.2", title: "İkinci Bir PSN Hesabı", desc: "Remote Play kumandanızı kesmesin diye gereken ücretsiz hesap.")
+                requirementCard(icon: "gamecontroller", title: "جهاز PlayStation 5", desc: "يجب أن يكون مشغّلًا وعلى نفس شبكة Wi-Fi المحلية مع هذا الـ Mac.")
+                requirementCard(icon: "tv", title: "تلفزيون ذكي أو TV Box", desc: "LG (webOS) أو Samsung (Tizen) أو Android TV / Google TV.")
+                requirementCard(icon: "person.2", title: "حساب PSN ثانٍ", desc: "حساب مجاني لازم حتى لا يقطع Remote Play ذراع التحكم.")
             }
         }
     }
@@ -3514,7 +3514,7 @@ struct SetupWizardView: View {
         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.white.opacity(0.08), lineWidth: 1))
     }
 
-    // ADIM 2: İkinci Hesap & PSN Girişi
+    // الخطوة 2: الحساب الثاني وتسجيل الدخول إلى PSN
     private var step2SecondAccount: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 12) {
@@ -3525,27 +3525,27 @@ struct SetupWizardView: View {
                         .foregroundStyle(Color(hex: "#38BDF8"))
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("İkinci PSN Hesabı Girişi")
+                    Text("تسجيل الدخول بحساب PSN الثاني")
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(Color.white)
-                    Text("GameTranslator oyunu Remote Play ile izler. İkinci hesap sayesinde ana hesabınızın kumandası hiç kapanmaz.")
+                    Text("يتابع GameTranslator اللعبة عبر Remote Play. بفضل الحساب الثاني لا ينقطع ذراع التحكم في حسابك الرئيسي أبدًا.")
                         .font(.system(size: 11.5))
                         .foregroundStyle(Color.white.opacity(0.7))
                 }
             }
 
             VStack(alignment: .leading, spacing: 8) {
-                numberedStep(num: "1", text: "playstation.com adresinden farklı bir e-posta ile ücretsiz bir 2. PSN hesabı açın.")
-                numberedStep(num: "2", text: "PS5'inizde 'Kullanıcı Ekle' deyip bu 2. hesapla bir kez giriş yapın.")
-                numberedStep(num: "3", text: "Yeni kullanıcıdayken Ayarlar › Sistem › Uzaktan Oynatma'yı açın.")
-                numberedStep(num: "4", text: "Ana kullanıcınıza geri dönün. Bu işlemi yalnızca 1 kez yaparsınız.")
+                numberedStep(num: "1", text: "أنشئ حساب PSN ثانيًا مجانيًا ببريد إلكتروني مختلف من playstation.com.")
+                numberedStep(num: "2", text: "على PS5 اختر 'إضافة مستخدم' وسجّل الدخول بهذا الحساب الثاني مرة واحدة.")
+                numberedStep(num: "3", text: "وأنت على المستخدم الجديد فعّل الإعدادات › النظام › اللعب عن بُعد.")
+                numberedStep(num: "4", text: "عُد إلى مستخدمك الرئيسي. تُجري هذه الخطوات مرة واحدة فقط.")
             }
             .padding(12)
             .background(Color.black.opacity(0.25), in: RoundedRectangle(cornerRadius: 8))
 
-            // Gerçek PSN Bağlantı Alanı
+            // منطقة ربط PSN الفعلية
             VStack(alignment: .leading, spacing: 12) {
-                Text("PlayStation Network Bağlantısı:")
+                Text("ربط PlayStation Network:")
                     .font(.system(size: 12, weight: .bold))
                     .foregroundStyle(Color.white)
 
@@ -3555,15 +3555,15 @@ struct SetupWizardView: View {
                             .font(.system(size: 20))
                             .foregroundStyle(Color.green)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("PlayStation Network Hesabı Başarıyla Bağlandı")
+                            Text("تم ربط حساب PlayStation Network بنجاح")
                                 .font(.system(size: 12, weight: .bold))
                                 .foregroundStyle(Color.green)
-                            Text("Hesap Kimliği (PSN ID): \(state.psnAccountId ?? "Bağlı")")
+                            Text("معرّف الحساب (PSN ID): \(state.psnAccountId ?? "متصل")")
                                 .font(.system(size: 10.5, design: .monospaced))
                                 .foregroundStyle(Color.white.opacity(0.7))
                         }
                         Spacer()
-                        Button("Çıkış Yap") {
+                        Button("سجّل الخروج") {
                             state.psnLinked = false
                             state.psnAccountId = nil
                             state.psnAccountBase64 = nil
@@ -3581,13 +3581,13 @@ struct SetupWizardView: View {
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.green.opacity(0.3), lineWidth: 1))
                 } else {
                     HStack(spacing: 10) {
-                        // Seçenek 1: Tarayıcıda yeni sekme aç
+                        // الخيار 1: افتح تبويبًا جديدًا في المتصفح
                         Button {
                             NSWorkspace.shared.open(PSNAccount.authorizeURL)
                         } label: {
                             HStack(spacing: 6) {
                                 Image(systemName: "safari.fill")
-                                Text("Sony Giriş Sayfasını Aç (Yeni Sekme)")
+                                Text("افتح صفحة دخول Sony (تبويب جديد)")
                             }
                             .font(.system(size: 11.5, weight: .semibold))
                             .foregroundStyle(Color.white)
@@ -3597,13 +3597,13 @@ struct SetupWizardView: View {
                         }
                         .buttonStyle(.plain)
 
-                        // Seçenek 2: Uygulama içi pencere
+                        // الخيار 2: نافذة داخل التطبيق
                         Button {
                             state.showInAppPSNLogin = true
                         } label: {
                             HStack(spacing: 6) {
                                 Image(systemName: "macwindow")
-                                Text("Uygulama İçi Giriş Yap")
+                                Text("سجّل الدخول داخل التطبيق")
                             }
                             .font(.system(size: 11.5, weight: .medium))
                             .foregroundStyle(Color.white.opacity(0.9))
@@ -3615,7 +3615,7 @@ struct SetupWizardView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Tarayıcıda giriş yaptıktan sonra açılan sayfanın adresini (URL) veya kodunu yapıştırın:")
+                        Text("بعد تسجيل الدخول في المتصفح الصق عنوان الصفحة التي تُفتح (URL) أو الرمز:")
                             .font(.system(size: 11))
                             .foregroundStyle(Color.white.opacity(0.7))
 
@@ -3638,7 +3638,7 @@ struct SetupWizardView: View {
                                     } else {
                                         Image(systemName: "link")
                                     }
-                                    Text("Bağlantıyı Doğrula")
+                                    Text("تحقّق من الربط")
                                 }
                                 .font(.system(size: 11, weight: .semibold))
                                 .foregroundStyle(Color.white)
@@ -3669,11 +3669,11 @@ struct SetupWizardView: View {
                 HStack {
                     Image(systemName: "gamecontroller.fill")
                         .foregroundStyle(Color(hex: "#0A84FF"))
-                    Text("PlayStation Network Girişi")
+                    Text("تسجيل الدخول إلى PlayStation Network")
                         .font(.system(size: 13, weight: .bold))
                         .foregroundStyle(Color.white)
                     Spacer()
-                    Button("Kapat") {
+                    Button("أغلق") {
                         state.showInAppPSNLogin = false
                     }
                     .font(.system(size: 11.5))
@@ -3710,7 +3710,7 @@ struct SetupWizardView: View {
         }
     }
 
-    // ADIM 3: PS5 Konsol Eşleştirme
+    // الخطوة 3: إقران جهاز PS5
     private var step3Console: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 12) {
@@ -3721,10 +3721,10 @@ struct SetupWizardView: View {
                         .foregroundStyle(Color(hex: "#34C759"))
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("PS5 Konsolunuzu Eşleştirin")
+                    Text("اقرن جهاز PS5")
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(Color.white)
-                    Text("PS5'te Ayarlar › Sistem › Uzaktan Oynatma › Cihaz Eşle yolunu açın.")
+                    Text("على PS5 افتح الإعدادات › النظام › اللعب عن بُعد › ربط الجهاز.")
                         .font(.system(size: 11.5))
                         .foregroundStyle(Color.white.opacity(0.7))
                 }
@@ -3738,7 +3738,7 @@ struct SetupWizardView: View {
                                 .font(.system(size: 20))
                                 .foregroundStyle(Color.green)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("PS5 Başarıyla Eşleşti")
+                                Text("تم إقران PS5 بنجاح")
                                     .font(.system(size: 12, weight: .bold))
                                     .foregroundStyle(Color.green)
                                 Text("IP: \(state.ps5Host.isEmpty ? "192.168.1.108" : state.ps5Host) (1080p 60 FPS)")
@@ -3746,7 +3746,7 @@ struct SetupWizardView: View {
                                     .foregroundStyle(Color.white.opacity(0.7))
                             }
                             Spacer()
-                            Button("Yeniden Eşle") {
+                            Button("أعد الإقران") {
                                 state.ps5Paired = false
                                 state.ps5Connected = false
                             }
@@ -3755,7 +3755,7 @@ struct SetupWizardView: View {
                             .buttonStyle(.plain)
                         }
 
-                        Text("✓ PS5 ekranının kod sayfasından otomatik olarak çıkması, konsolun bilgisayarınızı başarıyla kaydettiğini gösterir. Tekrar kod girmenize gerek yoktur. 'Devam Et →' butonuna basarak Akıllı TV adımına geçin.")
+                        Text("✓ خروج شاشة PS5 من صفحة الرمز تلقائيًا يعني أن جهاز الألعاب سجّل الكمبيوتر بنجاح. لا حاجة لإدخال الرمز مجددًا. اضغط زر 'تابع →' للانتقال إلى خطوة التلفزيون الذكي.")
                             .font(.system(size: 10.5))
                             .foregroundStyle(Color.white.opacity(0.75))
                             .lineSpacing(3)
@@ -3765,17 +3765,17 @@ struct SetupWizardView: View {
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.green.opacity(0.3), lineWidth: 1))
                 } else {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("PS5 IP Adresi (Yerel Ağ):")
+                        Text("عنوان IP لجهاز PS5 (الشبكة المحلية):")
                             .font(.system(size: 11, weight: .semibold))
                             .foregroundStyle(Color.white.opacity(0.8))
                         HStack {
-                            TextField("örn: 192.168.1.100", text: $state.ps5Host)
+                            TextField("مثال: 192.168.1.100", text: $state.ps5Host)
                                 .textFieldStyle(.plain)
                                 .padding(8)
                                 .background(Color.black.opacity(0.4), in: RoundedRectangle(cornerRadius: 6))
                                 .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.white.opacity(0.15), lineWidth: 1))
                             
-                            Button(state.isSearchingPS5 ? "Aranıyor..." : "Ağda Tara") {
+                            Button(state.isSearchingPS5 ? "جارٍ البحث..." : "ابحث في الشبكة") {
                                 Task { await state.scanLocalPS5() }
                             }
                             .font(.system(size: 11))
@@ -3789,10 +3789,10 @@ struct SetupWizardView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("PS5 Ekranındaki 8 Haneli Eşleşme PIN Kodu:")
+                        Text("رمز PIN للإقران المكوّن من 8 أرقام على شاشة PS5:")
                             .font(.system(size: 11, weight: .semibold))
                             .foregroundStyle(Color.white.opacity(0.8))
-                        TextField("8 haneli PIN kodu", text: $state.ps5Pin)
+                        TextField("رمز PIN من 8 أرقام", text: $state.ps5Pin)
                             .font(.system(size: 14, weight: .bold, design: .monospaced))
                             .textFieldStyle(.plain)
                             .padding(8)
@@ -3808,10 +3808,10 @@ struct SetupWizardView: View {
                                 ProgressView()
                                     .scaleEffect(0.7)
                                     .frame(width: 14, height: 14)
-                                Text("PS5 Eşleştiriliyor (Paket Gönderiliyor)...")
+                                Text("جارٍ إقران PS5 (إرسال الحزمة)...")
                             } else {
                                 Image(systemName: "link.badge.plus")
-                                Text("Konsolu Eşle ve Doğrula")
+                                Text("اقرن جهاز الألعاب وتحقّق")
                             }
                         }
                         .font(.system(size: 12, weight: .bold))
@@ -3851,7 +3851,7 @@ struct SetupWizardView: View {
         }
     }
 
-    // ADIM 4: Altyazı Hedefi (Mac Ekranı, OBS veya Akıllı TV)
+    // الخطوة 4: وجهة الترجمة (شاشة Mac أو OBS أو التلفزيون الذكي)
     private var step4TV: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 12) {
@@ -3862,17 +3862,17 @@ struct SetupWizardView: View {
                         .foregroundStyle(Color(hex: "#FF9F0A"))
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Altyazı Nerede Gösterilsin?")
+                    Text("أين تُعرض الترجمة؟")
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(Color.white)
-                    Text("Evde TV yoksa veya monitörde oynuyorsanız Mac ekranını seçebilirsiniz.")
+                    Text("إن لم يكن لديك تلفزيون أو كنت تلعب على شاشة كمبيوتر فيمكنك اختيار شاشة Mac.")
                         .font(.system(size: 11.5))
                         .foregroundStyle(Color.white.opacity(0.7))
                 }
             }
 
             VStack(spacing: 8) {
-                // Seçenek 1: Mac Ekranı & OBS (TV GEREKMEZ)
+                // الخيار 1: شاشة Mac و OBS (لا حاجة لتلفزيون)
                 Button {
                     state.selectedTVPlatform = "Mac / OBS"
                     state.tvDeviceName = "Mac & OBS (Port 8787)"
@@ -3880,13 +3880,13 @@ struct SetupWizardView: View {
                     state.tvError = nil
                 } label: {
                     tvOptionRow(
-                        title: "🖥️ Mac Ekranı & OBS Overlay (TV Gerekmez)",
-                        desc: "Evde televizyon yoksa veya monitörde oynuyorsanız en kolayıdır.",
+                        title: "🖥️ شاشة Mac و OBS Overlay (لا حاجة لتلفزيون)",
+                        desc: "الأسهل إن لم يكن لديك تلفزيون أو كنت تلعب على شاشة كمبيوتر.",
                         selected: state.selectedTVPlatform == "Mac / OBS"
                     )
                 }.buttonStyle(.plain)
 
-                // Seçenek 2: Android TV
+                // الخيار 2: Android TV
                 Button {
                     state.selectedTVPlatform = "Android TV"
                     state.tvDeviceName = "Android TV / Google TV"
@@ -3903,7 +3903,7 @@ struct SetupWizardView: View {
                     )
                 }.buttonStyle(.plain)
 
-                // Seçenek 3: LG webOS
+                // الخيار 3: LG webOS
                 Button {
                     state.selectedTVPlatform = "LG webOS"
                     state.tvDeviceName = "LG webOS TV"
@@ -3918,7 +3918,7 @@ struct SetupWizardView: View {
                     )
                 }.buttonStyle(.plain)
 
-                // Seçenek 4: Samsung Tizen
+                // الخيار 4: Samsung Tizen
                 Button {
                     state.selectedTVPlatform = "Samsung Tizen"
                     state.tvDeviceName = "Samsung Smart TV"
@@ -3934,17 +3934,17 @@ struct SetupWizardView: View {
                 }.buttonStyle(.plain)
             }
 
-            // Durum ve Platforma Özel Kurulum Kartı
+            // بطاقة الحالة والتثبيت الخاصة بكل منصة
             VStack(alignment: .leading, spacing: 10) {
                 if state.selectedTVPlatform == "Mac / OBS" {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack(spacing: 8) {
                             Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.green)
-                            Text("Mac Ekranı & OBS Modu Hazır")
+                            Text("وضع شاشة Mac و OBS جاهز")
                                 .font(.system(size: 12, weight: .bold))
                                 .foregroundStyle(Color.green)
                         }
-                        Text("Televizyon bağlantısı gerekmez! Altyazılar bu Mac uygulamasında ve tarayıcıda/OBS'te canlı görünür:")
+                        Text("لا حاجة للاتصال بتلفزيون! تظهر الترجمة مباشرةً في تطبيق Mac هذا وفي المتصفح/OBS:")
                             .font(.system(size: 11))
                             .foregroundStyle(Color.white.opacity(0.75))
 
@@ -3953,7 +3953,7 @@ struct SetupWizardView: View {
                                 .font(.system(size: 11.5, weight: .semibold, design: .monospaced))
                                 .foregroundStyle(Color(hex: "#38BDF8"))
                             Spacer()
-                            Button("OBS Linkini Kopyala") {
+                            Button("انسخ رابط OBS") {
                                 NSPasteboard.general.clearContents()
                                 NSPasteboard.general.setString("http://localhost:8787/obs", forType: .string)
                             }
@@ -3973,32 +3973,32 @@ struct SetupWizardView: View {
                 } else if state.selectedTVPlatform == "Android TV" {
                     VStack(alignment: .leading, spacing: 10) {
                         HStack {
-                            Text("Android TV Uygulama Yükleme & Bağlantı:")
+                            Text("تثبيت تطبيق Android TV والاتصال:")
                                 .font(.system(size: 12, weight: .bold))
                                 .foregroundStyle(Color.white)
                             Spacer()
                             if state.tvConnected {
                                 HStack(spacing: 4) {
                                     Circle().fill(Color.green).frame(width: 6, height: 6)
-                                    Text("Bağlı (\(state.tvDeviceName))").font(.system(size: 10.5, weight: .semibold)).foregroundStyle(Color.green)
+                                    Text("متصل (\(state.tvDeviceName))").font(.system(size: 10.5, weight: .semibold)).foregroundStyle(Color.green)
                                 }
                             }
                         }
 
-                        // Yöntem 1: Otomatik Ağdan ADB ile Kur
+                        // الطريقة 1: تثبيت تلقائي عبر الشبكة باستخدام ADB
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("Yöntem 1: Ağ Üzerinden Otomatik Kur (ADB)")
+                            Text("الطريقة 1: تثبيت تلقائي عبر الشبكة (ADB)")
                                 .font(.system(size: 11, weight: .semibold))
                                 .foregroundStyle(Color(hex: "#38BDF8"))
 
                             HStack {
-                                TextField("TV IP adresi (örn: 192.168.1.50)", text: $state.tvHost)
+                                TextField("عنوان IP للتلفزيون (مثال: 192.168.1.50)", text: $state.tvHost)
                                     .textFieldStyle(.plain)
                                     .padding(7)
                                     .background(Color.black.opacity(0.4), in: RoundedRectangle(cornerRadius: 6))
                                     .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.white.opacity(0.15), lineWidth: 1))
 
-                                Button(state.isSearchingTV ? "Aranıyor..." : "Ağda Tara") {
+                                Button(state.isSearchingTV ? "جارٍ البحث..." : "ابحث في الشبكة") {
                                     Task { await state.scanLocalTV() }
                                 }
                                 .font(.system(size: 11))
@@ -4018,7 +4018,7 @@ struct SetupWizardView: View {
                                         } else {
                                             Image(systemName: "arrow.down.circle.fill")
                                         }
-                                        Text(state.isInstallingTV ? "Yükleniyor..." : "TV'ye Otomatik Kur")
+                                        Text(state.isInstallingTV ? "جارٍ التثبيت..." : "ثبّت على التلفزيون تلقائيًا")
                                     }
                                     .font(.system(size: 11, weight: .semibold))
                                     .foregroundStyle(Color.white)
@@ -4055,7 +4055,7 @@ struct SetupWizardView: View {
                                     } label: {
                                         HStack(spacing: 6) {
                                             Image(systemName: "bolt.fill")
-                                            Text(state.testSent ? "✓ Test Altyazısı TV'ye Gönderildi!" : "⚡ TV'de Canlı Altyazıyı Test Et")
+                                            Text(state.testSent ? "✓ أُرسلت ترجمة الاختبار إلى التلفزيون!" : "⚡ اختبر الترجمة المباشرة على التلفزيون")
                                         }
                                         .font(.system(size: 11.5, weight: .bold))
                                         .foregroundStyle(Color.black)
@@ -4065,7 +4065,7 @@ struct SetupWizardView: View {
                                     }
                                     .buttonStyle(.plain)
 
-                                    Text("TV'de 'GameTranslator' uygulamasının açık olduğundan emin olun.")
+                                    Text("تأكد من أن تطبيق 'GameTranslator' مفتوح على التلفزيون.")
                                         .font(.system(size: 10.5))
                                         .foregroundStyle(Color.white.opacity(0.7))
                                 }
@@ -4075,14 +4075,14 @@ struct SetupWizardView: View {
                         .padding(9)
                         .background(Color.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 7))
 
-                        // Yöntem 2 & 3: Finder APK Reveal & TV Web Browser
+                        // الطريقتان 2 و 3: Finder APK Reveal & TV Web Browser
                         HStack(spacing: 10) {
                             Button {
                                 state.revealTVPackage(for: "Android TV")
                             } label: {
                                 HStack(spacing: 5) {
                                     Image(systemName: "folder.fill")
-                                    Text("📁 APK Paketini Finder'da Göster")
+                                    Text("📁 أظهر حزمة APK في Finder")
                                 }
                                 .font(.system(size: 10.5, weight: .medium))
                                 .foregroundStyle(Color.white.opacity(0.9))
@@ -4099,7 +4099,7 @@ struct SetupWizardView: View {
                             } label: {
                                 HStack(spacing: 5) {
                                     Image(systemName: "safari.fill")
-                                    Text("🌐 TV Tarayıcı Linkini Kopyala")
+                                    Text("🌐 انسخ رابط متصفح التلفزيون")
                                 }
                                 .font(.system(size: 10.5, weight: .medium))
                                 .foregroundStyle(Color(hex: "#38BDF8"))
@@ -4121,20 +4121,20 @@ struct SetupWizardView: View {
                     .background(Color.black.opacity(0.25), in: RoundedRectangle(cornerRadius: 8))
                 } else if state.selectedTVPlatform == "LG webOS" {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("LG webOS TV İçin En Kolay 2 Yöntem:")
+                        Text("أسهل طريقتين لتلفزيون LG webOS:")
                             .font(.system(size: 12, weight: .bold))
                             .foregroundStyle(Color.white)
 
-                        // 1. Önerilen: TV Web Tarayıcısı (Sıfır Kurulum)
+                        // 1. الموصى به: متصفح الويب في التلفزيون (بلا تثبيت)
                         VStack(alignment: .leading, spacing: 5) {
                             HStack {
-                                Text("1. Önerilen: LG TV Tarayıcısında Aç (Sıfır Kurulum)")
+                                Text("1. الموصى به: افتح في متصفح تلفزيون LG (بلا تثبيت)")
                                     .font(.system(size: 11, weight: .semibold))
                                     .foregroundStyle(Color(hex: "#38BDF8"))
                                 Spacer()
-                                Text("EN HIZLI").font(.system(size: 8.5, weight: .heavy)).foregroundStyle(Color.green).padding(.horizontal, 4).padding(.vertical, 1).background(Color.green.opacity(0.15), in: RoundedRectangle(cornerRadius: 3))
+                                Text("الأسرع").font(.system(size: 8.5, weight: .heavy)).foregroundStyle(Color.green).padding(.horizontal, 4).padding(.vertical, 1).background(Color.green.opacity(0.15), in: RoundedRectangle(cornerRadius: 3))
                             }
-                            Text("LG Sihirli Kumandadan 'Web Tarayıcısı'nı açın ve aşağıdaki adrese girin. Tam ekran yaptığınızda altyazılar şeffaf olarak anında görünür:")
+                            Text("افتح 'متصفح الويب' بريموت LG Magic Remote وادخل العنوان أدناه. عند تكبيره إلى ملء الشاشة تظهر الترجمة بخلفية شفافة فورًا:")
                                 .font(.system(size: 10.5))
                                 .foregroundStyle(Color.white.opacity(0.7))
 
@@ -4143,7 +4143,7 @@ struct SetupWizardView: View {
                                     .font(.system(size: 11, weight: .bold, design: .monospaced))
                                     .foregroundStyle(Color(hex: "#38BDF8"))
                                 Spacer()
-                                Button("Linki Kopyala") {
+                                Button("انسخ الرابط") {
                                     state.copyObsLink()
                                 }
                                 .font(.system(size: 10))
@@ -4159,18 +4159,18 @@ struct SetupWizardView: View {
                         .padding(9)
                         .background(Color.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 7))
 
-                        // 2. IPK Paketi
+                        // 2. حزمة IPK
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("2. Alternatif: LG Developer Mode (.ipk)")
+                                Text("2. البديل: LG Developer Mode (.ipk)")
                                     .font(.system(size: 11, weight: .semibold))
                                     .foregroundStyle(Color.white.opacity(0.9))
-                                Text("LG Content Store'dan 'Developer Mode' yükleyip IPK dosyasını atabilirsiniz.")
+                                Text("يمكنك تثبيت 'Developer Mode' من LG Content Store ثم إرسال ملف IPK.")
                                     .font(.system(size: 10))
                                     .foregroundStyle(Color.white.opacity(0.55))
                             }
                             Spacer()
-                            Button("📁 IPK Paketini Aç") {
+                            Button("📁 افتح حزمة IPK") {
                                 state.revealTVPackage(for: "LG webOS")
                             }
                             .font(.system(size: 10.5))
@@ -4187,20 +4187,20 @@ struct SetupWizardView: View {
                     .background(Color.black.opacity(0.25), in: RoundedRectangle(cornerRadius: 8))
                 } else if state.selectedTVPlatform == "Samsung Tizen" {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Samsung Tizen TV İçin En Kolay 2 Yöntem:")
+                        Text("أسهل طريقتين لتلفزيون Samsung Tizen:")
                             .font(.system(size: 12, weight: .bold))
                             .foregroundStyle(Color.white)
 
-                        // 1. Önerilen: Samsung TV Web Tarayıcısı (Sıfır Kurulum)
+                        // 1. الموصى به: متصفح الويب في تلفزيون Samsung (بلا تثبيت)
                         VStack(alignment: .leading, spacing: 5) {
                             HStack {
-                                Text("1. Önerilen: Samsung İnternet Tarayıcısında Aç (Sıfır Kurulum)")
+                                Text("1. الموصى به: افتح في متصفح Samsung Internet (بلا تثبيت)")
                                     .font(.system(size: 11, weight: .semibold))
                                     .foregroundStyle(Color(hex: "#38BDF8"))
                                 Spacer()
-                                Text("EN HIZLI").font(.system(size: 8.5, weight: .heavy)).foregroundStyle(Color.green).padding(.horizontal, 4).padding(.vertical, 1).background(Color.green.opacity(0.15), in: RoundedRectangle(cornerRadius: 3))
+                                Text("الأسرع").font(.system(size: 8.5, weight: .heavy)).foregroundStyle(Color.green).padding(.horizontal, 4).padding(.vertical, 1).background(Color.green.opacity(0.15), in: RoundedRectangle(cornerRadius: 3))
                             }
-                            Text("Samsung Smart TV kumandasından 'İnternet' uygulamasını açıp bu adrese gidin. Tam ekranda şeffaf altyazılar sıfır kurulumla anında akar:")
+                            Text("افتح تطبيق 'Internet' بريموت Samsung Smart TV وانتقل إلى هذا العنوان. في وضع ملء الشاشة تظهر الترجمة الشفافة فورًا بلا أي تثبيت:")
                                 .font(.system(size: 10.5))
                                 .foregroundStyle(Color.white.opacity(0.7))
 
@@ -4209,7 +4209,7 @@ struct SetupWizardView: View {
                                     .font(.system(size: 11, weight: .bold, design: .monospaced))
                                     .foregroundStyle(Color(hex: "#38BDF8"))
                                 Spacer()
-                                Button("Linki Kopyala") {
+                                Button("انسخ الرابط") {
                                     state.copyObsLink()
                                 }
                                 .font(.system(size: 10))
@@ -4225,18 +4225,18 @@ struct SetupWizardView: View {
                         .padding(9)
                         .background(Color.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 7))
 
-                        // 2. WGT Paketi & Geliştirici Modu (1-2-3-4-5)
+                        // 2. حزمة WGT ووضع المطوّر (1-2-3-4-5)
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("2. Alternatif: Samsung Developer Mode (.wgt)")
+                                Text("2. البديل: Samsung Developer Mode (.wgt)")
                                     .font(.system(size: 11, weight: .semibold))
                                     .foregroundStyle(Color.white.opacity(0.9))
-                                Text("Apps ekranında kumandadan '1-2-3-4-5' tuşlayıp Developer Mode açın.")
+                                Text("في شاشة Apps اضغط '1-2-3-4-5' بالريموت لتفعيل Developer Mode.")
                                     .font(.system(size: 10))
                                     .foregroundStyle(Color.white.opacity(0.55))
                             }
                             Spacer()
-                            Button("📁 WGT Paketini Aç") {
+                            Button("📁 افتح حزمة WGT") {
                                 state.revealTVPackage(for: "Samsung Tizen")
                             }
                             .font(.system(size: 10.5))
@@ -4276,7 +4276,7 @@ struct SetupWizardView: View {
         .overlay(RoundedRectangle(cornerRadius: 6).stroke(selected ? Color(hex: "#0A84FF") : Color.white.opacity(0.08), lineWidth: 1))
     }
 
-    // ADIM 5: Test & Bitti
+    // الخطوة 5: الاختبار والإنهاء
     private var step5TestAndFinish: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 12) {
@@ -4287,10 +4287,10 @@ struct SetupWizardView: View {
                         .foregroundStyle(Color(hex: "#AF52DE"))
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Bağlantıyı Test Edin")
+                    Text("اختبر الاتصال")
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(Color.white)
-                    Text("GameTranslator şimdi TV ekranınıza örnek bir Türkçe altyazı gönderecek.")
+                    Text("سيرسل GameTranslator الآن ترجمة عربية تجريبية إلى شاشة تلفزيونك.")
                         .font(.system(size: 11.5))
                         .foregroundStyle(Color.white.opacity(0.7))
                 }
@@ -4302,7 +4302,7 @@ struct SetupWizardView: View {
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "bolt.fill")
-                        Text(state.testSent ? "✓ Canlı Test Altyazısı TV'ye İletildi!" : "TV'ye Canlı Test Altyazısı Gönder")
+                        Text(state.testSent ? "✓ أُرسلت ترجمة الاختبار المباشرة إلى التلفزيون!" : "أرسل ترجمة اختبار مباشرة إلى التلفزيون")
                     }
                     .font(.system(size: 12.5, weight: .bold))
                     .foregroundStyle(Color.white)
@@ -4315,7 +4315,7 @@ struct SetupWizardView: View {
                 if state.testSent {
                     HStack(spacing: 6) {
                         Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.green)
-                        Text("Altyazı TV'ye ve OBS yayınına basıldı (Port 8787).")
+                        Text("أُرسلت الترجمة إلى التلفزيون وبث OBS (Port 8787).")
                             .font(.system(size: 11))
                             .foregroundStyle(Color.white.opacity(0.85))
                     }
@@ -4328,10 +4328,10 @@ struct SetupWizardView: View {
             .background(Color.black.opacity(0.25), in: RoundedRectangle(cornerRadius: 8))
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("TV'de Altyazıyı Görüyor Musunuz?")
+                Text("هل ترى الترجمة على التلفزيون؟")
                     .font(.system(size: 12, weight: .bold))
                     .foregroundStyle(Color.white)
-                Text("Evet ise kurulum tamamlandı! Artık ana ekrandan 'Çeviriyi Başlat' diyerek oyununuzu Türkçe oynayabilirsiniz.")
+                Text("إن كانت الإجابة نعم فقد اكتمل الإعداد! يمكنك الآن الضغط على 'ابدأ الترجمة' من الشاشة الرئيسية واللعب بالعربية.")
                     .font(.system(size: 11))
                     .foregroundStyle(Color.white.opacity(0.65))
             }
@@ -4341,7 +4341,7 @@ struct SetupWizardView: View {
     private var wizardFooter: some View {
         HStack(spacing: 12) {
             if state.setupStep > 1 {
-                Button("← Geri") {
+                Button("← رجوع") {
                     state.setupStep -= 1
                 }
                 .font(.system(size: 12))
@@ -4353,7 +4353,7 @@ struct SetupWizardView: View {
             }
 
             if !state.psnLinked {
-                Button("Tasarımı İncele (Geliştirici Modu)") {
+                Button("استعرض التصميم (وضع المطوّر)") {
                     state.bypassSetup = true
                     state.showSetup = false
                 }
@@ -4363,7 +4363,7 @@ struct SetupWizardView: View {
                 .padding(.vertical, 7)
                 .buttonStyle(.plain)
             } else {
-                Button("Ana Ekrana Dön") {
+                Button("عُد إلى الشاشة الرئيسية") {
                     state.showSetup = false
                 }
                 .font(.system(size: 11.5))
@@ -4376,7 +4376,7 @@ struct SetupWizardView: View {
             Spacer()
 
             if state.setupStep < 5 {
-                Button("Devam Et →") {
+                Button("تابع →") {
                     state.setupStep += 1
                 }
                 .font(.system(size: 12.5, weight: .semibold))
@@ -4387,7 +4387,7 @@ struct SetupWizardView: View {
                 .shadow(color: Color(hex: "#0A84FF").opacity(0.4), radius: 6, y: 2)
                 .buttonStyle(.plain)
             } else {
-                Button("✓ Kurulumu Tamamla ve Başlat") {
+                Button("✓ أكمل الإعداد وابدأ") {
                     state.isOnboarded = true
                     state.showSetup = false
                     state.tvConnected = true

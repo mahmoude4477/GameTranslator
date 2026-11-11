@@ -4,37 +4,37 @@ using GameTranslator.Core;
 
 namespace GameTranslator.Core.Tests;
 
-/// Metinler Mac uygulamasının Localizable.xcstrings dosyasından gelir; iki uygulama aynı çevirileri kullanır.
+/// تأتي النصوص من ملف Localizable.xcstrings المضمَّن في التطبيق؛ ولغة الواجهة هي العربية.
 public class LocalizerTests
 {
     [Fact]
-    public void TurkishTextComesFromSharedCatalog()
+    public void ArabicTextComesFromCatalog()
     {
-        var tr = Localizer.ForLanguage("tr");
-        Assert.Equal("Çeviriyi başlat", tr["Start translating"]);
+        var ar = Localizer.ForLanguage("ar");
+        Assert.Equal("ابدأ الترجمة", ar["Start translating"]);
         Assert.Equal("Start translating", Localizer.ForLanguage("en")["Start translating"]);
     }
 
     [Fact]
-    public void UnknownLanguageFallsBackToEnglish() =>
-        Assert.Equal("Start translating", Localizer.ForLanguage("de")["Start translating"]);
+    public void UnknownLanguageFallsBackToArabic() =>
+        Assert.Equal("ابدأ الترجمة", Localizer.ForLanguage("de")["Start translating"]);
 
     [Fact]
     public void MissingKeyShowsTheKey() =>
-        Assert.Equal("No such text", Localizer.ForLanguage("tr")["No such text"]);
+        Assert.Equal("No such text", Localizer.ForLanguage("ar")["No such text"]);
 
     [Fact]
     public void PositionalFormatArgumentsAreFilled()
     {
-        var tr = Localizer.ForLanguage("tr");
-        Assert.Equal("Adım 2 / 6", tr.Format("Step %lld of %lld", 2, 6));
-        Assert.Contains("İngilizce", tr.Format("The %@–%@ language pack is not downloaded yet.", "İngilizce", "Türkçe"));
+        var ar = Localizer.ForLanguage("ar");
+        Assert.Equal("الخطوة 2 من 6", ar.Format("Step %lld of %lld", 2, 6));
+        Assert.Contains("الإنجليزية", ar.Format("The %@–%@ language pack is not downloaded yet.", "الإنجليزية", "العربية"));
     }
 
     [Fact]
-    public void EveryEntryHasTurkish()
+    public void EveryEntryHasArabic()
     {
-        var missing = Localizer.MissingTranslations("tr");
+        var missing = Localizer.MissingTranslations("ar");
         Assert.True(missing.Count == 0, string.Join(", ", missing));
     }
 }

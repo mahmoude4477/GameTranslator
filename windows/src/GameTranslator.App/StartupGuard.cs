@@ -8,8 +8,8 @@ using System.Windows;
 namespace GameTranslator.App;
 
 /// <summary>
-/// Açılış hatalarını sessizce kapanmak yerine gösterir. Bu sınıf yalnız .NET'in kendi türlerini kullanır: uygulamanın
-/// başka bir DLL'i eksik olsa da yüklenip çalışabilmeli.
+/// يعرض أخطاء بدء التشغيل بدل الإغلاق بصمت. هذا الصنف يستخدم أنواع .NET نفسها فقط: يجب أن يُحمَّل ويعمل
+/// حتى لو كان أحد ملفات DLL الأخرى للتطبيق ناقصا.
 /// </summary>
 internal static class StartupGuard
 {
@@ -18,8 +18,8 @@ internal static class StartupGuard
     public static extern bool DeleteFile(string name);
 
     /// <summary>
-    /// İnternetten indirilen zip'ten çıkarılan dosyaların Windows Smart App Control (0xc0e90002)
-    /// ve Mark-of-the-Web (Zone.Identifier) engeline takılmasını önlemek için alternate stream'i kaldırır.
+    /// يزيل الـ alternate stream كي لا تصطدم الملفات المستخرجة من ملف zip منزّل من الإنترنت بحظر
+    /// Windows Smart App Control (0xc0e90002) و Mark-of-the-Web (Zone.Identifier).
     /// </summary>
     public static void UnblockFiles(string folder)
     {
@@ -42,8 +42,8 @@ internal static class StartupGuard
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GameTranslator", "error.log");
 
     /// <summary>
-    /// deps.json'da listelenen ama klasörde olmayan DLL'ler. Antivirüs bir dosyayı karantinaya alınca .NET açılışta
-    /// FileNotFoundException verir ve pencere hiç açılmaz.
+    /// ملفات DLL المذكورة في deps.json وغير الموجودة في المجلد. حين ينقل برنامج مكافحة الفيروسات ملفا إلى الحجر الصحي
+    /// يرمي .NET عند التشغيل FileNotFoundException ولا تُفتح النافذة أبدا.
     /// </summary>
     public static IReadOnlyList<string> MissingFiles(string folder)
     {
@@ -80,7 +80,7 @@ internal static class StartupGuard
         $"{error.GetType().Name}: {error.Message}\n\n" +
         $"التفاصيل في الملف {LogPath}. يمكنك الإبلاغ عن المشكلة مع هذا الملف من صفحة Issues على GitHub.";
 
-    /// <summary>Hatayı kaydeder, gösterir ve uygulamayı kapatır. Ekran görüntüsü kipinde pencere yerine errors.txt yazılır.</summary>
+    /// <summary>يسجّل الخطأ ويعرضه ويغلق التطبيق. في وضع لقطات الشاشة يُكتب errors.txt بدل النافذة.</summary>
     public static void Fail(Application app, string message, Exception? error, string? renderFolder)
     {
         Log(message, error);
@@ -97,8 +97,8 @@ internal static class StartupGuard
     }
 
     /// <summary>
-    /// Açılıştan sonraki yakalanmamış hataları da sessiz kalmadan gösterir. Uygulama kapanmaz: kullanıcı yaptığı işi
-    /// (ör. az önce bitirdiği PSN girişini) kaybetmesin.
+    /// يعرض أيضا الأخطاء غير الملتقطة بعد بدء التشغيل دون السكوت عنها. لا يُغلق التطبيق: كي لا يفقد المستخدم ما أنجزه
+    /// (مثلا تسجيل الدخول إلى PSN الذي أنهاه للتو).
     /// </summary>
     public static void Watch(Application app)
     {
@@ -112,7 +112,7 @@ internal static class StartupGuard
             Log("UnhandledException", e.ExceptionObject as Exception);
     }
 
-    /// <summary>%LOCALAPPDATA%\GameTranslator\hata.log dosyasına yazar; yazılamazsa sessizce geçer.</summary>
+    /// <summary>يكتب في الملف %LOCALAPPDATA%\GameTranslator\error.log؛ وإن تعذّرت الكتابة يمرّ بصمت.</summary>
     internal static void Log(string message, Exception? error)
     {
         try
@@ -122,7 +122,7 @@ internal static class StartupGuard
         }
         catch (Exception logError) when (logError is IOException or UnauthorizedAccessException)
         {
-            // Kayıt yazılamasa da mesaj gösterilir.
+            // تُعرض الرسالة حتى لو تعذّرت كتابة السجل.
         }
     }
 }

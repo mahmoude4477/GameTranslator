@@ -9,10 +9,10 @@
             "value" : "One-Time Setup"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tek Seferlik Kurulum"
+            "value" : "إعداد لمرة واحدة"
           }
         }
       }
@@ -25,10 +25,10 @@
             "value" : "This pairing is only required once. When you click 'Start Translation' in GameTranslator, the stream connects automatically; clicking 'Stop Translation' disconnects automatically."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu eşleştirme yalnızca ilk kurulumda bir kez yapılır. GameTranslator'da 'Çeviriyi Başlat' dediğinizde yayın otomatik bağlanır, 'Çeviriyi Durdur' dediğinizde otomatik kapatılır."
+            "value" : "هذا الاقتران مطلوب مرة واحدة فقط. عند النقر على «ابدأ الترجمة» في GameTranslator يتصل البث تلقائيًا، وعند النقر على «أوقف الترجمة» ينقطع تلقائيًا."
           }
         }
       }
@@ -41,10 +41,10 @@
             "value" : "%@ was damaged while downloading. Try again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ indirilirken bozuldu. Yeniden deneyin."
+            "value" : "تلف %@ أثناء التنزيل. حاول مرة أخرى."
           }
         }
       }
@@ -57,10 +57,10 @@
             "value" : "1. Create a free account at webostv.developer.lge.com."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1. webostv.developer.lge.com adresinde ücretsiz hesap açın."
+            "value" : "1. أنشئ حسابًا مجانيًا على webostv.developer.lge.com."
           }
         }
       }
@@ -73,10 +73,10 @@
             "value" : "1. On the TV, open Apps."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1. TV'de Uygulamalar ekranını açın."
+            "value" : "1. على التلفزيون، افتح شاشة التطبيقات (Apps)."
           }
         }
       }
@@ -89,10 +89,10 @@
             "value" : "1. On the TV, open Settings › Device Preferences › About (Google TV: Settings › System › About)."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1. TV'de Ayarlar › Cihaz Tercihleri › Hakkında'ya girin (Google TV'de Ayarlar › Sistem › Hakkında)."
+            "value" : "1. على التلفزيون، افتح Settings › Device Preferences › About (في Google TV: Settings › System › About)."
           }
         }
       }
@@ -105,10 +105,10 @@
             "value" : "2. On the TV, install Developer Mode from the LG Content Store and sign in."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "2. TV'de LG Content Store'dan Developer Mode uygulamasını kurup giriş yapın."
+            "value" : "2. على التلفزيون، ثبّت تطبيق Developer Mode من LG Content Store وسجّل الدخول."
           }
         }
       }
@@ -121,10 +121,10 @@
             "value" : "2. Press 1 2 3 4 5 on the remote (or type 12345 on the on-screen keypad). The Developer Mode window opens."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "2. Kumandada 1 2 3 4 5 tuşlarına basın (ya da ekran klavyesiyle 12345 yazın). Geliştirici modu penceresi açılır."
+            "value" : "2. اضغط الأزرار 1 2 3 4 5 في ريموت التلفزيون (أو اكتب 12345 بلوحة المفاتيح على الشاشة). ستُفتح نافذة وضع المطوّر."
           }
         }
       }
@@ -137,10 +137,10 @@
             "value" : "2. Press OK on Build 7 times until it says you are a developer."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "2. Yapı numarasının üstünde Tamam'a, geliştirici olduğunuz yazana kadar 7 kez basın."
+            "value" : "2. اضغط OK على Build 7 مرات حتى تظهر رسالة بأنك أصبحت مطوّرًا."
           }
         }
       }
@@ -153,10 +153,10 @@
             "value" : "3. Go back to Device Preferences (Google TV: System) › Developer options and turn on USB debugging. Turn on Network debugging too if you see it."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "3. Cihaz Tercihleri (Google TV'de Sistem) › Geliştirici seçenekleri'ne dönüp USB hata ayıklama'yı açın. Ağ hata ayıklama varsa onu da açın."
+            "value" : "3. ارجع إلى Device Preferences (في Google TV: System) › Developer options وفعّل USB debugging. فعّل Network debugging أيضًا إن وُجد."
           }
         }
       }
@@ -169,10 +169,10 @@
             "value" : "3. Turn Developer mode On, type this computer's address as Host PC IP: %@ and press OK."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "3. Developer mode'u On yapın, Host PC IP olarak bu bilgisayarın adresini yazın: %@ ve OK'e basın."
+            "value" : "3. اجعل Developer mode على On، واكتب عنوان هذا الكمبيوتر في Host PC IP: %@ ثم اضغط OK."
           }
         }
       }
@@ -185,10 +185,10 @@
             "value" : "3. Turn on Dev Mode Status. The TV restarts and this screen continues by itself."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "3. Dev Mode Status'u açın. TV yeniden başlar, bu ekran kendiliğinden devam eder."
+            "value" : "3. فعّل Dev Mode Status. سيُعاد تشغيل التلفزيون وتتابع هذه الشاشة من تلقاء نفسها."
           }
         }
       }
@@ -201,10 +201,10 @@
             "value" : "4. Restart the TV. This screen continues by itself."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "4. TV'yi yeniden başlatın. Bu ekran kendiliğinden devam eder."
+            "value" : "4. أعد تشغيل التلفزيون. ستتابع هذه الشاشة من تلقاء نفسها."
           }
         }
       }
@@ -217,10 +217,10 @@
             "value" : "8-digit code"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "8 haneli kod"
+            "value" : "رمز من 8 أرقام"
           }
         }
       }
@@ -233,10 +233,10 @@
             "value" : "A PS5 on the same Wi-Fi network as this Mac"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu Mac ile aynı Wi-Fi ağında bir PS5"
+            "value" : "جهاز PS5 على شبكة Wi-Fi نفسها مع جهاز Mac هذا"
           }
         }
       }
@@ -249,10 +249,10 @@
             "value" : "A PS5 on the same network as this computer"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu bilgisayarla aynı ağda bir PS5"
+            "value" : "جهاز PS5 على الشبكة نفسها مع هذا الكمبيوتر"
           }
         }
       }
@@ -265,10 +265,10 @@
             "value" : "A free second PlayStation Network account"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ücretsiz ikinci bir PlayStation Network hesabı"
+            "value" : "حساب PlayStation Network ثانٍ مجاني"
           }
         }
       }
@@ -281,10 +281,10 @@
             "value" : "A new version of GameTranslator is available: %@"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator'ın yeni sürümü çıktı: %@"
+            "value" : "يتوفر إصدار جديد من GameTranslator: %@"
           }
         }
       }
@@ -297,10 +297,10 @@
             "value" : "A second PSN account"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İkinci bir PSN hesabı"
+            "value" : "حساب PSN ثانٍ"
           }
         }
       }
@@ -313,10 +313,10 @@
             "value" : "About GameTranslator"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator Hakkında"
+            "value" : "حول GameTranslator"
           }
         }
       }
@@ -329,10 +329,10 @@
             "value" : "Above the English subtitle"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İngilizce altyazının üstünde"
+            "value" : "فوق الترجمة النصية الإنجليزية"
           }
         }
       }
@@ -345,10 +345,10 @@
             "value" : "Accept the request on the TV…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV'deki isteği onaylayın…"
+            "value" : "اقبل الطلب على التلفزيون…"
           }
         }
       }
@@ -361,10 +361,10 @@
             "value" : "Adjust the frame so it covers where the game shows its subtitles."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çerçeveyi, oyunun altyazıyı gösterdiği alanı kaplayacak şekilde ayarlayın."
+            "value" : "اضبط الإطار ليغطي المكان الذي تعرض فيه اللعبة ترجمتها النصية."
           }
         }
       }
@@ -377,10 +377,10 @@
             "value" : "An LG TV with the GameTranslator TV app"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator TV uygulaması kurulu bir LG TV"
+            "value" : "تلفزيون LG عليه تطبيق GameTranslator للتلفزيون"
           }
         }
       }
@@ -393,10 +393,10 @@
             "value" : "Area 1 (Num 1)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bölge 1 (Num 1)"
+            "value" : "المنطقة 1 (Num 1)"
           }
         }
       }
@@ -409,10 +409,10 @@
             "value" : "Area 2 (Num 2)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bölge 2 (Num 2)"
+            "value" : "المنطقة 2 (Num 2)"
           }
         }
       }
@@ -425,10 +425,10 @@
             "value" : "Area 3 (Num 3)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bölge 3 (Num 3)"
+            "value" : "المنطقة 3 (Num 3)"
           }
         }
       }
@@ -441,10 +441,10 @@
             "value" : "Back"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geri"
+            "value" : "رجوع"
           }
         }
       }
@@ -457,10 +457,10 @@
             "value" : "Background"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Arka plan"
+            "value" : "الخلفية"
           }
         }
       }
@@ -473,10 +473,10 @@
             "value" : "Below the English subtitle"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İngilizce altyazının altında"
+            "value" : "تحت الترجمة النصية الإنجليزية"
           }
         }
       }
@@ -489,10 +489,10 @@
             "value" : "Bold text"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kalın yazı"
+            "value" : "خط عريض"
           }
         }
       }
@@ -505,10 +505,10 @@
             "value" : "Bottom"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alt"
+            "value" : "أسفل"
           }
         }
       }
@@ -521,10 +521,10 @@
             "value" : "Cancel"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vazgeç"
+            "value" : "إلغاء"
           }
         }
       }
@@ -537,10 +537,10 @@
             "value" : "Characters"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Karakterler"
+            "value" : "الشخصيات"
           }
         }
       }
@@ -553,10 +553,10 @@
             "value" : "Check for Updates…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Güncellemeleri denetle…"
+            "value" : "تحقّق من التحديثات…"
           }
         }
       }
@@ -569,10 +569,10 @@
             "value" : "Checking the TV app…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV uygulaması kontrol ediliyor…"
+            "value" : "جارٍ التحقق من تطبيق التلفزيون…"
           }
         }
       }
@@ -585,10 +585,10 @@
             "value" : "Close"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kapat"
+            "value" : "إغلاق"
           }
         }
       }
@@ -601,10 +601,10 @@
             "value" : "Connect"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bağlan"
+            "value" : "اتصل"
           }
         }
       }
@@ -617,10 +617,10 @@
             "value" : "Connect your PS5"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PS5'inizi bağlayın"
+            "value" : "وصّل جهاز PS5"
           }
         }
       }
@@ -633,10 +633,10 @@
             "value" : "Connect your TV"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV'nizi bağlayın"
+            "value" : "وصّل التلفزيون"
           }
         }
       }
@@ -649,10 +649,10 @@
             "value" : "Connected"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bağlı"
+            "value" : "متصل"
           }
         }
       }
@@ -665,10 +665,10 @@
             "value" : "Connecting…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bağlanıyor…"
+            "value" : "جارٍ الاتصال…"
           }
         }
       }
@@ -681,10 +681,10 @@
             "value" : "Continue"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Devam"
+            "value" : "متابعة"
           }
         }
       }
@@ -697,7 +697,7 @@
             "value" : "GameTranslator"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "GameTranslator"
@@ -713,10 +713,10 @@
             "value" : "GameTranslator TV app"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator TV uygulaması"
+            "value" : "تطبيق GameTranslator للتلفزيون"
           }
         }
       }
@@ -729,10 +729,10 @@
             "value" : "GameTranslator extends Developer Mode by itself each time you use it."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator, geliştirici modunun süresini her kullanışınızda kendisi uzatır."
+            "value" : "يمدّد GameTranslator مدة وضع المطوّر تلقائيًا في كل مرة تستخدمه."
           }
         }
       }
@@ -745,10 +745,10 @@
             "value" : "GameTranslator is not affiliated with Sony Interactive Entertainment. PlayStation and PS5 are trademarks of Sony Interactive Entertainment Inc."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator, Sony Interactive Entertainment ile bağlantılı değildir. PlayStation ve PS5, Sony Interactive Entertainment Inc.'in ticari markalarıdır."
+            "value" : "لا يتبع GameTranslator شركة Sony Interactive Entertainment. والاسمان PlayStation وPS5 علامتان تجاريتان لشركة Sony Interactive Entertainment Inc."
           }
         }
       }
@@ -761,10 +761,10 @@
             "value" : "GameTranslator reads the English subtitles of your PS5 games and shows an Arabic translation on your TV, on top of the game. You keep playing on the TV with your own controller."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator, PS5 oyunlarınızın İngilizce altyazısını okur ve Türkçesini TV'de oyunun üstünde gösterir. Siz TV'de kendi kolunuzla oynamaya devam edersiniz."
+            "value" : "يقرأ GameTranslator الترجمة النصية الإنجليزية في ألعاب PS5 ويعرض ترجمتها العربية على التلفزيون فوق اللعبة. وتواصل أنت اللعب على التلفزيون بذراع التحكم الخاص بك."
           }
         }
       }
@@ -777,10 +777,10 @@
             "value" : "GameTranslator translates online with Google Translate, or with DeepL if you add your own key in Settings. There is nothing to download."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator çeviriyi bu bilgisayarda, internetsiz yapar. İngilizce–Türkçe model (yaklaşık 530 MB) bir kez indirilir ve bu bilgisayarda kalır."
+            "value" : "يترجم GameTranslator عبر الإنترنت باستخدام Google Translate، أو باستخدام DeepL إذا أضفت مفتاحك الخاص في الإعدادات. لا حاجة إلى تنزيل أي شيء."
           }
         }
       }
@@ -793,10 +793,10 @@
             "value" : "GameTranslator watches the game through Remote Play. If it used your own account, the PS5 would turn off your controller. With a second account you keep playing undisturbed."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator oyunu Uzaktan Oynatma ile izler. Kendi hesabınızı kullansaydı PS5 kolunuzu kapatırdı. İkinci bir hesapla oyununuz hiç bölünmez."
+            "value" : "يشاهد GameTranslator اللعبة عبر Remote Play. لو استخدم حسابك لأوقف PS5 ذراع التحكم الخاص بك. بحساب ثانٍ تواصل اللعب دون انقطاع."
           }
         }
       }
@@ -809,10 +809,10 @@
             "value" : "GameTranslator will send a sample subtitle to your TV. It should appear at the bottom of the screen, on top of the game."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator TV'nize örnek bir altyazı gönderecek. Ekranın altında, oyunun üstünde görünmeli."
+            "value" : "سيرسل GameTranslator ترجمة نصية تجريبية إلى التلفزيون. يُفترض أن تظهر أسفل الشاشة فوق اللعبة."
           }
         }
       }
@@ -825,10 +825,10 @@
             "value" : "Could not download %@. Check the internet connection and try again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ indirilemedi. İnternet bağlantısını denetleyip yeniden deneyin."
+            "value" : "تعذّر تنزيل %@. تحقق من اتصال الإنترنت وحاول مرة أخرى."
           }
         }
       }
@@ -841,10 +841,10 @@
             "value" : "Could not translate this area."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu alan çevrilemedi."
+            "value" : "تعذّرت ترجمة هذه المنطقة."
           }
         }
       }
@@ -857,10 +857,10 @@
             "value" : "Create a free account at playstation.com with a different email address."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "playstation.com'da farklı bir e-posta adresiyle ücretsiz bir hesap açın."
+            "value" : "أنشئ حسابًا مجانيًا على playstation.com بعنوان بريد إلكتروني مختلف."
           }
         }
       }
@@ -873,10 +873,10 @@
             "value" : "Debugging was not allowed on the TV. Try again and choose Allow on the TV."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV'de hata ayıklamaya izin verilmedi. Yeniden deneyin ve TV'de İzin ver'i seçin."
+            "value" : "لم يُسمح بتصحيح الأخطاء على التلفزيون. حاول مرة أخرى واختر «السماح» (Allow) على التلفزيون."
           }
         }
       }
@@ -889,10 +889,10 @@
             "value" : "Developer Mode is on. One last step to install the TV app:"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geliştirici modu açık. TV uygulamasını kurmak için son bir adım kaldı:"
+            "value" : "وضع المطوّر مفعّل. بقيت خطوة أخيرة لتثبيت تطبيق التلفزيون:"
           }
         }
       }
@@ -905,10 +905,10 @@
             "value" : "Developer Mode: %lld hours left. GameTranslator extends it by itself each time you use it."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geliştirici modu: %lld saat kaldı. GameTranslator süreyi her kullanışınızda kendisi uzatır."
+            "value" : "وضع المطوّر: بقيت %lld ساعة. يمدّده GameTranslator تلقائيًا في كل مرة تستخدمه."
           }
         }
       }
@@ -921,10 +921,10 @@
             "value" : "Do you see it on the TV?"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV'de görüyor musunuz?"
+            "value" : "هل تراها على التلفزيون؟"
           }
         }
       }
@@ -937,10 +937,10 @@
             "value" : "Done"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bitti"
+            "value" : "تم"
           }
         }
       }
@@ -953,10 +953,10 @@
             "value" : "Download"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İndir"
+            "value" : "نزّل"
           }
         }
       }
@@ -969,10 +969,10 @@
             "value" : "Download the model"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modeli indir"
+            "value" : "نزّل النموذج"
           }
         }
       }
@@ -985,10 +985,10 @@
             "value" : "Translation engine"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çeviri modelini indirin"
+            "value" : "محرك الترجمة"
           }
         }
       }
@@ -1001,10 +1001,10 @@
             "value" : "Download voices"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sesleri indir"
+            "value" : "نزّل الأصوات"
           }
         }
       }
@@ -1017,10 +1017,10 @@
             "value" : "Downloading voices… %lld%%"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sesler indiriliyor… %%%lld"
+            "value" : "جارٍ تنزيل الأصوات… %lld%%"
           }
         }
       }
@@ -1033,10 +1033,10 @@
             "value" : "Downloading…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İndiriliyor…"
+            "value" : "جارٍ التنزيل…"
           }
         }
       }
@@ -1049,10 +1049,10 @@
             "value" : "Drag on the picture to draw the area where the game shows its subtitles. Drag the edges to resize it, or the inside to move it."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oyunun altyazıyı gösterdiği alanı, görüntünün üzerinde fareyi sürükleyerek çizin. Kenarlarından tutup boyutunu, içinden tutup yerini değiştirebilirsiniz."
+            "value" : "اسحب على الصورة لرسم المنطقة التي تعرض فيها اللعبة ترجمتها النصية. اسحب الحواف لتغيير حجمها، أو اسحب من داخلها لتحريكها."
           }
         }
       }
@@ -1065,10 +1065,10 @@
             "value" : "Drag over the text you want to translate. Esc or right-click closes."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çevirmek istediğiniz yazının üstünü fareyle sürükleyin. Esc ya da sağ tık kapatır."
+            "value" : "اسحب فوق النص الذي تريد ترجمته. يُغلق بزر Esc أو بالنقر بالزر الأيمن."
           }
         }
       }
@@ -1081,10 +1081,10 @@
             "value" : "Draw the area to translate, for example a quest panel. While you play, press its key (Num 1, 2 or 3) to read and translate it once. Choose where the result shows. It works even when GameTranslator is in the background."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çevrilecek alanı çizin (ör. görev paneli). Oynarken kendi tuşuna (Num 1, 2 ya da 3) basınca bu alan bir kez okunup çevrilir. Sonucun nerede görüneceğini seçin. GameTranslator arka plandayken de çalışır."
+            "value" : "ارسم المنطقة المراد ترجمتها، مثل لوحة المهام. أثناء اللعب اضغط مفتاحها (Num 1 أو 2 أو 3) لقراءتها وترجمتها مرة واحدة. اختر مكان ظهور النتيجة. يعمل ذلك حتى عندما يكون GameTranslator في الخلفية."
           }
         }
       }
@@ -1097,10 +1097,10 @@
             "value" : "English"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İngilizce"
+            "value" : "الإنجليزية"
           }
         }
       }
@@ -1113,10 +1113,10 @@
             "value" : "Extra large"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çok büyük"
+            "value" : "كبير جدًا"
           }
         }
       }
@@ -1129,10 +1129,10 @@
             "value" : "Fixed position"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sabit yerde"
+            "value" : "موضع ثابت"
           }
         }
       }
@@ -1145,10 +1145,10 @@
             "value" : "Free and open source under the GNU AGPL-3.0 license."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GNU AGPL-3.0 lisansıyla ücretsiz ve açık kaynak."
+            "value" : "مجاني ومفتوح المصدر بموجب ترخيص GNU AGPL-3.0."
           }
         }
       }
@@ -1161,10 +1161,10 @@
             "value" : "Free area (Num 5)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Serbest alan (Num 5)"
+            "value" : "منطقة حرة (Num 5)"
           }
         }
       }
@@ -1177,10 +1177,10 @@
             "value" : "French"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fransızca"
+            "value" : "الفرنسية"
           }
         }
       }
@@ -1193,10 +1193,10 @@
             "value" : "Game language"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oyunun dili"
+            "value" : "لغة اللعبة"
           }
         }
       }
@@ -1209,10 +1209,10 @@
             "value" : "German"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Almanca"
+            "value" : "الألمانية"
           }
         }
       }
@@ -1225,10 +1225,10 @@
             "value" : "IP address, e.g. 192.168.1.20"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "IP adresi, ör. 192.168.1.20"
+            "value" : "عنوان IP، مثل 192.168.1.20"
           }
         }
       }
@@ -1241,10 +1241,10 @@
             "value" : "If Windows asks whether GameTranslator may use the network, allow it for private networks."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Windows, GameTranslator'ın ağı kullanmasına izin verip vermeyeceğinizi sorarsa özel ağlar için izin verin."
+            "value" : "إذا سأل Windows عمّا إذا كان يُسمح لـ GameTranslator باستخدام الشبكة، فاسمح بذلك للشبكات الخاصة."
           }
         }
       }
@@ -1257,10 +1257,10 @@
             "value" : "If you don't see it, make sure the GameTranslator TV app is open and connect the TV again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Görmüyorsanız GameTranslator TV uygulamasının açık olduğundan emin olun ve TV'yi yeniden bağlayın."
+            "value" : "إن لم تظهر لك، فتأكد أن تطبيق GameTranslator للتلفزيون مفتوح ثم وصّل التلفزيون من جديد."
           }
         }
       }
@@ -1273,10 +1273,10 @@
             "value" : "In fixed position you can also move subtitles with the ▲ and ▼ buttons on the TV remote."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sabit yerdeyken altyazıyı TV kumandasının ▲ ve ▼ tuşlarıyla da taşıyabilirsiniz."
+            "value" : "في الموضع الثابت يمكنك أيضًا تحريك الترجمة النصية بزرّي ▲ و▼ في ريموت التلفزيون."
           }
         }
       }
@@ -1289,10 +1289,10 @@
             "value" : "In the game's audio settings, turn the dialogue (voice) volume down; keep music and effects. If the game can show speaker names in subtitles, turn them on: every character then speaks with its own voice."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oyunun ses ayarlarından konuşma (diyalog) sesini kısın; müzik ve efektler kalsın. Oyun altyazıda konuşmacı adını gösterebiliyorsa bunu açın: her karakter kendi sesiyle konuşur."
+            "value" : "في إعدادات الصوت داخل اللعبة، اخفض صوت الحوار (الأصوات) وأبقِ الموسيقى والمؤثرات. إذا كانت اللعبة تستطيع عرض اسم المتحدث في الترجمة النصية ففعّل ذلك: عندها تتكلم كل شخصية بصوتها الخاص."
           }
         }
       }
@@ -1305,10 +1305,10 @@
             "value" : "Install on the TV"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV'ye kur"
+            "value" : "ثبّت على التلفزيون"
           }
         }
       }
@@ -1321,10 +1321,10 @@
             "value" : "Install the GameTranslator TV app on this TV using the guide and open it. It finds this computer by itself."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator TV uygulamasını rehberdeki gibi bu TV'ye kurup açın. Uygulama bu bilgisayarı kendisi bulur."
+            "value" : "ثبّت تطبيق GameTranslator للتلفزيون على هذا التلفزيون باتباع الدليل ثم افتحه. سيعثر على هذا الكمبيوتر من تلقاء نفسه."
           }
         }
       }
@@ -1337,10 +1337,10 @@
             "value" : "Install with a USB stick instead"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bunun yerine USB bellekle kur"
+            "value" : "ثبّت بذاكرة USB بدلًا من ذلك"
           }
         }
       }
@@ -1353,10 +1353,10 @@
             "value" : "Installing the TV app…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV uygulaması kuruluyor…"
+            "value" : "جارٍ تثبيت تطبيق التلفزيون…"
           }
         }
       }
@@ -1369,10 +1369,10 @@
             "value" : "Japanese"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Japonca"
+            "value" : "اليابانية"
           }
         }
       }
@@ -1385,10 +1385,10 @@
             "value" : "Key Server is off. Turn it on in the Developer Mode app and keep the app on screen."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Key Server kapalı. Developer Mode uygulamasından açın ve uygulamayı ekranda bırakın."
+            "value" : "خدمة Key Server متوقفة. فعّلها من تطبيق Developer Mode وأبقِ التطبيق ظاهرًا على الشاشة."
           }
         }
       }
@@ -1401,10 +1401,10 @@
             "value" : "Language"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dil"
+            "value" : "اللغة"
           }
         }
       }
@@ -1417,10 +1417,10 @@
             "value" : "Large"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Büyük"
+            "value" : "كبير"
           }
         }
       }
@@ -1433,10 +1433,10 @@
             "value" : "Last subtitle"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Son altyazı"
+            "value" : "آخر سطر ترجمة"
           }
         }
       }
@@ -1449,10 +1449,10 @@
             "value" : "Later you sign in once with a free Samsung account; Samsung needs it to sign the app for your TV."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ardından bir kez ücretsiz bir Samsung hesabıyla giriş yaparsınız; Samsung uygulamayı TV'nize özel imzalamak için bunu ister."
+            "value" : "بعد ذلك تسجّل الدخول مرة واحدة بحساب Samsung مجاني؛ تحتاج إليه Samsung لتوقيع التطبيق لتلفزيونك."
           }
         }
       }
@@ -1465,10 +1465,10 @@
             "value" : "Left"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sol"
+            "value" : "يسار"
           }
         }
       }
@@ -1481,10 +1481,10 @@
             "value" : "Let's test it"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deneyelim"
+            "value" : "لنجرّب"
           }
         }
       }
@@ -1497,10 +1497,10 @@
             "value" : "Listen"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dinle"
+            "value" : "استمع"
           }
         }
       }
@@ -1513,10 +1513,10 @@
             "value" : "Look at the TV: it asks whether to allow debugging from this computer."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV'ye bakın: bu bilgisayardan hata ayıklamaya izin verilip verilmeyeceğini soruyor."
+            "value" : "انظر إلى التلفزيون: يسأل عمّا إذا كنت تسمح بتصحيح الأخطاء من هذا الكمبيوتر."
           }
         }
       }
@@ -1529,10 +1529,10 @@
             "value" : "Looking for the TV on the network…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV ağda aranıyor…"
+            "value" : "جارٍ البحث عن التلفزيون على الشبكة…"
           }
         }
       }
@@ -1545,10 +1545,10 @@
             "value" : "Man 1 (calm, deep)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erkek 1 (sakin, kalın)"
+            "value" : "رجل 1 (هادئ، عميق)"
           }
         }
       }
@@ -1561,10 +1561,10 @@
             "value" : "Man 2 (energetic)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erkek 2 (enerjik)"
+            "value" : "رجل 2 (نشيط)"
           }
         }
       }
@@ -1577,10 +1577,10 @@
             "value" : "Man 3 (crisp)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erkek 3 (net)"
+            "value" : "رجل 3 (واضح)"
           }
         }
       }
@@ -1593,10 +1593,10 @@
             "value" : "Medium"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Orta"
+            "value" : "متوسط"
           }
         }
       }
@@ -1609,10 +1609,10 @@
             "value" : "Menu names differ a little by brand. If the app is already on the TV, you can skip this step."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Menü adları markaya göre biraz değişir. Uygulama TV'de zaten kuruluysa bu adımı geçebilirsiniz."
+            "value" : "تختلف أسماء القوائم قليلًا بحسب العلامة التجارية. إذا كان التطبيق مثبتًا على التلفزيون فيمكنك تخطي هذه الخطوة."
           }
         }
       }
@@ -1625,10 +1625,10 @@
             "value" : "Narrator and unnamed lines"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Anlatıcı ve adı yazmayan satırlar"
+            "value" : "الراوي والسطور بلا اسم متحدث"
           }
         }
       }
@@ -1641,10 +1641,10 @@
             "value" : "No"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hayır"
+            "value" : "لا"
           }
         }
       }
@@ -1657,10 +1657,10 @@
             "value" : "No LG or Samsung TV found. Make sure the TV is on and on the same network."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "LG ya da Samsung TV bulunamadı. TV'nin açık ve aynı ağda olduğundan emin olun."
+            "value" : "لم يُعثر على تلفزيون LG أو Samsung. تأكد أن التلفزيون يعمل وأنه على الشبكة نفسها."
           }
         }
       }
@@ -1673,10 +1673,10 @@
             "value" : "No PS5 found. Make sure it is on and on the same network, or enter its IP address."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PS5 bulunamadı. Açık ve aynı ağda olduğundan emin olun ya da IP adresini girin."
+            "value" : "لم يُعثر على PS5. تأكد أنه يعمل وأنه على الشبكة نفسها، أو أدخل عنوان IP الخاص به."
           }
         }
       }
@@ -1689,10 +1689,10 @@
             "value" : "No account? You can create a free one on the same page. If the browser asks to allow access to devices on your network, allow it."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hesabınız yok mu? Aynı sayfadan ücretsiz açabilirsiniz. Tarayıcı ağınızdaki cihazlara erişim izni sorarsa izin verin."
+            "value" : "ليس لديك حساب؟ يمكنك إنشاء حساب مجاني من الصفحة نفسها. إذا طلب المتصفح السماح بالوصول إلى الأجهزة على شبكتك فاسمح بذلك."
           }
         }
       }
@@ -1705,10 +1705,10 @@
             "value" : "No text found in this area."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu alanda yazı bulunamadı."
+            "value" : "لم يُعثر على نص في هذه المنطقة."
           }
         }
       }
@@ -1721,10 +1721,10 @@
             "value" : "None"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yok"
+            "value" : "بدون"
           }
         }
       }
@@ -1737,10 +1737,10 @@
             "value" : "Not connected"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bağlı değil"
+            "value" : "غير متصل"
           }
         }
       }
@@ -1753,10 +1753,10 @@
             "value" : "Num 0 pauses or resumes the live subtitle translation, which helps when you translate areas."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Num 0, canlı altyazı çevirisini duraklatır ya da devam ettirir; alan çevirirken işe yarar."
+            "value" : "المفتاح Num 0 يوقف الترجمة النصية المباشرة مؤقتًا أو يستأنفها، وهذا مفيد عند ترجمة المناطق."
           }
         }
       }
@@ -1769,10 +1769,10 @@
             "value" : "On both"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İkisinde de"
+            "value" : "على كليهما"
           }
         }
       }
@@ -1785,10 +1785,10 @@
             "value" : "On the PC"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bilgisayarda"
+            "value" : "على الكمبيوتر"
           }
         }
       }
@@ -1801,10 +1801,10 @@
             "value" : "On the PS5, choose Add User and sign in once with the new account."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PS5'te Kullanıcı Ekle'yi seçin ve yeni hesapla bir kez oturum açın."
+            "value" : "على PS5، اختر «إضافة مستخدم» (Add User) وسجّل الدخول مرة واحدة بالحساب الجديد."
           }
         }
       }
@@ -1817,10 +1817,10 @@
             "value" : "On the TV"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV'de"
+            "value" : "على التلفزيون"
           }
         }
       }
@@ -1833,10 +1833,10 @@
             "value" : "Open Language & Region"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dil ve Bölge'yi aç"
+            "value" : "افتح «اللغة والمنطقة»"
           }
         }
       }
@@ -1849,10 +1849,10 @@
             "value" : "Open Settings › Time & language › Language & region, add English and select its optical character recognition feature."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ayarlar › Saat ve dil › Dil ve bölge'yi açın, İngilizce'yi ekleyin ve optik karakter tanıma özelliğini seçin."
+            "value" : "افتح الإعدادات › الوقت واللغة › اللغة والمنطقة، وأضف الإنجليزية واختر ميزة التعرّف البصري على الأحرف الخاصة بها."
           }
         }
       }
@@ -1865,10 +1865,10 @@
             "value" : "Open System Settings › General › Language & Region › Translation Languages and download both languages."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sistem Ayarları › Genel › Dil ve Bölge › Çeviri Dilleri'ni açıp iki dili de indirin."
+            "value" : "افتح إعدادات النظام › عام › اللغة والمنطقة › لغات الترجمة ونزّل اللغتين."
           }
         }
       }
@@ -1881,10 +1881,10 @@
             "value" : "Open language settings"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dil ayarlarını aç"
+            "value" : "افتح إعدادات اللغة"
           }
         }
       }
@@ -1897,10 +1897,10 @@
             "value" : "Open the Developer Mode app on the TV, turn on Key Server and keep the app on screen. Type the Passphrase it shows."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV'de Developer Mode uygulamasını açın, Key Server'ı açın ve uygulamayı ekranda bırakın. Gösterdiği Passphrase'i buraya yazın."
+            "value" : "افتح تطبيق Developer Mode على التلفزيون، وفعّل Key Server وأبقِ التطبيق ظاهرًا على الشاشة. اكتب عبارة Passphrase التي يعرضها."
           }
         }
       }
@@ -1913,10 +1913,10 @@
             "value" : "Open the guide"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rehberi aç"
+            "value" : "افتح الدليل"
           }
         }
       }
@@ -1929,10 +1929,10 @@
             "value" : "Open the page again"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sayfayı yeniden aç"
+            "value" : "افتح الصفحة من جديد"
           }
         }
       }
@@ -1945,10 +1945,10 @@
             "value" : "Over the English subtitle"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İngilizce altyazının üstünü örtsün"
+            "value" : "تغطية الترجمة النصية الإنجليزية"
           }
         }
       }
@@ -1961,7 +1961,7 @@
             "value" : "PS5"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "PS5"
@@ -1977,7 +1977,7 @@
             "value" : "Passphrase"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Passphrase"
@@ -1993,10 +1993,10 @@
             "value" : "Placement"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeri"
+            "value" : "موضع الترجمة"
           }
         }
       }
@@ -2009,10 +2009,10 @@
             "value" : "Play the voice on"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ses nereden çalsın"
+            "value" : "تشغيل الصوت على"
           }
         }
       }
@@ -2025,7 +2025,7 @@
             "value" : "PlayStation Network"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "PlayStation Network"
@@ -2041,10 +2041,10 @@
             "value" : "Position on screen"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ekrandaki konum"
+            "value" : "الموضع على الشاشة"
           }
         }
       }
@@ -2057,10 +2057,10 @@
             "value" : "Press Num 5 while playing: the picture freezes on the PC, drag over any part of it to translate that part once. Esc closes."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oynarken Num 5'e basın: görüntü bilgisayarda donar, çevirmek istediğiniz yeri fareyle seçin, o kısım bir kez çevrilir. Esc kapatır."
+            "value" : "اضغط Num 5 أثناء اللعب: تتجمد الصورة على الكمبيوتر، فاسحب فوق أي جزء منها لترجمته مرة واحدة. يُغلق بزر Esc."
           }
         }
       }
@@ -2073,10 +2073,10 @@
             "value" : "Reconnecting…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeniden bağlanıyor…"
+            "value" : "جارٍ إعادة الاتصال…"
           }
         }
       }
@@ -2089,10 +2089,10 @@
             "value" : "Refresh picture (Num 8)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Görüntüyü yenile (Num 8)"
+            "value" : "حدّث الصورة (Num 8)"
           }
         }
       }
@@ -2105,10 +2105,10 @@
             "value" : "Remote Play connection by chiaki-ng (AGPL-3.0). Thanks to its developers."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uzaktan Oynatma bağlantısı chiaki-ng (AGPL-3.0) ile. Geliştiricilerine teşekkürler."
+            "value" : "اتصال Remote Play عبر chiaki-ng (AGPL-3.0). شكرًا لمطوّريه."
           }
         }
       }
@@ -2121,10 +2121,10 @@
             "value" : "Remote Play is in use on another device"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uzaktan Oynatma başka bir cihazda kullanılıyor"
+            "value" : "Remote Play قيد الاستخدام على جهاز آخر"
           }
         }
       }
@@ -2137,10 +2137,10 @@
             "value" : "Remote Play is in use on another device. Close it there and enter a new code."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uzaktan Oynatma başka bir cihazda kullanılıyor. Orada kapatıp yeni kodu girin."
+            "value" : "Remote Play قيد الاستخدام على جهاز آخر. أغلقه هناك وأدخل رمزًا جديدًا."
           }
         }
       }
@@ -2153,10 +2153,10 @@
             "value" : "Reset area"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alanı sıfırla"
+            "value" : "أعد ضبط المنطقة"
           }
         }
       }
@@ -2169,10 +2169,10 @@
             "value" : "Right"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sağ"
+            "value" : "يمين"
           }
         }
       }
@@ -2185,10 +2185,10 @@
             "value" : "Samsung did not issue the signing certificate. Try again in a few minutes."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Samsung imza sertifikasını vermedi. Birkaç dakika sonra yeniden deneyin."
+            "value" : "لم تصدر Samsung شهادة التوقيع. حاول مرة أخرى بعد بضع دقائق."
           }
         }
       }
@@ -2201,10 +2201,10 @@
             "value" : "Samsung sign-in did not complete. Try again and finish signing in on the page that opens."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Samsung girişi tamamlanmadı. Yeniden deneyin ve açılan sayfada girişi bitirin."
+            "value" : "لم يكتمل تسجيل الدخول إلى Samsung. حاول مرة أخرى وأكمل تسجيل الدخول في الصفحة التي تُفتح."
           }
         }
       }
@@ -2217,10 +2217,10 @@
             "value" : "Samsung signs the app for your TV. Sign in with your Samsung account on the page that opened in your browser."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Samsung uygulamayı TV'nize özel imzalar. Tarayıcıda açılan sayfada Samsung hesabınızla giriş yapın."
+            "value" : "توقّع Samsung التطبيق لتلفزيونك. سجّل الدخول بحساب Samsung في الصفحة التي فُتحت في المتصفح."
           }
         }
       }
@@ -2233,10 +2233,10 @@
             "value" : "Search again"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeniden ara"
+            "value" : "ابحث من جديد"
           }
         }
       }
@@ -2249,10 +2249,10 @@
             "value" : "Second speaker in dialogue"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Karşılıklı konuşmada ikinci kişi"
+            "value" : "المتحدث الثاني في الحوار"
           }
         }
       }
@@ -2265,10 +2265,10 @@
             "value" : "Select"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seç"
+            "value" : "اختر"
           }
         }
       }
@@ -2281,10 +2281,10 @@
             "value" : "Send test subtitle"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Test altyazısı gönder"
+            "value" : "أرسل ترجمة تجريبية"
           }
         }
       }
@@ -2297,10 +2297,10 @@
             "value" : "Set up again"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeniden kur"
+            "value" : "أعد الإعداد"
           }
         }
       }
@@ -2313,10 +2313,10 @@
             "value" : "Set up again?"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeniden kurulsun mu?"
+            "value" : "هل تريد إعادة الإعداد؟"
           }
         }
       }
@@ -2329,10 +2329,10 @@
             "value" : "Set up again…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeniden kur…"
+            "value" : "أعد الإعداد…"
           }
         }
       }
@@ -2345,10 +2345,10 @@
             "value" : "Settings"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ayarlar"
+            "value" : "الإعدادات"
           }
         }
       }
@@ -2361,10 +2361,10 @@
             "value" : "Show the result"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sonucu göster"
+            "value" : "عرض النتيجة"
           }
         }
       }
@@ -2377,10 +2377,10 @@
             "value" : "Sign in"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Giriş yap"
+            "value" : "سجّل الدخول"
           }
         }
       }
@@ -2393,10 +2393,10 @@
             "value" : "Sign in again"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeniden giriş yap"
+            "value" : "سجّل الدخول من جديد"
           }
         }
       }
@@ -2409,10 +2409,10 @@
             "value" : "Sign in to PlayStation Network first."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Önce PlayStation Network'e giriş yapın."
+            "value" : "سجّل الدخول إلى PlayStation Network أولًا."
           }
         }
       }
@@ -2425,10 +2425,10 @@
             "value" : "Sign in to PlayStation Network with the second account you just created. Your password goes directly to Sony; GameTranslator only keeps the account ID."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Az önce açtığınız ikinci hesapla PlayStation Network'e giriş yapın. Şifreniz doğrudan Sony'ye gider; GameTranslator yalnızca hesap kimliğini saklar."
+            "value" : "سجّل الدخول إلى PlayStation Network بالحساب الثاني الذي أنشأته للتو. كلمة المرور تذهب مباشرة إلى Sony؛ ولا يحتفظ GameTranslator إلا بمعرّف الحساب."
           }
         }
       }
@@ -2441,10 +2441,10 @@
             "value" : "Sign in with the second account"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İkinci hesapla giriş yapın"
+            "value" : "سجّل الدخول بالحساب الثاني"
           }
         }
       }
@@ -2457,10 +2457,10 @@
             "value" : "Sign-in did not complete. Please try again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Giriş tamamlanmadı. Lütfen tekrar deneyin."
+            "value" : "لم يكتمل تسجيل الدخول. يُرجى المحاولة مرة أخرى."
           }
         }
       }
@@ -2473,10 +2473,10 @@
             "value" : "Signed in"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Giriş yapıldı"
+            "value" : "تم تسجيل الدخول"
           }
         }
       }
@@ -2489,10 +2489,10 @@
             "value" : "Small"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Küçük"
+            "value" : "صغير"
           }
         }
       }
@@ -2505,10 +2505,10 @@
             "value" : "Solid"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tam"
+            "value" : "معتمة"
           }
         }
       }
@@ -2521,10 +2521,10 @@
             "value" : "Source code"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kaynak kodu"
+            "value" : "الشيفرة المصدرية"
           }
         }
       }
@@ -2537,10 +2537,10 @@
             "value" : "Spanish"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İspanyolca"
+            "value" : "الإسبانية"
           }
         }
       }
@@ -2553,10 +2553,10 @@
             "value" : "Start translating"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çeviriyi başlat"
+            "value" : "ابدأ الترجمة"
           }
         }
       }
@@ -2569,10 +2569,10 @@
             "value" : "Step %1$lld of %2$lld"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adım %1$lld / %2$lld"
+            "value" : "الخطوة %1$lld من %2$lld"
           }
         }
       }
@@ -2585,10 +2585,10 @@
             "value" : "Still as the new user, go to Settings › System › Remote Play and turn on Enable Remote Play."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hâlâ yeni kullanıcıdayken Ayarlar › Sistem › Uzaktan Oynatma'ya gidip Uzaktan Oynatmayı Etkinleştir'i açın."
+            "value" : "وأنت ما زلت بالمستخدم الجديد، انتقل إلى الإعدادات › النظام › Remote Play وفعّل Enable Remote Play."
           }
         }
       }
@@ -2601,10 +2601,10 @@
             "value" : "Stop translating"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çeviriyi durdur"
+            "value" : "أوقف الترجمة"
           }
         }
       }
@@ -2617,10 +2617,10 @@
             "value" : "Subtitle area"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Altyazı alanı"
+            "value" : "منطقة الترجمة النصية"
           }
         }
       }
@@ -2633,10 +2633,10 @@
             "value" : "Subtitle history"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Altyazı geçmişi"
+            "value" : "سجل الترجمة النصية"
           }
         }
       }
@@ -2649,10 +2649,10 @@
             "value" : "Subtitle translation paused"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Altyazı çevirisi duraklatıldı"
+            "value" : "توقفت الترجمة النصية مؤقتًا"
           }
         }
       }
@@ -2665,10 +2665,10 @@
             "value" : "Subtitle translation resumed"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Altyazı çevirisi devam ediyor"
+            "value" : "استؤنفت الترجمة النصية"
           }
         }
       }
@@ -2681,10 +2681,10 @@
             "value" : "Subtitles"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Altyazı"
+            "value" : "الترجمة النصية"
           }
         }
       }
@@ -2697,10 +2697,10 @@
             "value" : "Subtitles will appear here while you play."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Siz oynarken altyazılar burada görünecek."
+            "value" : "ستظهر الترجمة النصية هنا أثناء اللعب."
           }
         }
       }
@@ -2713,10 +2713,10 @@
             "value" : "Switch back to your own user. You only do this once."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kendi kullanıcınıza geri dönün. Bunu yalnızca bir kez yaparsınız."
+            "value" : "عُد إلى مستخدمك الأصلي. تفعل هذا مرة واحدة فقط."
           }
         }
       }
@@ -2729,10 +2729,10 @@
             "value" : "TV"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV"
+            "value" : "التلفزيون"
           }
         }
       }
@@ -2745,10 +2745,10 @@
             "value" : "TV says:"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV'nin yanıtı:"
+            "value" : "ردّ التلفزيون:"
           }
         }
       }
@@ -2761,10 +2761,10 @@
             "value" : "Text recognition for the game language is not installed on this computer."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oyun dilinin yazı tanıma özelliği bu bilgisayarda yüklü değil."
+            "value" : "التعرّف على النص للغة اللعبة غير مثبت على هذا الكمبيوتر."
           }
         }
       }
@@ -2777,10 +2777,10 @@
             "value" : "Text size"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yazı boyutu"
+            "value" : "حجم الخط"
           }
         }
       }
@@ -2793,10 +2793,10 @@
             "value" : "The %@–%@ language pack is not downloaded yet."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@–%@ dil paketi henüz indirilmedi."
+            "value" : "حزمة اللغة %@–%@ لم تُنزَّل بعد."
           }
         }
       }
@@ -2809,10 +2809,10 @@
             "value" : "The Num shortcuts work only while translating, so the number keys stay free in other apps. Keep Num Lock on."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Num kısayolları yalnız çeviri açıkken çalışır; böylece sayı tuşları diğer uygulamalarda serbest kalır. Num Lock açık olmalı."
+            "value" : "تعمل اختصارات Num أثناء الترجمة فقط، لتبقى مفاتيح الأرقام متاحة في التطبيقات الأخرى. أبقِ Num Lock مفعّلًا."
           }
         }
       }
@@ -2825,10 +2825,10 @@
             "value" : "The PS5 Remote Play service stopped unexpectedly. Restart the PS5 and enter a new code."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PS5'in Uzaktan Oynatma hizmeti beklenmedik şekilde durdu. PS5'i yeniden başlatıp yeni kodu girin."
+            "value" : "توقفت خدمة Remote Play في PS5 على نحو غير متوقع. أعد تشغيل PS5 وأدخل رمزًا جديدًا."
           }
         }
       }
@@ -2841,10 +2841,10 @@
             "value" : "The PS5 did not answer. Make sure it is on (not in rest mode), on the same network as this computer, and that Remote Play is turned on, then try again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PS5 yanıt vermedi. Açık olduğundan (dinlenme modunda olmadığından), bu bilgisayarla aynı ağda bulunduğundan ve Uzaktan Oynatma'nın açık olduğundan emin olup yeniden deneyin."
+            "value" : "لم يستجب PS5. تأكد أنه يعمل (وليس في وضع الراحة)، وأنه على الشبكة نفسها مع هذا الكمبيوتر، وأن Remote Play مفعّل، ثم حاول مرة أخرى."
           }
         }
       }
@@ -2857,10 +2857,10 @@
             "value" : "The PS5 did not recognise this account. Get the code from the PS5 user signed in with the account you used in GameTranslator, or sign in again with that user's account."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PS5 bu hesabı tanımadı. Kodu, GameTranslator'ta giriş yaptığınız hesapla oturum açmış PS5 kullanıcısından alın ya da bir önceki adımda o kullanıcının hesabıyla yeniden giriş yapın."
+            "value" : "لم يتعرّف PS5 على هذا الحساب. احصل على الرمز من مستخدم PS5 المسجّل دخوله بالحساب الذي استخدمته في GameTranslator، أو سجّل الدخول من جديد بحساب ذلك المستخدم."
           }
         }
       }
@@ -2873,10 +2873,10 @@
             "value" : "The PS5 refused the code. Open Pair Device again on the PS5 and enter the new code."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PS5 kodu kabul etmedi. PS5'te Cihazı Eşleştir'i yeniden açın ve yeni kodu girin."
+            "value" : "رفض PS5 الرمز. افتح Pair Device من جديد على PS5 وأدخل الرمز الجديد."
           }
         }
       }
@@ -2889,10 +2889,10 @@
             "value" : "The PS5 refused the connection. Set up the PS5 again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PS5 bağlantıyı reddetti. PS5'i yeniden kurun."
+            "value" : "رفض PS5 الاتصال. أعد إعداد PS5."
           }
         }
       }
@@ -2905,10 +2905,10 @@
             "value" : "The TV app could not be installed. Try again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV uygulaması kurulamadı. Tekrar deneyin."
+            "value" : "تعذّر تثبيت تطبيق التلفزيون. حاول مرة أخرى."
           }
         }
       }
@@ -2921,10 +2921,10 @@
             "value" : "The TV is out of free space. Remove an app you do not use from the TV and try again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV'de boş alan kalmadı. TV'den kullanmadığınız bir uygulamayı kaldırıp tekrar deneyin."
+            "value" : "لم تبقَ مساحة فارغة على التلفزيون. أزل من التلفزيون تطبيقًا لا تستخدمه وحاول مرة أخرى."
           }
         }
       }
@@ -2937,10 +2937,10 @@
             "value" : "The TV app could not be installed. Try again; if it fails again, send us the reason below."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV uygulaması kurulamadı. Tekrar deneyin; yine olmazsa aşağıdaki sebebi bize gönderin."
+            "value" : "تعذّر تثبيت تطبيق التلفزيون. حاول مرة أخرى؛ وإن فشل ثانيةً فأرسل إلينا السبب المذكور أدناه."
           }
         }
       }
@@ -2953,10 +2953,10 @@
             "value" : "The TV app is not installed. GameTranslator can install it once Developer Mode is on."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV uygulaması kurulu değil. Geliştirici modu açılınca GameTranslator kendisi kurar."
+            "value" : "تطبيق التلفزيون غير مثبت. يستطيع GameTranslator تثبيته بعد تفعيل وضع المطوّر."
           }
         }
       }
@@ -2969,10 +2969,10 @@
             "value" : "The TV app is not installed. GameTranslator installs it once Developer Mode is on."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV uygulaması kurulu değil. Geliştirici modu açılınca GameTranslator kendisi kurar."
+            "value" : "تطبيق التلفزيون غير مثبت. يثبّته GameTranslator بعد تفعيل وضع المطوّر."
           }
         }
       }
@@ -2985,10 +2985,10 @@
             "value" : "The TV app is not installed. GameTranslator installs it over the network once debugging is on."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV uygulaması kurulu değil. Hata ayıklama açılınca GameTranslator ağ üzerinden kendisi kurar."
+            "value" : "تطبيق التلفزيون غير مثبت. يثبّته GameTranslator عبر الشبكة بعد تفعيل تصحيح الأخطاء."
           }
         }
       }
@@ -3001,10 +3001,10 @@
             "value" : "The TV app is ready (version %@)."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV uygulaması hazır (sürüm %@)."
+            "value" : "تطبيق التلفزيون جاهز (الإصدار %@)."
           }
         }
       }
@@ -3017,10 +3017,10 @@
             "value" : "The TV did not accept this computer. In the TV's Developer Mode window, check that Host PC IP is this computer's address, then restart the TV."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV bu bilgisayarı kabul etmedi. TV'deki geliştirici modu penceresinde Host PC IP'nin bu bilgisayarın adresi olduğunu kontrol edip TV'yi yeniden başlatın."
+            "value" : "لم يقبل التلفزيون هذا الكمبيوتر. في نافذة وضع المطوّر على التلفزيون، تحقق أن Host PC IP هو عنوان هذا الكمبيوتر، ثم أعد تشغيل التلفزيون."
           }
         }
       }
@@ -3033,10 +3033,10 @@
             "value" : "The TV did not respond. Make sure it is on and on the same network."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV yanıt vermedi. Açık ve aynı ağda olduğundan emin olun."
+            "value" : "لم يستجب التلفزيون. تأكد أنه يعمل وأنه على الشبكة نفسها."
           }
         }
       }
@@ -3049,10 +3049,10 @@
             "value" : "The TV refused the key. Open Key Server and type the passphrase again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV anahtarı kabul etmedi. Key Server'ı açıp passphrase'i yeniden yazın."
+            "value" : "رفض التلفزيون المفتاح. افتح Key Server واكتب عبارة Passphrase من جديد."
           }
         }
       }
@@ -3065,10 +3065,10 @@
             "value" : "The code must be 8 digits."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kod 8 haneli olmalı."
+            "value" : "يجب أن يتكون الرمز من 8 أرقام."
           }
         }
       }
@@ -3081,10 +3081,10 @@
             "value" : "The download did not complete. Check your internet connection and try again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İndirme tamamlanamadı. İnternet bağlantınızı kontrol edip yeniden deneyin."
+            "value" : "لم يكتمل التنزيل. تحقق من اتصال الإنترنت وحاول مرة أخرى."
           }
         }
       }
@@ -3097,10 +3097,10 @@
             "value" : "The game picture appears here once translating starts."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çeviri başlayınca oyun görüntüsü burada görünür."
+            "value" : "تظهر صورة اللعبة هنا عند بدء الترجمة."
           }
         }
       }
@@ -3113,10 +3113,10 @@
             "value" : "Translation is ready."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Model hazır."
+            "value" : "الترجمة جاهزة."
           }
         }
       }
@@ -3129,10 +3129,10 @@
             "value" : "The passphrase is not correct. Check it on the TV screen."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Passphrase doğru değil. TV ekranındakiyle karşılaştırın."
+            "value" : "عبارة Passphrase غير صحيحة. تحقق منها على شاشة التلفزيون."
           }
         }
       }
@@ -3145,10 +3145,10 @@
             "value" : "The saved PS5, account and TV connection will be removed."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kayıtlı PS5, hesap ve TV bağlantısı silinecek."
+            "value" : "ستُحذف بيانات PS5 والحساب واتصال التلفزيون المحفوظة."
           }
         }
       }
@@ -3161,10 +3161,10 @@
             "value" : "The second user has a login passcode on the PS5. Turn it off in Settings › Users and Accounts."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İkinci kullanıcının PS5'te giriş şifresi var. Ayarlar › Kullanıcılar ve Hesaplar'dan kapatın."
+            "value" : "للمستخدم الثاني رمز دخول على PS5. عطّله من الإعدادات › المستخدمون والحسابات."
           }
         }
       }
@@ -3177,10 +3177,10 @@
             "value" : "The translation follows where the game shows its own subtitle."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çeviri, oyunun kendi altyazısı nerede çıkarsa oraya yerleşir."
+            "value" : "تتبع الترجمة المكان الذي تعرض فيه اللعبة ترجمتها النصية."
           }
         }
       }
@@ -3193,10 +3193,10 @@
             "value" : "The translation model is not downloaded yet."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çeviri modeli henüz indirilmedi."
+            "value" : "نموذج الترجمة لم يُنزَّل بعد."
           }
         }
       }
@@ -3209,10 +3209,10 @@
             "value" : "The voice engine did not start."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ses motoru başlatılamadı."
+            "value" : "لم يبدأ محرك الصوت."
           }
         }
       }
@@ -3225,10 +3225,10 @@
             "value" : "The voice engine is missing from the app. Download GameTranslator again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ses motoru uygulamada yok. GameTranslator'ı yeniden indirin."
+            "value" : "محرك الصوت غير موجود في التطبيق. نزّل GameTranslator من جديد."
           }
         }
       }
@@ -3241,10 +3241,10 @@
             "value" : "The voices are downloaded once (440 MB)."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sesler bir kez indirilir (440 MB)."
+            "value" : "تُنزَّل الأصوات مرة واحدة (440 MB)."
           }
         }
       }
@@ -3257,10 +3257,10 @@
             "value" : "This Mac"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu Mac"
+            "value" : "جهاز Mac هذا"
           }
         }
       }
@@ -3273,10 +3273,10 @@
             "value" : "This PS5 system version is not supported yet. Update GameTranslator and try again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu PS5 sistem sürümü henüz desteklenmiyor. GameTranslator'ı güncelleyip yeniden deneyin."
+            "value" : "إصدار نظام PS5 هذا غير مدعوم بعد. حدّث GameTranslator وحاول مرة أخرى."
           }
         }
       }
@@ -3289,10 +3289,10 @@
             "value" : "This Samsung TV is too old for the GameTranslator TV app (2019 models and later are supported)."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu Samsung TV, GameTranslator TV uygulaması için çok eski (2019 ve sonraki modeller destekleniyor)."
+            "value" : "تلفزيون Samsung هذا قديم جدًا لتطبيق GameTranslator للتلفزيون (المدعوم طرازات 2019 وما بعدها)."
           }
         }
       }
@@ -3305,10 +3305,10 @@
             "value" : "This computer"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu bilgisayar"
+            "value" : "هذا الكمبيوتر"
           }
         }
       }
@@ -3321,10 +3321,10 @@
             "value" : "This is a test subtitle. Can you see it on top of the game?"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu bir test altyazısı. Oyunun üstünde görebiliyor musunuz?"
+            "value" : "هذه ترجمة نصية تجريبية. هل تراها فوق اللعبة؟"
           }
         }
       }
@@ -3337,10 +3337,10 @@
             "value" : "Tick “Always allow from this computer” and choose Allow. The app then installs by itself."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“Bu bilgisayardan her zaman izin ver”i işaretleyip İzin ver'i seçin. Uygulama ardından kendiliğinden kurulur."
+            "value" : "ضع علامة على «السماح دائمًا من هذا الكمبيوتر» (Always allow from this computer) واختر «السماح» (Allow). بعدها يُثبَّت التطبيق من تلقاء نفسه."
           }
         }
       }
@@ -3353,10 +3353,10 @@
             "value" : "Top"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Üst"
+            "value" : "أعلى"
           }
         }
       }
@@ -3369,10 +3369,10 @@
             "value" : "Translating…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çevriliyor…"
+            "value" : "جارٍ الترجمة…"
           }
         }
       }
@@ -3385,10 +3385,10 @@
             "value" : "Translation from %@ to %@ is not available on this Mac."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu Mac'te %@ dilinden %@ diline çeviri kullanılamıyor."
+            "value" : "الترجمة من %@ إلى %@ غير متاحة على جهاز Mac هذا."
           }
         }
       }
@@ -3401,10 +3401,10 @@
             "value" : "Translation from %@ to %@ is not available yet."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ dilinden %@ diline çeviri henüz yok."
+            "value" : "الترجمة من %@ إلى %@ غير متاحة بعد."
           }
         }
       }
@@ -3417,10 +3417,10 @@
             "value" : "Translation model: OPUS-MT, University of Helsinki (CC BY 4.0)."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çeviri modeli: OPUS-MT, Helsinki Üniversitesi (CC BY 4.0)."
+            "value" : "الترجمة: Google Translate أو DeepL عبر الإنترنت."
           }
         }
       }
@@ -3433,10 +3433,10 @@
             "value" : "Try again"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeniden dene"
+            "value" : "حاول مرة أخرى"
           }
         }
       }
@@ -3449,10 +3449,10 @@
             "value" : "Turn on the PS5. As the second user, open Settings › System › Remote Play › Pair Device and enter the 8-digit code shown there."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PS5'i açın. GameTranslator'ta giriş yaptığınız ikinci hesabın kullanıcısıyla Ayarlar › Sistem › Uzaktan Oynatma › Cihazı Eşleştir'i açın ve orada görünen 8 haneli kodu girin."
+            "value" : "شغّل PS5. بالمستخدم الثاني، افتح الإعدادات › النظام › Remote Play › Pair Device وأدخل الرمز المكوّن من 8 أرقام الظاهر هناك."
           }
         }
       }
@@ -3465,10 +3465,10 @@
             "value" : "Turn on the TV. When you press Connect, the TV asks for permission once — accept it with the remote. If the GameTranslator TV app is missing, this screen helps you install it."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV'yi açın. Bağlan'a bastığınızda TV bir kez izin ister, kumandayla onaylayın. GameTranslator TV uygulaması kurulu değilse bu ekran kurmanıza yardım eder."
+            "value" : "شغّل التلفزيون. عند الضغط على «اتصل» يطلب التلفزيون الإذن مرة واحدة — اقبله بالريموت. إذا لم يكن تطبيق GameTranslator للتلفزيون مثبتًا فستساعدك هذه الشاشة على تثبيته."
           }
         }
       }
@@ -3481,10 +3481,10 @@
             "value" : "Turn on your PS5"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PS5'inizi açın"
+            "value" : "شغّل PS5"
           }
         }
       }
@@ -3497,10 +3497,10 @@
             "value" : "Update now"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Şimdi güncelle"
+            "value" : "حدّث الآن"
           }
         }
       }
@@ -3513,10 +3513,10 @@
             "value" : "Use this area"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu bölgeyi kullan"
+            "value" : "استخدم هذه المنطقة"
           }
         }
       }
@@ -3529,10 +3529,10 @@
             "value" : "Vestel, Arçelik, Beko, Grundig, Philips and other TVs running Android TV."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Android TV kullanan Vestel, Arçelik, Beko, Grundig, Philips ve diğer TV'ler."
+            "value" : "تلفزيونات Vestel وArçelik وBeko وGrundig وPhilips وغيرها من التلفزيونات العاملة بنظام Android TV."
           }
         }
       }
@@ -3545,10 +3545,10 @@
             "value" : "Waiting for sign-in…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Giriş bekleniyor…"
+            "value" : "في انتظار تسجيل الدخول…"
           }
         }
       }
@@ -3561,10 +3561,10 @@
             "value" : "Waiting for the TV app"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV uygulaması bekleniyor"
+            "value" : "في انتظار تطبيق التلفزيون"
           }
         }
       }
@@ -3577,10 +3577,10 @@
             "value" : "Waiting for the TV…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "TV bekleniyor…"
+            "value" : "في انتظار التلفزيون…"
           }
         }
       }
@@ -3593,10 +3593,10 @@
             "value" : "Welcome to GameTranslator"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator'a hoş geldiniz"
+            "value" : "مرحبًا بك في GameTranslator"
           }
         }
       }
@@ -3609,10 +3609,10 @@
             "value" : "Windows' OpenSSH Client is missing. Add it in Settings › System › Optional features and try again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Windows'un OpenSSH istemcisi eksik. Ayarlar › Sistem › İsteğe bağlı özellikler bölümünden ekleyip tekrar deneyin."
+            "value" : "عميل OpenSSH في Windows غير موجود. أضفه من الإعدادات › النظام › الميزات الاختيارية وحاول مرة أخرى."
           }
         }
       }
@@ -3625,10 +3625,10 @@
             "value" : "Woman 1 (bright)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kadın 1 (canlı)"
+            "value" : "امرأة 1 (مشرقة)"
           }
         }
       }
@@ -3641,10 +3641,10 @@
             "value" : "Woman 2 (warm)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kadın 2 (sıcak)"
+            "value" : "امرأة 2 (دافئة)"
           }
         }
       }
@@ -3657,10 +3657,10 @@
             "value" : "Woman 3 (confident)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kadın 3 (kendinden emin)"
+            "value" : "امرأة 3 (واثقة)"
           }
         }
       }
@@ -3673,10 +3673,10 @@
             "value" : "Yes, I see it"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Evet, görüyorum"
+            "value" : "نعم، أراها"
           }
         }
       }
@@ -3689,10 +3689,10 @@
             "value" : "You will need:"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gerekenler:"
+            "value" : "ستحتاج إلى:"
           }
         }
       }
@@ -3705,7 +3705,7 @@
             "value" : "chiaki-ng"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "chiaki-ng"
@@ -3721,10 +3721,10 @@
             "value" : "Without it Windows reads the subtitles with your system language and the translation turns into nonsense. Install it once; Windows asks for permission."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu olmadan Windows altyazıyı sistem dilinizle okur ve çeviri anlamsızlaşır. Bir kez kurun; Windows izin ister."
+            "value" : "بدونه يقرأ Windows الترجمة النصية بلغة نظامك فتصبح الترجمة بلا معنى. ثبّته مرة واحدة؛ سيطلب Windows الإذن."
           }
         }
       }
@@ -3737,10 +3737,10 @@
             "value" : "Install text recognition"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yazı tanımayı kur"
+            "value" : "ثبّت التعرّف على النص"
           }
         }
       }
@@ -3753,10 +3753,10 @@
             "value" : "Voice"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ses"
+            "value" : "الصوت"
           }
         }
       }
@@ -3769,10 +3769,10 @@
             "value" : "Natural"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Doğal"
+            "value" : "طبيعي"
           }
         }
       }
@@ -3785,10 +3785,10 @@
             "value" : "Fast"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hızlı"
+            "value" : "سريع"
           }
         }
       }
@@ -3801,10 +3801,10 @@
             "value" : "Natural voices, downloaded once. Each line takes a moment to prepare, so the voice can come a little after the subtitle."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Doğal sesler, bir kez indirilir. Her cümlenin hazırlanması biraz sürdüğü için ses altyazıdan biraz sonra gelebilir."
+            "value" : "أصوات طبيعية تُنزَّل مرة واحدة. يستغرق تجهيز كل سطر لحظة، لذا قد يأتي الصوت بعد الترجمة النصية بقليل."
           }
         }
       }
@@ -3817,10 +3817,10 @@
             "value" : "Online translation (DeepL)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çevrimiçi çeviri (DeepL)"
+            "value" : "الترجمة عبر الإنترنت (DeepL)"
           }
         }
       }
@@ -3833,10 +3833,10 @@
             "value" : "Optional. With your own free DeepL key, translations read more naturally. Subtitle text is sent to DeepL; when DeepL cannot be reached, the translation model on this computer takes over."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İsteğe bağlı. Kendi ücretsiz DeepL anahtarınızla çeviriler daha doğal olur. Altyazı metni DeepL'e gönderilir; DeepL'e ulaşılamazsa bu bilgisayardaki çeviri modeli devreye girer."
+            "value" : "اختياري. بمفتاح DeepL المجاني الخاص بك تصبح الترجمة أكثر سلاسة. يُرسل نص الترجمة النصية إلى DeepL؛ وعند تعذّر الوصول إلى DeepL تتولى Google Translate الترجمة."
           }
         }
       }
@@ -3849,10 +3849,10 @@
             "value" : "Save and test"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kaydet ve dene"
+            "value" : "احفظ وجرّب"
           }
         }
       }
@@ -3865,10 +3865,10 @@
             "value" : "Get a free DeepL API key"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ücretsiz DeepL API anahtarı alın"
+            "value" : "احصل على مفتاح DeepL API مجاني"
           }
         }
       }
@@ -3881,10 +3881,10 @@
             "value" : "Translate with DeepL"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DeepL ile çevir"
+            "value" : "ترجِم عبر DeepL"
           }
         }
       }
@@ -3897,10 +3897,10 @@
             "value" : "Remove key"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Anahtarı sil"
+            "value" : "احذف المفتاح"
           }
         }
       }
@@ -3913,10 +3913,10 @@
             "value" : "DeepL API key"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DeepL API anahtarı"
+            "value" : "مفتاح DeepL API"
           }
         }
       }
@@ -3929,10 +3929,10 @@
             "value" : "This month: %1$@ of %2$@ characters used."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu ay: %2$@ karakterin %1$@ kadarı kullanıldı."
+            "value" : "هذا الشهر: استُخدم %1$@ من %2$@ حرف."
           }
         }
       }
@@ -3945,10 +3945,10 @@
             "value" : "This month's DeepL limit is used up. Until it renews, the translation model on this computer translates."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu ayın DeepL sınırı doldu. Sınır yenilenene kadar bu bilgisayardaki çeviri modeli çevirir."
+            "value" : "استُنفدت حصة DeepL لهذا الشهر. إلى أن تتجدد تتولى Google Translate الترجمة."
           }
         }
       }
@@ -3961,10 +3961,10 @@
             "value" : "DeepL did not accept this key. Copy it again from your DeepL account page."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DeepL bu anahtarı kabul etmedi. Anahtarı DeepL hesap sayfanızdan yeniden kopyalayın."
+            "value" : "لم يقبل DeepL هذا المفتاح. انسخه من جديد من صفحة حسابك في DeepL."
           }
         }
       }
@@ -3977,10 +3977,10 @@
             "value" : "DeepL could not be reached. Check your internet connection."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DeepL'e ulaşılamadı. İnternet bağlantınızı kontrol edin."
+            "value" : "تعذّر الوصول إلى DeepL. تحقق من اتصال الإنترنت."
           }
         }
       }
@@ -3993,10 +3993,10 @@
             "value" : "Translate the screen (Num 9)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ekranı çevir (Num 9)"
+            "value" : "ترجِم الشاشة (Num 9)"
           }
         }
       }
@@ -4009,10 +4009,10 @@
             "value" : "Press Num 9 while playing: every text on the screen is translated once and shown on the TV in its own place. Press again to remove the translations."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oynarken Num 9'a basın: ekrandaki bütün yazılar bir kez çevrilir ve TV'de her biri kendi yerinde gösterilir. Çevirileri kaldırmak için yeniden basın."
+            "value" : "اضغط Num 9 أثناء اللعب: يُترجم كل نص على الشاشة مرة واحدة ويُعرض على التلفزيون في مكانه. اضغط مرة أخرى لإزالة الترجمات."
           }
         }
       }
@@ -4025,10 +4025,10 @@
             "value" : "Translate the screen (⌥⌘T)"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ekranı çevir (⌥⌘T)"
+            "value" : "ترجِم الشاشة (⌥⌘T)"
           }
         }
       }
@@ -4041,10 +4041,10 @@
             "value" : "Press ⌥⌘T while playing: every text on the screen is translated once and shown on the TV in its own place. Press again to remove the translations."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oynarken ⌥⌘T'ye basın: ekrandaki bütün yazılar bir kez çevrilir ve TV'de her biri kendi yerinde gösterilir. Çevirileri kaldırmak için yeniden basın."
+            "value" : "اضغط ⌥⌘T أثناء اللعب: يُترجم كل نص على الشاشة مرة واحدة ويُعرض على التلفزيون في مكانه. اضغط مرة أخرى لإزالة الترجمات."
           }
         }
       }
@@ -4057,10 +4057,10 @@
             "value" : "Translating the screen…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ekran çevriliyor…"
+            "value" : "جارٍ ترجمة الشاشة…"
           }
         }
       }
@@ -4073,10 +4073,10 @@
             "value" : "No text found on the screen."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ekranda yazı bulunamadı."
+            "value" : "لم يُعثر على نص على الشاشة."
           }
         }
       }
@@ -4089,10 +4089,10 @@
             "value" : "macOS can't read the text on the screen."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macOS ekrandaki yazıyı okuyamıyor."
+            "value" : "يتعذّر على macOS قراءة النص على الشاشة."
           }
         }
       }
@@ -4105,10 +4105,10 @@
             "value" : "The disk is almost full (%.1f GB free). macOS needs free space to read text; free up a few GB and start the translation again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Disk neredeyse dolu (%.1f GB boş). macOS'in yazıyı okuyabilmesi için boş yer gerekiyor; birkaç GB yer açıp çeviriyi yeniden başlatın."
+            "value" : "القرص شبه ممتلئ (المساحة الفارغة %.1f GB). يحتاج macOS إلى مساحة فارغة لقراءة النص؛ أفرغ بضعة GB وابدأ الترجمة من جديد."
           }
         }
       }
@@ -4121,10 +4121,10 @@
             "value" : "Restart the Mac and start the translation again."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mac'i yeniden başlatıp çeviriyi yeniden başlatın."
+            "value" : "أعد تشغيل Mac وابدأ الترجمة من جديد."
           }
         }
       }
@@ -4137,10 +4137,10 @@
             "value" : "OBS overlay"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "OBS katmanı"
+            "value" : "طبقة OBS"
           }
         }
       }
@@ -4153,10 +4153,10 @@
             "value" : "Streaming with a capture card? In OBS add a Browser source with this address (width 1920, height 1080). The Arabic subtitles appear over the game on your screen and on the stream."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Capture card ile yayın mı yapıyorsunuz? OBS'de bu adresle bir Tarayıcı kaynağı ekleyin (genişlik 1920, yükseklik 1080). Türkçe altyazı hem sizin ekranınızda hem yayında oyunun üstünde görünür."
+            "value" : "هل تبث ببطاقة التقاط؟ أضف في OBS مصدر متصفح (Browser) بهذا العنوان (العرض 1920، الارتفاع 1080). تظهر الترجمة العربية فوق اللعبة على شاشتك وفي البث."
           }
         }
       }
@@ -4169,10 +4169,10 @@
             "value" : "Copy"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kopyala"
+            "value" : "انسخ"
           }
         }
       }
@@ -4185,10 +4185,10 @@
             "value" : "Copied"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kopyalandı"
+            "value" : "تم النسخ"
           }
         }
       }
@@ -4201,10 +4201,10 @@
             "value" : "If OBS runs on another computer, use this Mac's network address instead of localhost. The overlay only shows subtitles while the translation is running."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "OBS başka bir bilgisayardaysa localhost yerine bu Mac'in ağ adresini yazın. Katman yalnızca çeviri çalışırken altyazı gösterir."
+            "value" : "إذا كان OBS يعمل على كمبيوتر آخر، فاستخدم عنوان الشبكة لجهاز Mac هذا بدلًا من localhost. لا تعرض الطبقة الترجمة النصية إلا أثناء عمل الترجمة."
           }
         }
       }
@@ -4217,10 +4217,10 @@
             "value" : "If OBS runs on another computer, use the network address of this PC instead of localhost. The overlay only shows subtitles while the translation is running."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "OBS başka bir bilgisayardaysa localhost yerine bu bilgisayarın ağ adresini yazın. Katman yalnızca çeviri çalışırken altyazı gösterir."
+            "value" : "إذا كان OBS يعمل على كمبيوتر آخر، فاستخدم عنوان الشبكة لهذا الكمبيوتر بدلًا من localhost. لا تعرض الطبقة الترجمة النصية إلا أثناء عمل الترجمة."
           }
         }
       }
@@ -4233,10 +4233,10 @@
             "value" : "Allow GameTranslator through Windows Firewall"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator'a Windows Güvenlik Duvarı'nda izin ver"
+            "value" : "اسمح لـ GameTranslator عبر جدار حماية Windows"
           }
         }
       }
@@ -4249,10 +4249,10 @@
             "value" : "Windows Firewall now allows GameTranslator."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Windows Güvenlik Duvarı artık GameTranslator'a izin veriyor."
+            "value" : "جدار حماية Windows يسمح الآن لـ GameTranslator."
           }
         }
       }
@@ -4265,10 +4265,10 @@
             "value" : "Windows Firewall may be blocking the connection."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bağlantıyı Windows Güvenlik Duvarı engelliyor olabilir."
+            "value" : "ربما يحظر جدار حماية Windows الاتصال."
           }
         }
       }
@@ -4281,10 +4281,10 @@
             "value" : "Waiting for Windows…"
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Windows bekleniyor…"
+            "value" : "في انتظار Windows…"
           }
         }
       }
@@ -4297,10 +4297,10 @@
             "value" : "The firewall rule was not added. Try again and choose Yes when Windows asks."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Güvenlik duvarı kuralı eklenmedi. Yeniden deneyin ve Windows sorduğunda Evet'i seçin."
+            "value" : "لم تُضف قاعدة جدار الحماية. حاول مرة أخرى واختر «نعم» عندما يسأل Windows."
           }
         }
       }
@@ -4313,10 +4313,10 @@
             "value" : "Open Pair Device again on the PS5 and enter the new code."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PS5'te Cihazı Eşleştir'i yeniden açın ve yeni kodu girin."
+            "value" : "افتح Pair Device من جديد على PS5 وأدخل الرمز الجديد."
           }
         }
       }
@@ -4329,10 +4329,10 @@
             "value" : "GameTranslator needs incoming connections from the PS5 and the TV. Windows asks for permission once."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator'ın PS5'ten ve TV'den gelen bağlantıları alabilmesi gerekiyor. Windows bir kez izin ister."
+            "value" : "يحتاج GameTranslator إلى استقبال الاتصالات الواردة من PS5 والتلفزيون. يطلب Windows الإذن مرة واحدة."
           }
         }
       }
@@ -4345,20 +4345,20 @@
             "value" : "Allow GameTranslator, then open Pair Device again on the PS5 and enter the new code."
           }
         },
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator'a izin verin, sonra PS5'te Cihazı Eşleştir'i yeniden açın ve yeni kodu girin."
+            "value" : "اسمح لـ GameTranslator، ثم افتح Pair Device من جديد على PS5 وأدخل الرمز الجديد."
           }
         }
       }
     },
     "A compatible TV (LG, Samsung, or Android TV) with the GameTranslator TV app" : {
       "localizations" : {
-        "tr" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GameTranslator TV uygulaması kurulu bir TV (LG, Samsung veya Android TV)"
+            "value" : "تلفزيون متوافق (LG أو Samsung أو Android TV) عليه تطبيق GameTranslator للتلفزيون"
           }
         }
       }

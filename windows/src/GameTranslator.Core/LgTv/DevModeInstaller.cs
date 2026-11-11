@@ -10,39 +10,39 @@ namespace GameTranslator.Core.LgTv;
 
 public sealed record CommandResult(int Status, string Output);
 
-/// <summary>Dış komut çalıştıran her şey (gerçekte <see cref="ProcessRunner"/>).</summary>
+/// <summary>كل ما يشغّل أمرًا خارجيًا (فعليًا <see cref="ProcessRunner"/>).</summary>
 public interface ICommandRunner
 {
     Task<CommandResult> RunAsync(string executable, IReadOnlyList<string> arguments, string? inputFile);
 }
 
-/// <summary>TV uygulamasını kurarken çıkan sorunlar (LG, Samsung ve Android TV ortak).</summary>
+/// <summary>المشكلات التي تظهر عند تثبيت تطبيق التلفزيون (مشتركة بين LG وSamsung وAndroid TV).</summary>
 public enum DevModeError
 {
     Unreachable, KeyServerOff, WrongPassphrase, KeyRefused, InstallFailed, ToolMissing,
-    /// <summary>Samsung: TV Tizen 5.0'dan (2019) eski.</summary>
+    /// <summary>Samsung: التلفزيون أقدم من Tizen 5.0 (2019).</summary>
     TooOld,
-    /// <summary>Samsung hesabıyla giriş tamamlanmadı.</summary>
+    /// <summary>لم يكتمل تسجيل الدخول بحساب Samsung.</summary>
     SignInFailed,
-    /// <summary>Samsung TV'ye özel sertifikayı vermedi.</summary>
+    /// <summary>لم تمنح Samsung الشهادة الخاصة بالتلفزيون.</summary>
     CertificateFailed,
-    /// <summary>Android: TV'de hata ayıklama izni verilmedi.</summary>
+    /// <summary>Android: لم يُمنح إذن تصحيح الأخطاء على التلفزيون.</summary>
     NotApproved,
-    /// <summary>TV kurulumda yer kalmadığını söyledi.</summary>
+    /// <summary>أفاد التلفزيون عند التثبيت بأنه لم تبقَ مساحة.</summary>
     NotEnoughSpace,
 }
 
-/// <param name="detail">Sorunu bulmak için ayrıntı (komut çıktısı gibi); hata günlüğüne yazılır, kullanıcıya gösterilmez.</param>
+/// <param name="detail">تفاصيل تساعد على معرفة المشكلة (مثل مخرجات الأمر)؛ تُكتب في سجل الأخطاء ولا تُعرض للمستخدم.</param>
 public sealed class DevModeException(DevModeError error, string? detail = null)
     : Exception(detail is null ? error.ToString() : $"{error}: {detail}")
 {
     public DevModeError Error { get; } = error;
 
-    /// <summary>TV'nin ya da aracın verdiği asıl sebep (ör. Samsung'un "install failed[118]" çıktısı).</summary>
+    /// <summary>السبب الفعلي الذي أعطاه التلفزيون أو الأداة (مثل مخرجات Samsung: "install failed[118]").</summary>
     public string? Detail { get; } = detail;
 }
 
-/// <summary>Key Server'dan gelen anahtarın parolasını çözen ssh-keygen'in yeri.</summary>
+/// <summary>مسار ssh-keygen الذي يزيل عبارة المرور عن المفتاح القادم من Key Server.</summary>
 public sealed record DevModeTools(string SshKeygen)
 {
     public static DevModeTools ForThisSystem() => OperatingSystem.IsWindows()
@@ -51,13 +51,13 @@ public sealed record DevModeTools(string SshKeygen)
 }
 
 /// <summary>
-/// TV uygulamasını LG'nin geliştirici modu üzerinden kurar ve günceller.
-/// Geliştirici modu açık TV 9922 portunda SSH bekler; anahtar Key Server'dan bir kez alınır.
+/// يثبّت تطبيق التلفزيون ويحدّثه عبر وضع المطوّر في LG.
+/// التلفزيون الذي فُعّل فيه وضع المطوّر ينتظر SSH على المنفذ 9922؛ ويُجلب المفتاح من Key Server مرة واحدة.
 /// </summary>
 public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval = null, TimeSpan? installTimeout = null,
     TimeSpan? verifyTimeout = null)
 {
-    /// <summary>TV'ye uygulamanın içinden SSH ile bağlanan kurucu. Kurulum komutu TV'nin sonucunu birkaç dakika bekler.</summary>
+    /// <summary>مثبِّت يتصل بالتلفزيون عبر SSH من داخل التطبيق. أمر التثبيت ينتظر نتيجة التلفزيون بضع دقائق.</summary>
     public static DevModeInstaller ForTv(string host, string keyFile) =>
         new(new SshNetShell(host, Port, keyFile) { CommandTimeout = TimeSpan.FromMinutes(5) });
 
@@ -66,7 +66,7 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
     public const string TempDir = "/media/developer/temp";
     private const string InstallLog = TempDir + "/gametranslator-install.log";
 
-    /// <summary>ares-install gibi paket TV'ye kendi adıyla yüklenir (<c>/media/developer/temp/com.gametranslator.tv_0.9.6_all.ipk</c>).</summary>
+    /// <summary>كما يفعل ares-install تُرفع الحزمة إلى التلفزيون باسمها (<c>/media/developer/temp/com.gametranslator.tv_0.9.6_all.ipk</c>).</summary>
     public static string RemotePackage(string package) => $"{TempDir}/{Path.GetFileName(package)}";
 
     /// <summary><c>com.gametranslator.tv_0.6.1_all.ipk</c> → <c>0.6.1</c></summary>
@@ -85,7 +85,7 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
         return match.Success ? match.Groups[1].Value : null;
     }
 
-    /// <summary>TV'de geliştirici modu açık mı? Kapalıysa port yanıt vermez.</summary>
+    /// <summary>هل وضع المطوّر مفعّل على التلفزيون؟ إن كان معطّلًا فالمنفذ لا يستجيب.</summary>
     public static async Task<bool> IsDevModeOnAsync(string host, TimeSpan? timeout = null)
     {
         using var client = new TcpClient();
@@ -103,7 +103,7 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
 
     public static Uri KeyUrl(string host) => new($"http://{host}:9991/webos_rsa");
 
-    /// <summary>Key Server'dan anahtarı alır ve TV ekranındaki parolayla çözer.</summary>
+    /// <summary>يجلب المفتاح من Key Server ويفكّه بعبارة المرور الظاهرة على شاشة التلفزيون.</summary>
     public static async Task<string> FetchKeyAsync(string host, string passphrase, ICommandRunner runner, DevModeTools tools)
     {
         byte[] key;
@@ -130,7 +130,7 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
         }
     }
 
-    /// <summary>TV'deki sürüm; uygulama kurulu değilse null.</summary>
+    /// <summary>الإصدار المثبَّت على التلفزيون؛ وnull إذا لم يكن التطبيق مثبَّتًا.</summary>
     public async Task<string?> InstalledVersionAsync()
     {
         var result = await SshAsync($"cat {AppInfoPath}");
@@ -138,23 +138,23 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
     }
 
     /// <summary>
-    /// Paketi TV'ye yükler ve ares-install'un yaptığı gibi kurar: kurulum aboneliği TV "installed" ya da hata diyene kadar
-    /// açık kalır, paket ancak bundan sonra silinir. Eskiden <c>luna-send -n 1</c> ilk yanıttan sonra çıkıyordu; abonelik
-    /// kapanınca bazı webOS sürümleri kurulumu yarıda bırakıyor, biz de sürüm görünmeyince "boş alan" hatası veriyorduk.
+    /// يرفع الحزمة إلى التلفزيون ويثبّتها كما يفعل ares-install: يبقى اشتراك التثبيت مفتوحًا حتى يقول التلفزيون "installed"
+    /// أو يعلن خطأ، ولا تُحذف الحزمة إلا بعد ذلك. كان <c>luna-send -n 1</c> سابقًا يخرج بعد أول رد؛ وعند إغلاق الاشتراك
+    /// كانت بعض إصدارات webOS تترك التثبيت في منتصفه، وكنا نعطي خطأ «المساحة الفارغة» لأن الإصدار لم يظهر.
     /// </summary>
     public async Task InstallAsync(string package, string version)
     {
         var remote = RemotePackage(package);
-        // Önceki denemelerden kalan paketler TV'de yer kaplamasın.
+        // حتى لا تشغل الحزم الباقية من محاولات سابقة مساحة على التلفزيون.
         var upload = await SshAsync(
             $"mkdir -p {TempDir} && rm -f {TempDir}/com.gametranslator.tv_*.ipk {TempDir}/gametranslator.ipk && cat > '{remote}'", package);
         if (upload.Status != 0)
-            throw Failure($"yükleme çıkış kodu {upload.Status}: {Short(upload.Output)}", upload.Output);
-        // Paket TV'ye eksiksiz ulaştı mı? (wc yoksa ya da çıktı okunamazsa denetim atlanır.)
+            throw Failure($"رمز خروج الرفع {upload.Status}: {Short(upload.Output)}", upload.Output);
+        // هل وصلت الحزمة إلى التلفزيون كاملة؟ (إذا لم يوجد wc أو تعذّرت قراءة المخرجات يُتخطى الفحص.)
         var expected = new FileInfo(package).Length;
         var size = await SshAsync($"wc -c < '{remote}'");
         if (long.TryParse(size.Output.Trim(), out var actual) && actual != expected)
-            throw new DevModeException(DevModeError.InstallFailed, $"paket TV'ye eksik ya da bozuk ulaştı: {actual}/{expected} bayt");
+            throw new DevModeException(DevModeError.InstallFailed, $"وصلت الحزمة إلى التلفزيون ناقصة أو تالفة: {actual}/{expected} بايت");
 
         var wait = installTimeout ?? TimeSpan.FromMinutes(3);
         var response = await SshAsync(InstallCommand(remote, (int)Math.Max(1, Math.Ceiling(wait.TotalSeconds))));
@@ -162,11 +162,11 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
         if (outcome.Failed)
         {
             await RemoveAsync(remote);
-            throw Failure(string.IsNullOrWhiteSpace(outcome.Reason) ? $"kurulum başarısız: {Short(response.Output)}" : outcome.Reason,
+            throw Failure(string.IsNullOrWhiteSpace(outcome.Reason) ? $"فشل التثبيت: {Short(response.Output)}" : outcome.Reason,
                 response.Output);
         }
 
-        // TV "installed" dese de (ya da sonucu okunamadıysa) sürüm appinfo.json'dan doğrulanır.
+        // حتى لو قال التلفزيون "installed" (أو تعذّرت قراءة النتيجة) يُتحقق من الإصدار عبر appinfo.json.
         var timer = Stopwatch.StartNew();
         var limit = verifyTimeout ?? TimeSpan.FromSeconds(outcome.Installed ? 30 : 60);
         while (true)
@@ -179,17 +179,17 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
             if (timer.Elapsed >= limit) break;
             await Task.Delay(pollInterval ?? TimeSpan.FromSeconds(2));
         }
-        // Sonuç gelmediyse paket silinmez: kurulum TV'de sürüyor olabilir; bir sonraki deneme onu temizler.
+        // إذا لم تصل نتيجة لا تُحذف الحزمة: قد يكون التثبيت جاريًا على التلفزيون؛ والمحاولة التالية تنظّفها.
         if (outcome.Installed) await RemoveAsync(remote);
         throw new DevModeException(DevModeError.InstallFailed,
-            $"TV'de {version} sürümü görünmedi; kurulum yanıtı ({response.Status}): {Short(response.Output)}");
+            $"لم يظهر الإصدار {version} على التلفزيون؛ ردّ التثبيت ({response.Status}): {Short(response.Output)}");
     }
 
     /// <summary>
-    /// TV'de kurulumu başlatan kabuk komutu. <c>luna-send-pub -i</c> (ares-install'un kullandığı biçim) girişi açık kaldıkça
-    /// aboneliği sürdürür; giriş <c>sleep</c>'ten gelir. Yanıtlar dosyaya yazılır; TV "installed" ya da hata dediğinde,
-    /// luna-send kendiliğinden çıktığında ya da süre dolduğunda yanıtlar basılır ve luna-send kapatılır. sleep'in
-    /// çıkışları SSH kanalına bağlı değildir; oturum onu beklemez.
+    /// أمر الصدفة الذي يبدأ التثبيت على التلفزيون. <c>luna-send-pub -i</c> (الصيغة التي يستخدمها ares-install) يُبقي
+    /// الاشتراك ما دام الإدخال مفتوحًا؛ والإدخال يأتي من <c>sleep</c>. تُكتب الردود في ملف؛ وعندما يقول التلفزيون "installed"
+    /// أو يعلن خطأ، أو يخرج luna-send من تلقاء نفسه، أو تنتهي المهلة، تُطبع الردود ويُغلق luna-send. مخارج sleep
+    /// غير مربوطة بقناة SSH؛ فلا تنتظره الجلسة.
     /// </summary>
     public static string InstallCommand(string remotePackage, int waitSeconds)
     {
@@ -204,12 +204,12 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
             $"rm -f {InstallLog}");
     }
 
-    /// <summary>luna-send yanıtlarının sonucu; <see cref="Reason"/> TV'nin verdiği sebeptir.</summary>
+    /// <summary>خلاصة ردود luna-send؛ و<see cref="Reason"/> هو السبب الذي أعطاه التلفزيون.</summary>
     public sealed record InstallOutcome(bool Installed, bool Failed, string? Reason);
 
     /// <summary>
-    /// luna-send'in satır satır JSON yanıtlarını ares-install gibi okur: <c>returnValue: false</c> ya da
-    /// <c>details.state</c> içinde FAILED hata, <c>installed</c>/<c>SUCCESS</c> başarıdır.
+    /// يقرأ ردود JSON التي يعطيها luna-send سطرًا سطرًا كما يفعل ares-install: <c>returnValue: false</c> أو
+    /// FAILED داخل <c>details.state</c> خطأ، و<c>installed</c>/<c>SUCCESS</c> نجاح.
     /// </summary>
     public static InstallOutcome ParseInstallReplies(string output)
     {
@@ -220,7 +220,7 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
             if (pending.Length == 0) continue;
             if (!pending.StartsWith('{'))
             {
-                // luna-send'in kendi yazısı (ör. "Error: ..."); ares de JSON olmayanı atlar.
+                // نص من luna-send نفسه (مثل "Error: ...")؛ وares أيضًا يتخطى ما ليس JSON.
                 pending = "";
                 continue;
             }
@@ -232,7 +232,7 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
             }
             catch (JsonException)
             {
-                continue; // Satır yarım; sonrakiyle birleşir.
+                continue; // السطر ناقص؛ يُضم إلى الذي يليه.
             }
             pending = "";
 
@@ -249,7 +249,7 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
         return new(false, false, null);
     }
 
-    /// <summary>TV ya da kabuk yer kalmadığını mı söylüyor?</summary>
+    /// <summary>هل يقول التلفزيون أو الصدفة إنه لم تبقَ مساحة؟</summary>
     public static bool IsStorageProblem(string text) => Regex.IsMatch(text,
         @"no space|not enough (free )?(space|storage)|insufficient (free )?(space|storage)|out of space|storage (is )?full|disk (is )?full|ENOSPC|lack of (space|storage)",
         RegexOptions.IgnoreCase);
@@ -275,7 +275,7 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
 
     private async Task RemoveAsync(string remote)
     {
-        try { await SshAsync($"rm -f '{remote}'"); } catch (DevModeException) { /* geçici dosya kalabilir */ }
+        try { await SshAsync($"rm -f '{remote}'"); } catch (DevModeException) { /* قد يبقى الملف المؤقت */ }
     }
 
     private static string Short(string text) => text.Length <= 500 ? text.Trim() : text[..500].Trim() + "…";
@@ -285,11 +285,11 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
     public static Uri CheckUrl(string token) => new($"https://developer.lge.com/secure/CheckDevModeSession.dev?sessionToken={Uri.EscapeDataString(token)}");
 
     /// <summary>
-    /// Geliştirici modunun 1000 saatlik süresini baştan başlatır (TV'deki Developer Mode uygulamasının EXTEND düğmesi
-    /// gibi). Oturum jetonu TV'den okunur ve LG'nin sunucusuna gönderilir; webOS Homebrew'un dev-manager-desktop
-    /// aracının yaptığının aynısı. Başarısız olursa yalnız uyarı döner: süre dolmadan kullanıcı TV'den de uzatabilir.
+    /// يعيد مدة وضع المطوّر البالغة 1000 ساعة إلى بدايتها (مثل زر EXTEND في تطبيق Developer Mode على التلفزيون).
+    /// يُقرأ رمز الجلسة من التلفزيون ويُرسل إلى خادم LG؛ وهو ما تفعله أداة dev-manager-desktop من webOS Homebrew
+    /// تمامًا. إذا فشل يعود تحذير فقط: يستطيع المستخدم التمديد من التلفزيون أيضًا قبل انتهاء المدة.
     /// </summary>
-    /// <returns>Kalan süre (saat); bilinmiyorsa null.</returns>
+    /// <returns>المدة المتبقية (بالساعات)؛ وnull إن لم تُعرف.</returns>
     public async Task<int?> RenewSessionAsync(HttpClient http)
     {
         var token = (await SshAsync($"cat {SessionTokenPath}")).Output.Trim();
@@ -306,7 +306,7 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
         }
     }
 
-    /// <summary>LG'nin yanıtındaki kalan süre <c>999:58:40</c> (saat:dakika:saniye) biçimindedir.</summary>
+    /// <summary>المدة المتبقية في رد LG تأتي بالصيغة <c>999:58:40</c> (ساعة:دقيقة:ثانية).</summary>
     public static int? RemainingHours(string response)
     {
         var match = Regex.Match(response, @"(\d{1,4}):(\d{2}):(\d{2})");
@@ -316,7 +316,7 @@ public sealed class DevModeInstaller(IRemoteShell shell, TimeSpan? pollInterval 
     private Task<CommandResult> SshAsync(string command, string? input = null) => shell.RunAsync(command, input);
 }
 
-/// <summary>Komutları <see cref="Process"/> ile çalıştırır; pencere açmaz.</summary>
+/// <summary>يشغّل الأوامر عبر <see cref="Process"/>؛ ولا يفتح نافذة.</summary>
 public sealed class ProcessRunner : ICommandRunner
 {
     public async Task<CommandResult> RunAsync(string executable, IReadOnlyList<string> arguments, string? inputFile)
@@ -338,7 +338,7 @@ public sealed class ProcessRunner : ICommandRunner
         }
         catch (Win32Exception)
         {
-            // Windows'un OpenSSH istemcisi (ssh-keygen) kaldırılmış olabilir.
+            // قد يكون عميل OpenSSH في Windows (ssh-keygen) محذوفًا.
             throw new DevModeException(DevModeError.ToolMissing);
         }
         var output = process.StandardOutput.ReadToEndAsync();

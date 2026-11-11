@@ -17,8 +17,8 @@ public sealed class AndroidInstallException(AndroidInstallError error, string? d
 }
 
 /// <summary>
-/// ADB protokolünün ağ üzerinden kullanılan küçük bir parçası: bağlantı, RSA kimlik doğrulama ve tek seferde bir
-/// akış. Google'ın adb aracını dağıtmadan TV'ye uygulama kurmaya yeter. Protokol: AOSP packages/modules/adb
+/// جزء صغير من بروتوكول ADB يُستخدم عبر الشبكة: الاتصال، والمصادقة بـ RSA، وتدفق واحد في كل مرة.
+/// يكفي لتثبيت تطبيق على التلفزيون دون توزيع أداة adb من Google. البروتوكول: AOSP packages/modules/adb
 /// (protocol.txt).
 /// </summary>
 public sealed class AdbConnection : IAsyncDisposable
@@ -40,10 +40,10 @@ public sealed class AdbConnection : IAsyncDisposable
         stream = tcp.GetStream();
     }
 
-    /// <summary>Bağlanır ve TV'nin onayını alır.</summary>
-    /// <param name="onApprovalNeeded">TV bu bilgisayarı ilk kez görüyor; ekranda "hata ayıklamaya izin verilsin mi"
-    /// sorusu çıktı.</param>
-    /// <param name="approvalTimeout">Kullanıcının TV'de onaylaması için tanınan süre.</param>
+    /// <summary>يتصل ويحصل على موافقة التلفزيون.</summary>
+    /// <param name="onApprovalNeeded">التلفزيون يرى هذا الكمبيوتر لأول مرة؛ وظهر على الشاشة سؤال
+    /// «هل تسمح بتصحيح الأخطاء».</param>
+    /// <param name="approvalTimeout">المهلة الممنوحة للمستخدم كي يوافق على التلفزيون.</param>
     public static async Task<AdbConnection> ConnectAsync(string host, int port, RSA key, Action? onApprovalNeeded = null,
         TimeSpan? approvalTimeout = null, CancellationToken cancellationToken = default)
     {
@@ -89,7 +89,7 @@ public sealed class AdbConnection : IAsyncDisposable
             catch (Exception error) when (error is OperationCanceledException or IOException or EndOfStreamException
                                           && !cancellationToken.IsCancellationRequested)
             {
-                // Onay beklenirken bağlantı kapandıysa ya da süre dolduysa kullanıcı izin vermedi.
+                // إذا أُغلق الاتصال أو انقضت المهلة أثناء انتظار الموافقة فالمستخدم لم يسمح.
                 throw new AndroidInstallException(waitingForApproval ? AndroidInstallError.NotApproved : AndroidInstallError.Unreachable,
                     error.Message);
             }
@@ -104,7 +104,7 @@ public sealed class AdbConnection : IAsyncDisposable
                     await WriteAsync(Auth, AuthSignature, 0, SignToken(key, packet.Data), cancellationToken);
                     break;
                 case Auth when packet.Arg0 == AuthToken:
-                    // İmza tanınmadı: TV bu anahtarı ilk kez görüyor. Açık anahtarı gönderince TV kullanıcıya sorar.
+                    // لم يُتعرَّف على التوقيع: التلفزيون يرى هذا المفتاح لأول مرة. عند إرسال المفتاح العام يسأل التلفزيون المستخدم.
                     var publicKey = Convert.ToBase64String(EncodePublicKey(key)) + " gametranslator@GameTranslator\0";
                     await WriteAsync(Auth, AuthPublicKey, 0, Encoding.ASCII.GetBytes(publicKey), cancellationToken);
                     waitingForApproval = true;
@@ -118,19 +118,19 @@ public sealed class AdbConnection : IAsyncDisposable
     }
 
     /// <summary>
-    /// adb, TV'nin gönderdiği 20 baytlık jetonu SHA-1 özeti yerine geçen değer olarak imzalar (RSA_sign NID_sha1):
-    /// jeton yeniden özetlenmez.
+    /// adb يوقّع الرمز المميز ذا الـ 20 بايتًا الذي يرسله التلفزيون بوصفه قيمة تقوم مقام تجزئة SHA-1 (RSA_sign NID_sha1):
+    /// فلا تُحسب تجزئة الرمز المميز من جديد.
     /// </summary>
     internal static byte[] SignToken(RSA key, byte[] token) =>
         key.SignHash(token, HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
 
-    /// <summary>Android'in kendi RSA açık anahtar biçimi (system/core/libcrypto_utils android_pubkey.c).</summary>
+    /// <summary>صيغة المفتاح العام RSA الخاصة بـ Android (system/core/libcrypto_utils android_pubkey.c).</summary>
     internal static byte[] EncodePublicKey(RSA key)
     {
         const int words = 64;
         var parameters = key.ExportParameters(false);
         if (parameters.Modulus is not { Length: words * 4 } modulus || parameters.Exponent is not { } exponentBytes)
-            throw new ArgumentException("ADB yalnız 2048 bitlik RSA anahtarını kabul eder.", nameof(key));
+            throw new ArgumentException("ADB لا يقبل إلا مفتاح RSA بطول 2048 بت.", nameof(key));
 
         var n = new BigInteger(modulus, isUnsigned: true, isBigEndian: true);
         var r32 = BigInteger.One << 32;
@@ -168,8 +168,8 @@ public sealed class AdbConnection : IAsyncDisposable
     }
 
     /// <summary>
-    /// Bir hizmet açar (ör. <c>shell:…</c>, <c>exec:…</c>), varsa girdiyi gönderir ve hizmet kapanana kadar
-    /// çıktıyı toplar.
+    /// يفتح خدمة (مثل <c>shell:…</c>، <c>exec:…</c>)، ويرسل الدخل إن وُجد، ويجمع المخرجات حتى
+    /// تُغلق الخدمة.
     /// </summary>
     public async Task<string> RunAsync(string service, Stream? input = null, CancellationToken cancellationToken = default)
     {
@@ -198,9 +198,9 @@ public sealed class AdbConnection : IAsyncDisposable
             }
         }
 
-        // Hizmetin açıldığını bekle.
+        // انتظر حتى تُفتح الخدمة.
         while (!await HandleAsync(await ReadAsync(cancellationToken))) { }
-        if (closed && remoteId == 0) throw new AndroidInstallException(AndroidInstallError.InstallFailed, $"{service} açılamadı");
+        if (closed && remoteId == 0) throw new AndroidInstallException(AndroidInstallError.InstallFailed, $"تعذر فتح {service}");
 
         if (input is not null && !closed)
         {
@@ -209,7 +209,7 @@ public sealed class AdbConnection : IAsyncDisposable
             while (!closed && (read = await input.ReadAsync(buffer, cancellationToken)) > 0)
             {
                 await WriteAsync(Wrte, localId, remoteId, buffer.AsSpan(0, read).ToArray(), cancellationToken);
-                // Bir sonraki parçadan önce TV'nin bu parçayı aldığını bekle; arada gelen çıktıyı da topla.
+                // قبل الجزء التالي انتظر تأكيد استلام التلفزيون لهذا الجزء؛ واجمع المخرجات الواردة في الأثناء.
                 while (true)
                 {
                     var packet = await ReadAsync(cancellationToken);
@@ -221,7 +221,7 @@ public sealed class AdbConnection : IAsyncDisposable
         }
 
         while (!closed) await HandleAsync(await ReadAsync(cancellationToken));
-        try { await WriteAsync(Clse, localId, remoteId, [], cancellationToken); } catch (IOException) { /* TV kapattı */ }
+        try { await WriteAsync(Clse, localId, remoteId, [], cancellationToken); } catch (IOException) { /* التلفزيون أغلق الاتصال */ }
         return Encoding.UTF8.GetString(output.ToArray());
     }
 
@@ -250,7 +250,7 @@ public sealed class AdbConnection : IAsyncDisposable
         var command = BinaryPrimitives.ReadUInt32LittleEndian(header);
         var length = BinaryPrimitives.ReadUInt32LittleEndian(header.AsSpan(12));
         if (BinaryPrimitives.ReadUInt32LittleEndian(header.AsSpan(20)) != (command ^ 0xffffffff) || length > 1024 * 1024)
-            throw new IOException("ADB paketi bozuk.");
+            throw new IOException("حزمة ADB تالفة.");
         var data = new byte[length];
         await stream.ReadExactlyAsync(data, cancellationToken);
         return new Packet(command, BinaryPrimitives.ReadUInt32LittleEndian(header.AsSpan(4)),

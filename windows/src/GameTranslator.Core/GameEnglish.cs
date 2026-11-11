@@ -5,9 +5,9 @@ using System.Text.RegularExpressions;
 namespace GameTranslator.Core;
 
 /// <summary>
-/// Oyunlarda sık geçen, cihaz üstü çeviri modelinin kelime kelime çevirdiği ifadeler ("I've got your six" →
-/// "Altını aldım") çeviriden önce aynı anlamdaki düz İngilizceye çevrilir. Liste OPUS-MT ile tek tek denendi:
-/// yalnız çeviriyi düzelten ifadeler var, modelin zaten doğru çevirdikleri ("Copy that", "Stand down") yok.
+/// العبارات الشائعة في الألعاب التي قد يترجمها المترجم الآلي حرفيًّا ("I've got your six") تُحوَّل قبل الترجمة
+/// إلى إنجليزية بسيطة بالمعنى نفسه. القائمة تقتصر على العبارات التي تحسّن الترجمة؛
+/// وليس فيها ما يُترجم صحيحًا أصلًا ("Copy that", "Stand down").
 /// </summary>
 public static partial class GameEnglish
 {
@@ -27,7 +27,7 @@ public static partial class GameEnglish
     private static Regex Phrase(string words) =>
         new($@"\b{words}\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
-    /// <summary>Bilinen ifadeler düz İngilizceye çevrilir; cümle başındaki büyük harf korunur.</summary>
+    /// <summary>تُحوَّل العبارات المعروفة إلى إنجليزية بسيطة؛ ويبقى الحرف الكبير في أول الجملة.</summary>
     public static string Plain(string sentence)
     {
         foreach (var (pattern, plain) in Phrases)

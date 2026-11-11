@@ -2,9 +2,9 @@
 
 namespace GameTranslator.Core;
 
-/// <summary>Bir kare için karar: son okuma kullanılır ya da yazı tanıma yapılır.</summary>
-/// <param name="Reuse">Bölge değişmedi, <paramref name="Text"/> geçerli.</param>
-/// <param name="Deep">Boş bölgede kısa satırlar için büyütülmüş okuma da denenir.</param>
+/// <summary>القرار لإطار واحد: تُستخدم آخر قراءة أو يُجرى التعرّف على النص.</summary>
+/// <param name="Reuse">المنطقة لم تتغيّر و<paramref name="Text"/> ما زال صالحًا.</param>
+/// <param name="Deep">في المنطقة الفارغة تُجرَّب أيضًا القراءة المكبَّرة لأجل الأسطر القصيرة.</param>
 public readonly record struct ReadPlan(bool Reuse, string Text, bool Deep)
 {
     public static ReadPlan Reused(string text) => new(true, text, false);
@@ -12,8 +12,8 @@ public readonly record struct ReadPlan(bool Reuse, string Text, bool Deep)
 }
 
 /// <summary>
-/// Hangi karede yazı tanıma yapılacağını seçer. Oyun süresinin çoğunda bölge boştur ya da değişmez;
-/// işlemcinin büyük kısmı bu karelerde boşa gider.
+/// يختار الإطارات التي يُجرى فيها التعرّف على النص. في معظم وقت اللعب تكون المنطقة فارغة أو لا تتغيّر؛
+/// ومعظم جهد المعالج يضيع في هذه الإطارات.
 /// </summary>
 public sealed class ReadScheduler(int changeThreshold = 16, int maxReuse = 20, int deepEvery = 3)
 {
@@ -22,7 +22,7 @@ public sealed class ReadScheduler(int changeThreshold = 16, int maxReuse = 20, i
     private int reused;
     private int emptyReads;
 
-    /// <summary>Her kare okunur ve boş kareler hep derin okunur.</summary>
+    /// <summary>يُقرأ كل إطار، والإطارات الفارغة تُقرأ دائمًا قراءة عميقة.</summary>
     public static ReadScheduler Always() => new(changeThreshold: -1, maxReuse: 0, deepEvery: 1);
 
     public ReadPlan Plan(byte[] signature)
@@ -41,7 +41,7 @@ public sealed class ReadScheduler(int changeThreshold = 16, int maxReuse = 20, i
     public void Record(string text)
     {
         lastText = text;
-        // Yazı yeni kalktıysa derin okuma sırası hemen gelmez.
+        // إذا اختفى النص للتوّ فلا يأتي دور القراءة العميقة فورًا.
         emptyReads = text.Length == 0 ? emptyReads + 1 : 1;
     }
 

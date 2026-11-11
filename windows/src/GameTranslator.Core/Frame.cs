@@ -2,7 +2,7 @@
 
 namespace GameTranslator.Core;
 
-/// <summary>BGRA (piksel başına 4 bayt) görüntü. PS5 akışından gelen kareler ve kırpılmış bölgeler.</summary>
+/// <summary>صورة BGRA (4 بايتات لكل بكسل). الإطارات القادمة من بث PS5 والمناطق المقصوصة منها.</summary>
 public sealed class Frame(byte[] pixels, int width, int height, int stride)
 {
     public byte[] Pixels { get; } = pixels;
@@ -12,7 +12,7 @@ public sealed class Frame(byte[] pixels, int width, int height, int stride)
 
     public static Frame Blank(int width, int height) => new(new byte[width * height * 4], width, height, width * 4);
 
-    /// <summary>Yerel kodun verdiği tamponun kopyası (tampon yalnız geri çağrı süresince geçerlidir).</summary>
+    /// <summary>نسخة من المخزن المؤقت الذي تعطيه الشيفرة الأصلية (المخزن صالح أثناء الاستدعاء الراجع فقط).</summary>
     public static unsafe Frame Copy(IntPtr bgra, int width, int height, int stride)
     {
         var pixels = new byte[width * height * 4];
@@ -35,7 +35,7 @@ public sealed class Frame(byte[] pixels, int width, int height, int stride)
         return result;
     }
 
-    /// <summary>İki doğrusal (bilinear) büyütme; kısa satırların okunmasına yardım eder.</summary>
+    /// <summary>تكبير ثنائي الخطية (bilinear)؛ يساعد على قراءة الأسطر القصيرة.</summary>
     public Frame Scaled(int factor)
     {
         var result = Blank(Width * factor, Height * factor);
@@ -66,20 +66,20 @@ public sealed class Frame(byte[] pixels, int width, int height, int stride)
     }
 }
 
-/// <summary>Görüntüde altyazının arandığı bölge, kenarlara oranla (0–1, üstten ve soldan).</summary>
-/// <summary>Yazı tanıma öncesi görüntü hazırlığı.</summary>
+/// <summary>المنطقة التي يُبحث فيها عن الترجمة النصية في الصورة، نسبةً إلى الحواف (0–1، من الأعلى ومن اليسار).</summary>
+/// <summary>تجهيز الصورة قبل التعرّف على النص.</summary>
 public static class TextImage
 {
     /// <summary>
-    /// Oyun altyazıları çoğunlukla koyu kenarlı ya da gölgeli beyaz yazıdır. Parlak zeminde (kum, gökyüzü) Windows'un
-    /// yazı tanıması harfleri zeminden ayıramıyor ve "CESAREiVJütt'h" gibi okuyordu. Burada yakınında koyu piksel olan
-    /// beyaza yakın pikseller siyah yazı, geri kalanı beyaz zemin olur; yazı tanıma en iyi bu biçimi okur.
+    /// الترجمات النصية في الألعاب غالبًا نص أبيض بحدّ داكن أو ظل. على خلفية ساطعة (رمل، سماء) لم يكن التعرّف على النص
+    /// في Windows يميّز الحروف عن الخلفية فيقرؤها مثل "CESAREiVJütt'h". هنا تصير البكسلات القريبة من الأبيض التي
+    /// بجوارها بكسل داكن نصًّا أسود والباقي خلفية بيضاء؛ وهذه أفضل صيغة يقرؤها التعرّف على النص.
     /// </summary>
     public static Frame WhiteTextOnly(Frame image, int radius = 5)
     {
         int width = image.Width, height = image.Height;
         var bright = new bool[width * height];
-        // Koyu piksellerin toplamlı tablosu: bir pencerede koyu piksel var mı tek adımda bulunur.
+        // جدول المجاميع التراكمية للبكسلات الداكنة: يُعرف بخطوة واحدة هل في النافذة بكسل داكن.
         var dark = new int[(width + 1) * (height + 1)];
         for (var y = 0; y < height; y++)
         {
@@ -124,7 +124,7 @@ public static class RegionCropper
 {
     public static Frame Crop(Frame image, CropRegion region)
     {
-        // Mac'teki CGRect.integral ile aynı: kenarlar dışa yuvarlanır.
+        // تُقرَّب الحواف إلى الخارج.
         var left = (int)Math.Floor(image.Width * region.Left);
         var top = (int)Math.Floor(image.Height * region.Top);
         var right = (int)Math.Ceiling(image.Width * region.Right);
@@ -132,7 +132,7 @@ public static class RegionCropper
         return image.Crop(left, top, right - left, bottom - top);
     }
 
-    /// <summary>Bölgenin küçültülmüş gri kopyası: iki kareyi yazı tanımaya gerek kalmadan karşılaştırmaya yeter.</summary>
+    /// <summary>نسخة رمادية مصغَّرة من المنطقة: تكفي لمقارنة إطارين دون حاجة إلى التعرّف على النص.</summary>
     public static byte[] Signature(Frame image)
     {
         const int width = 64, height = 12;
@@ -151,24 +151,24 @@ public static class RegionCropper
     }
 }
 
-/// <summary>Bir görüntüdeki yazıyı okur (Windows'ta Windows.Media.Ocr).</summary>
+/// <summary>يقرأ النص في صورة (على Windows: Windows.Media.Ocr).</summary>
 public interface ITextReader
 {
     string Read(Frame image);
-    /// <summary><paramref name="deep"/> false ise boş bölgede büyütülmüş okuma denenmez (işlemciyi çok daha az yorar).</summary>
+    /// <summary>إذا كان <paramref name="deep"/> false لا تُجرَّب القراءة المكبَّرة في المنطقة الفارغة (أخفّ كثيرًا على المعالج).</summary>
     string Read(Frame image, bool deep) => Read(image);
-    /// <summary>Satırlar ayrı ayrı ve görüntüdeki yerleriyle.</summary>
+    /// <summary>الأسطر منفصلة ومع مواضعها في الصورة.</summary>
     Reading ReadLines(Frame image, bool deep) => Reading.FromText(Read(image, deep));
 }
 
 /// <summary>
-/// OCR geniş bölgede "Go!" gibi kısa satırları sık sık hiç bulmaz. Bölgede yazı çıkmazsa
-/// ortadaki şerit (altyazılar ortalıdır) ve bölgenin tamamı büyütülerek aynı anda yeniden okunur;
-/// ikisi de yazı bulursa şeridinki seçilir. Aynı anda okumak, boş karede yeni satırı geç fark etmeyi önler.
+/// كثيرًا ما لا يجد OCR في المنطقة الواسعة الأسطر القصيرة مثل "Go!" إطلاقًا. إذا لم يظهر في المنطقة نص
+/// يُعاد في الوقت نفسه قراءة الشريط الأوسط (الترجمات النصية موسَّطة) والمنطقة كلها بعد تكبيرهما؛
+/// وإن وجد كلاهما نصًّا تُختار قراءة الشريط. القراءة المتزامنة تمنع التأخر في ملاحظة سطر جديد في إطار فارغ.
 /// </summary>
 public static class ReadingFallback
 {
-    /// <summary>Satırsız eski biçim: bulunan yazı tek metin olarak döner.</summary>
+    /// <summary>الصيغة القديمة بلا أسطر: يعود النص الموجود نصًّا واحدًا.</summary>
     public static string FirstReading(Frame image, Func<Frame, string> recognize) =>
         FirstLines(image, frame => Reading.FromText(recognize(frame))).Text;
 
@@ -177,7 +177,7 @@ public static class ReadingFallback
         var reading = recognize(image);
         if (reading.Lines.Count > 0) return reading;
 
-        // Şeritte bulunan satırın yeri şeridin değil bölgenin tamamının oranlarıyla verilir.
+        // موضع السطر الموجود في الشريط يُعطى بنسب المنطقة كلها لا بنسب الشريط.
         var (x, width) = CenterStrip(image, 0.4);
         var stripArea = new TextBox((double)x / image.Width, 0, (double)(x + width) / image.Width, 1);
         Func<Reading>[] fallbacks =

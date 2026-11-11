@@ -4,7 +4,7 @@ using GameTranslator.Core;
 
 namespace GameTranslator.Core.Tests;
 
-/// <summary>Oyun ifadeleri çeviriden önce düz İngilizceye çevrilir (Mac: GameEnglishTests).</summary>
+/// <summary>تعابير الألعاب تُحوَّل إلى إنجليزية بسيطة قبل الترجمة.</summary>
 public class GameEnglishTests
 {
     [Theory]

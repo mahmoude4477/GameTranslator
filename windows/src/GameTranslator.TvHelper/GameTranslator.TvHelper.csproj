@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <!-- SPDX-License-Identifier: AGPL-3.0-only -->
-  <!-- Mac uygulamasının içine gömülen tek dosyalık yardımcı (scripts/build-tv-helper.sh). Native AOT: tek imzalı
-       dosya, JIT gerekmez; böylece Apple onaylı uygulamanın içinde ek yetki istemeden çalışır. -->
+  <!-- أداة مساعدة من ملف واحد تُضمَّن داخل تطبيق Mac (scripts/build-tv-helper.sh). Native AOT: ملف واحد
+       موقَّع ولا حاجة إلى JIT؛ فتعمل داخل التطبيق المعتمد من Apple دون طلب صلاحيات إضافية. -->
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -11,7 +11,7 @@
     <AssemblyName>gametranslator-tv-helper</AssemblyName>
     <InvariantGlobalization>true</InvariantGlobalization>
     <PublishAot>true</PublishAot>
-    <!-- XML imzası (System.Security.Cryptography.Xml) yansımayla tür oluşturur; o derlemeler kırpılmasın. -->
+    <!-- توقيع XML (System.Security.Cryptography.Xml) ينشئ الأنواع بالانعكاس؛ فلا تُقتطع تلك التجميعات. -->
     <TrimMode>partial</TrimMode>
   </PropertyGroup>
 

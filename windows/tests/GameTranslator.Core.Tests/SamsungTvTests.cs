@@ -51,5 +51,5 @@ public class SamsungTvTests
 
     [Fact]
     public void LocatorDoesNotMoveToAnotherBrand() =>
-        Assert.Null(TvLocator.Moved(new Tv("Salon", "1.1.1.1"), [new Tv("Salon", "1.1.1.2", TvBrand.Samsung)]));
+        Assert.Null(TvLocator.Moved(new Tv("غرفة المعيشة", "1.1.1.1"), [new Tv("غرفة المعيشة", "1.1.1.2", TvBrand.Samsung)]));
 }

@@ -3,7 +3,7 @@
 
 namespace GameTranslator.Core;
 
-/// <summary>Bir satırı oyun dilinden hedef dile çevirir (cihaz üstünde).</summary>
+/// <summary>يترجم سطرًا من لغة اللعبة إلى لغة الترجمة.</summary>
 public interface ITextTranslator
 {
     Task<string> TranslateAsync(string text, CancellationToken cancellationToken = default);
@@ -12,22 +12,22 @@ public interface ITextTranslator
 public enum TranslatorStatus
 {
     Ready,
-    /// <summary>Çeviri modeli henüz indirilmedi.</summary>
+    /// <summary>نموذج الترجمة لم يُنزَّل بعد.</summary>
     NeedsDownload,
-    /// <summary>Bu dil çifti desteklenmiyor.</summary>
+    /// <summary>زوج اللغات هذا غير مدعوم.</summary>
     Unsupported,
 }
 
-/// <summary>Kullanıcının düzeltebileceği çeviri hatası (model eksik, dil desteklenmiyor).</summary>
+/// <summary>خطأ ترجمة يستطيع المستخدم إصلاحه (النموذج ناقص، اللغة غير مدعومة).</summary>
 public sealed class TranslatorException(TranslatorStatus status)
     : Exception($"Translator not available: {status}")
 {
     public TranslatorStatus Status { get; } = status;
 }
 
-/// <summary>Çevrimiçi çeviri anahtarı (DeepL) denendiğinde ne çıktı.</summary>
+/// <summary>نتيجة تجربة مفتاح الترجمة عبر الإنترنت (DeepL).</summary>
 public enum OnlineKeyState { Valid, Invalid, QuotaExceeded, Unreachable }
 
-/// <param name="Used">Bu ay kullanılan karakter (geçerli anahtarda).</param>
-/// <param name="Limit">Aylık sınır.</param>
+/// <param name="Used">عدد الأحرف المستخدمة هذا الشهر (مع مفتاح صالح).</param>
+/// <param name="Limit">الحد الشهري.</param>
 public sealed record OnlineKeyCheck(OnlineKeyState State, long Used = 0, long Limit = 0);

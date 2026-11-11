@@ -7,8 +7,8 @@ namespace GameTranslator.App;
 public static class Program
 {
     /// <summary>
-    /// Velopack kurulum, güncelleme ve kaldırma sırasında uygulamayı kısa süreli çağırır; bu kancalar WPF başlamadan
-    /// işlenip çıkılır. Normal açılışta hiçbir şey yapmadan döner.
+    /// يستدعي Velopack التطبيق لوقت قصير أثناء التثبيت والتحديث والإزالة؛ تُعالج هذه الخطافات قبل بدء WPF
+    /// ثم يُخرج. في التشغيل العادي يعود دون أن يفعل شيئا.
     /// </summary>
     [STAThread]
     public static void Main()

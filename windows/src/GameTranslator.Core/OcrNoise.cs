@@ -6,11 +6,11 @@ using System.Text.RegularExpressions;
 namespace GameTranslator.Core;
 
 /// <summary>
-/// Süslü yazı tiplerinde, solan ya da titreyen altyazıda yazı tanıma bazı sözcükleri harf, rakam ve simge
-/// karışımı çöpe çevirir ("ou$3e", "waters2aljd"). Bunlar hiçbir dilde sözcük değildir; çevirmen onları
-/// olduğu gibi taşır. Sözcük ortasında simge ya da harflerle rakamların iç içe geçtiği parçalar atılır;
-/// gerçek bir sözcüğe yapışmış çöp ("waters2aljd") sözcükten ayrılır. "PS5", "R2", "2nd", "100m", "$500"
-/// gibi olağan biçimler korunur (Mac'teki OcrNoise ile aynı kurallar).
+/// في الخطوط المزخرفة وفي الترجمة النصية الباهتة أو المهتزّة يحوّل التعرّف على النص بعض الكلمات إلى خليط عشوائي
+/// من حروف وأرقام ورموز ("ou$3e"، "waters2aljd"). هذه ليست كلمات في أي لغة؛ والمترجم ينقلها
+/// كما هي. تُحذف الأجزاء التي في وسطها رمز أو تتداخل فيها الحروف والأرقام؛
+/// والشوائب الملتصقة بكلمة حقيقية ("waters2aljd") تُفصل عن الكلمة. الصيغ المألوفة مثل "PS5" و"R2" و"2nd" و"100m"
+/// و"$500" تبقى كما هي.
 /// </summary>
 public static partial class OcrNoise
 {
@@ -25,11 +25,11 @@ public static partial class OcrNoise
             if (CleanCore(core) is { } fixedCore)
                 kept.Add(lead + fixedCore + trail);
             else if (trail.Length > 0 && kept.Count > 0)
-                // Atılan çöpün ardındaki noktalama cümleye aittir ("ou$3e," → virgül kalır).
+                // علامة الترقيم بعد الشوائب المحذوفة تخص الجملة ("ou$3e," ← تبقى الفاصلة).
                 kept[^1] += trail;
         }
-        // Altyazının yanındaki göstergenin sayısı satırın başına yapışıyor ("9? We'll lose", "100. Mac and John").
-        // Mesafe işareti de öyle ("23m CESARE: Here!"). Tek başına sayı ve ardından büyük harfle başlayan cümle: sayı atılır.
+        // رقم المؤشر المجاور للترجمة النصية يلتصق بأول السطر ("9? We'll lose", "100. Mac and John").
+        // وكذلك علامة المسافة ("23m CESARE: Here!"). رقم منفرد تليه جملة تبدأ بحرف كبير: يُحذف الرقم.
         if (kept.Count >= 3 && LeadingNumber().IsMatch(kept[0]) && char.IsUpper(kept[1][0])) kept.RemoveAt(0);
         return string.Join(' ', kept);
     }
@@ -38,8 +38,8 @@ public static partial class OcrNoise
     private static partial Regex LeadingNumber();
 
     /// <summary>
-    /// Bir okumanın ne kadar sözcük gibi göründüğü: düzgün sözcüklerin harfleri artı, çöp ve karışık büyük-küçük
-    /// harfli parçalar ("CESAREiVJütt'h") eksi sayılır. Aynı karenin iki okumasından iyisini seçmek için.
+    /// مدى شبه القراءة بالكلمات: حروف الكلمات السليمة تُحسب بالموجب، والشوائب والأجزاء المختلطة الحروف الكبيرة
+    /// والصغيرة ("CESAREiVJütt'h") بالسالب. لاختيار الأفضل من قراءتين للإطار نفسه.
     /// </summary>
     public static int Score(string text)
     {
@@ -49,23 +49,23 @@ public static partial class OcrNoise
             var core = Split(token).Core;
             var letters = core.Count(char.IsLetter);
             if (letters == 0) continue;
-            // Sözcük ortasındaki parantez ("the[lil") de okuma karışıklığıdır.
+            // القوس في وسط الكلمة ("the[lil") خلل قراءة أيضًا.
             var clean = CleanCore(core) == core && NormalCase(core) && core.IndexOfAny(['[', ']', '(', ')']) < 0;
             score += clean ? letters : -2 * letters;
         }
         return score;
     }
 
-    /// <summary>"word", "WORD", "Word", "McDonald", "don't": büyük harf yalnız başta ya da baştan bir dizi.</summary>
+    /// <summary>"word", "WORD", "Word", "McDonald", "don't": الحرف الكبير في الأول فقط أو سلسلة من الأول.</summary>
     private static bool NormalCase(string core)
     {
         var letters = core.Where(char.IsLetter).ToArray();
         if (letters.All(char.IsUpper) || letters.Skip(1).All(char.IsLower)) return true;
-        // Tek iç büyük harf ("McDonald", "iPhone") olağan; daha fazlası OCR karışıklığıdır.
+        // حرف كبير واحد في الداخل ("McDonald", "iPhone") مألوف؛ وما زاد عليه خلل من OCR.
         return letters.Skip(1).Count(char.IsUpper) == 1 && letters.Count(char.IsLower) >= 2;
     }
 
-    /// <summary>Sözcüğün kendisi; null ise tamamen çöptür.</summary>
+    /// <summary>الكلمة نفسها؛ وnull إذا كانت شوائب كلها.</summary>
     private static string? CleanCore(string core)
     {
         var letters = core.Count(char.IsLetter);
@@ -74,12 +74,12 @@ public static partial class OcrNoise
         if (letters == 0) return core;  // "24", "$500", "…"
         if (!hasSymbol && digits == 0) return core;
         if (!hasSymbol && IsUsualMix(core)) return core;
-        // Gerçek sözcüğe yapışmış çöp: baştaki en az 3 harf korunur ("waters2aljd" → "waters").
+        // شوائب ملتصقة بكلمة حقيقية: تبقى الحروف الأولى إن كانت 3 على الأقل ("waters2aljd" → "waters").
         var prefix = new string(core.TakeWhile(c => char.IsLetter(c) || c is '\'' or '’' or '-').ToArray());
         return prefix.Count(char.IsLetter) >= 3 ? prefix : null;
     }
 
-    /// <summary>"PS5", "R2", "MK2", "2nd", "100m", "4K", "60fps", "x2", "1980s", "R2-D2": olağan harf-rakam karışımları.</summary>
+    /// <summary>"PS5", "R2", "MK2", "2nd", "100m", "4K", "60fps", "x2", "1980s", "R2-D2": أخلاط مألوفة من الحروف والأرقام.</summary>
     private static bool IsUsualMix(string core) =>
         core.Split('-').All(part => !part.Any(char.IsNumber) || Usual().IsMatch(part));
 

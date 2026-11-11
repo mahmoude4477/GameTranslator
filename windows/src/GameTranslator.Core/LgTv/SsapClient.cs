@@ -6,7 +6,7 @@ using System.Text.Json.Nodes;
 
 namespace GameTranslator.Core.LgTv;
 
-/// <summary>TV'de uygulama başlatabilen ve önplandaki uygulamayı söyleyebilen her şey.</summary>
+/// <summary>كل ما يستطيع تشغيل تطبيق على التلفزيون ومعرفة التطبيق الظاهر في المقدمة.</summary>
 public interface ITvControl : IDisposable
 {
     Task LaunchAsync(string appId, IReadOnlyDictionary<string, string> parameters, CancellationToken cancellationToken = default);

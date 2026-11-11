@@ -7,8 +7,8 @@ using Xunit;
 namespace GameTranslator.Core.Tests;
 
 /// <summary>
-/// Gerçek SSH sunucusuyla denemeler için GAMETRANSLATOR_TEST_SSH="host:port:kullanıcı:anahtar-dosyası" verilir; sunucu LG
-/// geliştirici modu gibi yalnız ssh-rsa kabul edecek biçimde kurulabilir. Verilmezse yalnız bağlantısız denemeler çalışır.
+/// للتجارب مع خادم SSH حقيقي يُعطى GAMETRANSLATOR_TEST_SSH="host:port:user:key-file"؛ ويمكن إعداد الخادم ليقبل ssh-rsa فقط
+/// مثل وضع المطوّر في LG. إن لم يُعطَ تعمل فقط التجارب التي لا تحتاج اتصالا.
 /// </summary>
 public class SshNetShellTests
 {
@@ -45,7 +45,7 @@ public class SshNetShellTests
     public async Task UnreadableKeyIsRefused()
     {
         var key = Path.GetTempFileName();
-        await File.WriteAllTextAsync(key, "anahtar değil");
+        await File.WriteAllTextAsync(key, "ليس مفتاحا");
         try
         {
             var error = await Assert.ThrowsAsync<DevModeException>(() => new SshNetShell("127.0.0.1", 1, key).RunAsync("true"));
@@ -61,9 +61,9 @@ public class SshNetShellTests
     public async Task CommandOutputAndExitStatusAreRead()
     {
         if (Server is not var (host, port, user, key)) return;
-        var result = await new SshNetShell(host, port, key, user).RunAsync("echo merhaba; echo uyarı >&2; exit 3");
+        var result = await new SshNetShell(host, port, key, user).RunAsync("echo مرحبا; echo تحذير >&2; exit 3");
         Assert.Equal(3, result.Status);
-        Assert.Equal("merhaba\nuyarı\n", result.Output);
+        Assert.Equal("مرحبا\nتحذير\n", result.Output);
     }
 
     [Fact]

@@ -9,8 +9,8 @@ using System.Text.Json.Nodes;
 namespace GameTranslator.App.Services;
 
 /// <summary>
-/// Hesap kimliği, PS5 anahtarları ve TV anahtarı. Windows'un veri koruması (DPAPI, yalnız bu kullanıcı)
-/// ile şifrelenmiş tek bir dosyada tutulur.
+/// معرّف الحساب ومفاتيح PS5 ومفتاح التلفزيون. تُحفظ في ملف واحد مشفّر بحماية البيانات في Windows
+/// (DPAPI، لهذا المستخدم فقط).
 /// </summary>
 public sealed class SecureStore(string path)
 {
@@ -58,7 +58,7 @@ public sealed class SecureStore(string path)
         }
         catch (Exception error) when (error is CryptographicException or JsonException)
         {
-            // Başka kullanıcıdan kopyalanmış ya da bozulmuş dosya: kurulum baştan yapılır.
+            // ملف منسوخ من مستخدم آخر أو تالف: يُعاد الإعداد من البداية.
             return [];
         }
     }
@@ -73,7 +73,7 @@ public sealed class SecureStore(string path)
     }
 }
 
-/// <summary>Uygulamanın kullanıcıya özel klasörü (%LOCALAPPDATA%\GameTranslator).</summary>
+/// <summary>مجلد التطبيق الخاص بالمستخدم (%LOCALAPPDATA%\GameTranslator).</summary>
 public static class AppPaths
 {
     public static string Data { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GameTranslator");

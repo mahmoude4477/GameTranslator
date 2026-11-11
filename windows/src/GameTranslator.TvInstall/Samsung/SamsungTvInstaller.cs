@@ -11,11 +11,11 @@ namespace GameTranslator.TvInstall.Samsung;
 
 public enum SamsungInstallError
 {
-    /// <summary>TV'de geliştirici modu kapalı ya da TV'ye girilen bilgisayar IP'si bu bilgisayarınki değil.</summary>
+    /// <summary>وضع المطوّر معطّل على التلفزيون، أو عنوان IP للكمبيوتر المُدخل في التلفزيون ليس عنوان هذا الكمبيوتر.</summary>
     Unreachable,
     LoginFailed,
     CertificateFailed,
-    /// <summary>TV, Tizen 5.0'dan (2019) eski.</summary>
+    /// <summary>التلفزيون أقدم من Tizen 5.0 (2019).</summary>
     TooOld,
     InstallFailed,
 }
@@ -27,8 +27,8 @@ public sealed class SamsungInstallException(SamsungInstallError error, string? d
 }
 
 /// <summary>
-/// GameTranslator'ın Samsung TV uygulamasını geliştirici modu açık TV'ye kurar: TV'nin DUID'ini okur, gerekirse Samsung
-/// hesabıyla TV'ye özel sertifika alır, paketi imzalar ve kurar. sdb bağlantısı ve imza TizenSdb.Core'dan (MIT).
+/// يثبّت تطبيق GameTranslator لتلفزيون Samsung على تلفزيون مفعَّل فيه وضع المطوّر: يقرأ DUID التلفزيون، ويحصل عند الحاجة
+/// بحساب Samsung على شهادة خاصة بالتلفزيون، ثم يوقّع الحزمة ويثبّتها. اتصال sdb والتوقيع من TizenSdb.Core (MIT).
 /// </summary>
 public sealed partial class SamsungTvInstaller(string host, string profilesDirectory, SamsungCertificates certificates)
 {
@@ -36,14 +36,14 @@ public sealed partial class SamsungTvInstaller(string host, string profilesDirec
     public const string AppId = "GameTranslatorT.GameTranslator";
     private const string PackageId = "GameTranslatorT";
 
-    /// <summary>Sertifika yoksa Samsung girişini başlatır; yoksa null döner ve kurulum giriş adımında durur.</summary>
+    /// <summary>يبدأ تسجيل الدخول إلى Samsung عند غياب الشهادة؛ وإن كان null يتوقف التثبيت عند خطوة تسجيل الدخول.</summary>
     public Func<CancellationToken, Task<SamsungAccount>>? SignIn { get; init; }
 
     public Action<string>? Progress { get; init; }
 
     /// <summary>
-    /// TV'de geliştirici modu açık ve bu bilgisayar kabul ediliyor mu? Samsung yalnız geliştirici modunda girilen IP'den
-    /// gelen bağlantıyı kabul eder; başka bilgisayardan port açık görünse de bağlantı hemen kapanır.
+    /// هل وضع المطوّر مفعّل على التلفزيون وهل هذا الكمبيوتر مقبول؟ Samsung لا يقبل إلا الاتصال القادم من عنوان IP المُدخل
+    /// في وضع المطوّر؛ ومن كمبيوتر آخر يبدو المنفذ مفتوحًا لكن الاتصال يُغلق فورًا.
     /// </summary>
     public static async Task<bool> IsDevModeOnAsync(string host, TimeSpan? timeout = null)
     {
@@ -60,15 +60,15 @@ public sealed partial class SamsungTvInstaller(string host, string profilesDirec
         }
     }
 
-    /// <summary>Bu TV için kayıtlı geçerli sertifika var mı (giriş gerekmeden kurulabilir mi)?</summary>
+    /// <summary>هل توجد شهادة صالحة محفوظة لهذا التلفزيون (أي هل يمكن التثبيت دون تسجيل دخول)؟</summary>
     public async Task<bool> HasCertificateAsync(CancellationToken cancellationToken = default)
     {
         await using var device = await ConnectAsync(cancellationToken);
         return SigningProfile.In(ProfileDirectory(await ReadDuidAsync(device, cancellationToken))).IsValid(DateTime.UtcNow);
     }
 
-    /// <summary>Paketi imzalayıp kurar ve uygulamayı açar.</summary>
-    /// <param name="wgtPath">İmzasız ya da imzalı .wgt; dosyanın kendisine dokunulmaz.</param>
+    /// <summary>يوقّع الحزمة ويثبّتها ثم يفتح التطبيق.</summary>
+    /// <param name="wgtPath">ملف .wgt موقَّع أو غير موقَّع؛ والملف نفسه لا يُمَس.</param>
     public async Task InstallAsync(string wgtPath, CancellationToken cancellationToken = default)
     {
         await using var device = await ConnectAsync(cancellationToken);
@@ -83,7 +83,7 @@ public sealed partial class SamsungTvInstaller(string host, string profilesDirec
         var profile = SigningProfile.In(ProfileDirectory(duid));
         if (!profile.IsValid(DateTime.UtcNow))
         {
-            if (SignIn is null) throw new SamsungInstallException(SamsungInstallError.LoginFailed, "giriş gerekiyor");
+            if (SignIn is null) throw new SamsungInstallException(SamsungInstallError.LoginFailed, "يلزم تسجيل الدخول");
             Progress?.Invoke("signin");
             var account = await SignIn(cancellationToken);
             Progress?.Invoke("certificate");
@@ -101,8 +101,8 @@ public sealed partial class SamsungTvInstaller(string host, string profilesDirec
             var log = await CaptureAsync(() => new TizenInstaller(staged, device, toolPath).InstallApp());
             if (InstallFailed(log))
             {
-                // Başka sertifikayla kurulmuş eski kopya varsa ("Author certificate not match") kaldırıp bir kez daha
-                // dene. TV sürümüne göre kaldırma uygulama kimliğini ya da paket kimliğini bekliyor; ikisi de denenir.
+                // إن وُجدت نسخة قديمة مثبتة بشهادة أخرى ("Author certificate not match") فأزلها وجرّب مرة
+                // أخرى. بحسب إصدار التلفزيون تنتظر الإزالة معرّف التطبيق أو معرّف الحزمة؛ فيُجرَّب الاثنان.
                 Progress?.Invoke("uninstalling");
                 var removal = "";
                 foreach (var id in new[] { AppId, PackageId })
@@ -119,13 +119,13 @@ public sealed partial class SamsungTvInstaller(string host, string profilesDirec
         {
             DeleteStaged(staged);
         }
-        try { await device.ShellCommandAsync($"0 execute {AppId}", cancellationToken); } catch (Exception) { /* açmak isteğe bağlı */ }
+        try { await device.ShellCommandAsync($"0 execute {AppId}", cancellationToken); } catch (Exception) { /* الفتح اختياري */ }
     }
 
     /// <summary>
-    /// TizenSdb'nin TizenInstaller'ı paketi açıp kapatmıyor; Windows açık dosyanın silinmesine izin vermiyor. Silme
-    /// hatası kurulumun asıl sonucunu örtmesin diye tutamak çöp toplayıcıyla bırakılır, yine silinemezse dosya geçici
-    /// klasörde kalır (bir sonraki kurulumda temizlenir).
+    /// TizenInstaller في TizenSdb يفتح الحزمة ولا يغلقها؛ و Windows لا يسمح بحذف ملف مفتوح. وحتى لا يحجب خطأ
+    /// الحذف النتيجة الفعلية للتثبيت يُحرَّر المقبض عبر جامع القمامة، وإن تعذر الحذف مع ذلك يبقى الملف في المجلد
+    /// المؤقت (ويُنظَّف في التثبيت التالي).
     /// </summary>
     internal static bool DeleteStaged(string path)
     {
@@ -145,7 +145,7 @@ public sealed partial class SamsungTvInstaller(string host, string profilesDirec
         return false;
     }
 
-    /// <summary>Önceki kurulumlardan geçici klasörde kalmış paketler.</summary>
+    /// <summary>يحذف الحزم المتبقية في المجلد المؤقت من عمليات تثبيت سابقة.</summary>
     internal static void DeleteLeftovers(string directory)
     {
         try
@@ -153,7 +153,7 @@ public sealed partial class SamsungTvInstaller(string host, string profilesDirec
             foreach (var file in Directory.EnumerateFiles(directory, "gametranslator-*.wgt"))
                 if (File.GetLastWriteTimeUtc(file) < DateTime.UtcNow.AddMinutes(-10)) DeleteStaged(file);
         }
-        catch (Exception error) when (error is IOException or UnauthorizedAccessException) { /* temizlik isteğe bağlı */ }
+        catch (Exception error) when (error is IOException or UnauthorizedAccessException) { /* التنظيف اختياري */ }
     }
 
     private string ProfileDirectory(string duid) => Path.Combine(profilesDirectory, SafeName().Replace(duid, "_"));
@@ -176,7 +176,7 @@ public sealed partial class SamsungTvInstaller(string host, string profilesDirec
 
     private static async Task<string> ReadDuidAsync(SdbTcpDevice device, CancellationToken cancellationToken)
     {
-        // Yavaş TV'lerde ilk yanıt boş gelebiliyor; birkaç kez dene.
+        // في التلفزيونات البطيئة قد يأتي الرد الأول فارغًا؛ فجرّب عدة مرات.
         for (var attempt = 0; attempt < 3; attempt++)
         {
             var duid = (await device.ShellCommandAsync("0 getduid", cancellationToken)).Split('\n')[0].Trim();

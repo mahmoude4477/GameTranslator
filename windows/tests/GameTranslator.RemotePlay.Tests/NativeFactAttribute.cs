@@ -2,7 +2,7 @@
 
 namespace GameTranslator.RemotePlay.Tests;
 
-/// <summary>Yerel kütüphane (gametranslator_native) yüklenemiyorsa testi atlar: Mac'te ve DLL'siz derlemede.</summary>
+/// <summary>يتخطى الاختبار إذا تعذّر تحميل المكتبة الأصلية (gametranslator_native): على macOS وفي البناء بدون DLL.</summary>
 public sealed class NativeFactAttribute : FactAttribute
 {
     public NativeFactAttribute()

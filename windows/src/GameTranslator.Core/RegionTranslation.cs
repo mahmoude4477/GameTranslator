@@ -112,6 +112,6 @@ public static class RegionTranslation
         return (false, text);
     }
 
-    /// <summary>Çevirinin TV'de kalma süresi (ms): uzun panel yazısı okunacak kadar durur.</summary>
+    /// <summary>مدة بقاء الترجمة على التلفزيون (ms): نص اللوحة الطويل يبقى مدة تكفي لقراءته.</summary>
     public static int DisplayMilliseconds(string text) => Math.Clamp(4000 + (text.Length * 70), 6000, 25000);
 }

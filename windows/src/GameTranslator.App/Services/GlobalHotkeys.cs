@@ -5,29 +5,29 @@ using System.Windows.Interop;
 
 namespace GameTranslator.App.Services;
 
-/// <summary>Genel kısayolların yaptığı iş.</summary>
+/// <summary>العمل الذي تؤديه الاختصارات العامة.</summary>
 public enum HotkeyAction
 {
-    /// <summary>Num 1: 1. ek bölgeyi bir kez çevir.</summary>
+    /// <summary>Num 1: ترجِم المنطقة الإضافية 1 مرة واحدة.</summary>
     ExtraRegion1,
-    /// <summary>Num 2: 2. ek bölgeyi bir kez çevir.</summary>
+    /// <summary>Num 2: ترجِم المنطقة الإضافية 2 مرة واحدة.</summary>
     ExtraRegion2,
-    /// <summary>Num 3: 3. ek bölgeyi bir kez çevir.</summary>
+    /// <summary>Num 3: ترجِم المنطقة الإضافية 3 مرة واحدة.</summary>
     ExtraRegion3,
-    /// <summary>Num 5: görüntüyü dondurup serbest alan seçtir.</summary>
+    /// <summary>Num 5: جمّد الصورة ودَع المستخدم يحدد منطقة حرة.</summary>
     FreeArea,
-    /// <summary>Num 8: ayar ekranındaki görüntüyü oyunun şu anki görüntüsüyle yenile.</summary>
+    /// <summary>Num 8: حدّث الصورة في شاشة الإعدادات بصورة اللعبة الحالية.</summary>
     Snapshot,
-    /// <summary>Num 0: canlı altyazı çevirisini duraklat / sürdür.</summary>
+    /// <summary>Num 0: أوقف ترجمة النص الحية مؤقتا / استأنفها.</summary>
     PauseSubtitles,
-    /// <summary>Num 9: ekranın tamamını bir kez çevir; yeniden basınca çeviriler kalkar.</summary>
+    /// <summary>Num 9: ترجِم الشاشة كاملة مرة واحدة؛ والضغط مجددا يزيل الترجمات.</summary>
     Screen,
 }
 
 /// <summary>
-/// Genel kısayollar (Num 0, 1, 2, 3, 5, 8, 9): kullanıcı kumandayla oynarken bilgisayardaki pencere arka planda olsa da çalışır.
-/// Kısayollar yalnız <see cref="Enabled"/> iken tutulur; böylece çeviri kapalıyken sayı tuşları diğer uygulamalarda
-/// (Excel gibi) normal çalışır. Tuş başka bir uygulamada kullanılıyorsa sessizce atlanır.
+/// الاختصارات العامة (Num 0, 1, 2, 3, 5, 8, 9): تعمل حتى لو كانت نافذة الكمبيوتر في الخلفية والمستخدم يلعب بذراع التحكم.
+/// تُحجز الاختصارات فقط عند تفعيل <see cref="Enabled"/>؛ وهكذا تعمل مفاتيح الأرقام طبيعيا في التطبيقات الأخرى
+/// (مثل Excel) حين تكون الترجمة متوقفة. إن كان المفتاح مستخدما في تطبيق آخر يُتجاوز بصمت.
 /// </summary>
 public sealed partial class GlobalHotkeys : IDisposable
 {
@@ -35,7 +35,7 @@ public sealed partial class GlobalHotkeys : IDisposable
     private const uint ModNoRepeat = 0x4000;
     private const int FirstId = 0x4353;
 
-    /// <summary>Num 0, 1, 2, 3, 5, 8, 9 (NumLock açıkken).</summary>
+    /// <summary>Num 0, 1, 2, 3, 5, 8, 9 (و NumLock مفعّل).</summary>
     private static readonly (HotkeyAction Action, uint VirtualKey)[] Keys =
     [
         (HotkeyAction.ExtraRegion1, 0x61),
@@ -61,8 +61,8 @@ public sealed partial class GlobalHotkeys : IDisposable
     private readonly List<int> registered = [];
     private bool enabled;
 
-    /// <param name="window">Pencerenin tutamağı (HWND).</param>
-    /// <param name="pressed">Kısayola basılınca çağrılır.</param>
+    /// <param name="window">مقبض النافذة (HWND).</param>
+    /// <param name="pressed">يُستدعى عند الضغط على الاختصار.</param>
     public GlobalHotkeys(IntPtr window, Action<HotkeyAction> pressed)
     {
         this.window = window;
@@ -71,7 +71,7 @@ public sealed partial class GlobalHotkeys : IDisposable
         source?.AddHook(Hook);
     }
 
-    /// <summary>Kısayollar tutuluyor mu.</summary>
+    /// <summary>هل الاختصارات محجوزة.</summary>
     public bool Enabled
     {
         get => enabled;

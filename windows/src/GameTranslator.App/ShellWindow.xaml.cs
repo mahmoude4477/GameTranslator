@@ -10,7 +10,7 @@ using Microsoft.Win32;
 
 namespace GameTranslator.App;
 
-/// <summary>Uygulamanın tek penceresi: kurulum bitmediyse sihirbaz, bittiyse ana ekran.</summary>
+/// <summary>نافذة التطبيق الوحيدة: المعالج إن لم يكتمل الإعداد، والشاشة الرئيسية إن اكتمل.</summary>
 public partial class ShellWindow : Window
 {
     private readonly AppController controller;
@@ -22,15 +22,15 @@ public partial class ShellWindow : Window
         this.controller = controller;
         InitializeComponent();
         controller.PropertyChanged += OnChanged;
-        // Bilgisayar uykudan uyanınca bağlantılar hemen yenilenir.
+        // عند استيقاظ الكمبيوتر من السكون تُجدَّد الاتصالات فورا.
         SystemEvents.PowerModeChanged += OnPowerModeChanged;
-        // Num 0, 1, 2, 3, 5, 8, 9 kısayolları yalnız çeviri sürerken tutulur.
+        // اختصارات Num 0, 1, 2, 3, 5, 8, 9 تُحجز فقط ما دامت الترجمة جارية.
         SourceInitialized += (_, _) =>
         {
             hotkeys = new GlobalHotkeys(new WindowInteropHelper(this).Handle, OnHotkey);
             hotkeys.Enabled = controller.IsRunning;
         };
-        // Bilgisayarda gösterilecek çeviriler küçük, üstte duran bir kutuda çıkar.
+        // الترجمات التي تُعرض على الكمبيوتر تظهر في مربّع صغير يبقى في المقدمة.
         controller.PcResultReady += PcResultWindow.Display;
         Closed += (_, _) =>
         {

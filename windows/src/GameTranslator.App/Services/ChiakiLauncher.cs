@@ -7,8 +7,8 @@ using System.Text;
 namespace GameTranslator.App.Services;
 
 /// <summary>
-/// Windows'ta Chiaki veya chiaki-ng Remote Play uygulamasını başlatan,
-/// yapılandırmasını güvenle senkronize eden ve ön plana getiren yardımcı servis.
+/// خدمة مساعدة تشغّل تطبيق Remote Play المسمى Chiaki أو chiaki-ng على Windows،
+/// وتزامن إعداداته بأمان وتجلبه إلى المقدمة.
 /// </summary>
 public static class ChiakiLauncher
 {
@@ -52,14 +52,14 @@ public static class ChiakiLauncher
     }
 
     /// <summary>
-    /// Çeviri başladığında Chiaki'yi doğrudan konsola bağlanacak şekilde (stream modu) başlatır.
-    /// Zaten yayın penceresi açıksa ön plana getirir. Boşta bekleyen bir Chiaki varsa kapatıp stream komutuyla yeniden başlatır.
+    /// عند بدء الترجمة يشغّل Chiaki بحيث يتصل مباشرة بجهاز الألعاب (وضع stream).
+    /// إن كانت نافذة البث مفتوحة أصلا يجلبها إلى المقدمة. وإن وُجد Chiaki خامل يغلقه ويعيد تشغيله بأمر stream.
     /// </summary>
     public static bool LaunchAndStream(string? host = null, string? consoleName = null)
     {
         try
         {
-            // Zaten açık ve yayın yapan bir hedef pencere varsa ön plana getir
+            // إن وُجدت نافذة هدف مفتوحة وتبثّ أصلا فاجلبها إلى المقدمة
             var hWnd = WindowCaptureService.FindTargetWindow(out _);
             if (hWnd != IntPtr.Zero)
             {
@@ -67,8 +67,8 @@ public static class ChiakiLauncher
                 return true;
             }
 
-            // Eğer Chiaki işlemi çalışıyor ancak yayın penceresi henüz oluşmamış/boşta ise
-            // CLI stream komutunu kabul edebilmesi için eski boşta kalan işlemi nazikçe kapat
+            // إن كانت عملية Chiaki تعمل لكن نافذة البث لم تُنشأ بعد أو كانت خاملة
+            // فأغلق العملية الخاملة القديمة بلطف كي تقبل أمر stream من سطر الأوامر
             if (IsRunning())
             {
                 Stop();
@@ -87,7 +87,7 @@ public static class ChiakiLauncher
                 UseShellExecute = true
             };
 
-            // Eğer kayıtlı bir takma ad veya konsol varsa doğrudan stream komutunu ver
+            // إن وُجد اسم مستعار أو جهاز ألعاب مسجّل فأعطِ أمر stream مباشرة
             if (!string.IsNullOrWhiteSpace(host))
             {
                 var nick = GetRegisteredNickname(host) ?? (string.IsNullOrWhiteSpace(consoleName) ? "PS5" : consoleName);
@@ -109,7 +109,7 @@ public static class ChiakiLauncher
     }
 
     /// <summary>
-    /// Kurulum sihirbazında kullanıcının ilk eşleştirmeyi yapabilmesi için Chiaki arayüzünü açar.
+    /// يفتح واجهة Chiaki كي يتمكن المستخدم من إجراء الاقتران الأول في معالج الإعداد.
     /// </summary>
     public static bool LaunchPairingGui(string? host = null)
     {
@@ -148,7 +148,7 @@ public static class ChiakiLauncher
     }
 
     /// <summary>
-    /// Geriye uyumluluk için alias: LaunchAndStream çağrısı yapar.
+    /// اسم بديل للتوافق مع الإصدارات السابقة: يستدعي LaunchAndStream.
     /// </summary>
     public static bool LaunchOrBringToFront(string? host = null, string? consoleName = null)
     {
@@ -156,7 +156,7 @@ public static class ChiakiLauncher
     }
 
     /// <summary>
-    /// Çeviri durdurulduğunda veya uygulama kapatıldığında Chiaki ve bağlantıyı otomatik kapatır.
+    /// يغلق Chiaki والاتصال تلقائيا عند إيقاف الترجمة أو إغلاق التطبيق.
     /// </summary>
     public static void Stop()
     {
@@ -183,8 +183,8 @@ public static class ChiakiLauncher
     }
 
     /// <summary>
-    /// Chiaki'nin Registry veya INI dosyalarında gerçek bir kayıt anahtarı olup olmadığını kontrol eder.
-    /// Sahte dummy anahtarları kabul etmez.
+    /// يتحقق من وجود مفتاح تسجيل حقيقي في Registry أو ملفات INI الخاصة بـ Chiaki.
+    /// لا يقبل المفاتيح الوهمية (dummy).
     /// </summary>
     public static bool IsRegistered(string host)
     {
@@ -231,7 +231,7 @@ public static class ChiakiLauncher
     }
 
     /// <summary>
-    /// Chiaki'nin Registry veya INI dosyalarında daha önce girilmiş olan host IP'sini okur.
+    /// يقرأ عنوان IP للـ host المُدخل سابقا في Registry أو ملفات INI الخاصة بـ Chiaki.
     /// </summary>
     public static string? GetSavedHost()
     {
@@ -292,8 +292,8 @@ public static class ChiakiLauncher
     }
 
     /// <summary>
-    /// Chiaki'nin Registry veya INI dosyasında kayıtlı olan konsolun takma adını (nickname) okur.
-    /// Bulunamazsa null döner.
+    /// يقرأ الاسم المستعار (nickname) لجهاز الألعاب المسجّل في Registry أو ملف INI الخاص بـ Chiaki.
+    /// يعيد null إن لم يُعثر عليه.
     /// </summary>
     public static string? GetRegisteredNickname(string host)
     {
@@ -346,8 +346,8 @@ public static class ChiakiLauncher
     }
 
     /// <summary>
-    /// Chiaki yapılandırmasını hazırlar. Var olan gerçek kayıtları ASLA silmez.
-    /// Manuel host IP'sini, OpenGL görüntüleme ayarını ve varsa PSN Account ID'sini ekler.
+    /// يجهّز إعدادات Chiaki. لا يحذف التسجيلات الحقيقية الموجودة أبدا.
+    /// يضيف عنوان IP اليدوي للـ host، وإعداد العرض عبر OpenGL، و PSN Account ID إن وُجد.
     /// </summary>
     public static void SyncConfig(string host, byte[]? accountId = null)
     {

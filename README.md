@@ -1,244 +1,269 @@
-# 🎮 GameTranslator v1.0 Pro — Sefflex Edition
-### Konsol Oyunları İçin Gerçek Zamanlı, Sıfır Gecikmeli Türkçe Altyazı Sistemi
+# 🎮 GameTranslator — النسخة العربية
+### ترجمة نصية عربية فورية لألعاب PlayStation 5 على تلفزيونك، من دون أي تأخير في صورة اللعبة
 
-[![Platform: macOS](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows-blue?style=flat-square&logo=apple)](https://github.com/Sefflex/GameTranslate)
-[![Target: Smart TV](https://img.shields.io/badge/TV-TCL%20Android%20TV%20%7C%20LG%20webOS%20%7C%20Samsung%20Tizen-green?style=flat-square&logo=android)](https://github.com/Sefflex/GameTranslate)
-[![Zero-Lag](https://img.shields.io/badge/Gecikme-0%20ms%20(Doğrudan%20HDMI)-brightgreen?style=flat-square)](#-temel-mantık-3-cümlede-nasıl-çalışıyor)
-[![License: AGPL-3.0](https://img.shields.io/badge/Lisans-AGPL--3.0-red?style=flat-square)](LICENSE)
+[![المنصة: macOS | Windows](https://img.shields.io/badge/%D8%A7%D9%84%D9%85%D9%86%D8%B5%D8%A9-macOS%20%7C%20Windows-blue?style=flat-square)](https://github.com/mahmoude4477/GameTranslator)
+[![التلفزيون: Android TV | LG webOS | Samsung Tizen](https://img.shields.io/badge/%D8%A7%D9%84%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-Android%20TV%20%7C%20LG%20webOS%20%7C%20Samsung%20Tizen-green?style=flat-square)](https://github.com/mahmoude4477/GameTranslator)
+[![الترجمة: العربية](https://img.shields.io/badge/%D8%A7%D9%84%D8%AA%D8%B1%D8%AC%D9%85%D8%A9-%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%8A%D8%A9-brightgreen?style=flat-square)](#how-it-works)
+[![صورة اللعبة: مباشرة عبر HDMI](https://img.shields.io/badge/%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A7%D9%84%D9%84%D8%B9%D8%A8%D8%A9-%D9%85%D8%A8%D8%A7%D8%B4%D8%B1%D8%A9%20%D8%B9%D8%A8%D8%B1%20HDMI-brightgreen?style=flat-square)](#how-it-works)
+[![الرخصة: AGPL-3.0](https://img.shields.io/badge/%D8%A7%D9%84%D8%B1%D8%AE%D8%B5%D8%A9-AGPL--3.0-red?style=flat-square)](LICENSE)
 
-![GameTranslator Native UI](docs/screenshots/gametranslator-ui.jpg)
+**GameTranslator** نظام مفتوح المصدر يتيح لك أن تلعب ألعاب PlayStation 5 التي لا تدعم العربية وأنت ترى **الترجمة العربية** على تلفزيونك. صورة اللعبة وصوتها يصلان إلى التلفزيون مباشرة عبر HDMI، فلا يتأثر زمن استجابة ذراع التحكم ولا جودة الصورة.
 
-**GameTranslator**, başta **GTA 6** olmak üzere Türkçe dil desteği bulunmayan PlayStation 5 oyunlarını, televizyonunuzda **sıfır gecikmeyle (0 input lag)**, **4K 120 FPS / HDR görüntü kalitesi zerre bozulmadan** Türkçe altyazıyla oynamanızı sağlayan açık kaynaklı sistemdir.
-
----
-
-## 🧠 Temel Mantık: 3 Cümlede Nasıl Çalışıyor?
-
-1. **Görüntü TV'de Kalır (0 Lag):** PS5 konsolunuz televizyonunuza doğrudan **HDMI kablosuyla** bağlıdır. Oyunun görüntüsü ve sesi televizyondan doğrudan akar; 4K, 120Hz, HDR kaliteniz aynen korunur, elinizdeki DualSense kumanda sıfır gecikmeyle çalışır.
-2. **Bilgisayar Arkada Sessizce Dinler:** Bilgisayarınız (Mac veya Windows PC) evinizdeki yerel ağ üzerinden PS5'e Remote Play ile bağlanır. Kumandanız TV'den kopmasın diye konsola **ücretsiz açtığımız 2. bir hesapla** bağlanır! Bilgisayar sadece görüntüyü okur (OCR) ve İngilizce konuşmaları Türkçeye çevirir.
-3. **Televizyona Sadece Altyazı Gider:** Bilgisayar, çevrilen Türkçe metni televizyondaki GameTranslator uygulamasına (TCL/Android TV, LG webOS veya Samsung Tizen) yollar. Televizyon, HDMI'daki oyunun üzerine şeffaf bir katmanla Türkçe altyazıyı orijinal yazının üstüne basar!
+هذه هي النسخة العربية من المشروع: لغة الترجمة والواجهة هي العربية، وتُعرض الأسطر من اليمين إلى اليسار. المشروع الأصلي هو [GameTranslator من تطوير Sefflex](https://github.com/Sefflex/GameTranslator).
 
 ---
 
-## 🖥️ Ortak Yerel Masaüstü Tasarımı (Mac & PC)
+<a id="how-it-works"></a>
 
-GameTranslator, hem **macOS (Apple SwiftUI)** hem de **Windows (WPF / .NET 10)** platformlarında aynı sade, şık ve modern koyu arayüzü sunar. Tarayıcı veya harici web sunucusu gerektirmez.
+## 🧠 الفكرة الأساسية: كيف يعمل في 3 جمل؟
 
-* **Sol Panel (Çeviri Merkezi / Translation Hub):**
-  * **▶ Çeviriyi Başlat / ■ Çeviriyi Durdur:** Canlı sistemi tek tıkla başlatan ve durduran yüksek kontrastlı birincil buton.
-  * **Connection Status:** PS5 konsolunun ve TV bağlantısının durumunu anlık renkli noktalarla (yeşil/turuncu/gri) bildirir.
-  * **🔊 PC Oyun Sesi (Mute / Açık):** Oyunun sesi zaten HDMI kablosuyla televizyonunuzdan geldiği için, bilgisayarınızın hoparlöründen çift ses gelmesini tek tıkla sessize alır (Mute) veya dilediğinizde sesi açar.
-  * **Son Altyazı:** Oyunda konuşulan son altyazıyı anlık olarak gösterir ve tek tıkla panoya kopyalama imkanı sunar.
+1. **الصورة تبقى على التلفزيون (بلا تأخير في اللعب):** جهاز PS5 موصول بتلفزيونك مباشرة **بكابل HDMI**. صورة اللعبة وصوتها يأتيان من التلفزيون كما هما، وذراع التحكم DualSense يعمل من دون أي تأخير إضافي.
+2. **الكمبيوتر يتابع في الخلفية:** الكمبيوتر (Mac أو Windows) يتصل بجهاز PS5 عبر الشبكة المنزلية باستخدام Remote Play. وحتى لا ينفصل ذراع التحكم عن التلفزيون يتصل الكمبيوتر بـ**حساب ثانٍ مجاني** على جهاز الألعاب. يقرأ الكمبيوتر الترجمة الإنجليزية من الصورة (OCR) على الجهاز نفسه، ثم يترجمها إلى العربية عبر الإنترنت (Google Translate افتراضيًا، أو DeepL بمفتاحك الخاص).
+3. **التلفزيون يستقبل الترجمة فقط:** يرسل الكمبيوتر النص العربي إلى تطبيق GameTranslator على التلفزيون (Android TV أو LG webOS أو Samsung Tizen)، فيعرضه التلفزيون في طبقة شفافة فوق صورة HDMI، من اليمين إلى اليسار، فوق السطر الإنجليزي الأصلي.
 
-* **Sağ Panel (Entegre Ayarlar & Kalibrasyon Paneli):**
-  * **Üst Sekmeler (Segmented Control):** `[ 🖥️ Oyun Okuma Alanı ]`, `[ 📺 TV Görünümü ]`, `[ 🧠 Çeviri & Modeller ]`, `[ 🔗 Bağlantı & Sistem ]`, `[ 📖 Hızlı Rehber ]`.
-  * **Oyun Ekranı Altyazı Okuma Alanı:** 16:9 canlı PS5 oyun görüntüsü üzerinde mavi kalibrasyon çerçevesiyle alt yazının okunacağı koordinatları belirleme.
-  * **Akıllı TV Örtme & Otomatik Yerleşim:** Oyundaki orijinal İngilizce altyazının boyutunu ve koordinatlarını Vision OCR ile anlık hesaplayarak İngilizce yazıyı kapatır (`İngilizce altyazının üstünü örtsün`), üstüne koyar (`İngilizce altyazının üstünde`) veya altına yerleştirir.
-  * **Hassas Kaydırıcılar:** Üst/Alt başlangıç sınırları ve Sol/Sağ sınır ayarları.
-  * **Hızlı Seçenekler:** `Alt Orta (Standart)`, `Geniş Alt Bant`, `Tüm Alt Yarı`, `Üst Bölge (Görevler)` ve `Özel Kutu`.
-  * **TV Özelleştirme:** Yazı tipi boyutu, alt mesafe oranı, arka plan opaklığı, renk paleti ve Türkçe Dublaj (TTS) desteği.
-  * **Kısayol & OBS:** Yayıncılar için yerel OBS Browser Source overlay bağlantısı (`http://localhost:8787/obs`).
+> **ملاحظة صادقة عن السرعة:** صورة اللعبة لا تتأخر إطلاقًا لأنها لا تمر بالكمبيوتر. أما الترجمة النصية نفسها فتظهر بعد لحظة قصيرة من ظهور السطر الإنجليزي، لأنها تحتاج إلى التعرّف على النص ثم طلب ترجمة عبر الإنترنت. لذلك يحتاج الكمبيوتر إلى اتصال بالإنترنت أثناء اللعب.
 
 ---
 
-## 🎯 Platform Kurulum Rehberi (Hiç Kodlama Bilmeyenler İçin Adım Adım)
+## 🖥️ واجهة سطح المكتب (Mac و Windows)
 
-> ### 📄 Resimli & Adım Adım TV Kurulum Kılavuzu (PDF)
-> Televizyonunuza (Android TV, LG webOS, Samsung Tizen) uygulamanın nasıl kurulacağını anlatan, ekran görüntülü ve detaylı Türkçe rehberimizi doğrudan indirebilirsiniz:
-> 👉 **[GameTranslator TV Kurulum Rehberi (PDF)](GameTranslator_TV_Kurulum_Rehberi.pdf)** *(Masaüstünüzde ve bu depoda hazır olarak yer almaktadır)*
+تطبيق GameTranslator تطبيق أصلي على **macOS (SwiftUI)** وعلى **Windows (WPF / .NET 10)** بواجهة عربية داكنة وبسيطة، ولا يحتاج إلى متصفح. تختلف بعض التفاصيل بين النظامين، لكن العناصر الأساسية واحدة:
 
-Aşağıdaki adımları takip ederek 2 dakika içinde oyunu Türkçe altyazıyla oynamaya başlayabilirsiniz.
+* **اللوحة الرئيسية:**
+  * **▶ ابدأ الترجمة / ■ أوقف الترجمة:** زر واحد يشغّل النظام كله ويوقفه.
+  * **حالة الاتصال:** نقاط ملوّنة (أخضر / برتقالي / رمادي) تبيّن حالة الاتصال بجهاز PS5 وبالتلفزيون.
+  * **🔊 صوت اللعبة على الكمبيوتر:** صوت اللعبة يصل أصلًا من التلفزيون عبر HDMI، لذا يمكنك كتم صوت البث على الكمبيوتر حتى لا تسمع الصوت مرتين.
+  * **آخر سطر ترجمة:** يعرض آخر سطر تُرجم، مع إمكانية نسخه.
+
+* **الإعدادات والمعايرة:**
+  * **منطقة القراءة:** إطار تحدّده فوق صورة اللعبة (16:9) ليعرف التطبيق أين يقرأ الترجمة الإنجليزية، مع أشرطة تمرير دقيقة للحدود العليا والسفلى واليمنى واليسرى.
+  * **موضع الترجمة على التلفزيون:** يحسب التطبيق مكان السطر الإنجليزي وحجمه من نتيجة OCR، فيضع الترجمة العربية فوقه لتغطيته، أو أعلاه، أو أسفله، أو في موضع ثابت على الشاشة.
+  * **مظهر الترجمة:** حجم الخط، الخط العريض، شفافية الخلفية، والارتفاع عن أسفل الشاشة.
+  * **محرّك الترجمة:** Google Translate افتراضيًا، أو DeepL عند إدخال مفتاحك (انظر [الجدول أدناه](#translation-engines)).
+  * **OBS:** لأصحاب البث المباشر رابط طبقة جاهز يضاف في OBS كمصدر متصفح (Browser Source): `http://localhost:8787/obs`.
 
 ---
 
-### 1. 🍏 Mac (macOS Kurulumu - Apple Silicon M1 / M2 / M3 / M4)
-> Apple Silicon Neural Engine NPU çipini ve Vision OCR donanımını kullanarak **0 ms gecikmeyle** çevrimdışı çalışır.
+## 🎯 دليل الإعداد لكل منصة (خطوة بخطوة، لمن لا يعرف البرمجة)
 
-#### 🟢 Yöntem A: Tek Tıkla Otomatik Kurulum ve Başlatma (Önerilen)
-1. **GitHub'dan İndirin:** Bu sayfanın yukarısındaki yeşil **`<> Code`** butonuna tıklayın ve **`Download ZIP`** seçeneğini seçin. İnen ZIP dosyasını klasöre çıkartın.
-2. **Başlatıcıya Çift Tıklayın:** Klasörün içindeki **`GameTranslator.command`** dosyasına çift tıklayın.
-   * *İlk Açılışta:* Sistem uygulamanın henüz derlenmediğini otomatik anlar, gerekli motorları derler, Apple Developer sertifikanızla imzalar, `/Applications/GameTranslator.app` olarak kurar ve arayüzü ekrana getirir (yalnızca ilk seferde 10-15 saniye sürer).
-   * *Sonraki Açılışlarda:* Doğrudan 1 saniyede açılır!
-3. **⚠️ Mac Güvenlik İpuçları (İlk Kez Açarken):**
-   * **"Geliştiricisi Doğrulanamadığı İçin Açılamıyor" veya "İzin Yok" derse:**  
-     Dosyaya **sağ tıklayın** (veya iki parmakla dokunun), **`Aç`** seçeneğini seçin ve çıkan uyarıda tekrar **`Aç`** butonuna basın. (veya Terminal'de klasöre gidip `chmod +x GameTranslator.command` yazmanız yeterlidir).
-   * **"swiftc komutu için geliştirici araçları gerekiyor" uyarısı verirse:**  
-     Apple'ın çıkan resmi penceresinde **`Yükle`** butonuna basın; Apple Command Line Tools ücretsiz ve otomatik olarak kurulur.
-   * **Ekran Kaydı İzni (Altyazıyı Okumak İçin Şart):**  
-     Mac'inizde **`Sistem Ayarları` ➔ `Gizlilik ve Güvenlik` ➔ `Ekran ve Sistem Sesi Kaydı`** bölümüne gidin ve listede **`GameTranslator`** anahtarını **AÇIK (Mavi)** yapın.
+> ### 📄 دليل تثبيت تطبيق التلفزيون المصوَّر (PDF)
+> دليل عربي مفصّل يشرح تثبيت التطبيق على تلفزيونك (Android TV و LG webOS و Samsung Tizen):
+> 👉 **[دليل إعداد تطبيق التلفزيون (PDF)](GameTranslator_TV_Setup_Guide.pdf)** — والنسخة النصية منه في [`docs/tv-setup.ar.md`](docs/tv-setup.ar.md).
 
-#### 🛠️ Yöntem B: Manuel Olarak Kendiniz Derlemek İsterseniz (Terminal İle)
-Eğer uygulamayı terminalden kendi ellerinizle derleyip kurmak isterseniz:
-1. Mac'inizde **Terminal** uygulamasını açın (Klavyeden `Command + Boşluk` basıp Spotlight'a `Terminal` yazabilirsiniz).
-2. İndirdiğiniz proje klasörünün içine girin (Terminal penceresine `cd ` yazıp indirdiğiniz klasörü terminale sürükleyip Enter'a basabilirsiniz):
+تحتاج إلى ثلاثة أشياء: كمبيوتر (Mac أو Windows)، وجهاز PS5 موصول بالتلفزيون عبر HDMI، وتلفزيون ذكي مدعوم. يجب أن تكون الأجهزة الثلاثة على **الشبكة المنزلية نفسها**.
+
+---
+
+### 1. 🍏 Mac (معالجات Apple Silicon: M1 / M2 / M3 / M4، نظام macOS 14 أو أحدث)
+> التعرّف على النص يجري على الجهاز باستخدام Apple Vision. الترجمة تجري عبر الإنترنت (Google Translate، أو DeepL بمفتاحك).
+
+#### 🟢 الطريقة (أ): بناء وتشغيل تلقائي بنقرة واحدة (موصى بها)
+1. **نزّل المشروع من GitHub:** افتح `https://github.com/mahmoude4477/GameTranslator`، اضغط الزر الأخضر **`<> Code`** ثم اختر **`Download ZIP`**، وفُكّ ضغط الملف في مجلد.
+2. **انقر نقرًا مزدوجًا على المشغّل:** داخل المجلد انقر مرتين على الملف **`GameTranslator.command`**.
+   * *في المرة الأولى:* يلاحظ المشغّل أن التطبيق لم يُبنَ بعد، فيبنيه من الملف `mac/NativeApp.swift`، ويوقّعه محليًا، ويثبّته في `/Applications/GameTranslator.app` ثم يفتحه. يستغرق ذلك وقتًا قصيرًا في المرة الأولى فقط.
+   * *في المرات التالية:* يفتح التطبيق مباشرة.
+3. **Remote Play على Mac:** يفتح التطبيق بث PS5 عبر برنامج Chiaki المفتوح المصدر، ويبحث عنه في `/Applications/Chiaki.app` أو `/Applications/chiaki-ng.app`. إن لم يكن مثبتًا فثبّت [chiaki-ng](https://github.com/chiaki-ng/chiaki-ng/releases) أولًا.
+4. **⚠️ نصائح الأمان في Mac (عند الفتح أول مرة):**
+   * **إذا ظهرت رسالة أن الملف لا يمكن فتحه لأن مطوّره غير موثَّق، أو أنه لا توجد صلاحية:**
+     انقر على الملف **بالزر الأيمن** ثم اختر **«فتح»**، واضغط **«فتح»** مرة أخرى في التحذير. أو افتح Terminal داخل المجلد ونفّذ:
+     ```bash
+     chmod +x GameTranslator.command
+     ```
+   * **إذا ظهر تحذير بأن الأمر `swiftc` يحتاج إلى أدوات المطوّر:**
+     اضغط **«تثبيت»** في نافذة Apple الرسمية؛ تُثبَّت أدوات Apple Command Line Tools مجانًا وتلقائيًا، ثم شغّل الملف من جديد.
+   * **إذن تسجيل الشاشة (ضروري لقراءة الترجمة):**
+     افتح **«إعدادات النظام»** ثم **«الخصوصية والأمان»** ثم **«تسجيل الشاشة وصوت النظام»**، وفعّل المفتاح أمام **`GameTranslator`**.
+
+#### 🛠️ الطريقة (ب): البناء يدويًا من Terminal
+1. افتح تطبيق **Terminal** (اضغط `Command + Space` واكتب `Terminal`).
+2. ادخل إلى مجلد المشروع (اكتب `cd ` ثم اسحب المجلد إلى نافذة Terminal واضغط Enter):
    ```bash
-   cd /klasorun/yolu/GameTranslate-main
+   cd /path/to/GameTranslator-main
    ```
-3. Derleme scriptini çalıştırın:
+3. شغّل سكربت البناء:
    ```bash
    bash mac/build.sh
    ```
-4. Derleme bittiğinde terminalde `✅ Derleme ve kurulum başarıyla tamamlandı!` yazar ve uygulama otomatik olarak `/Applications/GameTranslator.app` konumuna yüklenir.
-5. Şimdi ister `GameTranslator.command` dosyasına çift tıklayarak, ister `Uygulamalar` (Applications) klasöründen **`GameTranslator`** ikonuna tıklayarak anında açabilirsiniz!
+4. عند انتهاء البناء تظهر رسالة نجاح، ويُثبَّت التطبيق تلقائيًا في `/Applications/GameTranslator.app`.
+5. افتحه بالنقر المزدوج على `GameTranslator.command` أو من مجلد «التطبيقات» (Applications).
 
 ---
 
-### 2. 🪟 PC (Windows Yerel Masaüstü Kurulumu - Windows 10 / 11)
-> C# / .NET 10, WPF ve DirectML / Windows Media OCR altyapısıyla çalışan yerel, donanım hızlandırmalı Windows masaüstü uygulamasıdır.  
-> 💡 **Hızlı İndirme:** [GitHub Releases](https://github.com/Sefflex/GameTranslator/releases/latest) sayfasından hazır kurulum sihirbazını (**`GameTranslator-Setup-v1.0.0.exe`**) veya tüm paketi içeren **`GameTranslator-Windows-v1.0.0.zip`** dosyasını indirebilirsiniz.
+### 2. 🪟 Windows (نظام Windows 10 / 11)
+> تطبيق سطح مكتب أصلي مبني بـ C# / .NET 10 و WPF. التعرّف على النص يجري على الجهاز باستخدام Windows.Media.Ocr، والترجمة تجري عبر الإنترنت (Google Translate، أو DeepL بمفتاحك).
 
-#### 🟢 Yöntem A: Hazır Kurulum Sihirbazı ile Tek Tıkla Kurulum (Önerilen)
-1. **GitHub Releases'ten İndirin:** [GitHub Releases](https://github.com/Sefflex/GameTranslator/releases/latest) bölümünden **`GameTranslator-Setup-v1.0.0.exe`** dosyasını (veya tüm paketi içeren `GameTranslator-Windows-v1.0.0.zip` arşivini) indirin.
-2. **Kurulum Sihirbazını Çalıştırın:** **`GameTranslator-Setup-v1.0.0.exe`** dosyasına çift tıklayın ve ekrandaki adımları takip ederek *"İleri > Kur"* butonuna basın.
-   * *Neler Yapar:* Gerekli tüm bileşenleri ve Chiaki motorunu güvenli uygulama dizinine kurar, Windows güvenlik izinlerini otomatik ayarlar.
-   * *Kısayollar:* Masaüstünüze ve Başlat Menünüze şık `GameTranslator` ikonunu bırakır.
-   * *Kaldırma (Uninstall):* İstenildiği zaman Windows *Ayarlar › Yüklü Uygulamalar* (Program Ekle/Kaldır) bölümünden veya kurulu dizindeki `unins000.exe` ile tek tıkla sistemden tertemiz kaldırılabilir.
-3. **📦 Taşınabilir (Portable / Kurulumsuz) Seçenek:**
-   * Bilgisayarına hiçbir şey kurmak istemeyenler `GameTranslator-Windows-x64-v1.0.0.zip` arşivini herhangi bir klasöre çıkartıp içindeki **`GameTranslator.exe`** dosyasına çift tıklayarak doğrudan çalıştırabilir!
-4. **⚠️ Windows Güvenlik İpuçları (İlk Kez Açarken):**
-   * **Windows Defender "Windows kişisel bilgisayarınızı korudu" (SmartScreen) derse:**  
-     Mavi penceredeki **`Ek bilgi`** yazısına tıklayın, ardından altta açılan **`Yine de çalıştır`** butonuna basın. (Açık kaynaklı ve dijital imza sertifikası satın alınmamış yeni bağımsız projelerde standarttır, %100 güvenlidir).
-   * **Windows Güvenlik Duvarı (Ağ İzni) uyarısı çıkarsa:**  
-     PS5 konsolunuzu ve TV uygulamasını yerel ağda otomatik bulabilmesi ve yayını aktarabilmesi için çıkan onay penceresinde **"Özel ağlar (Ev veya iş ağı)"** kutucuğunu işaretleyip **`Erişime izin ver`** butonuna basın.
+#### 🟢 الطريقة (أ): إصدار جاهز (إن نُشر إصدار جاهز)
+1. افتح صفحة الإصدارات: `https://github.com/mahmoude4477/GameTranslator/releases`. إن وجدت فيها إصدارًا جاهزًا فنزّل الملف **`GameTranslator-Windows-x64.zip`**. وإن لم يُنشر إصدار بعد فاستخدم الطريقة (ب)؛ البناء من المصدر متاح دائمًا.
+2. انقر على ملف ZIP بالزر الأيمن واختر **«استخراج الكل»** إلى مجلد. لا تشغّل التطبيق من داخل الملف المضغوط.
+3. انقر مرتين على **`GameTranslator.exe`** (أو على `GameTranslator-Start.bat` الذي يزيل حظر الملفات ثم يشغّل التطبيق).
+4. **⚠️ نصائح الأمان في Windows (عند الفتح أول مرة):**
+   * **إذا ظهرت نافذة SmartScreen الزرقاء (`Windows protected your PC`):**
+     اضغط **«معلومات إضافية»** (`More info`) ثم **«تشغيل على أي حال»** (`Run anyway`). هذا معتاد في المشاريع المفتوحة المصدر الجديدة التي لم تشترِ شهادة توقيع رقمي؛ ويمكنك دائمًا مراجعة الشيفرة وبناؤها بنفسك.
+   * **إذا ظهر تنبيه جدار الحماية (إذن الشبكة):**
+     حتى يجد التطبيق جهاز PS5 وتطبيق التلفزيون على الشبكة المحلية ويرسل إليه الترجمة، ضع علامة على **«الشبكات الخاصة»** ثم اضغط **«السماح بالوصول»**.
 
-#### 🛠️ Yöntem B: Kaynak Koddan Tek Tıkla Başlatma veya Derleme (Geliştiriciler)
-Eğer GitHub'dan kaynak kodları (`ZIP` veya `git clone`) ile indirdiyseniz:
-1. **Tek Tıkla Başlatma:** Proje klasöründeki **`GameTranslator.bat`** dosyasına çift tıklayın. Bilgisayarınızdaki .NET SDK ile proje saniyeler içinde derlenir ve açılır.
-2. **Tek Tıkla Bağımsız `.exe` Olarak Derlemek:**
-   * Klasördeki **`Derle-Windows.bat`** dosyasına çift tıklayın. Sistem tüm projeyi tek parça bağımsız (Self-Contained) Windows uygulaması olarak derler ve `bin/` klasörüne **`GameTranslator.exe`** olarak kaydeder.
-3. **💻 Konsoldan Çalıştırma (PowerShell / CMD):**
+#### 🛠️ الطريقة (ب): التشغيل أو البناء من الشيفرة المصدرية
+تحتاج إلى **.NET 10 SDK** (مجاني من `https://dotnet.microsoft.com/download`). بعد تنزيل المشروع (ZIP أو `git clone`):
+1. **تشغيل بنقرة واحدة:** انقر مرتين على **`GameTranslator.bat`** في مجلد المشروع؛ يبني المشروع ويفتحه.
+2. **بناء ملف `.exe` مستقل:** انقر مرتين على **`Build-Windows.bat`**؛ يبني المشروع كتطبيق مستقل (Self-Contained) ويحفظه في المجلد `bin\` باسم **`GameTranslator.exe`**.
+3. **💻 التشغيل من سطر الأوامر (PowerShell / CMD):**
    ```cmd
    dotnet run --project "windows/src/GameTranslator.App/GameTranslator.App.csproj" -c Release
    ```
 
+لتفاصيل الإعداد وحل المشكلات في Windows انظر [`docs/WINDOWS_SETUP.md`](docs/WINDOWS_SETUP.md).
+
 ---
 
-### 3. 📺 Akıllı TV (Smart TV Companion Uygulamaları)
-> TV'niz HDMI'daki oyun görüntüsünü oynatırken, üzerine şeffaf bir OSD penceresi açarak Türkçe altyazıyı basar. Hazır derlenmiş paketler `tv/packages/` klasöründedir.
-> 
-> 💡 **Tüm TV Modelleri İçin Kapsamlı Görsel Rehber:**  
-> Televizyonunuza yükleme yaparken görsellerle adım adım takip edebileceğiniz **[GameTranslator TV Kurulum Rehberi (PDF)](GameTranslator_TV_Kurulum_Rehberi.pdf)** belgesine göz atabilirsiniz.
+### 3. 📺 التلفزيون الذكي (تطبيق GameTranslator للتلفزيون)
+> يعرض التلفزيون صورة اللعبة القادمة من HDMI، ويضع فوقها طبقة شفافة فيها الترجمة العربية من اليمين إلى اليسار. الحزم الجاهزة موجودة في المجلد `tv/packages/`.
+>
+> 💡 **دليل مفصّل لكل أنواع التلفزيونات:** [دليل إعداد تطبيق التلفزيون (PDF)](GameTranslator_TV_Setup_Guide.pdf) أو [`docs/tv-setup.ar.md`](docs/tv-setup.ar.md).
 
-* **TCL / Google TV / Android TV (Sony, Philips, Xiaomi vb.):**
-  * **Hazır Paket Dosyası:** `tv/packages/gametranslator-androidtv_1.0.0.apk`
-  * **Kurulum Yöntemi 1 (USB ile - En Kolayı):**  
-    `gametranslator-androidtv_1.0.0.apk` dosyasını herhangi bir USB flash belleğe kopyalayın, TV'nize takın ve televizyondaki "Dosya Yöneticisi" veya "File Commander" ile APK'ya tıklayıp kurun.
-  * **Kurulum Yöntemi 2 (Wi-Fi / Ağ Üzerinden):**  
-    Bilgisayarınızdan TV'nin IP adresine kablosuz olarak kurabilirsiniz:
+* **Android TV / Google TV (مثل TCL و Sony و Philips و Xiaomi):**
+  * **الحزمة الجاهزة:** `tv/packages/gametranslator-androidtv_1.0.0.apk`
+  * **الطريقة 1 (من تطبيق الكمبيوتر، عبر الشبكة):** فعّل «تصحيح أخطاء USB» في خيارات المطوّر على التلفزيون، ثم اختر Android TV في خطوة التلفزيون داخل GameTranslator؛ يثبّت التطبيق الحزمة ويفتحها.
+  * **الطريقة 2 (بذاكرة USB):** انسخ الملف `gametranslator-androidtv_1.0.0.apk` إلى ذاكرة USB، وصِلها بالتلفزيون، ثم افتح الملف من أي مدير ملفات على التلفزيون وثبّته.
+  * **الطريقة 3 (يدويًا عبر ADB):**
     ```bash
-    adb connect <TV-IP-ADRESI>
+    adb connect <TV-IP>
     adb install tv/packages/gametranslator-androidtv_1.0.0.apk
     ```
-  * Televizyonda uygulamayı açıp PS5'in bağlı olduğu HDMI portunu (örneğin HDMI 1) seçin.
-* **LG TV (webOS):**
-  * **Yöntem 1 (Kalıcı Uygulama - Önerilen):**  
-    1. LG TV'nizden LG Content Store'u açıp ücretsiz **"Developer Mode"** uygulamasını kurun ve LG hesabınızla giriş yapın.
-    2. Bilgisayarınıza ücretsiz **[webOS Dev Manager](https://github.com/webosbrew/dev-manager-desktop/releases)** indirin ve TV'nizin IP adresini girip bağlanın.
-    3. GameTranslator'ın TV ekranındaki *"LG IPK Dosyasını Göster"* butonuna basarak çıkan `com.gametranslator.tv_1.0.0_all.ipk` paketini webOS Dev Manager'a sürükleyip TV'ye kurun. TV'de uygulamayı açın.
-  * **Yöntem 2 (Sıfır Kurulum - En Hızlı Yol - TV Web Tarayıcısı):**  
-    1. LG TV kumandasından **Web Tarayıcısı** uygulamasını açın.
-    2. Adres çubuğuna bilgisayarınızın yerel IP adresini yazın:  
-       👉 `http://<BILGISAYAR-IP-ADRESI>:8787` *(Örn: `http://192.168.1.50:8787`)*
-    3. Tarayıcıyı tam ekran yapın. Çeviri başladığı an altyazılar TV ekranınızda canlı olarak akar!
+  * افتح التطبيق على التلفزيون واختر منفذ HDMI الموصول به جهاز PS5 (مثل HDMI 1).
 
-* **Samsung TV (Tizen):**
-  * **Yöntem 1 (Apps2Samsung ile Kurulum):**  
-    1. TV'de Geliştirici Modunu açın (Uygulamalar menüsünde kumandadan `1-2-3-4-5` tuşlayarak).
-    2. Bilgisayarınızda **Apps2Samsung** programını açıp TV IP'nizi girin.
-    3. `GameTranslator-Samsung-Tizen-v1.0.0.wgt` dosyasını seçip **Install** butonuna basın ve TV'de uygulamayı açın.
-  * **Yöntem 2 (TV Web Tarayıcısı):**  
-    1. Samsung TV'nin dahili web tarayıcısını açıp `http://<BILGISAYAR-IP-ADRESI>:8787` adresini girin ve tam ekran yapın.
+* **LG (webOS):**
+  * **الطريقة 1 (تطبيق دائم، موصى بها):**
+    1. من متجر LG Content Store على التلفزيون ثبّت التطبيق المجاني **Developer Mode** وسجّل الدخول بحساب مطوّر LG المجاني.
+    2. في Windows يثبّت GameTranslator تطبيق التلفزيون بنفسه من خطوة التلفزيون. أو ثبّته يدويًا: نزّل [webOS Dev Manager](https://github.com/webosbrew/dev-manager-desktop/releases) على الكمبيوتر واتصل بالتلفزيون بعنوان IP الخاص به.
+    3. اسحب الحزمة `tv/packages/com.gametranslator.tv_1.0.0_all.ipk` إلى webOS Dev Manager وثبّتها، ثم افتح التطبيق على التلفزيون.
+  * **الطريقة 2 (للتجربة السريعة من متصفح التلفزيون):**
+    1. افتح **متصفح الويب** على تلفزيون LG.
+    2. اكتب في شريط العنوان عنوان الكمبيوتر على الشبكة المحلية:
+       `http://<COMPUTER-IP>:8787/obs` (مثال: `http://192.168.1.50:8787/obs`)
+    3. يعرض المتصفح أسطر الترجمة فور بدء الترجمة. انتبه: المتصفح لا يعرض صورة HDMI خلف الترجمة، فهذه الطريقة للتجربة فقط؛ ولرؤية الترجمة فوق اللعبة ثبّت التطبيق.
 
----
+* **Samsung (Tizen):**
+  * **الطريقة 1 (تثبيت التطبيق):**
+    1. فعّل وضع المطوّر على التلفزيون: افتح شاشة التطبيقات (Apps) واضغط على الريموت `1 2 3 4 5`، ثم اكتب عنوان IP للكمبيوتر في خانة Host PC IP وأعد تشغيل التلفزيون.
+    2. تطلب Samsung توقيع التطبيق لكل تلفزيون على حدة. في Windows يتولى GameTranslator ذلك بنفسه من خطوة التلفزيون بعد تسجيل دخول واحد بحساب Samsung مجاني.
+    3. أو ثبّت يدويًا ببرنامج **Apps2Samsung**: أدخل عنوان IP للتلفزيون، اختر الملف `tv/packages/gametranslator-samsung_1.0.0.wgt` واضغط **Install**، ثم افتح التطبيق على التلفزيون.
+  * **الطريقة 2 (للتجربة السريعة من متصفح التلفزيون):** افتح متصفح الإنترنت في تلفزيون Samsung وادخل إلى `http://<COMPUTER-IP>:8787/obs`. تظهر أسطر الترجمة فقط، من دون صورة اللعبة.
 
-### 4. 📱 Mobil Cihazlar & Tabletler (iOS / Android) — 🧪 [Test Aşamasında]
-> ⚠️ **Test ve Geliştirme Aşaması:** Akıllı telefonlar ve tabletler (iOS & Android) üzerinden canlı altyazı akışı ve ikinci ekran companion deneyimi şu an **test aşamasındadır (Beta)**.
-> * **Geçici Test Yöntemi:** Telefonunuz veya tabletiniz bilgisayarınızla aynı Wi-Fi ağına bağlıyken, mobil tarayıcınızdan (Safari / Chrome) `http://<BILGISAYAR-IP-ADRESI>:8787/obs` adresini açarak altyazıları mobil ekranınızda canlı olarak takip edebilirsiniz.
-> * Yerel mobil uygulamalar çok yakında testleri tamamlandığında kullanıma sunulacaktır.
+> ملاحظة: حزمتا LG (`.ipk`) و Samsung (`.wgt`) مبنيتان من الشيفرة الحالية في `tv/webos`. حزمة Android TV (`.apk`) هي البناء السابق ولم يُعَد بناؤها، لكنها تعرض الترجمة العربية بشكل صحيح.
 
 ---
 
-## 🎮 PlayStation 5 Ayarı (Kumanda Neden Kopmaz?)
-
-PlayStation normalde Remote Play açılınca elinizdeki kumandayı televizyondan koparır. Bunu aşmak son derece basittir:
-1. PS5'te `Ayarlar` ➔ `Sistem` ➔ `Uzaktan Oynatma (Remote Play)` ➔ **Uzaktan Oynatmayı Etkinleştir** seçeneğini **AÇIK** yapın.
-2. PS5'inizde **ücretsiz ikinci bir kullanıcı / PSN hesabı** ekleyin (örneğin: `oyunceviri@gmail.com`).
-3. **Nasıl Oynayacaksınız?**
-   - TV karşısında **kendi ana hesabınızı** açıp kumandanızı elinize alın.
-   - Bilgisayar ise arka planda bu **ikinci hesapla** konsola bağlanır.
-   - Böylece DualSense kumandanız TV'den **asla kopmaz**!
+### 4. 📱 الهاتف والجهاز اللوحي (iOS / Android) — 🧪 تجريبي
+> لا يوجد تطبيق خاص للهواتف حاليًا. يمكنك مع ذلك متابعة الترجمة على شاشة ثانية:
+> * صِل الهاتف أو الجهاز اللوحي بشبكة Wi-Fi نفسها التي يتصل بها الكمبيوتر، وافتح في المتصفح (Safari أو Chrome) العنوان `http://<COMPUTER-IP>:8787/obs`؛ تظهر أسطر الترجمة العربية مباشرة أثناء اللعب.
 
 ---
 
-## 🧠 Hangi Çeviri Modeli Ne İşe Yarar?
+## 🎮 إعداد PlayStation 5 (لماذا لا ينفصل ذراع التحكم؟)
 
-| Model | Nasıl Çalışır? | Ne Zaman Tercih Edilmeli? |
+عند بدء Remote Play يفصل PlayStation عادةً ذراع التحكم عن التلفزيون. الحل بسيط:
+1. في PS5 افتح **«الإعدادات»** ثم **«النظام»** ثم **«اللعب عن بُعد»** وفعّل خيار **«تفعيل اللعب عن بُعد»** (بالإنجليزية: `Settings > System > Remote Play > Enable Remote Play`).
+2. أضف على جهاز PS5 **مستخدمًا ثانيًا بحساب PSN مجاني**.
+3. **كيف تلعب؟**
+   - أمام التلفزيون ادخل بـ**حسابك الأساسي** وأمسك ذراع التحكم.
+   - الكمبيوتر يتصل بجهاز الألعاب في الخلفية بـ**الحساب الثاني**.
+   - هكذا يبقى ذراع التحكم DualSense متصلًا بالتلفزيون **دائمًا**.
+
+---
+
+<a id="translation-engines"></a>
+
+## 🧠 أي محرّك ترجمة أختار؟
+
+في التطبيق محرّكان فقط، وكلاهما يعمل **عبر الإنترنت**:
+
+| المحرّك | كيف يعمل؟ | متى تختاره؟ |
 | :--- | :--- | :--- |
-| **1. Apple Yerel (Önerilen)** | Mac'inizin Neural Engine (NPU) yapay zeka çipini kullanır. | **0 ms gecikme sağlar.** Tamamen internetsiz, çevrimdışı, kotasız ve ücretsizdir. |
-| **2. Google Gemini 2.5 Flash** | Google Gemini API (AI Studio). | GTA 6 gibi oyunlardaki **sokak argosu, küfürler, şakalar ve hikaye bağlamını** en zeki ve en doğal Türkçeyle çeviren yapay zeka modelidir. |
-| **3. DeepL API** | DeepL Free / Pro API. | Dünyanın en bilinen profesyonel çeviri motorudur. Kusursuz dilbilgisi için tercih edilir. |
-| **4. Yerel Derin Öğrenme** | Bilgisayarınızın CPU/GPU'sunda yerel çalışan MarianMT / DirectML sinir ağı modeli. | İnternetsiz yerel yapay sinir ağı çevirisi. |
+| **Google Translate (الافتراضي)** | يرسل النص الإنجليزي إلى خدمة Google Translate ويستقبل الترجمة العربية. لا يحتاج إلى مفتاح ولا إلى إعداد. | يعمل فور تشغيل التطبيق. مناسب للبدء السريع ولمعظم الألعاب. |
+| **DeepL** | يرسل النص إلى DeepL باستخدام **مفتاح DeepL API الخاص بك** الذي تدخله في الإعدادات. | عندما تريد صياغة أكثر سلاسة. يلزمك حساب DeepL API (توجد خطة مجانية بحصة شهرية). |
+
+* لا توجد ترجمة من دون إنترنت في هذه النسخة: لا نموذج محلي، ولا ترجمة عبر Gemini، ولا ترجمة Apple على الجهاز. ما يجري على الجهاز هو التعرّف على النص (OCR) فقط.
+* في Windows: إذا تعذّر الوصول إلى DeepL يعود التطبيق إلى Google Translate. ويقبل مفاتيح DeepL المجانية والمدفوعة.
+* في Mac: يُستخدم DeepL متى أُدخل المفتاح (عبر `api-free.deepl.com`)، وإلا فـ Google Translate. قد تعرض شاشة الإعدادات في Mac أسماء «نماذج» أخرى، لكن المحرّكين المذكورين هما الوحيدان اللذان يعملان فعلًا.
 
 ---
 
-## 📁 Proje Klasör Rehberi
+## 📁 دليل مجلدات المشروع
 
 ```text
-GameTranslate/
-├── mac/                            # 🍏 macOS Yerel Uygulaması (SwiftUI, Apple Vision OCR, NPU)
-│   ├── NativeApp.swift             # Ana masaüstü arayüzü & altyazı motoru
-│   ├── build.sh                    # Tek komutla Apple Developer imzalı derleme aracı
-│   ├── project.yml                 # XcodeGen proje dosyası
-│   └── GameTranslator/             # Varlıklar, ikonlar ve Info.plist
+GameTranslator/
+├── mac/                            # 🍏 تطبيق macOS
+│   ├── NativeApp.swift             # التطبيق كله في ملف واحد (SwiftUI + Apple Vision OCR)
+│   ├── build.sh                    # سكربت البناء والتثبيت
+│   └── Resources/                  # الصور
 │
-├── windows/                        # 🪟 Windows Yerel Uygulaması (.NET 10, C#, WPF, DirectML)
-│   ├── GameTranslator.Windows.slnx # Visual Studio / Rider Çözümü
-│   ├── src/                        # Modüller (App, Core, RemotePlay, TvInstall)
-│   └── native/                     # C/C++ donanım hızlandırma katmanı
+├── windows/                        # 🪟 تطبيق Windows (.NET 10 / C# / WPF)
+│   ├── GameTranslator.Windows.slnx # ملف الحل
+│   ├── src/                        # App, Shell, Core, Translation, RemotePlay, TvInstall, TvHelper
+│   ├── tests/                      # الاختبارات
+│   └── native/                     # غلاف بلغة C حول chiaki
 │
-├── tv/                             # 📺 Akıllı TV Uygulamaları (Companion Apps)
-│   ├── android/                    # Android TV & Google TV kaynak kodları (Java/Gradle)
-│   ├── webos/                      # LG webOS TV şeffaf altyazı katmanı (HTML5/JS)
-│   ├── tizen/                      # Samsung Tizen TV katmanı (Web App)
-│   └── packages/                   # Doğrudan TV'ye yüklenebilir hazır derlenmiş paketler:
+├── tv/                             # 📺 تطبيقات التلفزيون
+│   ├── webos/                      # تطبيق الويب المشترك (LG، ويستخدمه Tizen و Android أيضًا)
+│   ├── tizen/                      # ملفات Samsung Tizen
+│   ├── android/                    # تطبيق Android TV / Google TV
+│   └── packages/                   # حزم جاهزة للتثبيت:
 │       ├── gametranslator-androidtv_1.0.0.apk
 │       ├── com.gametranslator.tv_1.0.0_all.ipk
 │       └── gametranslator-samsung_1.0.0.wgt
 │
-├── core/                           # ⚙️ Çekirdek Kütüphane (Ağ, OCR gürültü filtreleme, senkronizasyon)
-├── dictionaries/                   # 📚 Oyun sözlükleri (GTA 6 slang & community pack)
-├── docs/                           # 📖 Detaylı kurulum rehberleri ve mimari dokümanlar
-├── design/                         # 🎨 Vektör logolar, AppIcon ve tasarım bileşenleri
-├── scripts/                        # 🛠️ TV paketleme ve derleme otomasyon araçları
+├── docs/                           # 📖 أدلة الإعداد ووثائق البنية
+├── design/                         # 🎨 الشعار والأيقونات و tokens.json
+├── scripts/                        # 🛠️ أدوات تحزيم تطبيقات التلفزيون وتثبيتها
 │
-├── GameTranslator.command          # 🚀 Mac tek tıkla başlatıcı
-├── GameTranslator.bat              # 🚀 Windows tek tıkla başlatıcı
-├── README.md                       # Açık kaynak proje dokümantasyonu
-└── LICENSE                         # AGPL-3.0 Açık Kaynak Lisansı
+├── GameTranslator.command          # 🚀 مشغّل Mac بنقرة واحدة
+├── GameTranslator.bat              # 🚀 مشغّل Windows بنقرة واحدة
+├── Build-Windows.bat               # بناء ملف exe مستقل لـ Windows
+├── generate_pdf_guide.py           # يولّد دليل التلفزيون بصيغة PDF
+├── GameTranslator_TV_Setup_Guide.pdf
+├── PRIVACY.md                      # الخصوصية
+├── THIRD-PARTY-NOTICES.md          # إشعارات مكوّنات الطرف الثالث
+├── README.md
+└── LICENSE                         # رخصة AGPL-3.0
 ```
 
 ---
 
-## 👨‍💻 Geliştiriciler İçin: Kodları Derleme
+## 👨‍💻 للمطوّرين: بناء الشيفرة
 
 ```bash
-# 🍏 macOS Uygulamasını Derleme (Apple Silicon):
+# 🍏 macOS (Apple Silicon)
 bash mac/build.sh
 
-# 🪟 Windows Projesini Derleme ve Çalıştırma:
+# 🪟 Windows (.NET 10 SDK)
 dotnet run --project windows/src/GameTranslator.App/GameTranslator.App.csproj
 
-# 📺 Android TV APK'sını Kaynak Kodundan Derleme:
-cd tv/android && ./gradlew assembleRelease
+# 📺 LG: tv/packages/com.gametranslator.tv_1.0.0_all.ipk
+python3 scripts/package-ipk.py
 
-# ⚙️ Core Swift Kütüphanesini Derleme:
-swift build --package-path core
+# 📺 Samsung: dist/tv-app/gametranslator-samsung_<version>.wgt
+sh scripts/package-tizen.sh
+
+# 📺 Android TV (Gradle + Android SDK)
+cd tv/android && gradle assembleRelease
+
+# 📄 PDF: docs/GameTranslator_TV_Setup_Guide.pdf
+python3 generate_pdf_guide.py
 ```
+
+وثائق أخرى: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) للبنية، و[`docs/DESIGN.md`](docs/DESIGN.md) للتصميم.
 
 ---
 
-## ⚖️ Lisans & Telif Hakkı
+## ⚖️ الرخصة والحقوق والشكر
 
-Bu proje **[GNU AGPL-3.0](LICENSE)** lisansı altında açık kaynak olarak sunulmaktadır.  
-Geliştirici: **Sefflex** — Telif Hakkı © 2026 GameTranslator Pro. Tüm hakları saklıdır.  
-Çekirdek ağ ve video yakalama altyapısında açık kaynaklı [chiaki-ng](https://github.com/chiaki-ng/chiaki-ng), TV altyazı uygulamalarının altyapısında ise [CouchSubs](https://github.com/yorulmazsinan/couchsubs) projesinin temellerinden yararlanılmıştır.
+هذا المشروع مفتوح المصدر برخصة **[GNU AGPL-3.0](LICENSE)**.
+
+* **المشروع الأصلي:** [GameTranslator](https://github.com/Sefflex/GameTranslator). المطوّر: **Sefflex** — حقوق النشر © 2026 GameTranslator Pro. جميع الحقوق محفوظة. هذه النسخة العربية مشتقة منه وتُنشر بالرخصة نفسها.
+* **مستودع النسخة العربية:** `https://github.com/mahmoude4477/GameTranslator`
+* **[chiaki-ng](https://github.com/chiaki-ng/chiaki-ng):** المشروع المفتوح المصدر الذي يعتمد عليه الاتصال بـ PS5 عبر Remote Play واستقبال البث.
+* **[CouchSubs](https://github.com/yorulmazsinan/couchsubs):** المشروع الذي استُفيد من أسسه في تطبيقات الترجمة على التلفزيون.
+
+إشعارات مكوّنات الطرف الثالث في [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md)، وسياسة الخصوصية في [`PRIVACY.md`](PRIVACY.md).
+
+GameTranslator غير تابع لشركة Sony Interactive Entertainment ولا معتمد منها. «PlayStation» و«PS5» علامتان تجاريتان لشركة Sony Interactive Entertainment Inc.

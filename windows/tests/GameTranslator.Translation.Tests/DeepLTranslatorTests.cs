@@ -11,7 +11,7 @@ namespace GameTranslator.Translation.Tests;
 
 public class DeepLTranslatorTests
 {
-    /// <summary>DeepL yerine geçen sahte sunucu: gelen istekleri saklar, verilen yanıtı döner.</summary>
+    /// <summary>خادم وهمي يقوم مقام DeepL: يحفظ الطلبات الواردة ويعيد الرد المعطى.</summary>
     private sealed class FakeDeepL(Func<HttpRequestMessage, string, HttpResponseMessage> reply) : HttpMessageHandler
     {
         public List<(HttpRequestMessage Request, string Body)> Requests { get; } = [];
@@ -30,27 +30,27 @@ public class DeepLTranslatorTests
         public Task<string> TranslateAsync(string text, CancellationToken cancellationToken = default)
         {
             Calls.Add(text);
-            return Task.FromResult("yerel: " + text);
+            return Task.FromResult("محلي: " + text);
         }
     }
 
     private static HttpResponseMessage Json(string json, HttpStatusCode status = HttpStatusCode.OK) =>
         new(status) { Content = new StringContent(json, Encoding.UTF8, "application/json") };
 
-    /// <summary>Her cümleyi "[tr] cümle" diye çevirir.</summary>
+    /// <summary>يترجم كل جملة إلى "[ar] الجملة".</summary>
     private static HttpResponseMessage Echo(HttpRequestMessage request, string body)
     {
         var texts = JsonDocument.Parse(body).RootElement.GetProperty("text").EnumerateArray().Select(t => t.GetString());
-        return Json(JsonSerializer.Serialize(new { translations = texts.Select(t => new { text = "[tr] " + t }) }));
+        return Json(JsonSerializer.Serialize(new { translations = texts.Select(t => new { text = "[ar] " + t }) }));
     }
 
     [Fact]
     public async Task SpeakerLabelStaysAndPreviousSubtitleIsContext()
     {
         var deepL = new FakeDeepL(Echo);
-        var translator = new DeepLTranslator("abc:fx", new FakeLocal(), "tr", new HttpClient(deepL));
+        var translator = new DeepLTranslator("abc:fx", new FakeLocal(), "ar", new HttpClient(deepL));
 
-        Assert.Equal("KRATOS: [tr] We move on.", await translator.TranslateAsync("KRATOS: We move on."));
+        Assert.Equal("KRATOS: [ar] We move on.", await translator.TranslateAsync("KRATOS: We move on."));
         await translator.TranslateAsync("Stay close.");
 
         var (first, firstBody) = deepL.Requests[0];
@@ -58,12 +58,12 @@ public class DeepLTranslatorTests
         Assert.Equal("DeepL-Auth-Key abc:fx", first.Headers.Authorization!.ToString());
         var json = JsonDocument.Parse(firstBody).RootElement;
         Assert.Equal("We move on.", json.GetProperty("text")[0].GetString());
-        Assert.Equal("TR", json.GetProperty("target_lang").GetString());
+        Assert.Equal("AR", json.GetProperty("target_lang").GetString());
         Assert.False(json.TryGetProperty("context", out _));
         Assert.Equal("KRATOS: We move on.", JsonDocument.Parse(deepL.Requests[1].Body).RootElement.GetProperty("context").GetString());
     }
 
-    /// <summary>Çeviri dili DeepL'e büyük harfli koduyla gider (Arapça: "AR").</summary>
+    /// <summary>لغة الترجمة تُرسل إلى DeepL برمزها بأحرف كبيرة (العربية: "AR").</summary>
     [Fact]
     public async Task TargetLanguageIsSentToDeepL()
     {
@@ -77,24 +77,24 @@ public class DeepLTranslatorTests
     public async Task SameSubtitleIsNotSentTwice()
     {
         var deepL = new FakeDeepL(Echo);
-        var translator = new DeepLTranslator("abc", new FakeLocal(), "tr", new HttpClient(deepL));
+        var translator = new DeepLTranslator("abc", new FakeLocal(), "ar", new HttpClient(deepL));
         await translator.TranslateAsync("Who are you?");
         await translator.TranslateAsync("Who are you?");
         Assert.Single(deepL.Requests);
         Assert.StartsWith("https://api.deepl.com/", deepL.Requests[0].Request.RequestUri!.AbsoluteUri);
     }
 
-    /// <summary>Kota biterse ya da DeepL'e ulaşılamazsa oyun altyazısız kalmaz; bir süre DeepL hiç denenmez.</summary>
+    /// <summary>إذا انتهت الحصة أو تعذّر الوصول إلى DeepL لا تبقى اللعبة بلا ترجمة نصية؛ ولا يُجرَّب DeepL لفترة.</summary>
     [Fact]
     public async Task FallsBackToLocalModelWhenDeepLFails()
     {
         var deepL = new FakeDeepL((_, _) => new HttpResponseMessage((HttpStatusCode)456));
         var local = new FakeLocal();
-        var translator = new DeepLTranslator("abc:fx", local, "tr", new HttpClient(deepL));
+        var translator = new DeepLTranslator("abc:fx", local, "ar", new HttpClient(deepL));
 
-        Assert.Equal("yerel: Run!", await translator.TranslateAsync("Run!"));
+        Assert.Equal("محلي:Run!", await translator.TranslateAsync("Run!"));
         Assert.Equal(OnlineKeyState.QuotaExceeded, translator.LastError);
-        Assert.Equal("yerel: Hide!", await translator.TranslateAsync("Hide!"));
+        Assert.Equal("محلي:Hide!", await translator.TranslateAsync("Hide!"));
         Assert.Single(deepL.Requests);
         Assert.Equal(["Run!", "Hide!"], local.Calls);
     }

@@ -7,9 +7,9 @@ using GameTranslator.RemotePlay;
 namespace GameTranslator.App.Services;
 
 /// <summary>
-/// PS5 bağlantısının (libchiaki) günlüğünü %LOCALAPPDATA%\GameTranslator\remoteplay.log dosyasına yazar. PS5 "Yeniden
-/// bağlanıyor…"da kalınca sebep buradan görülür. Satırlar yerel kütüphanenin iş parçacığını bekletmeden arka planda
-/// yazılır; dosya 1 MB'yi geçince eski yarısı silinir.
+/// يكتب سجل اتصال PS5 (libchiaki) في الملف %LOCALAPPDATA%\GameTranslator\remoteplay.log. حين يبقى PS5 على
+/// "جارٍ إعادة الاتصال…" يُعرف السبب من هنا. تُكتب الأسطر في الخلفية دون تعطيل خيط المكتبة الأصلية؛
+/// وحين يتجاوز الملف 1 MB يُحذف نصفه القديم.
 /// </summary>
 internal static class RemotePlayDiagnostics
 {
@@ -44,7 +44,7 @@ internal static class RemotePlayDiagnostics
             }
             catch (Exception error) when (error is IOException or UnauthorizedAccessException)
             {
-                // Günlük yazılamasa da uygulama sürer.
+                // يستمر التطبيق حتى لو تعذّرت كتابة السجل.
             }
         }
     }

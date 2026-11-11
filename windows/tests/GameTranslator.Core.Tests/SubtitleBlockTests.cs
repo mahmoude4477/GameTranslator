@@ -4,7 +4,7 @@ using GameTranslator.Core;
 
 namespace GameTranslator.Core.Tests;
 
-/// <summary>Alanda altyazının yanında menü, köşe göstergesi ve kumanda ipucu da okunur (Mac: SubtitleBlockTests).</summary>
+/// <summary>في المنطقة تُقرأ مع الترجمة النصية القائمة ومؤشر الزاوية وتلميح ذراع التحكم أيضا.</summary>
 public class SubtitleBlockTests
 {
     private static readonly TextBox Area = new(0, 0.6, 1, 1);

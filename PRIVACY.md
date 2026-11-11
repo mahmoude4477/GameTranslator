@@ -1,61 +1,77 @@
-# Gizlilik / Privacy
+# الخصوصية / Privacy
 
-*Son güncelleme / Last updated: 2026-11-01*
+*آخر تحديث / Last updated: 2026-11-11*
 
-## Türkçe
+## العربية
 
-GameTranslator, Sefflex tarafından yayınlanan açık kaynaklı bir uygulamadır. Hiçbir kişisel veriyi toplamaz,
-saklamak üzere kendi sunucularımıza göndermez; bizim bir sunucumuz yoktur. Reklam, analiz ya da izleme
-kodu içermez.
+GameTranslator برنامج مفتوح المصدر. المشروع الأصلي من تطوير Sefflex، وهذه هي النسخة العربية منه. لا يجمع البرنامج
+أي بيانات شخصية، ولا يرسل أي بيانات إلى خوادم تخصنا؛ فليس لدينا أي خادم. ولا يحتوي على إعلانات ولا على شيفرة
+تحليلات أو تتبّع.
 
-**Bilgisayarda kalanlar**
+**ما يبقى على الكمبيوتر**
 
-- PS5'ten gelen oyun görüntüsü yalnız altyazıyı okumak için bellekte işlenir; kaydedilmez, hiçbir yere
-  gönderilmez.
-- Okunan altyazılar ve çevirileri bilgisayarda üretilir ve yalnız ev ağınızdaki TV'ye gönderilir (çevrimiçi çeviriyi
-  açarsanız İngilizce metin DeepL'e de gider; aşağıya bakın).
-- PlayStation Network hesap kimliği (sayısal), PS5 eşleme anahtarı ve TV eşleme anahtarı bilgisayarda
-  saklanır: Mac'te Anahtar Zinciri'nde, Windows'ta yalnız sizin kullanıcı hesabınızın açabileceği
-  şifreli bir dosyada (DPAPI).
+- صورة اللعبة القادمة من PS5 تُعالَج في الذاكرة فقط لقراءة الترجمة النصية. التعرّف على النص (OCR) يجري على
+  جهازك (Apple Vision في Mac، و Windows.Media.Ocr في Windows). الصورة لا تُحفظ ولا تُرسل إلى أي مكان.
+- النص العربي المترجَم يُرسل فقط إلى التلفزيون (أو إلى طبقة OBS أو المتصفح) داخل شبكتك المنزلية.
+- معرّف حساب PlayStation Network (رقمي) ومفتاح إقران PS5 ومفتاح إقران التلفزيون تُحفظ على الكمبيوتر: في Windows
+  داخل ملف مشفّر لا يفتحه إلا حساب المستخدم الخاص بك (DPAPI)، وفي Mac ضمن تفضيلات التطبيق على جهازك.
+  تُكتب بيانات إقران PS5 أيضًا في إعدادات برنامج Chiaki على جهازك حتى يتمكن من فتح بث Remote Play.
 
-**Dışarıyla kurulan bağlantılar**
+**ما يُرسل إلى خارج شبكتك**
 
-- **Sony:** PlayStation Network girişi doğrudan Sony'nin sayfasında yapılır; şifrenizi GameTranslator görmez.
-  Girişten sonra Sony'den yalnız hesap kimliği alınır, oturum anahtarı saklanmaz.
-- **Hugging Face (yalnız Windows):** ilk açılışta çeviri modeli `huggingface.co` adresinden bir kez indirilir.
-- **Apple (yalnız Mac):** çeviri dilleri macOS tarafından indirilir ve yönetilir.
-- **DeepL (yalnız siz açarsanız):** ayarlarda kendi DeepL anahtarınızı girip çevrimiçi çeviriyi açarsanız okunan
-  İngilizce altyazı metni çeviri için DeepL'e (`api.deepl.com` ya da `api-free.deepl.com`) gönderilir. Görüntü,
-  ses ve hesap bilgisi gönderilmez. DeepL'in kendi gizlilik koşulları geçerlidir. Anahtar Mac'te Anahtar
-  Zinciri'nde, Windows'ta DPAPI ile şifreli dosyada saklanır. Açmazsanız DeepL'e hiçbir şey gönderilmez.
-- **Ev ağı:** PS5 ve LG TV'yi bulmak ve onlarla eşleşmek için yalnız yerel ağ kullanılır.
+- **Google Translate (الافتراضي):** الترجمة تجري عبر الإنترنت. نص الترجمة الإنجليزي الذي قُرئ من الشاشة يُرسل إلى
+  خدمة Google Translate (`translate.googleapis.com`) ليُترجم إلى العربية. يُرسل النص فقط؛ لا تُرسل الصورة ولا الصوت
+  ولا معلومات الحساب. تسري على ذلك شروط الخصوصية الخاصة بـ Google، وترى الخدمة عنوان IP الخاص بك كأي طلب ويب.
+- **DeepL (فقط إذا فعّلته أنت):** إذا أدخلت مفتاح DeepL الخاص بك في الإعدادات، يُرسل نص الترجمة الإنجليزي إلى DeepL
+  (`api.deepl.com` أو `api-free.deepl.com`) بدلًا من Google. لا تُرسل الصورة ولا الصوت ولا معلومات الحساب. تسري
+  شروط الخصوصية الخاصة بـ DeepL. في Windows يُحفظ المفتاح في الملف المشفّر بـ DPAPI، وإذا تعذّر الوصول إلى DeepL
+  يعود التطبيق إلى Google Translate. في Mac يبقى المفتاح في ذاكرة التطبيق أثناء تشغيله ولا يُحفظ. إن لم تُدخل
+  مفتاحًا فلا يُرسل أي شيء إلى DeepL.
+- **Sony:** تسجيل الدخول إلى PlayStation Network يجري في صفحة Sony نفسها؛ لا يرى GameTranslator كلمة مرورك. بعد
+  الدخول يُطلب من Sony معرّف الحساب فقط، ولا يُحفظ مفتاح الجلسة.
+- **GitHub (في Windows فقط):** يتحقق التطبيق من وجود إصدار جديد في صفحة إصدارات المستودع
+  `https://github.com/mahmoude4477/GameTranslator`، ويُنزّل التحديث منها إذا طلبت ذلك. لا تُرسل أي بيانات شخصية.
+- **LG و Samsung (في Windows، فقط عند تثبيت تطبيق التلفزيون):** لتمديد جلسة وضع المطوّر في تلفزيون LG يتصل
+  التطبيق بموقع مطوّري LG (`developer.lge.com`). ولتثبيت التطبيق على تلفزيون Samsung تسجّل الدخول في صفحة Samsung
+  نفسها، ثم يطلب التطبيق من خوادم Samsung شهادة توقيع خاصة بتلفزيونك. تسري شروط الخصوصية الخاصة بكل شركة.
+- **الشبكة المنزلية:** البحث عن PS5 والتلفزيون والإقران معهما يجري عبر الشبكة المحلية فقط.
 
-TV uygulaması altyazıları yalnız ev ağındaki GameTranslator bilgisayarından alır ve internete bağlanmaz.
+تطبيق التلفزيون يستقبل الترجمة فقط من كمبيوتر GameTranslator داخل الشبكة المنزلية، ولا يتصل بالإنترنت.
 
-Sorularınız için: https://github.com/Sefflex/GameTranslate/issues
+لا توجد في هذه النسخة ترجمة تجري على الجهاز من دون إنترنت، ولا دبلجة صوتية.
+
+للأسئلة: https://github.com/mahmoude4477/GameTranslator/issues
 
 ## English
 
-GameTranslator is open-source software published by Sefflex. It does not collect personal data and does not
-send any data to servers of ours (we do not operate any). It contains no advertising, analytics or
-tracking code.
+GameTranslator is open-source software. The original project is by Sefflex; this is its Arabic edition. It does not
+collect personal data and does not send any data to servers of ours (we do not operate any). It contains no
+advertising, analytics or tracking code.
 
 **Stays on your computer:** the game picture received from the PS5 is processed in memory only to read
-subtitles and is never stored or uploaded. Subtitles and translations are produced on your computer and
-sent only to the TV on your home network. Your numeric PlayStation Network account ID and the PS5 and TV
-pairing keys are stored locally (Keychain on Mac; a file encrypted for your Windows user account with
-DPAPI on Windows).
+subtitles; text recognition (OCR) runs on your device (Apple Vision on Mac, Windows.Media.Ocr on Windows), and the
+picture is never stored or uploaded. The translated Arabic text is sent only to the TV (or the OBS overlay or a
+browser) on your home network. Your numeric PlayStation Network account ID and the PS5 and TV pairing keys are stored
+locally (a file encrypted for your Windows user account with DPAPI on Windows; the app's preferences on Mac). The PS5
+pairing data is also written to the settings of Chiaki on your computer so that it can open the Remote Play stream.
 
-**External connections:** PlayStation Network sign-in happens on Sony's own page, and GameTranslator never sees
-your password; afterwards only the account ID is requested from Sony, and no session token is kept. On
-Windows, the translation model is downloaded once from `huggingface.co`. On Mac, translation languages are
-downloaded and managed by macOS. If you enter your own DeepL key in settings and turn on online
-translation, the English subtitle text that was read is sent to DeepL (`api.deepl.com` or
-`api-free.deepl.com`) to be translated; no picture, audio or account data is sent, and DeepL's own privacy
-terms apply. The key is stored in the Keychain on Mac and in the DPAPI-encrypted file on Windows. Nothing is
-sent to DeepL unless you turn this on. PS5 and TV discovery and pairing use your local network only.
+**Sent outside your network:** translation is done online. The English subtitle text that was read is sent to
+Google Translate (`translate.googleapis.com`) to be translated into Arabic; if you enter your own DeepL key in
+settings, it is sent to DeepL (`api.deepl.com` or `api-free.deepl.com`) instead. Only the text is sent: no picture,
+audio or account data. Google's and DeepL's own privacy terms apply, and the service sees your IP address like any
+web request. On Windows the DeepL key is stored in the DPAPI-encrypted file, and Google Translate is used when DeepL
+cannot be reached; on Mac the key is kept in memory while the app runs and is not saved. Nothing is sent to DeepL
+unless you enter a key. PlayStation Network sign-in happens on Sony's own page, and GameTranslator never sees your
+password; afterwards only the account ID is requested from Sony, and no session token is kept. On Windows the app
+checks the Releases page of `https://github.com/mahmoude4477/GameTranslator` for a new version and downloads it from
+there if you ask; no personal data is sent. On Windows, only when you install the TV app: the app contacts LG's
+developer site (`developer.lge.com`) to extend the developer mode session of an LG TV, and for a Samsung TV you sign
+in on Samsung's own page and the app requests a signing certificate for your TV from Samsung's servers. PS5 and TV
+discovery and pairing use your local network only.
 
 The TV app receives subtitles only from the GameTranslator computer on your home network and does not connect
 to the internet.
 
-Contact: https://github.com/Sefflex/GameTranslate/issues
+This edition has no on-device (offline) translation and no dubbing.
+
+Contact: https://github.com/mahmoude4477/GameTranslator/issues

@@ -4,22 +4,22 @@ using System.Reflection;
 
 namespace GameTranslator.Shell;
 
-/// <summary>Uygulama güncellemesi (gerçekte Velopack, GitHub sürümlerinden).</summary>
+/// <summary>تحديث التطبيق (في الواقع Velopack، من إصدارات GitHub).</summary>
 public interface IUpdater
 {
-    /// <summary>Kurulum dosyasıyla kurulduysa kendini günceller; zip'ten açıldıysa yalnız sürüm sayfasını gösteririz.</summary>
+    /// <summary>إن ثُبّت بملف التثبيت يحدّث نفسه؛ وإن فُتح من ملف zip نعرض صفحة الإصدار فقط.</summary>
     bool CanUpdateItself { get; }
     Uri DownloadPage { get; }
-    /// <summary>Daha yeni sürüm varsa numarası, yoksa null.</summary>
+    /// <summary>رقم الإصدار الأحدث إن وُجد، وإلا null.</summary>
     Task<string?> CheckAsync();
-    /// <summary>İndirir, kurar ve uygulamayı yeniden başlatır.</summary>
+    /// <summary>ينزّل التحديث ويثبّته ويعيد تشغيل التطبيق.</summary>
     Task InstallAsync(IProgress<double> progress);
 }
 
-/// <summary>Sürüm numaraları: "0.1.0-beta.10" (anlamsal sürüm, ön sürüm parçaları sayıysa sayı olarak karşılaştırılır).</summary>
+/// <summary>أرقام الإصدارات: "0.1.0-beta.10" (إصدار دلالي؛ أجزاء الإصدار التجريبي تُقارن كأرقام إن كانت أرقاما).</summary>
 public static class AppVersion
 {
-    /// <summary>Derlemenin sürümü (CI etiketten verir: -p:Version=0.1.0-beta.10); "+commit" eki atılır.</summary>
+    /// <summary>إصدار البناء (يحدّده CI من الوسم: -p:Version=0.1.0-beta.10)؛ وتُحذف اللاحقة "+commit".</summary>
     public static string Current(Assembly assembly) =>
         (assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.0.0").Split('+')[0];
 
@@ -35,7 +35,7 @@ public static class AppVersion
             var y = i < coreB.Length ? coreB[i] : 0;
             if (x != y) return x.CompareTo(y);
         }
-        // Ön sürümü olmayan, ön sürümlüden yenidir (0.1.0 > 0.1.0-beta.9).
+        // الإصدار بلا جزء تجريبي أحدث من الإصدار التجريبي (0.1.0 > 0.1.0-beta.9).
         if (preA.Length == 0 || preB.Length == 0) return preB.Length.CompareTo(preA.Length);
         for (var i = 0; i < Math.Max(preA.Length, preB.Length); i++)
         {

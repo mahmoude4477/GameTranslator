@@ -50,7 +50,7 @@ public class RegionTranslationTests
             Image, new CropRegion(), new LinesReader(Lines("R2 Swing", "Find the blacksmith.")), new FakeTranslator());
         Assert.NotNull(result);
         Assert.Equal("Find the blacksmith.", result.Source);
-        Assert.Equal("AR:Find the blacksmith.", result.Translation);
+        Assert.Equal("AR: Find the blacksmith.", result.Translation);
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public class RegionTranslationTests
         var result = await RegionTranslation.TranslateOnceAsync(
             Image, new CropRegion(), new LinesReader(Lines("Find the blacksmith.", "Bring him three iron bars.")), new FakeTranslator());
         Assert.NotNull(result);
-        Assert.Equal("AR:Find the blacksmith.\nAR:Bring him three iron bars.", result.Translation);
+        Assert.Equal("AR: Find the blacksmith.\nAR: Bring him three iron bars.", result.Translation);
     }
 
     [Fact]

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <!-- SPDX-License-Identifier: AGPL-3.0-only -->
-  <!-- Samsung ve Android TV'ye GameTranslator TV uygulamasını ağ üzerinden kurar. Windows uygulaması doğrudan,
-       Mac uygulaması GameTranslator.TvHelper aracılığıyla kullanır. -->
+  <!-- يثبّت تطبيق GameTranslator للتلفزيون على Samsung و Android TV عبر الشبكة. تطبيق Windows يستخدمه مباشرة،
+       وتطبيق Mac عبر GameTranslator.TvHelper. -->
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Samsung'un geliştirici sertifikalarını veren ara sertifikalar (Tizen Studio'dan, değiştirilmeden). -->
+    <!-- الشهادات الوسيطة التي تصدر شهادات المطوّرين لدى Samsung (من Tizen Studio، دون تعديل). -->
     <EmbeddedResource Include="Samsung\ca\*.pem" LogicalName="SamsungCa.%(Filename).pem" />
   </ItemGroup>
 

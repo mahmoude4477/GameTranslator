@@ -82,7 +82,7 @@ public class ScreenTranslationTests
             Line("Leave the camp", 0.60, 0.80, 0.90),
         ])), new FakeTranslator(), list => reported.Add(list.Count));
         Assert.Equal(2, items.Count);
-        Assert.Equal("AR:Find the blacksmith.\nAR:Bring him three iron bars.", items[0].Translation);
+        Assert.Equal("AR: Find the blacksmith.\nAR: Bring him three iron bars.", items[0].Translation);
         Assert.True(items[0].Paragraphs);
         Assert.False(items[1].Paragraphs);
         Assert.Equal([1, 2], reported);

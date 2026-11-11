@@ -1,87 +1,115 @@
-# GameTranslator - Windows Manuel Kurulum ve Sorun Giderme Rehberi
+# GameTranslator - دليل التثبيت اليدوي وحل المشكلات على Windows
 
-Bu rehber, GameTranslator Windows uygulamasının kurulumunu, PlayStation 5 ve Akıllı TV (Samsung, LG, Android TV, PC/OBS) eşleştirmesini adım adım anlatmaktadır.
+يشرح هذا الدليل خطوة بخطوة تثبيت تطبيق GameTranslator على Windows، ومطابقته مع PlayStation 5 ومع التلفزيون الذكي (Samsung أو LG أو Android TV) أو مع شاشة الكمبيوتر / OBS.
 
----
-
-## 🚀 1. Windows Kurulumu
-
-1. [GitHub Releases](https://github.com/Sefflex/GameTranslator/releases) sayfasından **`GameTranslator-Windows-x64.zip`** dosyasını indirin.
-2. İndirdiğiniz zip dosyasına **sağ tıklayın** ve **"Tümünü Ayıkla..." (Extract All)** seçeneğine tıklayın.
-   > ⚠️ **Önemli:** Uygulamayı zip'in içinden doğrudan çalıştırmayın! Mutlaka bir klasöre çıkarın.
-3. Klasörün içindeki **`GameTranslator.exe`** dosyasına çift tıklayarak uygulamayı başlatın.
-   > Windows SmartScreen uyarısı çıkarsa: *"Ek Bilgi"* -> *"Yine de çalıştır"* butonuna tıklayın.
+يقرأ التطبيق الترجمة الإنجليزية للعبة من بث Remote Play، ويترجمها إلى العربية عبر الإنترنت (Google افتراضيًا، أو DeepL إذا حفظت مفتاحه في الإعدادات)، ثم يعرضها على التلفزيون من اليمين إلى اليسار.
 
 ---
 
-## 🎮 2. PlayStation 5 Eşleştirmesi
+## 🚀 1. التثبيت على Windows
 
-### Adım 1: PS5 Ayarları
-1. PS5 konsolunuzu açın.
-2. **Ayarlar ➔ Sistem ➔ Uzaktan Oynatma (Remote Play)** menüsüne gidin ve **"Uzaktan Oynatmayı Etkinleştir"** seçeneğini açık konuma getirin.
-3. Aynı menüde yer alan **"Cihazı Eşleştir"** seçeneğine tıklayın. Ekranda **8 haneli bir kod** ve 300 saniyelik bir geri sayım görünecektir.
+المتطلبات: Windows 10 (الإصدار 2004 أو أحدث) أو Windows 11، 64 بت، واتصال بالإنترنت للترجمة.
 
-### Adım 2: GameTranslator'da PSN Girişi
-1. GameTranslator kurulum sihirbazında **"Sony Giriş Sayfasını Aç"** butonuna tıklayın.
-2. Tarayıcınızda açılan resmi Sony giriş ekranından PSN hesabınızla giriş yapın.
-3. Giriş tamamlandığında tarayıcınız `remoteplay.dl.playstation.net/remoteplay/redirect?code=...` sayfasına yönlenecektir (sayfa beyaz/boş görünebilir, bu normaldir).
-4. Tarayıcınızın adres çubuğundaki bu bağlantının **tamamını kopyalayın** ve GameTranslator'daki alana yapıştırıp **"Doğrula"**ya basın.
+### الطريقة أ: الحزمة الجاهزة
 
-### Adım 3: 8 Haneli Kodu Girme
-1. PS5 ekranında görünen **8 haneli kodu** GameTranslator'a yazın.
-2. Konsol IP adresi otomatik taranır (bulunamazsa PS5 Ayarlar ➔ Ağ ➔ Bağlantı Durumu'ndan IP adresini elle yazabilirsiniz).
-3. **"PS5 ile Eşleştir"** butonuna tıklayın. Yeşil onay işaretini görünce ana ekrana geçebilirsiniz.
+1. نزّل الملف **`GameTranslator-Windows-x64.zip`** من صفحة [GitHub Releases](https://github.com/mahmoude4477/GameTranslator/releases) (إن نُشر إصدار جاهز).
+2. انقر على ملف zip **بالزر الأيمن** واختر **Extract All...** (استخراج الكل).
+   > ⚠️ **مهم:** لا تشغّل التطبيق من داخل ملف zip مباشرة! استخرجه إلى مجلد أولًا.
+3. انقر نقرًا مزدوجًا على **`GameTranslator.exe`** داخل المجلد لتشغيل التطبيق (أو على **`GameTranslator-Start.bat`** الذي يزيل حظر Windows عن الملفات ثم يشغّله).
+   > إذا ظهر تنبيه Windows SmartScreen: انقر *More info* ثم *Run anyway*.
+
+### الطريقة ب: من الشيفرة المصدرية
+
+1. ثبّت [.NET 10 SDK](https://dotnet.microsoft.com/download).
+2. نزّل [المستودع](https://github.com/mahmoude4477/GameTranslator) (`Download ZIP` أو `git clone`) واستخرجه إلى مجلد.
+3. انقر نقرًا مزدوجًا على **`GameTranslator.bat`** لبناء التطبيق وتشغيله، أو على **`Build-Windows.bat`** لبناء نسخة مستقلة تُحفظ في `bin\GameTranslator.exe`.
+
+إذا ظهر تنبيه جدار الحماية في Windows عند أول تشغيل فاسمح للتطبيق على الشبكات الخاصة (Private networks)؛ وإلا لن يجد PS5 ولا التلفزيون.
 
 ---
 
-## 📺 3. Akıllı TV Kurulumu (Samsung, LG, Android TV, OBS)
+## 🎮 2. مطابقة PlayStation 5
 
-GameTranslator, çevirileri televizyonunuza veya bilgisayar ekranınıza sıfır gecikmeyle yansıtır.
+يتصل الكمبيوتر بجهاز PS5 عبر Remote Play بحساب PSN ثانٍ مجاني، حتى لا ينقطع ذراع التحكم عن حسابك الأساسي على التلفزيون. أنشئ هذا الحساب على PS5 قبل البدء.
 
-### 🔷 Seçenek A: PC & OBS / Tarayıcı (En Kolay)
-- Herhangi bir TV uygulaması yüklemek istemiyorsanız ya da yayında kullanacaksanız:
-- OBS Studio'da yeni bir **"Tarayıcı Kaynağı" (Browser Source)** ekleyin:
+### الخطوة 1: إعدادات PS5
+1. شغّل جهاز PS5 وادخل بالمستخدم الثاني.
+2. اذهب إلى **Settings ➔ System ➔ Remote Play** وفعّل الخيار **Enable Remote Play**.
+3. في القائمة نفسها اختر **Pair Device** (اسمه **Link Device** في إصدارات النظام الأقدم). سيظهر على الشاشة **رمز من 8 أرقام** وعدّ تنازلي مدته 300 ثانية.
+
+### الخطوة 2: تسجيل الدخول إلى PSN في GameTranslator
+1. في خطوة PS5 من معالج الإعداد اضغط زر تسجيل الدخول بحساب PSN (تُفتح صفحة Sony داخل التطبيق)، أو زر فتح صفحة تسجيل الدخول إلى Sony في المتصفح الخارجي.
+2. سجّل الدخول بحساب PSN الثاني في صفحة Sony الرسمية.
+3. إذا استخدمت المتصفح الخارجي: بعد اكتمال الدخول ينتقل المتصفح إلى صفحة `remoteplay.dl.playstation.net/remoteplay/redirect?code=...` (قد تبدو الصفحة بيضاء أو فارغة، وهذا طبيعي). **انسخ الرابط كاملًا** من شريط العنوان، والصقه في الخانة المخصصة في GameTranslator ثم اضغط زر التحقق.
+4. بعد ربط الحساب يعرض التطبيق رمز الحساب (PSN Account-ID) مع زر لنسخه.
+
+### الخطوة 3: إدخال الرمز المكوّن من 8 أرقام
+1. اضغط زر فتح واجهة Chiaki ومطابقة PS5. في نافذة Chiaki انقر نقرًا مزدوجًا على جهاز PS5 في القائمة (أو انقر بالزر الأيمن واختر **Register**).
+2. اكتب **الرمز المكوّن من 8 أرقام** الظاهر على شاشة PS5 والصق رمز الحساب (PSN Account-ID)، ثم أكمل المطابقة.
+3. بديل متقدم: من قسم المطابقة اليدوية في الخطوة نفسها ابحث عن الجهاز في الشبكة (أو اكتب عنوان IP يدويًا من **Settings ➔ Network ➔ Connection Status** في PS5)، واكتب الرمز واضغط زر المطابقة اليدوية.
+4. حين تظهر علامة النجاح الخضراء انتقل إلى خطوة التلفزيون.
+
+المطابقة تُجرى مرة واحدة فقط. بعدها يتصل البث تلقائيًا عند الضغط على «ابدأ الترجمة» وينقطع عند «أوقف الترجمة».
+
+---
+
+## 📺 3. إعداد التلفزيون الذكي (Samsung، LG، Android TV، OBS)
+
+يعرض GameTranslator الترجمة العربية على تلفزيونك فوق صورة اللعبة، أو على شاشة الكمبيوتر. اختر في خطوة التلفزيون من المعالج مكان عرض الترجمة.
+
+الحزم الجاهزة لتطبيق التلفزيون موجودة في المجلد `tv-app` بجانب `GameTranslator.exe` (وفي `tv/packages` من المستودع). والشرح المفصّل لتفعيل وضع المطوّر والتثبيت لكل نوع في [دليل تثبيت تطبيق التلفزيون](tv-setup.ar.md).
+
+### 🔷 الخيار أ: شاشة الكمبيوتر و OBS / المتصفح (الأسهل)
+- إذا كنت لا تريد تثبيت أي تطبيق على التلفزيون، أو كنت تبثّ اللعب:
+- أضف في OBS Studio مصدرًا جديدًا من نوع **Browser Source**:
   - **URL:** `http://localhost:8787/obs`
-  - **Genişlik:** 1920, **Yükseklik:** 1080
+  - **Width:** 1920، **Height:** 1080
 
 ---
 
-### 🔷 Seçenek B: Samsung Smart TV (Tizen)
-1. Uygulama klasöründeki `tv-app/gametranslator-samsung_1.0.0.wgt` dosyasını kullanın (veya GitHub Releases sayfasından indirin).
-2. **Apps2Samsung ile Kurulum:**
-   - Bilgisayarınızda **Apps2Samsung** programını açın.
-   - TV'nizin IP adresini girin.
-   - `GameTranslator-Samsung-Tizen-v1.0.0.wgt` dosyasını seçip **Install** butonuna basın.
-3. TV'nizde GameTranslator uygulamasını açın.
-4. GameTranslator Windows uygulamasında TV IP'nizi girip kaydedin.
+### 🔷 الخيار ب: Samsung Smart TV (Tizen)
+1. استخدم الملف `tv-app/gametranslator-samsung_1.0.0.wgt` من مجلد التطبيق.
+2. **التثبيت ببرنامج Apps2Samsung:**
+   - فعّل وضع المطوّر في التلفزيون (انظر [Samsung TV](tv-setup.ar.md#samsung-tv)).
+   - افتح برنامج **Apps2Samsung** على الكمبيوتر.
+   - أدخل عنوان IP للتلفزيون.
+   - اختر الملف `gametranslator-samsung_1.0.0.wgt` واضغط **Install**.
+3. افتح تطبيق GameTranslator على التلفزيون.
+4. أدخل عنوان IP للتلفزيون في تطبيق GameTranslator على Windows واحفظه.
 
 ---
 
-### 🔷 Seçenek C: LG Smart TV (webOS)
-1. Bilgisayarınıza [webOS Dev Manager](https://github.com/webosbrew/dev-manager-desktop) indirin.
-2. LG TV'nizin Developer Mode uygulamasını açın ve bilgisayarınızı bağlayın.
-3. `tv-app/com.gametranslator.tv_1.0.0_all.ipk` dosyasını webOS Dev Manager üzerinden TV'nize kurun.
-4. TV'de uygulamayı açın ve Windows programından IP'nizi kaydedin.
+### 🔷 الخيار ج: LG Smart TV (webOS)
+1. نزّل [webOS Dev Manager](https://github.com/webosbrew/dev-manager-desktop) على الكمبيوتر.
+2. افتح تطبيق Developer Mode في تلفزيون LG (انظر [LG TV](tv-setup.ar.md#lg-tv)) واربط الكمبيوتر به.
+3. ثبّت الملف `tv-app/com.gametranslator.tv_1.0.0_all.ipk` على التلفزيون عبر webOS Dev Manager.
+4. افتح التطبيق على التلفزيون، ثم أدخل عنوان IP للتلفزيون في تطبيق Windows واضغط زر الاتصال ووافق على الطلب الذي يظهر على التلفزيون.
 
 ---
 
-### 🔷 Seçenek D: Android TV / Google TV
-1. `tv-app/gametranslator-androidtv_1.0.0.apk` dosyasını USB bellek veya "Send Files to TV" uygulamasıyla televizyonunuza yükleyin.
-2. Uygulamayı TV'nizde başlatın.
-3. Windows uygulamasında TV IP adresinizi girin.
+### 🔷 الخيار د: Android TV / Google TV
+1. فعّل تصحيح الأخطاء في التلفزيون (انظر [Android TV / Google TV](tv-setup.ar.md#android-tv--google-tv))، ثم ابحث عن التلفزيون من تطبيق Windows أو أدخل عنوان IP، واضغط زر تثبيت التطبيق على التلفزيون وتشغيله.
+2. أو انقل الملف `tv-app/gametranslator-androidtv_1.0.0.apk` إلى التلفزيون بذاكرة USB أو بتطبيق «Send Files to TV» وثبّته يدويًا.
+3. شغّل التطبيق على التلفزيون.
 
 ---
 
-## 🛠️ 4. Sık Karşılaşılan Sorunlar ve Çözümleri
+## 🛠️ 4. المشكلات الشائعة وحلولها
 
-### ❓ Soru: "Sony giriş sayfasını açtığımda 4161 hatası veriyor"
-**Çözüm:** v1.0.0 güncellemesi ile resmi Sony Remote Play OAuth protokolü güncellenmiştir. Artık doğrudan resmi kimlik doğrulama ekranı açılmaktadır ve 4161 hatası giderilmiştir.
+### ❓ السؤال: «يظهر الخطأ 4161 عند فتح صفحة تسجيل الدخول إلى Sony»
+**الحل:** يستخدم الإصدار v1.0.0 بروتوكول OAuth الرسمي لـ Sony Remote Play. تُفتح الآن صفحة التحقق الرسمية مباشرة، وقد أُزيل الخطأ 4161.
 
-### ❓ Soru: "Unable to load DLL 'gametranslator_native' hatası alıyorum"
-**Çözüm:** v1.0.0 sürümünde bu denetim korumalı hale getirilmiştir. Yerel C++ DLL bulunmasa bile Windows saf UDP ağ soketleriyle eşleşme sorunsuz tamamlanır ve program çökmez.
+### ❓ السؤال: «يظهر الخطأ Unable to load DLL 'gametranslator_native'»
+**الحل:** في الإصدار v1.0.0 أصبح هذا الفحص محميًا. إذا لم توجد المكتبة الأصلية `gametranslator_native.dll` فلن يتعطل البرنامج: تُجرى المطابقة بدونها، ويلتقط التطبيق الصورة من نافذة Chiaki بدلًا منها.
 
-### ❓ Soru: "PS5 eşleşmesi yaptım ama ana ekranda Eşleşmedi yazıyor"
-**Çözüm:** Güncel sürümde konsol kaydı yapıldığı anda durum çubuğu yeşil renge döner ve `Eşleşti (192.168.x.x)` şeklinde IP adresiyle birlikte görüntülenir.
+### ❓ السؤال: «طابقت PS5 لكن الشاشة الرئيسية تقول إنه غير مطابَق»
+**الحل:** في الإصدار الحالي يتحول شريط الحالة إلى الأخضر فور تسجيل الجهاز، ويعرض حالة المطابقة مع عنوان IP (مثل `192.168.x.x`).
 
-### ❓ Soru: "Samsung WGT Apps2Samsung'ta hata veriyor"
-**Çözüm:** Önceki pakette eksik olan HTML/JS motor dosyaları v1.0.0 tam sürümünde pakete dahil edilmiştir. Güncel `GameTranslator-Samsung-Tizen-v1.0.0.wgt` dosyasıyla kurulum tek tıkla tamamlanır.
+### ❓ السؤال: «ملف WGT الخاص بـ Samsung يعطي خطأ في Apps2Samsung»
+**الحل:** ملفات محرّك HTML/JS التي كانت ناقصة من الحزمة السابقة أُضيفت إلى الحزمة الكاملة في v1.0.0. استخدم الملف الحالي `gametranslator-samsung_1.0.0.wgt`.
+
+### ❓ السؤال: «لا تظهر أي ترجمة على التلفزيون»
+**الحل:** الترجمة تحتاج إلى الإنترنت. تحقق من اتصال الكمبيوتر بالإنترنت؛ وإذا كنت تستخدم DeepL فتحقق من المفتاح ومن الحصة المتبقية في حسابك. عند تعذّر الوصول إلى خدمة الترجمة لا يصل السطر المترجَم إلى التلفزيون.
+
+### ❓ السؤال: «أين أجد ملفات السجل؟»
+**الحل:** في المجلد `%LOCALAPPDATA%\GameTranslator`: الملف `error.log` لأخطاء التطبيق و`remoteplay.log` لاتصال PS5، وبجانبهما ملف الإعدادات `settings.json`. أرفقها عند كتابة مشكلة في صفحة [Issues](https://github.com/mahmoude4477/GameTranslator/issues).

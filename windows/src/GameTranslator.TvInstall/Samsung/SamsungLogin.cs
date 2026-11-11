@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// Giriş akışı Apps2Samsung'dan (MIT, Patrick Stel) uyarlandı: https://github.com/Jellyfin2Samsung/Samsung-Jellyfin-Installer
+// تدفق تسجيل الدخول مقتبس من Apps2Samsung (MIT, Patrick Stel): https://github.com/Jellyfin2Samsung/Samsung-Jellyfin-Installer
 
 using System.Net;
 using System.Net.Sockets;
@@ -8,12 +8,12 @@ using System.Text.Json;
 
 namespace GameTranslator.TvInstall.Samsung;
 
-/// <summary>Samsung hesabıyla girişten dönen bilgiler; sertifika istemek için gerekir.</summary>
+/// <summary>البيانات العائدة من تسجيل الدخول بحساب Samsung؛ وهي لازمة لطلب الشهادة.</summary>
 public sealed record SamsungAccount(string AccessToken, string UserId, string Email);
 
 /// <summary>
-/// Samsung hesabıyla giriş. Sayfa tarayıcıda açılır; Samsung'un SignInGate sayfası jetonu bu bilgisayardaki
-/// küçük bir dinleyiciye POST eder. Tizen Studio'nun sertifika eklentisi de aynı yolu kullanır.
+/// تسجيل الدخول بحساب Samsung. تُفتح الصفحة في المتصفح؛ وصفحة SignInGate لدى Samsung ترسل الرمز المميز بطلب POST
+/// إلى مستمع صغير على هذا الكمبيوتر. إضافة الشهادات في Tizen Studio تستخدم الطريقة نفسها.
 /// </summary>
 public static class SamsungLogin
 {
@@ -28,11 +28,11 @@ public static class SamsungLogin
         $"&redirect_uri={Uri.EscapeDataString($"http://localhost:{CallbackPort}{CallbackPath}")}" +
         $"&state={State}&tokenType=TOKEN";
 
-    /// <summary>Dinleyiciyi açar, <paramref name="openBrowser"/> ile sayfayı açtırır ve girişi bekler.</summary>
+    /// <summary>يفتح المستمع، ويفتح الصفحة عبر <paramref name="openBrowser"/>، ثم ينتظر تسجيل الدخول.</summary>
     public static async Task<SamsungAccount> SignInAsync(Action<string> openBrowser, TimeSpan timeout,
         CancellationToken cancellationToken = default)
     {
-        // Tarayıcı localhost'u ::1'e çözebilir; iki yığını da dinle.
+        // قد يحلّ المتصفح localhost إلى ::1؛ فاستمع على المكدسين معًا.
         var listener = new TcpListener(IPAddress.IPv6Any, CallbackPort);
         listener.Server.DualMode = true;
         try { listener.Start(); }
@@ -56,7 +56,7 @@ public static class SamsungLogin
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
-            throw new SamsungInstallException(SamsungInstallError.LoginFailed, "zaman aşımı");
+            throw new SamsungInstallException(SamsungInstallError.LoginFailed, "انتهت المهلة");
         }
         finally
         {
@@ -64,7 +64,7 @@ public static class SamsungLogin
         }
     }
 
-    /// <summary>Gövde: <c>code=&lt;JSON&gt;&amp;state=…</c>. JSON'da access_token, userId ve inputEmailID bulunur.</summary>
+    /// <summary>الجسم: <c>code=&lt;JSON&gt;&amp;state=…</c>. يحتوي JSON على access_token و userId و inputEmailID.</summary>
     internal static SamsungAccount? ParseCallback(string body)
     {
         string? state = null, code = null;
@@ -132,7 +132,7 @@ public static class SamsungLogin
     {
         var page = signedIn
             ? "<!doctype html><meta charset=utf-8><title>GameTranslator</title><body style=\"font-family:system-ui;padding:3em\">" +
-              "<h2>Giriş tamam / Signed in</h2><p>Bu sekmeyi kapatıp GameTranslator'a dönebilirsiniz.<br>You can close this tab and return to GameTranslator.</p>"
+              "<h2>تم تسجيل الدخول / Signed in</h2><p>يمكنك إغلاق هذه الصفحة والعودة إلى GameTranslator.<br>You can close this tab and return to GameTranslator.</p>"
             : "Not found";
         var reason = status switch { 200 => "OK", 400 => "Bad Request", _ => "Not Found" };
         var body = Encoding.UTF8.GetBytes(page);

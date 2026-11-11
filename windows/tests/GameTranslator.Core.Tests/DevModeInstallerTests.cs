@@ -20,7 +20,7 @@ public class DevModeInstallerTests
         }
     }
 
-    /// <summary>10 baytlık geçici paket; kurulum TV'deki boyutu bununla karşılaştırır.</summary>
+    /// <summary>حزمة مؤقتة من 10 بايتات؛ التثبيت يقارن بها الحجم الموجود على التلفزيون.</summary>
     private static string Package()
     {
         var file = Path.Combine(Path.GetTempPath(), $"gametranslator-test-{Guid.NewGuid():N}.ipk");
@@ -88,7 +88,7 @@ public class DevModeInstallerTests
         var remote = "/media/developer/temp/" + Path.GetFileName(package);
         await Installer(shell).InstallAsync(package, "0.6.1");
         Assert.Equal(package, shell.Calls[0].Input);
-        // ares-install gibi: paket kendi adıyla yüklenir, eski GameTranslator paketleri önce silinir.
+        // مثل ares-install: تُرفع الحزمة باسمها، وتُحذف حزم GameTranslator القديمة أولا.
         Assert.Contains($"cat > '{remote}'", shell.Calls[0].Command);
         Assert.Contains("rm -f /media/developer/temp/com.gametranslator.tv_*.ipk", shell.Calls[0].Command);
         Assert.Contains($"wc -c < '{remote}'", shell.Calls[1].Command);
@@ -102,7 +102,7 @@ public class DevModeInstallerTests
     public void InstallCommandKeepsTheSubscriptionOpenUntilTheTvAnswers()
     {
         var command = DevModeInstaller.InstallCommand("/media/developer/temp/com.gametranslator.tv_0.9.6_all.ipk", 180);
-        // -n 1 ilk yanıttan sonra aboneliği kapatıyordu; ares-install -i kullanır ve sonucu bekler.
+        // كان -n 1 يغلق الاشتراك بعد أول رد؛ ares-install يستخدم -i وينتظر النتيجة.
         Assert.DoesNotContain("-n 1", command);
         Assert.Contains("/usr/bin/luna-send-pub -i 'luna://com.webos.appInstallService/dev/install'", command);
         Assert.Contains("{\"id\":\"com.ares.defaultName\",\"ipkUrl\":\"/media/developer/temp/com.gametranslator.tv_0.9.6_all.ipk\",\"subscribe\":true}", command);
@@ -127,7 +127,7 @@ public class DevModeInstallerTests
         var refused = DevModeInstaller.ParseInstallReplies("{\"returnValue\":false,\"errorCode\":-1,\"errorText\":\"Denied method call\"}");
         Assert.Equal(new DevModeInstaller.InstallOutcome(false, true, "Denied method call (errorCode -1)"), refused);
 
-        // Birden çok satıra bölünmüş yanıt ve JSON olmayan satırlar.
+        // رد مقسوم على عدة أسطر وأسطر ليست JSON.
         var split = DevModeInstaller.ParseInstallReplies("Error: something\n{\"details\":\n{\"state\":\"installed\"}}\n");
         Assert.True(split.Installed);
     }
@@ -183,14 +183,14 @@ public class DevModeInstallerTests
         var shell = new FakeShell { Answer = line => line.Contains("appinfo.json") ? new CommandResult(0, "\"version\": \"0.4.0\"") : null };
         var error = await Assert.ThrowsAsync<DevModeException>(() => Installer(shell).InstallAsync(Package(), "0.6.1"));
         Assert.Equal(DevModeError.InstallFailed, error.Error);
-        // TV sonuç vermediyse kurulum sürüyor olabilir; paket silinmez.
+        // إذا لم يعطِ التلفزيون نتيجة فقد يكون التثبيت مستمرا؛ لا تُحذف الحزمة.
         Assert.DoesNotContain(shell.Calls.Skip(1), call => call.Command.StartsWith("rm -f '"));
     }
 
     [Fact]
     public async Task IncompleteUploadIsReportedBeforeInstalling()
     {
-        // Paket TV'ye eksik ulaştıysa kurulum denenmez; hata günlüğü iki boyutu da söyler.
+        // إذا وصلت الحزمة إلى التلفزيون ناقصة لا يُجرَّب التثبيت؛ وسجل الأخطاء يذكر الحجمين.
         var shell = new FakeShell { Answer = line => line.Contains("wc -c") ? new CommandResult(0, "7\n") : null };
         var error = await Assert.ThrowsAsync<DevModeException>(() => Installer(shell).InstallAsync(Package(), "0.6.1"));
         Assert.Equal(DevModeError.InstallFailed, error.Error);
@@ -210,8 +210,8 @@ public class DevModeInstallerTests
     public async Task RealRunnerReadsOutputWithoutInput()
     {
         if (OperatingSystem.IsWindows()) return;
-        var result = await new ProcessRunner().RunAsync("/bin/echo", ["merhaba"], null);
-        Assert.Equal(new CommandResult(0, "merhaba\n"), result);
+        var result = await new ProcessRunner().RunAsync("/bin/echo", ["مرحبا"], null);
+        Assert.Equal(new CommandResult(0, "مرحبا\n"), result);
     }
 
     [Fact]
@@ -219,11 +219,11 @@ public class DevModeInstallerTests
     {
         if (OperatingSystem.IsWindows()) return;
         var file = Path.GetTempFileName();
-        await File.WriteAllTextAsync(file, "merhaba");
+        await File.WriteAllTextAsync(file, "مرحبا");
         try
         {
             var result = await new ProcessRunner().RunAsync("/bin/cat", [], file);
-            Assert.Equal(new CommandResult(0, "merhaba"), result);
+            Assert.Equal(new CommandResult(0, "مرحبا"), result);
         }
         finally
         {

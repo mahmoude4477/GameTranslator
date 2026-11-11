@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace GameTranslator.App.Services;
 
-/// <summary>Çeviri sürerken bilgisayarın boşta uykuya geçmesini engeller (kullanıcı TV'de oynuyor, bilgisayara dokunmuyor).</summary>
+/// <summary>يمنع الكمبيوتر من الدخول في السكون عند الخمول ما دامت الترجمة جارية (المستخدم يلعب على التلفزيون ولا يلمس الكمبيوتر).</summary>
 public static partial class SleepGuard
 {
     private const uint EsContinuous = 0x80000000;

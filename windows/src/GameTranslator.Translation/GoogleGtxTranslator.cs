@@ -8,8 +8,8 @@ using GameTranslator.Core;
 namespace GameTranslator.Translation;
 
 /// <summary>
-/// Ücretsiz ve sıfır kurulum gerektiren Google GTX Çeviri Motoru.
-/// Model indirme veya API anahtarı gerektirmez; Mac sürümündeki gibi anında Türkçe çeviri sağlar.
+/// محرك ترجمة Google GTX المجاني الذي لا يحتاج إلى أي إعداد.
+/// لا يتطلب مفتاح API؛ ويترجم مباشرة عبر الإنترنت إلى اللغة الهدف (العربية افتراضيًا).
 /// </summary>
 public sealed class GoogleGtxTranslator : ITextTranslator
 {
@@ -60,7 +60,7 @@ public sealed class GoogleGtxTranslator : ITextTranslator
         }
         catch
         {
-            // Ağ hatasında orijinal metin korunur
+            // عند خطأ الشبكة يبقى النص الأصلي
         }
 
         return trimmed;

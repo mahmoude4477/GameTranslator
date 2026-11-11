@@ -9,7 +9,7 @@ using GameTranslator.Core.LgTv;
 
 namespace GameTranslator.Core.Tests;
 
-/// SSAP konuşan sahte bir TV: register'a client-key ile, isteklere sırayla verilen yanıtlarla döner.
+/// تلفزيون وهمي يتحدث SSAP: يرد على register بـ client-key، وعلى الطلبات بالردود المعطاة بالترتيب.
 public sealed class FakeLgTv : IDisposable
 {
     private readonly HttpListener listener = new();
@@ -17,7 +17,7 @@ public sealed class FakeLgTv : IDisposable
     public List<string> ReceivedUris { get; } = [];
     public List<JsonNode?> ReceivedPayloads { get; } = [];
     public Queue<string> ForegroundApps { get; } = new();
-    /// true ise register'a yalnız "soru gösterildi" yanıtı verir, onay hiç gelmez.
+    /// إذا كان true يرد على register برد «عُرض السؤال» فقط، ولا تأتي الموافقة أبدا.
     public bool NeverApprove { get; set; }
     public int Port { get; }
 
@@ -53,7 +53,7 @@ public sealed class FakeLgTv : IDisposable
             {
                 var result = await socket.ReceiveAsync(buffer, stop.Token);
                 if (result.MessageType == WebSocketMessageType.Close) return;
-                // Gerçek LG TV ikili çerçeveyi reddeder; yalnız metin çerçevesi kabul edilir.
+                // تلفزيون LG الحقيقي يرفض الإطار الثنائي؛ يُقبل الإطار النصي فقط.
                 if (result.MessageType != WebSocketMessageType.Text)
                 {
                     await Send(socket, new JsonObject { ["type"] = "error", ["id"] = "", ["error"] = "400 binary messages not supported" });
@@ -139,7 +139,7 @@ public class SsapClientTests
     public async Task FallsBackToNextEndpoint()
     {
         using var tv = new FakeLgTv();
-        // İlk adreste kimse dinlemiyor; ikinciye düşmeli.
+        // لا أحد يستمع على العنوان الأول؛ يجب الانتقال إلى الثاني.
         using var client = new SsapClient([new Uri("ws://127.0.0.1:1"), new Uri($"ws://127.0.0.1:{tv.Port}")], null);
         Assert.Equal("fake-key", await client.ConnectAsync());
     }
@@ -155,7 +155,7 @@ public class TvKeeperTests
 
         public Task<string> ForegroundAppIdAsync(CancellationToken cancellationToken = default)
         {
-            if (FailNext) { FailNext = false; throw new IOException("bağlantı koptu"); }
+            if (FailNext) { FailNext = false; throw new IOException("انقطع الاتصال"); }
             return Task.FromResult(foreground.Count == 0 ? "com.gametranslator.tv" : foreground.Dequeue());
         }
 
@@ -177,17 +177,17 @@ public class TvKeeperTests
         var connects = 0;
         var keeper = new TvKeeper(() => { connects++; return Task.FromResult<ITvControl>(control); }, "com.gametranslator.tv",
             new Dictionary<string, string>(), () => connected, TimeSpan.FromMilliseconds(200));
-        await keeper.TickAsync(); // uygulama bağlı değil → aç ve bağlantıyı kapat
+        await keeper.TickAsync(); // التطبيق غير متصل → افتحه وأغلق الاتصال
         Assert.Single(control.Launches);
         Assert.Equal(1, control.Disposals);
-        await keeper.TickAsync(); // hemen yeniden açmaya çalışmaz
+        await keeper.TickAsync(); // لا يحاول الفتح مجددا فورا
         Assert.Equal(1, connects);
         connected = true;
         await Task.Delay(250);
-        for (var i = 0; i < 5; i++) await keeper.TickAsync(); // uygulama bağlıyken TV'ye dokunulmaz
+        for (var i = 0; i < 5; i++) await keeper.TickAsync(); // لا يُمس التلفزيون والتطبيق متصل
         Assert.Equal(1, connects);
         connected = false;
-        await keeper.TickAsync(); // uygulama kapandı → bir kez daha aç
+        await keeper.TickAsync(); // أُغلق التطبيق → افتحه مرة أخرى
         Assert.Equal(2, control.Launches.Count);
     }
 
@@ -196,10 +196,10 @@ public class TvKeeperTests
     {
         var control = new FakeControl("com.gametranslator.tv", "com.webos.app.hdmi2", "com.gametranslator.tv", "netflix");
         var keeper = new TvKeeper(() => Task.FromResult<ITvControl>(control), "com.gametranslator.tv", new Dictionary<string, string> { ["server"] = "http://1.2.3.4:8787" });
-        await keeper.TickAsync(); // bağlanır ve uygulamayı bir kez başlatır
-        await keeper.TickAsync(); // önde HDMI girişi → geri getir
-        await keeper.TickAsync(); // önde bizimki
-        await keeper.TickAsync(); // kullanıcı Netflix'i açtı → dokunma
+        await keeper.TickAsync(); // يتصل ويشغّل التطبيق مرة واحدة
+        await keeper.TickAsync(); // مدخل HDMI في الواجهة → أعده
+        await keeper.TickAsync(); // تطبيقنا في الواجهة
+        await keeper.TickAsync(); // فتح المستخدم Netflix → لا تمسه
         Assert.Equal(2, control.Launches.Count);
         Assert.Equal("com.gametranslator.tv", control.Launches[^1].AppId);
         Assert.Equal("http://1.2.3.4:8787", control.Launches[^1].Params["server"]);
@@ -213,17 +213,17 @@ public class TvKeeperTests
         var keeper = new TvKeeper(() =>
         {
             attempts++;
-            if (attempts == 1) throw new IOException("TV kapalı");
+            if (attempts == 1) throw new IOException("التلفزيون مغلق");
             return Task.FromResult<ITvControl>(control);
         }, "com.gametranslator.tv", new Dictionary<string, string>());
         await keeper.TickAsync();
         Assert.Empty(control.Launches);
-        await keeper.TickAsync(); // TV açıldı → bağlan ve başlat
+        await keeper.TickAsync(); // اشتغل التلفزيون → اتصل وشغّل
         Assert.Single(control.Launches);
 
-        control.FailNext = true;  // bağlantı koptu
+        control.FailNext = true;  // انقطع الاتصال
         await keeper.TickAsync();
-        await keeper.TickAsync(); // yeniden bağlanır ve tekrar başlatır
+        await keeper.TickAsync(); // يعيد الاتصال ويشغّل من جديد
         Assert.Equal(3, attempts);
         Assert.Equal(2, control.Launches.Count);
     }

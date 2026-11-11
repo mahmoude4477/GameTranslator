@@ -6,22 +6,22 @@ using System.Text.RegularExpressions;
 namespace GameTranslator.Translation;
 
 /// <summary>
-/// Altyazıyı modele cümle cümle verir. Denemede bütün metin tek seferde çevrilince model kısa cümleleri
-/// ("Boy!", "What is that?") ve ikinci satırı sık sık düşürdü; cümle başına çeviri hiçbirini kaybetmedi.
-/// Konuşmacı etiketi ("ATREUS:", "Kratos:") ve diyalog tirelerine dokunulmaz, çünkü model onları siliyor ya da
-/// çeviriyor. Mac'teki GameTranslatorCore/SubtitleSegmenter.swift ile aynı kurallar.
+/// يسلّم الترجمة النصية إلى المترجم جملةً جملة. في التجربة، حين تُرجم النص كله دفعة واحدة أسقط المترجم كثيرًا
+/// الجمل القصيرة ("Boy!", "What is that?") والسطر الثاني؛ أما الترجمة جملةً جملة فلم تُضِع شيئًا منها.
+/// لا تُمَس تسمية المتكلم ("ATREUS:", "Kratos:") ولا شرطات الحوار، لأن المترجم يحذفها أو
+/// يترجمها.
 /// </summary>
 internal static partial class SubtitleSegmenter
 {
-    /// <summary>Çevrilecek bir parça ya da olduğu gibi kalacak ayraç/etiket.</summary>
+    /// <summary>جزء يُترجَم، أو فاصل/تسمية تبقى كما هي.</summary>
     internal readonly record struct Piece(string Text, bool Translate);
 
-    // Etiket: satır ya da cümle başında, en çok üç sözcüklü ad ve iki nokta. Ya tümü büyük harf ("ATREUS:", "OLD MAN:")
-    // ya da her sözcüğü büyük harfle başlayan ("Kratos:", "Mimir Head:").
+    // التسمية: في بداية السطر أو الجملة، اسم من ثلاث كلمات على الأكثر تليه نقطتان. إما كله بأحرف كبيرة ("ATREUS:", "OLD MAN:")
+    // أو تبدأ كل كلمة فيه بحرف كبير ("Kratos:", "Mimir Head:").
     [GeneratedRegex(@"^(?<label>(?<name>\p{Lu}[\p{Lu}\d'’.\-]+(?:[ ]\p{Lu}[\p{Lu}\d'’.\-]*){0,2}|\p{Lu}\p{Ll}[\p{L}'’.\-]*(?:[ ]\p{Lu}[\p{L}'’.\-]*){0,2}):)\s+")]
     private static partial Regex SpeakerLabelPattern();
 
-    /// <summary>Büyük harfle başlayıp iki noktayla biten ama ad olmayan oyun başlıkları; bunlar çevrilir.</summary>
+    /// <summary>عناوين في اللعبة تبدأ بحرف كبير وتنتهي بنقطتين لكنها ليست أسماء؛ وهذه تُترجَم.</summary>
     private static readonly HashSet<string> NotNames = new(StringComparer.OrdinalIgnoreCase)
     {
         "note", "warning", "tip", "hint", "objective", "objectives", "quest", "goal", "new", "reward", "rewards",
@@ -30,7 +30,7 @@ internal static partial class SubtitleSegmenter
         "listen", "look", "wait", "okay", "ok", "well", "so", "yes", "no", "now", "then", "and", "but",
     };
 
-    /// <summary>Satır başındaki konuşmacı etiketi; tek sözcüklü başlıklar ("Note:", "Objective:") ad sayılmaz.</summary>
+    /// <summary>تسمية المتكلم في بداية السطر؛ العناوين ذات الكلمة الواحدة ("Note:", "Objective:") لا تُعد أسماء.</summary>
     private static Match? SpeakerLabel(string text)
     {
         var match = SpeakerLabelPattern().Match(text);
@@ -39,21 +39,21 @@ internal static partial class SubtitleSegmenter
         return !name.Contains(' ') && NotNames.Contains(name) ? null : match;
     }
 
-    /// <summary>Etiket parçasındaki ad ("ATREUS: " → "ATREUS"); etiket değilse null.</summary>
+    /// <summary>الاسم الموجود في جزء التسمية ("ATREUS: " → "ATREUS")؛ و null إن لم يكن تسمية.</summary>
     public static string? LabelName(Piece piece) =>
         !piece.Translate && piece.Text.EndsWith(": ", StringComparison.Ordinal) ? piece.Text[..^2] : null;
 
     [GeneratedRegex(@"^(?<dash>[-–—]+)\s*")]
     private static partial Regex DialogueDash();
 
-    // Cümle sonu: . ! ? … (yinelenebilir), ardından isteğe bağlı kapanış tırnağı/parantez ve boşluk.
+    // نهاية الجملة: . ! ? … (قد تتكرر)، تليها اختياريًا علامة اقتباس/قوس إغلاق ثم فراغ.
     [GeneratedRegex(@"(?<=[.!?…]+[""'”’)\]]*)\s+")]
     private static partial Regex SentenceGap();
 
     [GeneratedRegex(@"\s+")]
     private static partial Regex Whitespace();
 
-    /// <summary>Noktadan sonra cümle bitmeyen kısaltmalar ("Mr. Smith").</summary>
+    /// <summary>اختصارات لا تنتهي الجملة بعد نقطتها ("Mr. Smith").</summary>
     private static readonly HashSet<string> Abbreviations = new(StringComparer.OrdinalIgnoreCase)
     {
         "mr", "mrs", "ms", "dr", "st", "jr", "sr", "prof", "mt", "vs", "etc", "e.g", "i.e", "lt", "sgt", "capt", "gen", "col",
@@ -79,7 +79,7 @@ internal static partial class SubtitleSegmenter
         {
             var line = raw.Trim();
             if (line.Length == 0) continue;
-            // Etiketli ya da tireli satır yeni bir konuşmadır; diğer satırlar sarmadır, birleştirilir.
+            // السطر ذو التسمية أو الشرطة كلام جديد؛ والأسطر الأخرى التفاف للسطر السابق فتُدمج.
             if (SpeakerLabel(line) is not null || DialogueDash().IsMatch(line)) FlushBlock();
             if (block.Length > 0) block.Append(' ');
             block.Append(line);
@@ -120,7 +120,7 @@ internal static partial class SubtitleSegmenter
         {
             var candidate = block[start..gap.Index];
             var next = gap.Index + gap.Length < block.Length ? block[gap.Index + gap.Length] : '\0';
-            // "wait... what" gibi küçük harfle süren yer ve kısaltmalar cümle sonu değildir.
+            // الموضع الذي يستمر بحرف صغير مثل "wait... what" والاختصارات ليست نهاية جملة.
             if (char.IsLower(next) || EndsWithAbbreviation(candidate)) continue;
             yield return candidate;
             start = gap.Index + gap.Length;
@@ -133,14 +133,14 @@ internal static partial class SubtitleSegmenter
         if (!sentence.EndsWith('.')) return false;
         var lastSpace = sentence.LastIndexOf(' ');
         var word = sentence[(lastSpace + 1)..^1];
-        // Tek harf ad baş harfidir ("J. R. R.").
+        // الحرف المفرد هو الحرف الأول من اسم ("J. R. R.").
         return (word.Length == 1 && char.IsUpper(word[0])) || Abbreviations.Contains(word);
     }
 
     /// <summary>
-    /// Tümü büyük harfli cümleyi ("THE GATE WILL NOT HOLD.") cümle düzenine çevirir; model büyük harfli
-    /// sözcükleri ad sanıp çevirmeden bırakıyordu ("GATE daha fazla dayanamaz"). Bilinen adlar (konuşmacı
-    /// etiketlerinden öğrenilen) büyük harfle başlar. Tek sözcüğe dokunulmaz.
+    /// يحوّل الجملة المكتوبة كلها بأحرف كبيرة ("THE GATE WILL NOT HOLD.") إلى حالة الجملة العادية؛ فالمترجم كان
+    /// يظن الكلمات ذات الأحرف الكبيرة أسماء فيتركها دون ترجمة ("GATE لن يصمد أكثر"). الأسماء المعروفة (المستخلصة
+    /// من تسميات المتكلمين) تبدأ بحرف كبير. الكلمة المفردة لا تُمَس.
     /// </summary>
     public static string NormalizeCase(string sentence, IReadOnlySet<string>? names = null)
     {
@@ -160,7 +160,7 @@ internal static partial class SubtitleSegmenter
         {
             if (word.Length == 0) return;
             var lower = word.ToString().ToLowerInvariant();
-            // İngilizcede "I" her zaman büyük.
+            // في الإنجليزية تُكتب "I" بحرف كبير دائمًا.
             var capital = startOfSentence || lower == "i" || (names?.Contains(lower) ?? false);
             output.Append(capital ? char.ToUpperInvariant(lower[0]) + lower[1..] : lower);
             startOfSentence = false;
@@ -182,7 +182,7 @@ internal static partial class SubtitleSegmenter
         return output.ToString();
     }
 
-    /// <summary>Harfsiz parça ("...", "?!", "3") modele gitmez; olduğu gibi kalır.</summary>
+    /// <summary>الجزء الخالي من الحروف ("...", "?!", "3") لا يُرسل إلى المترجم؛ ويبقى كما هو.</summary>
     private static bool HasLetter(string text)
     {
         foreach (var c in text)

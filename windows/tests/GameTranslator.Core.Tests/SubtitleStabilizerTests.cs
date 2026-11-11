@@ -6,7 +6,7 @@ namespace GameTranslator.Core.Tests;
 
 public class SubtitleStabilizerTests
 {
-    /// Noktalamayla bitmeyen satır yazılmakta olabilir; iki kare aynı okununca gönderilir.
+    /// السطر الذي لا ينتهي بعلامة ترقيم قد يكون قيد الكتابة؛ يُرسل عندما يُقرأ إطاران بالنص نفسه.
     [Fact]
     public void UnfinishedLineIsSentAfterTwoStableFrames()
     {
@@ -16,7 +16,7 @@ public class SubtitleStabilizerTests
         Assert.Equal(StabilizerAction.None, s.Feed("We do not have time"));
     }
 
-    /// Süslü yazıda aynı cümle her karede başka çöple okunur; TV'de iki çeviri olarak görünmemeli.
+    /// في الخط المزخرف تُقرأ الجملة نفسها في كل إطار برموز عشوائية مختلفة؛ يجب ألا تظهر على التلفزيون كترجمتين.
     [Fact]
     public void GarbledRereadOfSentLineDoesNotReemit()
     {
@@ -28,7 +28,7 @@ public class SubtitleStabilizerTests
         Assert.Equal(StabilizerAction.Translate("We should keep moving."), s.Feed("We should keep moving."));
     }
 
-    /// Cümle bitmişse beklemeye gerek yok; hızlı konuşmada her kare önemli.
+    /// إذا اكتملت الجملة فلا حاجة للانتظار؛ في الحوار السريع كل إطار مهم.
     [Theory]
     [InlineData("We do not have time.")]
     [InlineData("Wait!")]
@@ -83,8 +83,8 @@ public class SubtitleStabilizerTests
     public void AlreadyTranslatedIsSkipped()
     {
         var s = new SubtitleStabilizer();
-        Assert.False(s.ShouldSend("Kullanıcı Ekle Oturum Açtı", "Kullanıcı Ekle Oturum Açtı"));
-        Assert.True(s.ShouldSend("Add user", "Kullanıcı ekle"));
+        Assert.False(s.ShouldSend("إضافة مستخدم تم تسجيل الدخول", "إضافة مستخدم تم تسجيل الدخول"));
+        Assert.True(s.ShouldSend("Add user", "إضافة مستخدم"));
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public class SubtitleStabilizerTests
         Assert.Equal(StabilizerAction.None, s.Reset());
     }
 
-    /// Çevirisi başarısız olan satır ekranda kaldıkça yeniden denenebilmeli.
+    /// السطر الذي فشلت ترجمته يجب أن تُعاد محاولته ما دام على الشاشة.
     [Fact]
     public void ForgottenLineIsTranslatedAgain()
     {

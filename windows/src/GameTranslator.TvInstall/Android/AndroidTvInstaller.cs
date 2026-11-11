@@ -9,18 +9,18 @@ using System.Text.RegularExpressions;
 namespace GameTranslator.TvInstall.Android;
 
 /// <summary>
-/// GameTranslator'ın Android TV uygulamasını ağ üzerinden kurar. TV'de geliştirici seçenekleri ve USB hata ayıklama
-/// açık olmalıdır; Android TV'lerin çoğu bu ayarla 5555 portunda ADB bekler.
+/// يثبّت تطبيق GameTranslator لـ Android TV عبر الشبكة. يجب تفعيل خيارات المطوّر وتصحيح أخطاء USB على التلفزيون؛
+/// ومعظم أجهزة Android TV تنتظر ADB على المنفذ 5555 بهذا الإعداد.
 /// </summary>
 public sealed partial class AndroidTvInstaller(string host, string keyDirectory, int port = AndroidTvInstaller.DefaultPort)
 {
     public const int DefaultPort = 5555;
     public const string PackageName = "com.gametranslator.tv";
 
-    /// <summary>Kurulum sırasında TV'nin onay sorusunu göstermesi.</summary>
+    /// <summary>يُستدعى حين يعرض التلفزيون سؤال الموافقة أثناء التثبيت.</summary>
     public Action? OnApprovalNeeded { get; init; }
 
-    /// <summary>TV'de ADB açık mı (port yanıt veriyor mu)?</summary>
+    /// <summary>هل ADB مفعّل على التلفزيون (هل يرد المنفذ)؟</summary>
     public static async Task<bool> IsReachableAsync(string host, int port = DefaultPort, TimeSpan? timeout = null)
     {
         using var tcp = new TcpClient();
@@ -36,7 +36,7 @@ public sealed partial class AndroidTvInstaller(string host, string keyDirectory,
         }
     }
 
-    /// <summary>Bu bilgisayarın ağlarında ADB'si açık cihazları arar (her ağın /24 bölümü).</summary>
+    /// <summary>يبحث في شبكات هذا الكمبيوتر عن الأجهزة التي فيها ADB مفعّل (قسم /24 من كل شبكة).</summary>
     public static async Task<IReadOnlyList<string>> ScanAsync(int port = DefaultPort, CancellationToken cancellationToken = default)
     {
         var hosts = ScanTargets(LocalAddresses()).ToList();
@@ -78,15 +78,15 @@ public sealed partial class AndroidTvInstaller(string host, string keyDirectory,
     }
 
     /// <summary>
-    /// Uygulama eksikse ya da eskiyse kurar ve açar; hepsi tek bağlantıda yapılır, TV onayı en çok bir kez sorulur.
+    /// يثبّت التطبيق ويفتحه إن كان مفقودًا أو قديمًا؛ كل ذلك في اتصال واحد، وتُطلب موافقة التلفزيون مرة واحدة على الأكثر.
     /// </summary>
-    /// <returns>TV'de artık bulunan sürüm ve kurulum yapılıp yapılmadığı.</returns>
+    /// <returns>الإصدار الموجود الآن على التلفزيون، وهل جرى تثبيت.</returns>
     public async Task<(string Version, bool Installed)> EnsureInstalledAsync(string apkPath, string version,
         CancellationToken cancellationToken = default, bool forceReinstall = false)
     {
         await using var adb = await ConnectAsync(cancellationToken);
 
-        // Multi-user Android TV (örn. TCL / Google TV profilleri) için paketi aktif kullanıcıya da bağla
+        // في Android TV متعدد المستخدمين (مثل ملفات TCL / Google TV الشخصية) اربط الحزمة بالمستخدم النشط أيضًا
         await adb.RunAsync($"shell:cmd package install-existing {PackageName}", cancellationToken: cancellationToken);
 
         var dumpsys = await adb.RunAsync($"shell:dumpsys package {PackageName}", cancellationToken: cancellationToken);
@@ -126,7 +126,7 @@ public sealed partial class AndroidTvInstaller(string host, string keyDirectory,
     internal static string? VersionFromDumpsys(string output) =>
         VersionName().Match(output) is { Success: true } match ? match.Groups[1].Value : null;
 
-    /// <summary>APK'yı kurar. İmzası farklı eski bir kopya varsa önce onu kaldırır.</summary>
+    /// <summary>يثبّت ملف APK. إن وُجدت نسخة قديمة بتوقيع مختلف أزالها أولًا.</summary>
     private static async Task InstallAsync(AdbConnection adb, string apkPath, CancellationToken cancellationToken)
     {
         var result = await StreamInstallAsync(adb, apkPath, cancellationToken);
@@ -142,7 +142,7 @@ public sealed partial class AndroidTvInstaller(string host, string keyDirectory,
     private static async Task<string> StreamInstallAsync(AdbConnection adb, string apkPath, CancellationToken cancellationToken)
     {
         await using var apk = File.OpenRead(apkPath);
-        // Android 7 ve sonrası: dosyayı TV'ye ayrıca kopyalamadan doğrudan paket yöneticisine akıtır.
+        // Android 7 وما بعده: يُدفَّق الملف مباشرة إلى مدير الحزم دون نسخه إلى التلفزيون أولًا.
         return await adb.RunAsync($"exec:cmd package install -r -d -g -S {apk.Length}", apk, cancellationToken);
     }
 
@@ -150,7 +150,7 @@ public sealed partial class AndroidTvInstaller(string host, string keyDirectory,
         AdbConnection.ConnectAsync(host, port, LoadOrCreateKey(keyDirectory), OnApprovalNeeded, cancellationToken: cancellationToken);
 
     /// <summary>
-    /// Bu bilgisayarın ADB anahtarı. TV onayı bu anahtara verilir; anahtar değişirse TV yeniden sorar.
+    /// مفتاح ADB الخاص بهذا الكمبيوتر. موافقة التلفزيون تُمنح لهذا المفتاح؛ وإن تغيّر المفتاح سأل التلفزيون من جديد.
     /// </summary>
     public static RSA LoadOrCreateKey(string directory)
     {
@@ -164,7 +164,7 @@ public sealed partial class AndroidTvInstaller(string host, string keyDirectory,
                 key.ImportFromPem(File.ReadAllText(path));
                 if (key.KeySize == 2048) return key;
             }
-            catch (CryptographicException) { /* bozuk dosya: yenisi üretilir */ }
+            catch (CryptographicException) { /* ملف تالف: يُنشأ مفتاح جديد */ }
         }
         key.Dispose();
         key = RSA.Create(2048);

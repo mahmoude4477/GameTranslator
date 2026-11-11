@@ -3,20 +3,20 @@
 namespace GameTranslator.Shell;
 
 /// <summary>
-/// Windows Güvenlik Duvarı'nda GameTranslator'a gelen bağlantı izni. Remote Play (PS5) ve altyazı sunucusu (TV) dışarıdan
-/// bağlantı alır; kullanıcı ilk açılıştaki izin sorusunu kapattıysa ya da ağ "Ortak" ise bu bağlantılar engellenir.
+/// إذن الاتصالات الواردة إلى GameTranslator في جدار حماية Windows. Remote Play (PS5) وخادم الترجمة النصية (التلفزيون) يستقبلان
+/// اتصالات من الخارج؛ إن أغلق المستخدم سؤال الإذن عند أول تشغيل أو كانت الشبكة "عامة" تُحظر هذه الاتصالات.
 /// </summary>
 public interface IFirewall
 {
-    /// <summary>Bu exe için her profilde (Etki alanı, Özel, Ortak) TCP ve UDP'ye açık, engellenmemiş izin kuralı var mı. Yönetici gerekmez.</summary>
+    /// <summary>هل توجد لهذا الملف التنفيذي قاعدة سماح غير محظورة تشمل TCP و UDP في كل ملف تعريف (المجال، خاص، عام). لا يتطلب صلاحيات المسؤول.</summary>
     bool HasRule();
 
-    /// <summary>Yönetici izniyle (UAC) kuralı ekler; kullanıcı izin vermezse ya da kural yine yoksa false.</summary>
+    /// <summary>يضيف القاعدة بإذن المسؤول (UAC)؛ false إن لم يأذن المستخدم أو بقيت القاعدة غير موجودة.</summary>
     Task<bool> AddRuleAsync();
 }
 
 /// <summary>
-/// Güvenlik duvarı kartının durumu. Offer: kural eksik ve bağlantı sorunlu, düğme görünür. Working: Windows'un izin
-/// sorusu bekleniyor. Allowed: kural eklendi (kısa onay). Failed: kural eklenemedi, düğme yeniden görünür.
+/// حالة بطاقة جدار الحماية. Offer: القاعدة ناقصة والاتصال متعثّر، فيظهر الزر. Working: في انتظار سؤال الإذن
+/// من Windows. Allowed: أُضيفت القاعدة (تأكيد قصير). Failed: تعذّرت إضافة القاعدة، فيظهر الزر من جديد.
 /// </summary>
 public enum FirewallPrompt { None, Offer, Working, Allowed, Failed }

@@ -346,13 +346,13 @@ public sealed class StreamSession : IStreamSession
                 box.lastError = error.Message;
             }
             if (box.native != 0) return box;
-            // Başlamamış oturumun beklenecek iş parçacığı yok; yalnız tutamak bırakılır.
+            // الجلسة التي لم تبدأ لا خيوط لها تُنتظر؛ يُحرَّر المقبض فقط.
             failure = box.lastError;
             box.handle.Free();
             return null;
         }
 
-        /// <summary>Oturumu durdurur ve iş parçacıklarını bekler. Yerel geri çağrıdan çağrılmamalı.</summary>
+        /// <summary>يوقف الجلسة وينتظر خيوطها. يجب ألا يُستدعى من رد نداء أصلي.</summary>
         public void TearDown()
         {
             lock (tearLock)
@@ -392,19 +392,19 @@ public sealed class StreamSession : IStreamSession
         private static unsafe void OnLog(int level, byte* message, nint user)
         {
             var text = NativeMethods.Utf8(message);
-            // Oturum başlatılamazsa nedeni son hata satırıdır (cs_session_start aynı iş parçacığında yazar).
+            // إذا تعذر بدء الجلسة فالسبب هو آخر سطر خطأ (cs_session_start يكتبه في الخيط نفسه).
             if (level == 0 && text is not null && From(user) is { } box) box.lastError = text;
             RemotePlayLog.Write(level, text);
         }
     }
 }
 
-/// <summary>Kareleri yerel iş parçacığından alıp kendi iş parçacığında dağıtır. İşleyici meşgulken
-/// gelen kareler kopyalanmadan atlanır: ağ iş parçacığı okumayı beklemez, gereksiz bellek ayrılmaz.</summary>
+/// <summary>يأخذ الإطارات من الخيط الأصلي ويوزّعها في خيطه الخاص. الإطارات الواردة أثناء انشغال المعالج
+/// تُتخطى دون نسخ: فلا ينتظر خيط الشبكة القراءة ولا تُحجز ذاكرة بلا داعٍ.</summary>
 internal sealed class FrameDelivery : IDisposable
 {
     private readonly Action<Frame> deliver;
-    // Monitor.Wait/Pulse gerektiği için Lock değil düz nesne.
+    // كائن عادي لا Lock لأن Monitor.Wait/Pulse مطلوبان.
     private readonly object gate = new();
     private readonly Thread thread;
     private Frame? pending;
@@ -418,7 +418,7 @@ internal sealed class FrameDelivery : IDisposable
         thread.Start();
     }
 
-    /// <summary>Tampon yalnız bu çağrı süresince geçerlidir.</summary>
+    /// <summary>المخزن المؤقت صالح طوال هذا الاستدعاء فقط.</summary>
     public void Offer(nint bgra, int width, int height, int stride)
     {
         lock (gate)

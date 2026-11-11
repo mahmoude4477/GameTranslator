@@ -14,18 +14,18 @@ using GameTranslator.Shell;
 namespace GameTranslator.App.Services;
 
 /// <summary>
-/// Geliştirme aracı: <c>GameTranslator.exe --render-screens klasör</c> bütün ekranları açık ve koyu temada PNG'ye
-/// döker ve kapanır. Ekranların görünümü Windows makinesi olmadan (sürekli tümleştirmede) böyle denetlenir.
+/// أداة تطوير: <c>GameTranslator.exe --render-screens folder</c> يحفظ كل الشاشات بالسمتين الفاتحة والداكنة في ملفات PNG
+/// ثم يُغلق. هكذا يُفحص مظهر الشاشات دون جهاز Windows (في التكامل المستمر).
 /// </summary>
 public static class ScreenRenderer
 {
     public static void Run(Application app, string folder)
     {
         Directory.CreateDirectory(folder);
-        // Açılan ilk pencere kendiliğinden ana pencere sayılır; kapanınca uygulama da kapanmasın.
+        // أول نافذة تُفتح تُعدّ تلقائيا النافذة الرئيسية؛ يجب ألا يُغلق التطبيق بإغلاقها.
         app.ShutdownMode = ShutdownMode.OnExplicitShutdown;
         var log = Path.Combine(folder, "errors.txt");
-        // Bir ekranın hatası diğerlerini durdurmasın; hatalar dosyaya yazılır.
+        // خطأ في شاشة واحدة يجب ألا يوقف البقية؛ تُكتب الأخطاء في ملف.
         app.DispatcherUnhandledException += (_, e) =>
         {
             File.AppendAllText(log, $"[dispatcher] {e.Exception}\n\n");
@@ -34,22 +34,22 @@ public static class ScreenRenderer
         foreach (var dark in new[] { false, true })
         {
             ThemeManager.Apply(app.Resources, dark);
-            var suffix = dark ? "koyu" : "acik";
+            var suffix = dark ? "dark" : "light";
             foreach (var step in Enum.GetValues<OnboardingStep>().Where(s => s != OnboardingStep.Done))
             {
                 var controller = Demo(step);
-                Save(() => new OnboardingView(controller), 640, 720, Path.Combine(folder, $"adim-{(int)step + 1}-{step}-{suffix}.png"));
+                Save(() => new OnboardingView(controller), 640, 720, Path.Combine(folder, $"step-{(int)step + 1}-{step}-{suffix}.png"));
             }
-            Save(() => new MainView(Demo(OnboardingStep.Done)), 640, 720, Path.Combine(folder, $"ana-{suffix}.png"));
-            // Uygulamanın gerçek penceresi: XAML'ı (simge dahil) açılıştaki gibi yüklenir.
-            Save(() => Detach(new ShellWindow(Demo(OnboardingStep.Done))), 640, 720, Path.Combine(folder, $"pencere-{suffix}.png"));
-            Save(() => Detach(new SettingsWindow(Demo(OnboardingStep.Done))), 600, 720, Path.Combine(folder, $"ayarlar-{suffix}.png"));
-            Save(() => Detach(new AboutWindow()), 460, 640, Path.Combine(folder, $"hakkinda-{suffix}.png"));
+            Save(() => new MainView(Demo(OnboardingStep.Done)), 640, 720, Path.Combine(folder, $"main-{suffix}.png"));
+            // نافذة التطبيق الحقيقية: يُحمَّل XAML الخاص بها (مع الأيقونة) كما عند التشغيل.
+            Save(() => Detach(new ShellWindow(Demo(OnboardingStep.Done))), 640, 720, Path.Combine(folder, $"window-{suffix}.png"));
+            Save(() => Detach(new SettingsWindow(Demo(OnboardingStep.Done))), 600, 720, Path.Combine(folder, $"settings-{suffix}.png"));
+            Save(() => Detach(new AboutWindow()), 460, 640, Path.Combine(folder, $"about-{suffix}.png"));
         }
         app.Shutdown();
     }
 
-    /// <summary>Pencerenin içeriğini başka bir pencerede çizebilmek için kendi penceresinden ayırır.</summary>
+    /// <summary>يفصل محتوى النافذة عن نافذته كي يمكن رسمه في نافذة أخرى.</summary>
     private static FrameworkElement Detach(Window window)
     {
         var content = (FrameworkElement)window.Content;
@@ -79,7 +79,7 @@ public static class ScreenRenderer
 
     private static void Render(FrameworkElement view, int width, int height, string path)
     {
-        // Görüntüye pencere zemini de girsin (içerik saydam zemin üzerinde çizilir).
+        // لتدخل خلفية النافذة في الصورة أيضا (المحتوى يُرسم على خلفية شفافة).
         var root = new System.Windows.Controls.Border { Child = view };
         root.SetResourceReference(System.Windows.Controls.Border.BackgroundProperty, "backgroundBrush");
         root.SetResourceReference(System.Windows.Documents.TextElement.ForegroundProperty, "textPrimaryBrush");
@@ -91,7 +91,7 @@ public static class ScreenRenderer
         window.SetResourceReference(Window.BackgroundProperty, "backgroundBrush");
         window.Show();
         window.UpdateLayout();
-        // Yükleme sırasında başlayan arama vb. işlerin ekrana yansıması için kısa bekleme.
+        // انتظار قصير كي تنعكس على الشاشة الأعمال التي تبدأ عند التحميل، كالبحث ونحوه.
         var frame = new System.Windows.Threading.DispatcherFrame();
         var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(600) };
         timer.Tick += (_, _) => { timer.Stop(); frame.Continue = false; };

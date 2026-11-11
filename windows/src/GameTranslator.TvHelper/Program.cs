@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// Mac uygulamasının Samsung ve Android TV kurulumu için çağırdığı yardımcı. Windows uygulaması aynı kitaplığı
-// (GameTranslator.TvInstall) doğrudan kullanır. Her satır bir JSON olaydır:
+// الأداة المساعدة التي يستدعيها تطبيق Mac لتثبيت التطبيق على تلفزيونات Samsung و Android TV. تطبيق Windows يستخدم
+// المكتبة نفسها (GameTranslator.TvInstall) مباشرة. كل سطر حدث بصيغة JSON:
 //   {"event":"progress","step":"signing"}   {"event":"login","url":"https://…"}   {"event":"approve"}
 //   {"event":"done","version":"0.7.0","installed":true}   {"event":"error","code":"Unreachable","message":"…"}
 //   {"event":"found","hosts":["192.168.1.40"]}
@@ -13,7 +13,7 @@ using GameTranslator.TvInstall.Android;
 using GameTranslator.TvInstall.Samsung;
 using TizenSdb.SigningManager;
 
-// TizenInstaller konsola yazar ve kurulum sırasında Console.Out yakalanır; olaylar her zaman gerçek çıktıya gider.
+// TizenInstaller يكتب إلى الكونسول ويُلتقط Console.Out أثناء التثبيت؛ أما الأحداث فتذهب دائمًا إلى المخرج الحقيقي.
 var output = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
 var gate = new object();
 
@@ -26,11 +26,11 @@ void Emit(string name, params (string Key, JsonNode? Value)[] fields)
 
 string Option(string name) =>
     args.SkipWhile(a => a != name).Skip(1).FirstOrDefault()
-    ?? throw new ArgumentException($"{name} eksik");
+    ?? throw new ArgumentException($"{name} مفقود");
 
 using var cancel = new CancellationTokenSource();
 Console.CancelKeyPress += (_, e) => { e.Cancel = true; cancel.Cancel(); };
-// Mac uygulaması kapanırsa yardımcı da kapansın: girdi kapanınca iptal et.
+// إذا أُغلق تطبيق Mac فلتُغلق الأداة المساعدة أيضًا: ألغِ عند إغلاق الدخل.
 _ = Task.Run(async () =>
 {
     try { await Console.OpenStandardInput().CopyToAsync(Stream.Null); } catch (IOException) { }
@@ -76,7 +76,7 @@ try
             var installer = new SamsungTvInstaller(Option("--host"), Option("--profiles"), new SamsungCertificates(http))
             {
                 Progress = step => Emit("progress", ("step", step)),
-                // Tarayıcıyı Mac uygulaması açar; giriş geri dönüşünü burası dinler.
+                // تطبيق Mac يفتح المتصفح؛ وهنا يُستمع إلى رد تسجيل الدخول.
                 SignIn = token => SamsungLogin.SignInAsync(url => Emit("login", ("url", url)), TimeSpan.FromMinutes(10), token),
             };
             await installer.InstallAsync(Option("--package"), cancel.Token);
@@ -85,13 +85,13 @@ try
         }
 
         case "self-test":
-            // Yayın derlemesinde XML imzasının AOT ile çalıştığını doğrular (scripts/build-tv-helper.sh).
+            // يتحقق في بنية الإصدار من أن توقيع XML يعمل مع AOT (scripts/build-tv-helper.sh).
             await SelfTestAsync();
             Emit("done", ("version", "self-test"), ("installed", false));
             return 0;
 
         default:
-            Console.Error.WriteLine("kullanım: gametranslator-tv-helper android-scan | android-install --host IP --package APK --version V --key-dir DİZİN | samsung-install --host IP --package WGT --version V --profiles DİZİN | self-test");
+            Console.Error.WriteLine("الاستخدام: gametranslator-tv-helper android-scan | android-install --host IP --package APK --version V --key-dir DIR | samsung-install --host IP --package WGT --version V --profiles DIR | self-test");
             return 2;
     }
 }
@@ -131,7 +131,7 @@ static async Task SelfTestAsync()
         await TizenWgtSigner.ReSignWgtWithCertsInPlace(wgt, p12, p12, "x");
         using var signed = ZipFile.OpenRead(wgt);
         if (signed.GetEntry("author-signature.xml") is null || signed.GetEntry("signature1.xml") is null)
-            throw new InvalidOperationException("imza dosyaları oluşmadı");
+            throw new InvalidOperationException("لم تُنشأ ملفات التوقيع");
     }
     finally
     {

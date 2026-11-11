@@ -38,12 +38,12 @@ account. Tested on a 75" Neo QLED.
 4. GameTranslator gets the certificate for your TV, signs the app, installs it and opens it.
 
 If GameTranslator says the TV did not accept this computer, check that **Host PC IP** is your computer's current address and
-restart the TV. Manual install with Tizen Studio: see the [Turkish guide](tv-kurulum.md#elle-kurulum).
+restart the TV. Manual install with Tizen Studio: see the [Arabic guide](tv-setup.ar.md#manual-install).
 
 ## Android TV / Google TV
 
 Tested on a real TV. Some TVs may not give the HDMI picture to other apps: subtitles appear but the picture stays
-black. Please report your TV model in [Issues](https://github.com/Sefflex/GameTranslate/issues).
+black. Please report your TV model in [Issues](https://github.com/mahmoude4477/GameTranslator/issues).
 
 1. In **Settings › Device Preferences › About** (Google TV: **Settings › System › About**) press OK on **Build** 7 times.
 2. In **Developer options** turn on **USB debugging** (and **Network debugging** if you see it).
@@ -52,5 +52,9 @@ black. Please report your TV model in [Issues](https://github.com/Sefflex/GameTr
    the app and opens it.
 5. If there is no picture, press OK for the panel and pick the HDMI input with left and right.
 
-If GameTranslator cannot find the TV, install `GameTranslator-androidtv.apk` from
-[Releases](https://github.com/Sefflex/GameTranslate/releases) with a USB stick and a file manager on the TV.
+If GameTranslator cannot find the TV, copy `tv/packages/gametranslator-androidtv_1.0.0.apk` from the repository (or
+download it from [Releases](https://github.com/mahmoude4477/GameTranslator/releases) if a prebuilt release is published)
+to a USB stick and install it with a file manager on the TV.
+
+The prebuilt packages for all three platforms are in `tv/packages`; manual installation is described in the
+[Arabic guide](tv-setup.ar.md#manual-install).

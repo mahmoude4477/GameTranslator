@@ -15,7 +15,7 @@ public class TvLocatorTests
         public void Dispose() { }
     }
 
-    private static readonly Tv Saved = new("Salon", "192.168.1.153");
+    private static readonly Tv Saved = new("غرفة المعيشة", "192.168.1.153");
 
     [Fact]
     public async Task KeepsSavedAddressWhileItWorks()
@@ -30,7 +30,7 @@ public class TvLocatorTests
     [Fact]
     public async Task FollowsTvToItsNewAddressAndReportsIt()
     {
-        var moved = new Tv("Salon", "192.168.1.230");
+        var moved = new Tv("غرفة المعيشة", "192.168.1.230");
         var tried = new List<string>();
         Tv? reported = null;
         var locator = new TvLocator(Saved, tv =>
@@ -61,8 +61,8 @@ public class TvLocatorTests
     [Fact]
     public void PicksTheTvWithTheSameNameAmongSeveral()
     {
-        var moved = new Tv("Salon", "192.168.1.230");
-        Assert.Equal(moved, TvLocator.Moved(Saved, [new Tv("Yatak odası", "192.168.1.40"), moved]));
+        var moved = new Tv("غرفة المعيشة", "192.168.1.230");
+        Assert.Equal(moved, TvLocator.Moved(Saved, [new Tv("غرفة النوم", "192.168.1.40"), moved]));
     }
 
     [Fact]
@@ -78,5 +78,5 @@ public class TvLocatorTests
 
     [Fact]
     public void StaysPutWhenSavedAddressStillAnswersDiscovery() =>
-        Assert.Null(TvLocator.Moved(Saved, [new Tv("Salon", Saved.Host)]));
+        Assert.Null(TvLocator.Moved(Saved, [new Tv("غرفة المعيشة", Saved.Host)]));
 }

@@ -62,13 +62,13 @@ public class ReadingChoiceTests
                     frame.Pixels[i + 3] = 255;
                 }
         }
-        Paint(0, 30, 230);   // parlak kum: yakınında koyu yok
-        Paint(40, 44, 20);   // yazının koyu kenarı
-        Paint(44, 48, 250);  // beyaz harf
+        Paint(0, 30, 230);   // رمل ساطع: لا شيء داكن بقربه
+        Paint(40, 44, 20);   // الحافة الداكنة للنص
+        Paint(44, 48, 250);  // حرف أبيض
         var result = TextImage.WhiteTextOnly(frame, radius: 3);
         byte At(int x) => result.Pixels[10 * result.Stride + x * 4];
-        Assert.Equal(255, At(5));   // zemin
-        Assert.Equal(0, At(45));    // harf
-        Assert.Equal(255, At(41));  // kenar
+        Assert.Equal(255, At(5));   // الخلفية
+        Assert.Equal(0, At(45));    // الحرف
+        Assert.Equal(255, At(41));  // الحافة
     }
 }

@@ -10,7 +10,7 @@ namespace GameTranslator.Shell.Tests;
 internal sealed class FakeFirewall : IFirewall
 {
     public bool Rule { get; set; }
-    /// <summary>Kullanıcı Windows'un izin sorusunda Evet derse kural eklenir.</summary>
+    /// <summary>تُضاف القاعدة إذا اختار المستخدم «نعم» في سؤال الإذن من Windows.</summary>
     public bool UserAccepts { get; set; } = true;
     public int Checks { get; private set; }
     public int Adds { get; private set; }
@@ -29,7 +29,7 @@ internal sealed class FakeFirewall : IFirewall
     }
 }
 
-/// Güvenlik duvarı izni yalnız sorun varken ve kural eksikken önerilir; kullanıcı her açılışta rahatsız edilmez.
+/// لا يُقترح إذن جدار الحماية إلا عند وجود مشكلة وغياب القاعدة؛ فلا يُزعَج المستخدم عند كل تشغيل.
 public class FirewallPairingTests
 {
     private static async Task<(AppController Controller, FakeFirewall Firewall)> Pairing(Exception error, bool rule = false)
@@ -60,7 +60,7 @@ public class FirewallPairingTests
         Assert.Equal(FirewallPrompt.None, controller.FirewallPrompt);
     }
 
-    /// Hesap yanlışsa sorun güvenlik duvarı değildir.
+    /// إذا كان الحساب خاطئًا فالمشكلة ليست جدار الحماية.
     [Fact]
     public async Task WrongAccountOffersNothing()
     {
@@ -70,7 +70,7 @@ public class FirewallPairingTests
         Assert.Equal(0, firewall.Checks);
     }
 
-    /// PS5'ten yanıt gelmeyince kayıt zaman aşımıyla düşer; o da güvenlik duvarı belirtisidir.
+    /// عندما لا يرد PS5 يفشل التسجيل بانتهاء المهلة؛ وهذا أيضًا من أعراض جدار الحماية.
     [Fact]
     public async Task NetworkErrorOffersFirewallAndKeepsTheError()
     {
@@ -144,12 +144,12 @@ public class FirewallRunningTests
         var deadline = DateTime.UtcNow.AddSeconds(3);
         while (!condition())
         {
-            Assert.True(DateTime.UtcNow < deadline, "Koşul zamanında sağlanmadı");
+            Assert.True(DateTime.UtcNow < deadline, "لم يتحقق الشرط في الوقت المحدد");
             await Task.Delay(20);
         }
     }
 
-    /// TV uygulamasının yerine sunucuya bağlanır.
+    /// يتصل بالخادم بدلًا من تطبيق التلفزيون.
     private static async Task<HttpResponseMessage> ConnectTv(AppController controller)
     {
         var response = await Http.GetAsync($"http://127.0.0.1:{controller.ServerPort}/events", HttpCompletionOption.ResponseHeadersRead);
@@ -201,7 +201,7 @@ public class FirewallRunningTests
         controller.Dispose();
     }
 
-    /// PS5 uykudaysa ya da başka cihazdaysa sorun güvenlik duvarı değildir.
+    /// إذا كان PS5 في وضع الراحة أو مستخدمًا على جهاز آخر فالمشكلة ليست جدار الحماية.
     [Fact]
     public async Task AsleepPs5OffersNothing()
     {
@@ -238,7 +238,7 @@ public class FirewallRunningTests
         Assert.Equal(FirewallPrompt.Allowed, controller.FirewallPrompt);
         Assert.Equal(1, services.Streams[0].Reconnects);
         Assert.Equal(1, services.Keepers[0].Reconnects);
-        // Hâlâ bağlanmadıysa onay kalır, kart yeniden önerilmez.
+        // إن لم يتصل بعد يبقى التأكيد، ولا تُقترح البطاقة من جديد.
         clock.Advance(120);
         await controller.CheckConnectionsAsync();
         Assert.Equal(FirewallPrompt.Allowed, controller.FirewallPrompt);

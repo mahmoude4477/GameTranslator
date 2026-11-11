@@ -28,7 +28,7 @@ public static class ScreenTranslation
     /// <summary>
     /// يقرأ الإطار ويترجم مجموعاته بالترتيب. بعد ترجمة كل مجموعة يُستدعى <paramref name="progress"/> بكل النتائج
     /// حتى تلك اللحظة؛ فيمتلئ التلفزيون كلما جهزت الترجمات. المجموعة التي تطابق ترجمتُها أصلَها
-    /// (اسم، رقم، نص بلغة الترجمة أصلًا) لا تُعرض. إذا تعذّر استخدام المترجم يرمي <see cref="TranslatorException"/>.
+    /// (اسم، رقم، نص عربي أصلًا) لا تُعرض. إذا تعذّر استخدام المترجم يرمي <see cref="TranslatorException"/>.
     /// </summary>
     public static async Task<IReadOnlyList<Item>> TranslateAsync(
         Frame frame, ITextReader reader, ITextTranslator translator,

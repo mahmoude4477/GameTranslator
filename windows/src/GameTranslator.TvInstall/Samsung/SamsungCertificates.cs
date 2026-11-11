@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// Samsung'un sertifika uç noktaları ve istek biçimleri Apps2Samsung'dan (MIT, Patrick Stel) alındı:
+// نقاط نهاية الشهادات لدى Samsung وصيغ الطلبات مأخوذة من Apps2Samsung (MIT, Patrick Stel):
 // https://github.com/Jellyfin2Samsung/Samsung-Jellyfin-Installer
 
 using System.Formats.Asn1;
@@ -9,7 +9,7 @@ using System.Text;
 
 namespace GameTranslator.TvInstall.Samsung;
 
-/// <summary>Bir TV için imza dosyaları: yazar ve dağıtıcı sertifikası (PKCS#12) ve parolaları.</summary>
+/// <summary>ملفات التوقيع الخاصة بتلفزيون واحد: شهادة المؤلف وشهادة الموزّع (PKCS#12) وكلمة مرورهما.</summary>
 public sealed record SigningProfile(string Directory, string AuthorP12, string DistributorP12, string Password)
 {
     public static SigningProfile In(string directory) => new(directory,
@@ -18,7 +18,7 @@ public sealed record SigningProfile(string Directory, string AuthorP12, string D
 
     public bool Exists => File.Exists(AuthorP12) && File.Exists(DistributorP12) && Password.Length > 0;
 
-    /// <summary>Sertifikalar hâlâ geçerli mi (bir gün pay bırakılarak)?</summary>
+    /// <summary>هل ما زالت الشهادات صالحة (مع ترك هامش يوم واحد)؟</summary>
     public bool IsValid(DateTime now)
     {
         if (!Exists) return false;
@@ -39,8 +39,8 @@ public sealed record SigningProfile(string Directory, string AuthorP12, string D
 }
 
 /// <summary>
-/// Samsung'dan TV'ye özel imza sertifikası alır: yazar sertifikası Samsung hesabına, dağıtıcı sertifikası TV'nin
-/// DUID'ine bağlıdır. Tizen Studio'nun Certificate Manager'ının yaptığının aynısıdır.
+/// يحصل من Samsung على شهادة توقيع خاصة بالتلفزيون: شهادة المؤلف مرتبطة بحساب Samsung، وشهادة الموزّع مرتبطة
+/// بـ DUID التلفزيون. وهو ما يفعله Certificate Manager في Tizen Studio تمامًا.
 /// </summary>
 public sealed class SamsungCertificates(HttpClient http)
 {
@@ -48,7 +48,7 @@ public sealed class SamsungCertificates(HttpClient http)
     private const string DistributorProfileUrl = "https://svdca.samsungqbe.com/apis/v1/distributors";
     private const string DistributorUrl = "https://svdca.samsungqbe.com/apis/v3/distributors";
 
-    /// <summary>Sertifikaları alır ve <paramref name="directory"/> içine yazar.</summary>
+    /// <summary>يحصل على الشهادات ويكتبها داخل <paramref name="directory"/>.</summary>
     public async Task<SigningProfile> CreateAsync(string duid, SamsungAccount account, string directory,
         CancellationToken cancellationToken = default)
     {
@@ -57,7 +57,7 @@ public sealed class SamsungCertificates(HttpClient http)
         var distributorCsr = DistributorRequest(key, duid, account.Email);
 
         var author = await PostAsync(AuthorUrl, account, authorCsr, "author.csr", distributor: false, cancellationToken);
-        // Eski TV'ler (Tizen 4 ve öncesi) için cihaz profili; yenilerde imzanın içinde olduğu için kullanılmaz ama saklanır.
+        // ملف تعريف الجهاز للتلفزيونات القديمة (Tizen 4 وما قبله)؛ في الأحدث هو ضمن التوقيع فلا يُستخدم لكنه يُحفظ.
         var deviceProfile = await PostAsync(DistributorProfileUrl, account, distributorCsr, "distributor.csr", distributor: true, cancellationToken);
         var distributor = await PostAsync(DistributorUrl, account, distributorCsr, "distributor.csr", distributor: true, cancellationToken);
 
@@ -85,8 +85,8 @@ public sealed class SamsungCertificates(HttpClient http)
         subject.AddCommonName("TizenSDK");
         if (!string.IsNullOrWhiteSpace(email)) subject.AddEmailAddress(email);
         var request = new CertificateRequest(subject.Build(), key, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-        // TV, imzayı yalnız kendi DUID'i sertifikada yazılıysa kabul eder. Adlar olduğu gibi (büyük harfle) yazılmalı;
-        // SubjectAlternativeNameBuilder.AddUri şemayı küçük harfe çevirdiği için ASN.1 elle yazılır.
+        // التلفزيون لا يقبل التوقيع إلا إذا كان DUID الخاص به مكتوبًا في الشهادة. يجب كتابة الأسماء كما هي (بأحرف كبيرة)؛
+        // ولأن SubjectAlternativeNameBuilder.AddUri يحوّل المخطط إلى أحرف صغيرة يُكتب ASN.1 يدويًا.
         var writer = new AsnWriter(AsnEncodingRules.DER);
         using (writer.PushSequence())
         {
@@ -129,8 +129,8 @@ public sealed class SamsungCertificates(HttpClient http)
     }
 
     /// <summary>
-    /// Sertifika, anahtar ve onu veren Samsung ara sertifikası tek PKCS#12 dosyasında. Şifreleme 3DES: her platformun
-    /// okuyabildiği biçim.
+    /// الشهادة والمفتاح وشهادة Samsung الوسيطة التي أصدرتها في ملف PKCS#12 واحد. التشفير 3DES: الصيغة التي
+    /// تقرؤها كل المنصات.
     /// </summary>
     internal static byte[] Pkcs12(X509Certificate2 leaf, RSA key, string password)
     {
@@ -145,7 +145,7 @@ public sealed class SamsungCertificates(HttpClient http)
         SamsungCa.All().FirstOrDefault(ca => ca.Subject == leaf.Issuer && ca.Subject != ca.Issuer);
 }
 
-/// <summary>Samsung'un geliştirici sertifikalarını veren ara sertifikalar (Tizen Studio'dan, değiştirilmeden).</summary>
+/// <summary>الشهادات الوسيطة التي تصدر شهادات المطوّرين لدى Samsung (من Tizen Studio، دون تعديل).</summary>
 internal static class SamsungCa
 {
     private static readonly string[] Names = ["vd_tizen_dev_author_ca", "author_ca", "vd_tizen_dev_public2", "public2"];

@@ -4,7 +4,7 @@ namespace GameTranslator.Translation.Tests;
 
 public class SubtitleSegmenterTests
 {
-    /// <summary>Çevrilecek parçalar köşeli parantezde, kalanlar olduğu gibi.</summary>
+    /// <summary>الأجزاء التي ستُترجم بين قوسين مربعين، والباقي كما هو.</summary>
     private static string Render(string text) =>
         string.Concat(SubtitleSegmenter.Split(text).Select(p => p.Translate ? $"[{p.Text}]" : p.Text));
 

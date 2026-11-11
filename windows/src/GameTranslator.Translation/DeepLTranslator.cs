@@ -11,14 +11,14 @@ using GameTranslator.Core;
 namespace GameTranslator.Translation;
 
 /// <summary>
-/// İsteğe bağlı çevrimiçi çeviri: kullanıcının kendi DeepL anahtarıyla. Altyazı cümle cümle, konuşmacı adları
-/// çevrilmeden gönderilir; önceki altyazı bağlam olarak eklenir (ücretlendirilmez, "o"nun kim olduğunu bilir).
-/// DeepL'e ulaşılamazsa ya da kota biterse o satır cihaz üstü modelle çevrilir; oyun hiç altyazısız kalmaz.
+/// ترجمة اختيارية عبر الإنترنت بمفتاح DeepL الخاص بالمستخدم. تُرسل الترجمة النصية جملةً جملة دون ترجمة أسماء
+/// المتكلمين؛ ويُضاف سطر الترجمة السابق سياقًا (لا يُحتسب في التكلفة، وبه يُعرف من يعود عليه الضمير).
+/// إذا تعذر الوصول إلى DeepL أو انتهت الحصة يُترجَم ذلك السطر بالمترجم الاحتياطي؛ فلا تبقى اللعبة بلا ترجمة.
 /// </summary>
 public sealed class DeepLTranslator : ITextTranslator
 {
     private const int CacheLimit = 4096;
-    /// <summary>Hata sonrası bu süre DeepL denenmez; her satırda bağlantı zaman aşımını beklemeyelim.</summary>
+    /// <summary>بعد الخطأ لا يُجرَّب DeepL طوال هذه المدة؛ حتى لا ننتظر مهلة الاتصال في كل سطر.</summary>
     private static readonly TimeSpan RetryAfter = TimeSpan.FromMinutes(1);
 
     private static readonly Lazy<HttpClient> SharedClient = new(() => new HttpClient { Timeout = TimeSpan.FromSeconds(4) });
@@ -32,7 +32,7 @@ public sealed class DeepLTranslator : ITextTranslator
     private string? _previous;
     private DateTimeOffset _pausedUntil = DateTimeOffset.MinValue;
 
-    /// <param name="target">Çevirinin dili ("tr", "ar"); DeepL'e büyük harfle gider.</param>
+    /// <param name="target">لغة الترجمة (مثل "ar")؛ تُرسل إلى DeepL بأحرف كبيرة.</param>
     public DeepLTranslator(string key, ITextTranslator? fallback, string target, HttpClient? http = null)
     {
         _key = key.Trim();
@@ -41,10 +41,10 @@ public sealed class DeepLTranslator : ITextTranslator
         _http = http ?? SharedClient.Value;
     }
 
-    /// <summary>Son DeepL hatası; çeviri düzgün gidiyorsa null.</summary>
+    /// <summary>آخر خطأ من DeepL؛ و null إن كانت الترجمة تسير سليمة.</summary>
     public OnlineKeyState? LastError { get; private set; }
 
-    /// <summary>Ücretsiz anahtarlar ":fx" ile biter ve ayrı adrese gider.</summary>
+    /// <summary>المفاتيح المجانية تنتهي بـ ":fx" وتُرسل إلى عنوان مستقل.</summary>
     internal static Uri BaseUri(string key) =>
         new(key.Trim().EndsWith(":fx", StringComparison.Ordinal) ? "https://api-free.deepl.com/v2/" : "https://api.deepl.com/v2/");
 
@@ -92,7 +92,7 @@ public sealed class DeepLTranslator : ITextTranslator
 
     private async Task<string[]> RequestAsync(List<string> sentences, CancellationToken cancellationToken)
     {
-        // Oyun konuşması: "siz" değil "sen" (DeepL hedef dilde desteklemiyorsa yok sayar).
+        // حوار اللعبة: صيغة المخاطبة غير الرسمية لا الرسمية (يتجاهلها DeepL إن لم تدعمها اللغة الهدف).
         var body = new TranslateRequest(sentences, "EN", _target, _previous, "prefer_less", true);
         using var request = new HttpRequestMessage(HttpMethod.Post, new Uri(BaseUri(_key), "translate"))
         {
@@ -106,7 +106,7 @@ public sealed class DeepLTranslator : ITextTranslator
         return [.. list.Select(t => t.Text)];
     }
 
-    /// <summary>Ayarlardaki "Dene" düğmesi: anahtar geçerli mi, bu ay ne kadar kullanıldı.</summary>
+    /// <summary>زر «اختبار» في الإعدادات: هل المفتاح صالح، وكم استُخدم هذا الشهر.</summary>
     public static async Task<OnlineKeyCheck> CheckAsync(string key, HttpClient? http = null, CancellationToken cancellationToken = default)
     {
         key = key.Trim();

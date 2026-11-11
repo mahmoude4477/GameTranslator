@@ -30,7 +30,7 @@ internal sealed class FakeTranslator : ITextTranslator
     {
         if (Error is not null) throw Error;
         if (FailuresLeft > 0) { FailuresLeft--; throw new TimeoutException(); }
-        return Task.FromResult("AR:" + text);
+        return Task.FromResult("AR: " + text);
     }
 }
 
@@ -51,7 +51,7 @@ internal sealed class GatedTranslator : ITextTranslator
             if (!isOpen) { done = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously); waiting.Add((text, done)); }
         }
         if (done is not null) await done.Task;
-        return "AR:" + text;
+        return "AR: " + text;
     }
 
     public void Open()
@@ -107,7 +107,7 @@ public class SubtitlePipelineTests
         var pipeline = new SubtitlePipeline(
             new FakeReader("R2 Swing", "R2 Swing", "Hold the gate\nR2 Swing", "Hold the gate\nR2 Swing"), new FakeTranslator(), sender);
         await Run(pipeline, 4);
-        Assert.Equal(["AR:Hold the gate"], sender.Sent);
+        Assert.Equal(["AR: Hold the gate"], sender.Sent);
     }
 
     [Fact]
@@ -143,7 +143,7 @@ public class SubtitlePipelineTests
         var sender = new FakeSender();
         var pipeline = new SubtitlePipeline(new FakeReader("Hold the gate", "Hold the gate", "Hold the gate"), new FakeTranslator(), sender);
         await Run(pipeline, 3);
-        Assert.Equal(["AR:Hold the gate"], sender.Sent);
+        Assert.Equal(["AR: Hold the gate"], sender.Sent);
         Assert.Equal("Hold the gate", pipeline.LastPair?.Source);
     }
 
@@ -175,7 +175,7 @@ public class SubtitlePipelineTests
         var pipeline = new SubtitlePipeline(new FakeReader("Hold the gate", "Hold the gate", "Hold the gate", "Hold the gate"),
             new FakeTranslator { FailuresLeft = 1 }, sender);
         await Run(pipeline, 4);
-        Assert.Equal(["AR:Hold the gate"], sender.Sent);
+        Assert.Equal(["AR: Hold the gate"], sender.Sent);
     }
 
     /// تُقرأ الإطارات نحو 20 مرة في الثانية؛ إطار متفرق تعذّرت قراءته يجب ألا يمسح الترجمة النصية من التلفزيون.
@@ -186,7 +186,7 @@ public class SubtitlePipelineTests
         var pipeline = new SubtitlePipeline(new FakeReader("Hold the gate", "Hold the gate", "", "", "Hold the gate"), new FakeTranslator(), sender);
         await Run(pipeline, 5);
         Assert.Equal(0, sender.Clears);
-        Assert.Equal(["AR:Hold the gate"], sender.Sent);
+        Assert.Equal(["AR: Hold the gate"], sender.Sent);
     }
 
     [Fact]
@@ -222,7 +222,7 @@ public class SubtitlePipelineTests
         await WaitUntil(() => sender.Sent.Count == 1);
         await translator.Release("Run!");
         await pipeline.WaitForTranslationsAsync();
-        Assert.Equal(["AR:Hold the gate.", "AR:Run!"], sender.Sent);
+        Assert.Equal(["AR: Hold the gate.", "AR: Run!"], sender.Sent);
     }
 
     /// إذا كانت ترجمة السطر الجديد قد عُرضت فلا تُكتب فوقها ترجمة السطر القديم.
@@ -237,7 +237,7 @@ public class SubtitlePipelineTests
         await WaitUntil(() => sender.Sent.Count == 1);
         await translator.Release("Hold the gate.");
         await pipeline.WaitForTranslationsAsync();
-        Assert.Equal(["AR:Run!"], sender.Sent);
+        Assert.Equal(["AR: Run!"], sender.Sent);
     }
 
     /// إذا وصلت ترجمة السطر بعد اختفائه من الشاشة فإنها تُعرض مع ذلك مدة قصيرة تكفي لقراءتها.
@@ -251,8 +251,8 @@ public class SubtitlePipelineTests
         Assert.Equal(1, sender.Clears);
         translator.Open();
         await pipeline.WaitForTranslationsAsync();
-        Assert.Equal(["AR:Hold the gate."], sender.Sent);
-        Assert.Equal(2000 + "AR:Hold the gate.".Length * 60, sender.Durations[0]);
+        Assert.Equal(["AR: Hold the gate."], sender.Sent);
+        Assert.Equal(2000 + "AR: Hold the gate.".Length * 60, sender.Durations[0]);
     }
 
     /// إذا أُوقفت الترجمة فلا تُرسل الترجمة المتأخرة إلى التلفزيون.

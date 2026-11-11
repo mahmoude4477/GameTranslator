@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace GameTranslator.RemotePlay.Tests;
 
-/// <summary>Yerel kütüphaneyle koşan testler (Windows CI'da; DLL yoksa atlanır).</summary>
+/// <summary>اختبارات تعمل بالمكتبة الأصلية (على Windows في CI؛ تُتخطى إن لم توجد DLL).</summary>
 public class NativeTests
 {
     [NativeFact]
@@ -23,7 +23,7 @@ public class NativeTests
         Assert.Equal(RegistrationFailure.NoAnswer, error.Failure);
     }
 
-    /// <summary>Bağlanamayan bir adreste yeniden deneme beklerken durdurup bırakmak çökmemeli ve bloklamamalı.</summary>
+    /// <summary>الإيقاف والتحرير أثناء انتظار إعادة المحاولة على عنوان يتعذّر الاتصال به يجب ألا يسبب انهيارا ولا تعليقا.</summary>
     [NativeFact]
     public async Task StopWhileReconnectingDoesNotCrashOrBlock()
     {
@@ -42,7 +42,7 @@ public class NativeTests
         session.Stop();
         Assert.True(watch.Elapsed < TimeSpan.FromMilliseconds(200));
         session.Dispose();
-        // Bekleyen yeniden deneme bloğunun çalışacağı zamanı geçir; süreç hâlâ ayaktaysa çökme yok.
+        // انتظر حتى يمر الوقت الذي كانت ستعمل فيه إعادة المحاولة المعلّقة؛ إن بقيت العملية حية فلا انهيار.
         await Task.Delay(TimeSpan.FromSeconds(3));
     }
 

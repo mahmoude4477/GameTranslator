@@ -13,41 +13,41 @@ public static class StoreKeys
     public const string Tv = "tv";
     public const string TvKey = "tvKey";
     public const string TvDevKey = "tvDevKey";
-    /// <summary>Samsung ve Android TV'ye GameTranslator'ın kurduğu sürüm (LG'de sürüm TV'den okunur).</summary>
+    /// <summary>الإصدار الذي ثبّته GameTranslator على Samsung و Android TV (في LG يُقرأ الإصدار من التلفزيون).</summary>
     public const string TvAppVersion = "tvAppVersion";
-    /// <summary>LG geliştirici modu süresinin son uzatıldığı an.</summary>
+    /// <summary>آخر لحظة مُدّدت فيها مدة وضع المطوّر في LG.</summary>
     public const string DevSessionRenewed = "devSessionRenewed";
-    /// <summary>Kullanıcının DeepL anahtarı (isteğe bağlı çevrimiçi çeviri).</summary>
+    /// <summary>مفتاح DeepL الخاص بالمستخدم (ترجمة اختيارية عبر الإنترنت).</summary>
     public const string DeepLKey = "deepLKey";
 }
 
-/// <summary>Kalıcı ayarlar (şifreli depo değil, sıradan ayar dosyası).</summary>
+/// <summary>الإعدادات الدائمة (ملف إعدادات عادي، لا المخزن المشفّر).</summary>
 public sealed record UserSettings
 {
     public CropRegion Region { get; init; } = new();
-    /// <summary>Ek bölge 1 (ör. sağ üstteki görev paneli); null ise kapalı. Num 1 tuşuyla bir kez okunup çevrilir.</summary>
+    /// <summary>المنطقة الإضافية 1 (مثلا لوحة المهام أعلى اليمين)؛ معطّلة إن كانت null. تُقرأ وتُترجم مرة واحدة بمفتاح Num 1.</summary>
     public CropRegion? ExtraRegion1 { get; init; }
-    /// <summary>Ek bölge 2 (ör. sağ alttaki bilgi kutusu); null ise kapalı. Num 2 tuşuyla bir kez okunup çevrilir.</summary>
+    /// <summary>المنطقة الإضافية 2 (مثلا مربّع المعلومات أسفل اليمين)؛ معطّلة إن كانت null. تُقرأ وتُترجم مرة واحدة بمفتاح Num 2.</summary>
     public CropRegion? ExtraRegion2 { get; init; }
-    /// <summary>Ek bölge 3 (ör. ekranın ortası); null ise kapalı. Num 3 tuşuyla bir kez okunup çevrilir.</summary>
+    /// <summary>المنطقة الإضافية 3 (مثلا وسط الشاشة)؛ معطّلة إن كانت null. تُقرأ وتُترجم مرة واحدة بمفتاح Num 3.</summary>
     public CropRegion? ExtraRegion3 { get; init; }
-    /// <summary>Ek bölgelerin çevirisi nerede gösterilir (TV'de, bilgisayarda ya da ikisinde de).</summary>
+    /// <summary>أين تُعرض ترجمة المناطق الإضافية (على التلفزيون أو الكمبيوتر أو كليهما).</summary>
     public ResultTarget ExtraTarget1 { get; init; } = ResultTarget.Tv;
     public ResultTarget ExtraTarget2 { get; init; } = ResultTarget.Tv;
     public ResultTarget ExtraTarget3 { get; init; } = ResultTarget.Tv;
-    /// <summary>Serbest alan çevirisinin (Num 5) sonucu nerede gösterilir.</summary>
+    /// <summary>أين تُعرض نتيجة ترجمة المنطقة الحرة (Num 5).</summary>
     public ResultTarget FreeAreaTarget { get; init; } = ResultTarget.Tv;
     public SubtitleStyle Style { get; init; } = new();
     public string SourceLanguage { get; init; } = "en";
-    /// <summary>Çevirinin dili. Arapça sağdan sola yazılır; TV ve OBS yönü metinden anlar.</summary>
+    /// <summary>لغة الترجمة. العربية تُكتب من اليمين إلى اليسار؛ والتلفزيون و OBS يستنتجان الاتجاه من النص.</summary>
     public string TargetLanguage { get; init; } = "ar";
-    /// <summary>Anahtar girildiyse çeviri DeepL'le yapılır; kapalıysa ya da DeepL'e ulaşılamazsa cihaz üstü model.</summary>
+    /// <summary>إن أُدخل المفتاح تُجرى الترجمة عبر DeepL؛ وإن كانت معطّلة أو تعذّر الوصول إلى DeepL يُستخدم المترجم الافتراضي (Google).</summary>
     public bool OnlineTranslation { get; init; }
 
-    /// <summary>Ek bölgenin sayısı; <see cref="ExtraRegion"/> 1..ExtraRegionCount arasında çalışır.</summary>
+    /// <summary>عدد المناطق الإضافية؛ <see cref="ExtraRegion"/> يعمل ضمن 1..ExtraRegionCount.</summary>
     public const int ExtraRegionCount = 3;
 
-    /// <summary>1, 2 ya da 3 numaralı ek bölge; kapalıysa null.</summary>
+    /// <summary>المنطقة الإضافية رقم 1 أو 2 أو 3؛ null إن كانت معطّلة.</summary>
     public CropRegion? ExtraRegion(int slot) => slot switch { 1 => ExtraRegion1, 2 => ExtraRegion2, 3 => ExtraRegion3, _ => null };
 
     public UserSettings WithExtraRegion(int slot, CropRegion? region) => slot switch
@@ -58,7 +58,7 @@ public sealed record UserSettings
         _ => this,
     };
 
-    /// <summary>Ek bölgenin çevirisinin gösterileceği yer.</summary>
+    /// <summary>المكان الذي تُعرض فيه ترجمة المنطقة الإضافية.</summary>
     public ResultTarget ExtraTarget(int slot) => slot switch { 1 => ExtraTarget1, 2 => ExtraTarget2, 3 => ExtraTarget3, _ => ResultTarget.Tv };
 
     public UserSettings WithExtraTarget(int slot, ResultTarget target) => slot switch
@@ -70,10 +70,10 @@ public sealed record UserSettings
     };
 }
 
-/// <summary>Tek seferlik çevirinin sonucunun gösterileceği yer.</summary>
+/// <summary>المكان الذي تُعرض فيه نتيجة الترجمة لمرة واحدة.</summary>
 public enum ResultTarget { Tv, Pc, Both }
 
-/// <summary>Hesap kimliği, PS5 ve TV anahtarları (gerçekte DPAPI ile şifreli dosya).</summary>
+/// <summary>معرّف الحساب ومفاتيح PS5 والتلفزيون (في الواقع ملف مشفّر بـ DPAPI).</summary>
 public interface IAppStore
 {
     void Save<T>(string key, T value);
@@ -87,14 +87,14 @@ public interface ISettingsStore
     void Save(UserSettings settings);
 }
 
-/// <summary>Çeviri sürerken bilgisayarın boşta uykuya geçmesini engeller.</summary>
+/// <summary>يمنع الكمبيوتر من الدخول في السكون عند الخمول ما دامت الترجمة جارية.</summary>
 public interface ISleepGuard
 {
     void Begin();
     void End();
 }
 
-/// <summary>TV uygulamasını açık tutan görevli (gerçekte TvKeeper).</summary>
+/// <summary>المكلّف بإبقاء تطبيق التلفزيون مفتوحا (في الواقع TvKeeper).</summary>
 public interface IKeeper
 {
     void Start(TimeSpan interval);
@@ -102,7 +102,7 @@ public interface IKeeper
     void Reconnect();
 }
 
-/// <summary>Cihaz üstü çeviri modeli: kurulu mu, indir, çevirmen oluştur.</summary>
+/// <summary>محرك الترجمة الافتراضي: هل هو مدعوم وجاهز، نزّل ما يلزمه، أنشئ مترجما.</summary>
 public interface ITranslationModel
 {
     bool IsSupported(string source, string target);
@@ -111,84 +111,84 @@ public interface ITranslationModel
     ITextTranslator Create(string source, string target);
 }
 
-/// <summary>Dış dünyayla (PS5, PSN, TV, OCR, çeviri) konuşan her şey; testlerde sahtesi kullanılır.</summary>
+/// <summary>كل ما يتواصل مع العالم الخارجي (PS5، PSN، التلفزيون، OCR، الترجمة)؛ يُستخدم بديل وهمي له في الاختبارات.</summary>
 public interface IAppServices
 {
     Task<IReadOnlyList<ConsoleInfo>> DiscoverConsolesAsync();
     Task<byte[]> AccountIdFromRedirectAsync(Uri redirect);
     Task<RegisteredConsole> RegisterAsync(string host, byte[] accountId, uint pin);
     Task<IReadOnlyList<LgTv>> DiscoverTvsAsync();
-    /// <summary>TV ile eşleşir ve TV uygulamasını sunucu adresiyle başlatmayı dener.</summary>
+    /// <summary>يقترن بالتلفزيون ويحاول تشغيل تطبيق التلفزيون بعنوان الخادم.</summary>
     Task<TvPairing> PairTvAsync(LgTv tv, string? key, string server);
     IStreamSession MakeStream(RegisteredConsole console, byte[] accountId);
-    /// <param name="appConnected">TV uygulaması bilgisayara bağlı mı (Samsung'da bağlıyken TV'ye dokunulmaz).</param>
-    /// <param name="onMoved">TV ağda yeni bir adreste bulununca çağrılır.</param>
+    /// <param name="appConnected">هل تطبيق التلفزيون متصل بالكمبيوتر (في Samsung لا يُمسّ التلفزيون ما دام متصلا).</param>
+    /// <param name="onMoved">يُستدعى حين يُعثر على التلفزيون في عنوان جديد على الشبكة.</param>
     IKeeper MakeKeeper(LgTv tv, string? key, IReadOnlyDictionary<string, string> parameters, Func<bool> appConnected, Action<LgTv> onMoved);
-    /// <summary>Uygulamayla gelen TV paketinin sürümü (geliştirici derlemesinde paket olmayabilir).</summary>
+    /// <summary>إصدار حزمة التلفزيون المرفقة بالتطبيق (قد لا توجد الحزمة في بناء المطوّر).</summary>
     string? BundledTvAppVersion { get; }
     Task<bool> IsDevModeOnAsync(string host);
     Task<string> FetchDevKeyAsync(string host, string passphrase);
     Task<string?> InstalledTvAppVersionAsync(string host, string devKey);
     Task InstallTvAppAsync(string host, string devKey);
-    /// <summary>LG geliştirici modunun süresini baştan başlatır; kalan saati döner (bilinmiyorsa null).</summary>
+    /// <summary>يعيد بدء مدة وضع المطوّر في LG؛ ويعيد الساعات المتبقية (null إن لم تُعرف).</summary>
     Task<int?> RenewDevSessionAsync(string host, string devKey);
-    /// <summary>Samsung ve Android TV için uygulamayla gelen paket (geliştirici derlemesinde olmayabilir).</summary>
+    /// <summary>الحزمة المرفقة بالتطبيق لـ Samsung و Android TV (قد لا توجد في بناء المطوّر).</summary>
     BundledTvApp? BundledApp(TvBrand brand);
     Task<bool> IsSamsungDevModeOnAsync(string host);
     Task InstallSamsungAppAsync(string host, BundledTvApp app, Action<TvInstallEvent> onEvent);
     Task<bool> IsAndroidDebugOnAsync(string host);
-    /// <summary>Ağda ADB'si açık cihazlar.</summary>
+    /// <summary>الأجهزة المفعّل فيها ADB على الشبكة.</summary>
     Task<IReadOnlyList<string>> ScanAndroidTvsAsync();
-    /// <summary>Eksikse ya da eskiyse kurar; TV'deki sürümü döner.</summary>
+    /// <summary>يثبّته إن كان ناقصا أو قديما؛ ويعيد الإصدار الموجود على التلفزيون.</summary>
     Task<string> InstallAndroidAppAsync(string host, BundledTvApp app, Action<TvInstallEvent> onEvent);
-    /// <summary>Oyun dili için yazı tanıyıcı; bilgisayarda hiç OCR dili yoksa null.</summary>
+    /// <summary>أداة التعرّف على النص للغة اللعبة؛ null إن لم توجد أي لغة OCR في الكمبيوتر.</summary>
     ITextReader? MakeReader(string language);
     /// <summary>
-    /// Oyun dilinin kendi yazı tanıma paketi yüklü mü. Değilse okuyucu sistemin diliyle (ör. Türkçe) okur ve İngilizce
-    /// altyazı "thıs.messs" gibi bozulur; kullanıcıya paketi yüklemesi söylenir.
+    /// هل حزمة التعرّف على النص الخاصة بلغة اللعبة مثبّتة. إن لم تكن، يقرأ القارئ بلغة النظام فتخرج الترجمة النصية
+    /// الإنجليزية مشوّهة الحروف؛ ويُطلب من المستخدم تثبيت الحزمة.
     /// </summary>
     bool HasOcrLanguage(string language) => true;
     ITranslationModel Translation { get; }
-    /// <summary>DeepL çevirmeni; <paramref name="fallback"/> DeepL'e ulaşılamayan satırları çevirir. Bu derlemede yoksa null.</summary>
+    /// <summary>مترجم DeepL؛ <paramref name="fallback"/> يترجم الأسطر التي يتعذّر فيها الوصول إلى DeepL. null إن لم يوجد في هذا البناء.</summary>
     ITextTranslator? MakeOnlineTranslator(string key, ITextTranslator? fallback, string target) => null;
     Task<OnlineKeyCheck> CheckOnlineKeyAsync(string key) => Task.FromResult(new OnlineKeyCheck(OnlineKeyState.Unreachable));
-    /// <summary>Uygulama güncellemesi; geliştirici derlemesinde null.</summary>
+    /// <summary>تحديث التطبيق؛ null في بناء المطوّر.</summary>
     IUpdater? Updater => null;
-    /// <summary>Windows Güvenlik Duvarı izni; Windows dışında ve testlerde null (hiçbir şey önerilmez).</summary>
+    /// <summary>إذن جدار حماية Windows؛ null خارج Windows وفي الاختبارات (لا يُقترح شيء).</summary>
     IFirewall? Firewall => null;
 }
 
-/// <param name="Launched">false ise TV uygulaması açılamadı; büyük olasılıkla TV'de kurulu değil.</param>
+/// <param name="Launched">إن كان false فقد تعذّر فتح تطبيق التلفزيون؛ والأرجح أنه غير مثبّت على التلفزيون.</param>
 public sealed record TvPairing(string Key, bool Launched);
 
-/// <param name="Path">Paket dosyası.</param>
+/// <param name="Path">ملف الحزمة.</param>
 public sealed record BundledTvApp(string Path, string Version);
 
 public enum TvInstallEventKind { SignIn, ApproveOnTv, Progress }
 
-/// <summary>Samsung ve Android TV kurulumu sırasında kullanıcıdan bir şey isteyen olay.</summary>
+/// <summary>حدث يطلب شيئا من المستخدم أثناء التثبيت على Samsung و Android TV.</summary>
 public sealed record TvInstallEvent(TvInstallEventKind Kind, Uri? Url = null);
 
 /// <summary>
-/// SignIn: Samsung sertifikası için tarayıcıda Samsung hesabıyla giriş bekleniyor. ApproveOnTv: Android TV ekranında
-/// hata ayıklama izni bekleniyor.
+/// SignIn: في انتظار تسجيل الدخول بحساب Samsung في المتصفح لأجل شهادة Samsung. ApproveOnTv: في انتظار إذن
+/// تصحيح الأخطاء على شاشة Android TV.
 /// </summary>
 public enum TvAppKind { Unknown, Working, UpToDate, DevModeOff, NeedsPassphrase, Failed, SignIn, ApproveOnTv }
 
-/// <summary>TV uygulamasının kurulum durumu.</summary>
+/// <summary>حالة تثبيت تطبيق التلفزيون.</summary>
 public sealed record TvAppState(TvAppKind Kind, string? Version = null, DevModeError? Error = null, Uri? Url = null, string? Reason = null)
 {
     public static readonly TvAppState Unknown = new(TvAppKind.Unknown);
 }
 
-/// <summary>Durum noktasının rengi: bağlı (yeşil), sorun var (turuncu), boşta (gri).</summary>
+/// <summary>لون نقطة الحالة: متصل (أخضر)، توجد مشكلة (برتقالي)، خامل (رمادي).</summary>
 public enum StatusTone { Idle, Warning, Good }
 
 public enum OnboardingStep { Welcome, SecondAccount, PsnLogin, Console, Tv, Translation, Test, Done }
 
 public enum AppError { InvalidPin, InvalidLogin, MissingAccount, WrongAccount, RegistrationFailed, ConsoleNoAnswer, ConsoleInUse, ConsoleCrashed, ConsoleVersion }
 
-/// <summary>Kullanıcıya gösterilecek, ne yapması gerektiğini söyleyen hata.</summary>
+/// <summary>خطأ يُعرض للمستخدم ويخبره بما عليه فعله.</summary>
 public sealed class AppException(AppError error, string message) : Exception(message)
 {
     public AppError Error { get; } = error;

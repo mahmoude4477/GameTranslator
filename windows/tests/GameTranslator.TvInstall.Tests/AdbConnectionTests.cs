@@ -12,12 +12,12 @@ namespace GameTranslator.TvInstall.Tests;
 
 public class AdbConnectionTests
 {
-    /// <summary>Android TV'nin adbd'si gibi davranan sahte sunucu.</summary>
+    /// <summary>خادم وهمي يتصرف مثل adbd في Android TV.</summary>
     private sealed class FakeAdbd : IAsyncDisposable
     {
         private readonly TcpListener listener = new(IPAddress.Loopback, 0);
         public int Port => ((IPEndPoint)listener.LocalEndpoint).Port;
-        /// <summary>Daha önce onaylanmış anahtar; null ise ilk bağlantıda onay istenir.</summary>
+        /// <summary>مفتاح تمت الموافقة عليه سابقا؛ إذا كان null تُطلب الموافقة عند أول اتصال.</summary>
         public RSA? TrustedKey { get; set; }
         public bool ApproveNewKeys { get; set; } = true;
         public byte[]? ReceivedPublicKey { get; private set; }
@@ -117,7 +117,7 @@ public class AdbConnectionTests
         }
         Assert.True(asked);
         Assert.NotNull(tv.ReceivedPublicKey);
-        // Açık anahtar: base64(android_pubkey) + " kullanıcı@makine" + NUL
+        // المفتاح العام: base64(android_pubkey) + " user@host" + NUL
         var text = Encoding.ASCII.GetString(tv.ReceivedPublicKey!).TrimEnd('\0');
         var blob = Convert.FromBase64String(text.Split(' ')[0]);
         Assert.Equal(AdbConnection.EncodePublicKey(key), blob);
@@ -196,7 +196,7 @@ public class AdbConnectionTests
         await using var tv = new FakeAdbd { TrustedKey = key, Reply = "  versionName=0.7.0\n  versionCode=1" };
         tv.Serve();
         var installer = new AndroidTvInstaller("127.0.0.1", dir, tv.Port);
-        var (version, installed) = await installer.EnsureInstalledAsync("yok.apk", "0.7.0");
+        var (version, installed) = await installer.EnsureInstalledAsync("missing.apk", "0.7.0");
         Assert.Equal("0.7.0", version);
         Assert.False(installed);
     }

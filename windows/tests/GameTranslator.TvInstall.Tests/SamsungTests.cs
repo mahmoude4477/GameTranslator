@@ -14,7 +14,7 @@ namespace GameTranslator.TvInstall.Tests;
 public class SamsungTests
 {
 
-    /// <summary>TizenInstaller gibi: dosyayı açar, kapatmadan bırakır.</summary>
+    /// <summary>مثل TizenInstaller: يفتح الملف ويتركه دون إغلاق.</summary>
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
     private static void OpenAndForget(string path) => _ = File.OpenRead(path);
 
@@ -26,7 +26,7 @@ public class SamsungTests
         OpenAndForget(path);
         Assert.True(SamsungTvInstaller.DeleteStaged(path));
         Assert.False(File.Exists(path));
-        Assert.True(SamsungTvInstaller.DeleteStaged(path), "olmayan dosya sorun değil");
+        Assert.True(SamsungTvInstaller.DeleteStaged(path), "الملف غير الموجود ليس مشكلة");
     }
 
     [Fact]
@@ -41,8 +41,8 @@ public class SamsungTests
     public void ForeignCallbackIsIgnored()
     {
         var json = Uri.EscapeDataString("{\"access_token\":\"tok\",\"userId\":\"u1\"}");
-        Assert.Null(SamsungLogin.ParseCallback($"code={json}&state=baska"));
-        Assert.Null(SamsungLogin.ParseCallback("state=accountcheckdogeneratedstatetext&code=bozuk"));
+        Assert.Null(SamsungLogin.ParseCallback($"code={json}&state=other"));
+        Assert.Null(SamsungLogin.ParseCallback("state=accountcheckdogeneratedstatetext&code=broken"));
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public class SamsungTests
         while (opened is null) await Task.Delay(20);
         using var http = new HttpClient();
         var json = "{\"access_token\":\"tok\",\"userId\":\"u1\",\"inputEmailID\":\"a@b.c\"}";
-        // Tarayıcıdan gelmeyen istek yok sayılır, ardından gerçek geri dönüş gelir.
+        // الطلب الذي لا يأتي من المتصفح يُتجاهل، ثم يصل الرد الحقيقي.
         var stray = await http.GetAsync($"http://localhost:{SamsungLogin.CallbackPort}/favicon.ico");
         Assert.Equal(HttpStatusCode.NotFound, stray.StatusCode);
         var response = await http.PostAsync($"http://localhost:{SamsungLogin.CallbackPort}/signin/callback",
@@ -107,22 +107,22 @@ public class SamsungTests
         Assert.False(SamsungTvInstaller.InstallFailed("Push complete.\napp_id[GameTranslatorT.GameTranslator] installing[100]\nspend time for pkgcmd is [1234]ms"));
     }
 
-    /// <summary>Kendi imzaladığımız sahte yazar ve dağıtıcı sertifikalarıyla paketi imzalar.</summary>
+    /// <summary>يوقّع الحزمة بشهادتي مؤلف وموزّع وهميتين وقّعناهما بأنفسنا.</summary>
     [Fact]
     public async Task PackageIsSignedWithBothCertificates()
     {
         var dir = Directory.CreateTempSubdirectory().FullName;
         using var key = RSA.Create(2048);
-        const string password = "parola";
+        const string password = "password";
         var author = Path.Combine(dir, "author.p12");
         var distributor = Path.Combine(dir, "distributor.p12");
-        await File.WriteAllBytesAsync(author, SamsungCertificates.Pkcs12(SelfSigned(key, "CN=Yazar"), key, password));
-        await File.WriteAllBytesAsync(distributor, SamsungCertificates.Pkcs12(SelfSigned(key, "CN=Dagitici"), key, password));
+        await File.WriteAllBytesAsync(author, SamsungCertificates.Pkcs12(SelfSigned(key, "CN=Author"), key, password));
+        await File.WriteAllBytesAsync(distributor, SamsungCertificates.Pkcs12(SelfSigned(key, "CN=Distributor"), key, password));
 
         var wgt = Path.Combine(dir, "app.wgt");
         using (var zip = ZipFile.Open(wgt, ZipArchiveMode.Create))
         {
-            foreach (var (name, text) in new[] { ("config.xml", "<widget/>"), ("index.html", "<p>merhaba</p>") })
+            foreach (var (name, text) in new[] { ("config.xml", "<widget/>"), ("index.html", "<p>مرحبا</p>") })
             {
                 await using var entry = zip.CreateEntry(name).Open();
                 await entry.WriteAsync(Encoding.UTF8.GetBytes(text));
@@ -150,7 +150,7 @@ public class SamsungTests
     {
         var request = new CertificateRequest(subject, key, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
         using var withKey = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
-        // Samsung'dan gelen sertifika gibi anahtarsız.
+        // بلا مفتاح، مثل الشهادة القادمة من Samsung.
         return X509CertificateLoader.LoadCertificate(withKey.RawData);
     }
 }

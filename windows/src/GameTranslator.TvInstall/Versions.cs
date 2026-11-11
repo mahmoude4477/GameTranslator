@@ -4,7 +4,7 @@ namespace GameTranslator.TvInstall;
 
 public static class Versions
 {
-    /// <summary>Sayısal karşılaştırma: 0.10.0, 0.9.9'dan yenidir.</summary>
+    /// <summary>مقارنة عددية: 0.10.0 أحدث من 0.9.9.</summary>
     public static bool IsNewer(string a, string b)
     {
         var x = Parts(a);
@@ -21,7 +21,7 @@ public static class Versions
     private static int[] Parts(string version) =>
         [.. version.Split('.', '-').Select(p => int.TryParse(p, out var n) ? n : 0)];
 
-    /// <summary><c>gametranslator-androidtv_0.7.0.apk</c> → <c>0.7.0</c>; ad bu biçimde değilse null.</summary>
+    /// <summary><c>gametranslator-androidtv_0.7.0.apk</c> → <c>0.7.0</c>؛ و null إن لم يكن الاسم بهذه الصيغة.</summary>
     public static string? OfBundledFile(string fileName)
     {
         var name = Path.GetFileNameWithoutExtension(fileName);

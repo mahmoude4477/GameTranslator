@@ -5,10 +5,10 @@ using System.Text;
 
 namespace GameTranslator.Core;
 
-/// <summary>OCR çıktılarını karşılaştırmak için sadeleştirme ve gürültüye dayanıklı benzerlik.</summary>
+/// <summary>تبسيط وتشابه يتحمّل الضجيج لمقارنة مخرجات OCR.</summary>
 public static class TextMatch
 {
-    /// <summary>Küçük harf, yalnız harf/rakam, tek boşluk.</summary>
+    /// <summary>حروف صغيرة، حروف/أرقام فقط، مسافة واحدة.</summary>
     public static string Normalize(string s)
     {
         var builder = new StringBuilder(s.Length);
@@ -17,7 +17,7 @@ public static class TextMatch
         return string.Join(' ', builder.ToString().Split(' ', StringSplitOptions.RemoveEmptyEntries));
     }
 
-    /// <summary>Levenshtein oranı <paramref name="threshold"/> ve üstündeyse benzer sayılır. Boş metin hiçbir metne benzemez.</summary>
+    /// <summary>يُعدّان متشابهين إذا بلغت نسبة Levenshtein <paramref name="threshold"/> أو تجاوزتها. النص الفارغ لا يشبه أي نص.</summary>
     public static bool IsSimilar(string a, string b, double threshold = 0.85)
     {
         if (a == b) return a.Length > 0;
@@ -36,10 +36,10 @@ public static class TextMatch
     }
 
     /// <summary>
-    /// Yeni okuma, gönderilmiş altyazının yeniden okuması mı (sadeleştirilmiş metinler). Süslü yazı tipinde ya da
-    /// solarken OCR bir iki sözcüğü her karede başka çöpe çevirir ("ou$3e", "waters2aljd") ya da iki satırlık
-    /// altyazının bir satırını kaçırır; karakter benzerliği düşse de sözcükler aynı kalır. Rakam karışmış sözcükler
-    /// ve tek harfler çöp sayılıp karşılaştırmaya girmez. Metin belirgin uzadıysa (daktilo efekti) yeni satırdır.
+    /// هل القراءة الجديدة إعادة قراءة للترجمة النصية المرسَلة (نصوص مبسَّطة)؟ في الخط المزخرف أو أثناء البهتان
+    /// يحوّل OCR كلمة أو كلمتين إلى شوائب مختلفة في كل إطار ("ou$3e"، "waters2aljd") أو يفوّت سطرًا من ترجمة نصية
+    /// من سطرين؛ فتبقى الكلمات نفسها وإن انخفض تشابه الأحرف. الكلمات التي خالطتها أرقام والحروف المنفردة
+    /// تُعدّ شوائب ولا تدخل المقارنة. إذا طال النص بوضوح (تأثير الآلة الكاتبة) فهو سطر جديد.
     /// </summary>
     public static bool IsSameSubtitle(string reread, string sent)
     {
@@ -50,15 +50,15 @@ public static class TextMatch
         var shared = 0;
         foreach (var word in x)
             if (remaining.Remove(word)) shared++;
-        // Kaçırılmış satır: yeni okumanın sözcüklerinin hemen hepsi gönderilende var.
+        // سطر فائت: كلمات القراءة الجديدة كلها تقريبًا موجودة في المرسَل.
         if (x.Count >= 4 && x.Count <= sentCount && shared >= x.Count * 0.85) return true;
-        // Kısa satırda tek sözcük anlamı değiştirir ("where is the boy" / "ship"); orada yalnız karakter benzerliği geçerli.
+        // في السطر القصير كلمة واحدة تغيّر المعنى ("where is the boy" / "ship")؛ هناك يُعتمد تشابه الأحرف وحده.
         int longer = Math.Max(x.Count, sentCount), shorter = Math.Min(x.Count, sentCount);
         if (shorter < 6 || (double)shorter / longer < 0.75) return false;
         return (double)shared / longer >= 0.75;
     }
 
-    // Tek harfler ("a", "I" ya da OCR'ın uydurduğu "O") karşılaştırmaya bir şey katmaz.
+    // الحروف المنفردة ("a" و"I" أو "O" التي يختلقها OCR) لا تضيف شيئًا إلى المقارنة.
     private static List<string> CleanWords(string normalized) =>
         normalized.Split(' ', StringSplitOptions.RemoveEmptyEntries).Where(w => w.Length > 1 && !w.Any(char.IsNumber)).ToList();
 

@@ -8,8 +8,8 @@ using Velopack.Sources;
 namespace GameTranslator.App.Services;
 
 /// <summary>
-/// GitHub'daki sürümlerden güncelleme (Velopack). Yalnız kurulum dosyasıyla (GameTranslator-Setup.exe) kurulan uygulama
-/// kendini günceller; zip'ten açılan eski kopyada sürüm sayfası açılır.
+/// التحديث من الإصدارات على GitHub (Velopack). التطبيق المثبّت بملف التثبيت (GameTranslator-Setup.exe) وحده
+/// يحدّث نفسه؛ أما النسخة المفتوحة من ملف zip فتُفتح فيها صفحة الإصدار.
 /// </summary>
 internal sealed class Updater : IUpdater
 {
@@ -34,7 +34,7 @@ internal sealed class Updater : IUpdater
         manager.ApplyUpdatesAndRestart(pending);
     }
 
-    /// <summary>Zip kullanıcısı için: GitHub'daki en son sürümün etiketi, bu sürümden yeniyse.</summary>
+    /// <summary>لمستخدم ملف zip: وسم أحدث إصدار على GitHub إن كان أحدث من هذا الإصدار.</summary>
     private static async Task<string?> LatestTagAsync()
     {
         try

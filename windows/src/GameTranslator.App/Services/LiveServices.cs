@@ -13,7 +13,7 @@ using GameTranslator.TvInstall.Samsung;
 
 namespace GameTranslator.App.Services;
 
-/// <summary>Uygulama denetleyicisinin gerçek dünya bağlantıları (PS5, PSN, TV, OCR, çeviri).</summary>
+/// <summary>صلات متحكّم التطبيق بالعالم الحقيقي (PS5، PSN، التلفزيون، OCR، الترجمة).</summary>
 public sealed class LiveServices : IAppServices
 {
     public ITranslationModel Translation { get; } = new OnlineModel();
@@ -44,7 +44,7 @@ public sealed class LiveServices : IAppServices
 
     public async Task<TvPairing> PairTvAsync(LgTv tv, string? key, string server)
     {
-        // Bilgisayar Android TV'yi denetlemez; TV uygulaması bilgisayarı kendisi bulur.
+        // الكمبيوتر لا يتحكم في Android TV؛ تطبيق التلفزيون يجد الكمبيوتر بنفسه.
         if (tv.Brand == TvBrand.AndroidTv) return new TvPairing("", true);
         if (tv.Brand == TvBrand.Samsung)
         {
@@ -54,13 +54,13 @@ public sealed class LiveServices : IAppServices
                 using var samsung = new SamsungClient(tv, key);
                 var token = await samsung.ConnectAsync(cts.Token);
                 try { await samsung.LaunchAsync(SamsungClient.AppId, new Dictionary<string, string> { ["server"] = server }); }
-                catch (Exception) { /* TV uygulaması bilgisayarı kendisi de bulabilir */ }
+                catch (Exception) { /* تطبيق التلفزيون يستطيع أيضا أن يجد الكمبيوتر بنفسه */ }
                 return new TvPairing(token, true);
             }
             catch (Exception)
             {
-                // TV kapalı, IP farklı veya kumanda izni henüz verilmemiş olsa bile
-                // TV uygulamasının (veya tarayıcının) bilgisayara bağlanabilmesi için eşleşmeyi tamamla
+                // حتى لو كان التلفزيون مطفأ أو عنوان IP مختلفا أو لم يُمنح إذن التحكم بعد
+                // أكمل الاقتران كي يتمكن تطبيق التلفزيون (أو المتصفح) من الاتصال بالكمبيوتر
                 return new TvPairing(key ?? "", false);
             }
         }
@@ -132,7 +132,7 @@ public sealed class LiveServices : IAppServices
         return new Keeper(new TvKeeper(locator.ConnectAsync, AppController.TvAppId, parameters));
     }
 
-    // --- TV uygulamasını kurma ---
+    // --- تثبيت تطبيق التلفزيون ---
 
     private static string? BundledTvPackage
     {
@@ -161,14 +161,14 @@ public sealed class LiveServices : IAppServices
             await WithKeyFileAsync<object?>(devKey, async file =>
             {
                 if (BundledTvPackage is not { } package || BundledTvAppVersion is not { } version)
-                    throw new DevModeException(DevModeError.InstallFailed, "uygulamanın yanında LG paketi (tv-app/*.ipk) yok");
+                    throw new DevModeException(DevModeError.InstallFailed, "لا توجد حزمة LG (tv-app/*.ipk) بجانب التطبيق");
                 await Installer(host, file).InstallAsync(package, version);
                 return null;
             });
         }
         catch (DevModeException error)
         {
-            StartupGuard.Log("LG TV kurulumu", error);
+            StartupGuard.Log("تثبيت تلفزيون LG", error);
             throw;
         }
     }
@@ -186,9 +186,9 @@ public sealed class LiveServices : IAppServices
         }
     }
 
-    // --- Samsung ve Android TV (GameTranslator.TvInstall) ---
+    // --- Samsung و Android TV (GameTranslator.TvInstall) ---
 
-    /// <summary>Kalıcı dosyalar: ADB anahtarı ve Samsung sertifikaları.</summary>
+    /// <summary>الملفات الدائمة: مفتاح ADB وشهادات Samsung.</summary>
     private static string DataDirectory(string name) =>
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GameTranslator", name);
 
@@ -230,7 +230,7 @@ public sealed class LiveServices : IAppServices
         }
         catch (SamsungInstallException error)
         {
-            StartupGuard.Log("Samsung TV kurulumu", error);
+            StartupGuard.Log("تثبيت تلفزيون Samsung", error);
             throw new DevModeException(error.Error switch
             {
                 SamsungInstallError.Unreachable => DevModeError.Unreachable,
@@ -242,7 +242,7 @@ public sealed class LiveServices : IAppServices
         }
         catch (Exception error) when (error is not DevModeException)
         {
-            StartupGuard.Log("TV kurulumu", error);
+            StartupGuard.Log("تثبيت التلفزيون", error);
             throw new DevModeException(DevModeError.InstallFailed, error.Message);
         }
     }
@@ -264,7 +264,7 @@ public sealed class LiveServices : IAppServices
         }
         catch (AndroidInstallException error)
         {
-            StartupGuard.Log("Android TV kurulumu", error);
+            StartupGuard.Log("تثبيت Android TV", error);
             throw new DevModeException(error.Error switch
             {
                 AndroidInstallError.Unreachable => DevModeError.Unreachable,
@@ -274,14 +274,14 @@ public sealed class LiveServices : IAppServices
         }
         catch (Exception error) when (error is not DevModeException)
         {
-            StartupGuard.Log("TV kurulumu", error);
+            StartupGuard.Log("تثبيت التلفزيون", error);
             throw new DevModeException(DevModeError.InstallFailed, error.Message);
         }
     }
 
     private static DevModeInstaller Installer(string host, string keyFile) => DevModeInstaller.ForTv(host, keyFile);
 
-    /// <summary>ssh anahtarı dosyadan okur; dosya yalnız komut süresince durur.</summary>
+    /// <summary>ssh يقرأ المفتاح من ملف؛ ويبقى الملف طوال مدة الأمر فقط.</summary>
     private static async Task<T> WithKeyFileAsync<T>(string key, Func<string, Task<T>> body)
     {
         var file = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
@@ -299,7 +299,7 @@ public sealed class LiveServices : IAppServices
     public ITextReader? MakeReader(string language) => WindowsOcrReader.Create(language);
     public bool HasOcrLanguage(string language) => WindowsOcrReader.HasLanguage(language);
 
-    /// <summary>Denetlenemeyen TV'ler için: TV uygulaması kendisi bağlanır.</summary>
+    /// <summary>للتلفزيونات التي لا يمكن التحكم فيها: تطبيق التلفزيون يتصل بنفسه.</summary>
     private sealed class IdleKeeper : IKeeper
     {
         public void Start(TimeSpan interval) { }
@@ -314,7 +314,7 @@ public sealed class LiveServices : IAppServices
         public void Reconnect() => keeper.Reconnect();
     }
 
-    /// <summary>Çeviri Google GTX ile yapılır: indirilecek model yoktur, her dil çifti hazırdır.</summary>
+    /// <summary>تُجرى الترجمة عبر Google GTX: لا يوجد ما يُنزَّل، وكل زوج لغات جاهز.</summary>
     private sealed class OnlineModel : ITranslationModel
     {
         public bool IsSupported(string source, string target) => true;
@@ -328,7 +328,7 @@ public sealed class LiveServices : IAppServices
     }
 }
 
-/// <summary>Şifreli depo (hesap, PS5, TV anahtarları).</summary>
+/// <summary>المخزن المشفّر (الحساب ومفاتيح PS5 والتلفزيون).</summary>
 public sealed class DpapiAppStore : IAppStore
 {
     public void Save<T>(string key, T value) => SecureStore.Default.Save(key, value);
@@ -336,7 +336,7 @@ public sealed class DpapiAppStore : IAppStore
     public void Remove(string key) => SecureStore.Default.Remove(key);
 }
 
-/// <summary>Sıradan ayarlar: %LOCALAPPDATA%\GameTranslator\settings.json.</summary>
+/// <summary>الإعدادات العادية: %LOCALAPPDATA%\GameTranslator\settings.json.</summary>
 public sealed class FileSettingsStore : ISettingsStore
 {
     private static readonly string FilePath = Path.Combine(AppPaths.Data, "settings.json");

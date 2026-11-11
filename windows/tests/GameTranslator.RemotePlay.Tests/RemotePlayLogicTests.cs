@@ -106,7 +106,7 @@ public class RegistrationReasonTests
         Assert.Equal(RegistrationFailure.VersionMismatch, Registration.FailureFrom(0x80108b11));
         Assert.Equal(RegistrationFailure.ConsoleCrashed, Registration.FailureFrom(0x80108b15));
         Assert.Equal(RegistrationFailure.NoAnswer, Registration.FailureFrom(null, ["Regist timed out waiting for search response", "Regist search failed"]));
-        // PS5 kod bildirdiyse arama aşaması geçilmiştir.
+        // إذا أبلغ PS5 عن رمز فقد تم تجاوز مرحلة البحث.
         Assert.Equal(RegistrationFailure.Failed, Registration.FailureFrom(0x80108b09, ["Regist timed out waiting for search response"]));
     }
 
