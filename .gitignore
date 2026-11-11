@@ -23,3 +23,6 @@ dotnet-install.ps1
 # IDE & Agent local settings
 .claude/
 .gemini/
+
+# Python
+__pycache__/
