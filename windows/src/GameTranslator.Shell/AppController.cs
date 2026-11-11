@@ -940,7 +940,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     {
         var local = MakeLocalTranslator();
         if (OnlineTranslationActive && store.Load<string>(StoreKeys.DeepLKey) is { } key &&
-            services.MakeOnlineTranslator(key, local is UnavailableTranslator ? null : local) is { } online)
+            services.MakeOnlineTranslator(key, local is UnavailableTranslator ? null : local, settings.TargetLanguage) is { } online)
             return online;
         return local;
     }
@@ -952,9 +952,9 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         return translation.Create(source, target);
     }
 
-    /// <summary>DeepL yalnız İngilizce→Türkçe için açılır (ayar ekranındaki dil seçenekleri de bunlar).</summary>
+    /// <summary>DeepL yalnız İngilizceden Türkçeye ya da Arapçaya çeviride açılır.</summary>
     private bool OnlineTranslationActive =>
-        settings.OnlineTranslation && settings.SourceLanguage == "en" && settings.TargetLanguage == "tr" && HasDeepLKey;
+        settings.OnlineTranslation && settings.SourceLanguage == "en" && settings.TargetLanguage is ("tr" or "ar") && HasDeepLKey;
 
     /// <summary>Kayıtlı bir DeepL anahtarı var mı (anahtarın kendisi arayüze hiç dönmez).</summary>
     public bool HasDeepLKey => store.Load<string>(StoreKeys.DeepLKey) is { Length: > 0 };
@@ -1305,6 +1305,8 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
 
     private void Speak(IReadOnlyList<SpokenLine> lines)
     {
+        // Sesler Türkçe konuşur; başka dildeki çeviriyi (ör. Arapça) okuyamaz.
+        if (settings.TargetLanguage != "tr") return;
         if (!settings.Dubbing.Enabled || !DubbingInstalled) return;
         MakeDubber()?.Speak(lines);
     }

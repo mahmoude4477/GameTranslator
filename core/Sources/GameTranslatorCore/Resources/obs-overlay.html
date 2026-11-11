@@ -56,6 +56,8 @@
   function show(text, duration, box) {
     clearTimeout(timer);
     line.textContent = text;
+    // Arapça ve İbranice gibi diller sağdan sola dizilir (TV uygulamasıyla aynı kural).
+    line.setAttribute('dir', /[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFC]/.test(text || '') ? 'rtl' : 'ltr');
     var cover = box && placement === 'cover' && !fixed.bottom;
     if (cover) {
       line.style.left = ((box.left + box.right) / 2 * 100) + '%';

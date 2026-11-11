@@ -39,7 +39,8 @@ public sealed record UserSettings
     public ResultTarget FreeAreaTarget { get; init; } = ResultTarget.Tv;
     public SubtitleStyle Style { get; init; } = new();
     public string SourceLanguage { get; init; } = "en";
-    public string TargetLanguage { get; init; } = "tr";
+    /// <summary>Çevirinin dili. Arapça sağdan sola yazılır; TV ve OBS yönü metinden anlar.</summary>
+    public string TargetLanguage { get; init; } = "ar";
     public DubbingSettings Dubbing { get; init; } = new();
     public bool DubbingEnabled
     {
@@ -155,7 +156,7 @@ public interface IAppServices
     bool HasOcrLanguage(string language) => true;
     ITranslationModel Translation { get; }
     /// <summary>DeepL çevirmeni; <paramref name="fallback"/> DeepL'e ulaşılamayan satırları çevirir. Bu derlemede yoksa null.</summary>
-    ITextTranslator? MakeOnlineTranslator(string key, ITextTranslator? fallback) => null;
+    ITextTranslator? MakeOnlineTranslator(string key, ITextTranslator? fallback, string target) => null;
     Task<OnlineKeyCheck> CheckOnlineKeyAsync(string key) => Task.FromResult(new OnlineKeyCheck(OnlineKeyState.Unreachable));
     /// <summary>Türkçe dublaj modeli; bu derlemede yoksa null.</summary>
     IDubbingModel? Dubbing => null;

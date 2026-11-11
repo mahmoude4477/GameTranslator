@@ -134,11 +134,22 @@ public sealed class SubtitleServer(int port = 8787) : ISubtitleSender, IDisposab
         {
             ["at"] = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
             ["duration"] = durationMs,
-            ["text"] = text,
+            ["text"] = Directional(text),
         };
         if (paragraphs) json["paragraphs"] = true;
         if (box is { } b) json["box"] = BoxJson(b);
         Broadcast(Frame("subtitle", json));
+    }
+
+    /// <summary>
+    /// Sağdan sola yazılan satırı (Arapça, İbranice) yön işaretleriyle sarar: yönü kendisi ayarlamayan eski TV
+    /// uygulamalarında da noktalama ve konuşmacı adı doğru uçta durur. Her satır ayrı sarılır.
+    /// </summary>
+    public static string Directional(string text)
+    {
+        if (!text.Any(c => c is (>= '\u0590' and <= '\u08FF') or (>= '\uFB1D' and <= '\uFDFF') or (>= '\uFE70' and <= '\uFEFC')))
+            return text;
+        return string.Join('\n', text.Split('\n').Select(line => "\u202B" + line + "\u202C"));
     }
 
     /// <summary>Dört basamağa yuvarlanır (decimal: JSON'da 0.8 olarak yazılsın).</summary>
@@ -160,7 +171,7 @@ public sealed class SubtitleServer(int port = 8787) : ISubtitleSender, IDisposab
             {
                 ["box"] = BoxJson(item.Box),
                 ["line"] = Round(item.LineHeight),
-                ["text"] = item.Translation,
+                ["text"] = Directional(item.Translation),
             };
             if (item.Paragraphs) json["paragraphs"] = true;
             return json;

@@ -48,7 +48,7 @@ public class DeepLTranslatorTests
     public async Task SpeakerLabelStaysAndPreviousSubtitleIsContext()
     {
         var deepL = new FakeDeepL(Echo);
-        var translator = new DeepLTranslator("abc:fx", new FakeLocal(), new HttpClient(deepL));
+        var translator = new DeepLTranslator("abc:fx", new FakeLocal(), "tr", new HttpClient(deepL));
 
         Assert.Equal("KRATOS: [tr] We move on.", await translator.TranslateAsync("KRATOS: We move on."));
         await translator.TranslateAsync("Stay close.");
@@ -63,11 +63,21 @@ public class DeepLTranslatorTests
         Assert.Equal("KRATOS: We move on.", JsonDocument.Parse(deepL.Requests[1].Body).RootElement.GetProperty("context").GetString());
     }
 
+    /// <summary>Çeviri dili DeepL'e büyük harfli koduyla gider (Arapça: "AR").</summary>
+    [Fact]
+    public async Task TargetLanguageIsSentToDeepL()
+    {
+        var deepL = new FakeDeepL(Echo);
+        var translator = new DeepLTranslator("abc:fx", new FakeLocal(), "ar", new HttpClient(deepL));
+        await translator.TranslateAsync("Stay close.");
+        Assert.Equal("AR", JsonDocument.Parse(deepL.Requests[0].Body).RootElement.GetProperty("target_lang").GetString());
+    }
+
     [Fact]
     public async Task SameSubtitleIsNotSentTwice()
     {
         var deepL = new FakeDeepL(Echo);
-        var translator = new DeepLTranslator("abc", new FakeLocal(), new HttpClient(deepL));
+        var translator = new DeepLTranslator("abc", new FakeLocal(), "tr", new HttpClient(deepL));
         await translator.TranslateAsync("Who are you?");
         await translator.TranslateAsync("Who are you?");
         Assert.Single(deepL.Requests);
@@ -80,7 +90,7 @@ public class DeepLTranslatorTests
     {
         var deepL = new FakeDeepL((_, _) => new HttpResponseMessage((HttpStatusCode)456));
         var local = new FakeLocal();
-        var translator = new DeepLTranslator("abc:fx", local, new HttpClient(deepL));
+        var translator = new DeepLTranslator("abc:fx", local, "tr", new HttpClient(deepL));
 
         Assert.Equal("yerel: Run!", await translator.TranslateAsync("Run!"));
         Assert.Equal(OnlineKeyState.QuotaExceeded, translator.LastError);

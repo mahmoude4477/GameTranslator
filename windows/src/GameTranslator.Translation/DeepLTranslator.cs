@@ -25,6 +25,7 @@ public sealed class DeepLTranslator : ITextTranslator
     private static readonly Lazy<HttpClient> SharedClient = new(() => new HttpClient { Timeout = TimeSpan.FromSeconds(4) });
 
     private readonly string _key;
+    private readonly string _target;
     private readonly ITextTranslator? _fallback;
     private readonly HttpClient _http;
     private readonly ConcurrentDictionary<string, string> _cache = new(StringComparer.Ordinal);
@@ -33,9 +34,11 @@ public sealed class DeepLTranslator : ITextTranslator
     private string? _previous;
     private DateTimeOffset _pausedUntil = DateTimeOffset.MinValue;
 
-    public DeepLTranslator(string key, ITextTranslator? fallback, HttpClient? http = null)
+    /// <param name="target">Çevirinin dili ("tr", "ar"); DeepL'e büyük harfle gider.</param>
+    public DeepLTranslator(string key, ITextTranslator? fallback, string target, HttpClient? http = null)
     {
         _key = key.Trim();
+        _target = target.Trim().ToUpperInvariant();
         _fallback = fallback;
         _http = http ?? SharedClient.Value;
     }
@@ -103,8 +106,8 @@ public sealed class DeepLTranslator : ITextTranslator
 
     private async Task<string[]> RequestAsync(List<string> sentences, CancellationToken cancellationToken)
     {
-        // Oyun konuşması: "siz" değil "sen" (DeepL Türkçede desteklemiyorsa yok sayar).
-        var body = new TranslateRequest(sentences, "EN", "TR", _previous, "prefer_less", true);
+        // Oyun konuşması: "siz" değil "sen" (DeepL hedef dilde desteklemiyorsa yok sayar).
+        var body = new TranslateRequest(sentences, "EN", _target, _previous, "prefer_less", true);
         using var request = new HttpRequestMessage(HttpMethod.Post, new Uri(BaseUri(_key), "translate"))
         {
             Content = JsonContent.Create(body, DeepLJson.Default.TranslateRequest),

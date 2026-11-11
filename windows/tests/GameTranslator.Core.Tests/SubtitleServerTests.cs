@@ -108,6 +108,16 @@ public class SubtitleServerTests
         Assert.Contains(lines, l => l.Contains("Kapıyı tut, evlat!"));
     }
 
+    /// Arapça gibi sağdan sola diller satır satır yön işaretleriyle sarılır (eski TV uygulamaları yönü kendisi
+    /// ayarlamaz); soldan sağa metne dokunulmaz.
+    [Fact]
+    public void RightToLeftLinesAreWrappedInDirectionMarks()
+    {
+        Assert.Equal("Kapıyı tut, evlat!", SubtitleServer.Directional("Kapıyı tut, evlat!"));
+        Assert.Equal("\u202BKRATOS: الباب لن يصمد!\u202C", SubtitleServer.Directional("KRATOS: الباب لن يصمد!"));
+        Assert.Equal("\u202Bالهدف\u202C\n\u202B• اهرب\u202C", SubtitleServer.Directional("الهدف\n• اهرب"));
+    }
+
     [Fact]
     public async Task NewClientReceivesLastStyle()
     {

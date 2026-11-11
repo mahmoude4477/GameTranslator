@@ -18,7 +18,7 @@ public sealed class LiveServices : IAppServices
 {
     public ITranslationModel Translation { get; } = new MarianModel();
 
-    public ITextTranslator? MakeOnlineTranslator(string key, ITextTranslator? fallback) => new DeepLTranslator(key, fallback);
+    public ITextTranslator? MakeOnlineTranslator(string key, ITextTranslator? fallback, string target) => new DeepLTranslator(key, fallback, target);
 
     public Task<OnlineKeyCheck> CheckOnlineKeyAsync(string key) => DeepLTranslator.CheckAsync(key);
     public IDubbingModel? Dubbing { get; } = PocketDubbingModel.EngineBundled ? new PocketDubbingModel() : null;
@@ -331,10 +331,11 @@ public sealed class LiveServices : IAppServices
         public Task DownloadAsync(string source, string target, IProgress<double> progress, CancellationToken cancellationToken) =>
             englishTurkish.DownloadAsync(progress, cancellationToken);
 
-        // Yerel model indirilmişse Marian motorunu kullan; indirilmemişse anında Google GTX motoruna dön.
+        // Yerel model yalnız İngilizce→Türkçe çevirir: o çiftte ve indirilmişse Marian, diğer her durumda
+        // (ör. Arapça) Google GTX kullanılır.
         public ITextTranslator Create(string source, string target)
         {
-            if (englishTurkish.IsInstalled)
+            if (source == "en" && target == "tr" && englishTurkish.IsInstalled)
             {
                 if (translator is not null) return translator;
                 translator = new MarianTranslator(englishTurkish.InstallDirectory);

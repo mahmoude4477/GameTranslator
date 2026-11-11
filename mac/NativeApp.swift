@@ -129,7 +129,7 @@ public final class NativeSubtitleServer: @unchecked Sendable {
     public func sendSubtitle(turkish: String, original: String = "", box: [String: Double]? = nil, durationMs: Int = 12000) {
         let at = Int(Date().timeIntervalSince1970 * 1000)
         var json: [String: Any] = [
-            "text": turkish,
+            "text": Self.directional(turkish),
             "original": original,
             "duration": durationMs,
             "at": at
@@ -138,6 +138,17 @@ public final class NativeSubtitleServer: @unchecked Sendable {
             json["box"] = box
         }
         broadcast(event: "subtitle", json: json)
+    }
+
+    /// Sağdan sola yazılan satırı (Arapça, İbranice) yön işaretleriyle sarar: yönü kendisi ayarlamayan eski TV
+    /// uygulamalarında da noktalama ve konuşmacı adı doğru uçta durur. Her satır ayrı sarılır.
+    static func directional(_ text: String) -> String {
+        let rtl = text.unicodeScalars.contains { scalar in
+            let v = scalar.value
+            return (v >= 0x0590 && v <= 0x08FF) || (v >= 0xFB1D && v <= 0xFDFF) || (v >= 0xFE70 && v <= 0xFEFC)
+        }
+        guard rtl else { return text }
+        return text.components(separatedBy: "\n").map { "\u{202B}\($0)\u{202C}" }.joined(separator: "\n")
     }
 
     public func clearSubtitle() {
@@ -303,6 +314,11 @@ public final class NativeSubtitleServer: @unchecked Sendable {
       ev.addEventListener('subtitle', e => {
         const d = JSON.parse(e.data);
         box.innerText = d.text;
+        // Arapça ve İbranice gibi diller sağdan sola dizilir (TV uygulamasıyla aynı kural).
+        box.dir = Array.from(d.text || '').some(ch => {
+          const c = ch.charCodeAt(0);
+          return (c >= 0x590 && c <= 0x8FF) || (c >= 0xFB1D && c <= 0xFDFF) || (c >= 0xFE70 && c <= 0xFEFC);
+        }) ? 'rtl' : 'ltr';
         box.style.display = 'inline-block';
       });
       ev.addEventListener('style', e => {
@@ -1095,6 +1111,8 @@ final class AppState {
     var placement: String = "cover"
     var lastBox: [String: Double]? = nil
     var language: String = "en"
+    /// Çevirinin dili (Google ve DeepL'e bu kodla gider). Arapça sağdan sola yazılır; TV ve OBS yönü metinden anlar.
+    var targetLanguage: String = UserDefaults.standard.string(forKey: "gt_target_language") ?? "ar"
     var isDubbing: Bool = false
     var isMuteComputerAudio: Bool = UserDefaults.standard.object(forKey: "gt_mute_computer_audio") as? Bool ?? true
     
@@ -1304,7 +1322,8 @@ final class AppState {
                     // Televizyona otomatik hoş geldin ve bağlantı testi altyazısı gönder
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                         self.server.sendSubtitle(
-                            turkish: "🎮 GameTranslator Televizyonunuza Başarıyla Bağlandı! (Hazır)",
+                            turkish: self.sample(tr: "🎮 GameTranslator Televizyonunuza Başarıyla Bağlandı! (Hazır)",
+                                                 ar: "🎮 تم اتصال GameTranslator بالتلفزيون بنجاح! (جاهز)"),
                             original: "GameTranslator TV Connected Successfully! (Ready)",
                             durationMs: 15000
                         )
@@ -1317,9 +1336,15 @@ final class AppState {
         }
     }
 
+    /// TV'ye giden örnek satırlar çeviri dilinde olur; Arapçada sağdan sola dizilişi de sınar.
+    func sample(tr: String, ar: String) -> String {
+        targetLanguage == "ar" ? ar : tr
+    }
+
     func sendTVTestSubtitle() {
         testSent = true
-        let testTr = "🎮 GameTranslator Canlı Altyazı Testi Başarılı! (TCL Smart TV)"
+        let testTr = sample(tr: "🎮 GameTranslator Canlı Altyazı Testi Başarılı! (TCL Smart TV)",
+                            ar: "🎮 نجح اختبار الترجمة المباشرة من GameTranslator! (TCL Smart TV)")
         let testEn = "GameTranslator Live Subtitle Test Successful!"
         let entry = SubtitleEntry(turkish: testTr, english: testEn, timestamp: currentTime())
         history.insert(entry, at: 0)
@@ -1880,7 +1905,7 @@ final class AppState {
 
     private func translateGoogleGTX(text: String) async -> String? {
         guard let encoded = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL(string: "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=tr&dt=t&q=\(encoded)") else {
+              let url = URL(string: "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=\(targetLanguage)&dt=t&q=\(encoded)") else {
             return nil
         }
         var req = URLRequest(url: url)
@@ -1906,7 +1931,7 @@ final class AppState {
         request.httpMethod = "POST"
         request.setValue("DeepL-Auth-Key \(key)", forHTTPHeaderField: "Authorization")
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        let body = "text=\(text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&target_lang=TR&source_lang=EN"
+        let body = "text=\(text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&target_lang=\(targetLanguage.uppercased())&source_lang=EN"
         request.httpBody = body.data(using: .utf8)
 
         guard let (data, resp) = try? await URLSession.shared.data(for: request),
@@ -2050,7 +2075,7 @@ final class AppState {
         isRunning.toggle()
         if isRunning {
             ps5Connected = true
-            liveTurkish = "PS5 Canlı Akışına Bağlanılıyor..."
+            liveTurkish = sample(tr: "PS5 Canlı Akışına Bağlanılıyor...", ar: "جارٍ الاتصال ببث PS5 المباشر...")
             liveEnglish = "Starting Remote Play session..."
             server.sendSubtitle(turkish: liveTurkish, original: liveEnglish)
             startStreamAndOCR()
@@ -2064,7 +2089,8 @@ final class AppState {
     
     func sendTestSubtitle() {
         testSent = true
-        let testTr = "GameTranslator canlı altyazı testi başarılı! 🎮"
+        let testTr = sample(tr: "GameTranslator canlı altyazı testi başarılı! 🎮",
+                            ar: "نجح اختبار الترجمة المباشرة من GameTranslator! 🎮")
         let testEn = "GameTranslator live subtitle test successful!"
         let entry = SubtitleEntry(turkish: testTr, english: testEn, timestamp: currentTime())
         history.insert(entry, at: 0)

@@ -107,15 +107,17 @@ internal sealed class FakeServices : IAppServices
     public OnlineKeyCheck KeyCheck { get; set; } = new(OnlineKeyState.Valid, 10, 500_000);
     public List<string> CheckedKeys { get; } = [];
     public List<(string Key, ITextTranslator? Fallback)> OnlineTranslators { get; } = [];
+    public List<string> OnlineTargets { get; } = [];
     public Task<OnlineKeyCheck> CheckOnlineKeyAsync(string key)
     {
         CheckedKeys.Add(key);
         return Task.FromResult(KeyCheck);
     }
-    public ITextTranslator? MakeOnlineTranslator(string key, ITextTranslator? fallback)
+    public ITextTranslator? MakeOnlineTranslator(string key, ITextTranslator? fallback, string target)
     {
         OnlineTranslators.Add((key, fallback));
-        return fallback ?? Translation.Create("en", "tr");
+        OnlineTargets.Add(target);
+        return fallback ?? Translation.Create("en", target);
     }
 
     public Task<IReadOnlyList<ConsoleInfo>> DiscoverConsolesAsync() => Task.FromResult<IReadOnlyList<ConsoleInfo>>(Consoles);
@@ -513,6 +515,8 @@ public class AppControllerRunTests
         await controller.StartAsync();
         Assert.Equal("key:fx", Assert.Single(services.OnlineTranslators).Key);
         Assert.Null(services.OnlineTranslators[0].Fallback);
+        // Varsayılan çeviri dili Arapçadır; DeepL'e de o gider.
+        Assert.Equal(["ar"], services.OnlineTargets);
 
         controller.RemoveDeepLKey();
         Assert.False(controller.HasDeepLKey);

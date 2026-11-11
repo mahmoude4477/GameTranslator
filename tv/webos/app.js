@@ -135,6 +135,18 @@
 
   // --- Altyazı ---
 
+  // Arapça ve İbranice gibi sağdan sola yazılan dillerde satır sağdan sola dizilir; yoksa noktalama ve konuşmacı adı
+  // satırın yanlış ucunda kalır. Yön metnin kendisinden anlaşılır: bilgisayardaki eski sürümlerle de çalışır.
+  var RTL_CHARS = /[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFC]/;
+
+  function isRtl(text) { return RTL_CHARS.test(text || ''); }
+
+  function setDirection(el, text) {
+    var rtl = isRtl(text);
+    el.setAttribute('dir', rtl ? 'rtl' : 'ltr');
+    return rtl;
+  }
+
   // Kutunun sayıları geçerli mi (0–1 arası, sağ soldan, alt üstten büyük).
   function validBox(box) {
     if (!box || typeof box !== 'object') return null;
@@ -156,11 +168,13 @@
     holdUntil = shownAt + Math.min(HOLD_MAX_MS, 2000 + text.length * 60);
     currentBox = validBox(box);
     $('subtitle-text').textContent = text;
+    var rtl = setDirection($('subtitle-text'), text);
     $('subtitle-text').style.whiteSpace = paragraphs ? 'pre-line' : '';
-    $('subtitle-text').style.textAlign = paragraphs ? 'left' : '';
+    $('subtitle-text').style.textAlign = paragraphs ? (rtl ? 'right' : 'left') : '';
     $('subtitle').className = '';
     layout();
     setStatus('st-last', text.length > 40 ? text.slice(0, 40) + '…' : text);
+    setDirection($('st-last'), text);
     notePlace();
     clearTimeout(hideTimer);
     // Geçersiz ya da çok kısa süre yazıyı gösterir göstermez kaldırmasın.
@@ -202,6 +216,7 @@
 
   function showPrevious(text) {
     $('subtitle-prev-text').textContent = text;
+    setDirection($('subtitle-prev-text'), text);
     $('subtitle-prev').className = '';
     clearTimeout(previousTimer);
     previousTimer = setTimeout(hidePrevious, PREVIOUS_HOLD_MS);
@@ -235,6 +250,8 @@
       var el = document.createElement('div');
       el.className = item.paragraphs === true ? 'item paragraphs' : 'item';
       el.textContent = item.text;
+      // Sola yaslı maddeli yazı sağdan sola dillerde sağa yaslanır.
+      if (setDirection(el, item.text) && item.paragraphs === true) el.style.textAlign = 'right';
       var left = Math.max(0, box.left - SCREEN_PAD);
       var top = Math.max(0, box.top - SCREEN_PAD);
       var boxHeight = (box.bottom - box.top + 2 * SCREEN_PAD) * height;
