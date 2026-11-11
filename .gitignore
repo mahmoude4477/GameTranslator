@@ -10,13 +10,16 @@ mac/GameTranslator.xcodeproj/
 mac/GameTranslatorBinary
 /bin/
 /obj/
-!scripts/bin/
+scripts/bin/*.exe
 
 # Archives & Temporary files
 *.zip
 *.tar.gz
+*.log
+*.txt
+chiaki/
+dotnet-install.ps1
 
 # IDE & Agent local settings
 .claude/
 .gemini/
-mac/Helpers/

@@ -80,16 +80,6 @@ if [ -f "$ROOT_DIR/scripts/gametranslator-ps5-register" ]; then
     chmod +x "$MACOS_DIR/gametranslator-ps5-register"
 fi
 
-# 5b. Embedded Chiaki Remote Play Motoru (Helpers)
-mkdir -p "$APP_DIR/Contents/Helpers"
-if [ -f "$DIR/Helpers/Chiaki.app.tar.gz" ]; then
-    echo "🎮 Dahili Chiaki.app motoru pakete ekleniyor..."
-    tar -xzf "$DIR/Helpers/Chiaki.app.tar.gz" -C "$APP_DIR/Contents/Helpers/"
-elif [ -d "$DIR/Helpers/Chiaki.app" ]; then
-    echo "🎮 Dahili Chiaki.app motoru pakete ekleniyor..."
-    cp -R "$DIR/Helpers/Chiaki.app" "$APP_DIR/Contents/Helpers/"
-fi
-
 # PS5 Eşleştiriciyi Resources içine yerleştir
 mkdir -p "$RES_DIR/ps5-register"
 if [ -d "$ROOT_DIR/scripts/ps5-register" ]; then
@@ -125,20 +115,10 @@ else
     codesign --force --deep --sign - "$APP_DIR"
 fi
 
-# 7. /Applications Klasörüne Kurulum ve Dağıtım Paketi (ZIP)
+# 7. /Applications Klasörüne Kurulum
 echo "📲 /Applications/GameTranslator.app kuruluyor..."
 rm -rf /Applications/GameTranslator.app
 cp -R "$APP_DIR" /Applications/GameTranslator.app
 xattr -dr com.apple.quarantine /Applications/GameTranslator.app 2>/dev/null || true
 
-echo "📦 Dağıtım ZIP arşivi hazırlanıyor..."
-mkdir -p "$ROOT_DIR/dist"
-cd "$ROOT_DIR/dist"
-rm -f "GameTranslator-macOS-v1.0.0.zip"
-zip -r -y -q "GameTranslator-macOS-v1.0.0.zip" "GameTranslator.app"
-
-# Downloads klasörüne sıfırdan test için kopyala
-mkdir -p /Users/Sefflex/Downloads
-cp "GameTranslator-macOS-v1.0.0.zip" /Users/Sefflex/Downloads/
-
-echo "✅ Derleme, imzalama ve paketleme başarıyla tamamlandı!"
+echo "✅ Derleme ve kurulum başarıyla tamamlandı!"

@@ -82,14 +82,45 @@ public sealed partial class AndroidTvInstaller(string host, string keyDirectory,
     /// </summary>
     /// <returns>TV'de artık bulunan sürüm ve kurulum yapılıp yapılmadığı.</returns>
     public async Task<(string Version, bool Installed)> EnsureInstalledAsync(string apkPath, string version,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default, bool forceReinstall = false)
     {
         await using var adb = await ConnectAsync(cancellationToken);
-        var installed = VersionFromDumpsys(await adb.RunAsync($"shell:dumpsys package {PackageName}", cancellationToken: cancellationToken));
-        if (installed is not null && !Versions.IsNewer(version, installed)) return (installed, false);
+
+        // Multi-user Android TV (örn. TCL / Google TV profilleri) için paketi aktif kullanıcıya da bağla
+        await adb.RunAsync($"shell:cmd package install-existing {PackageName}", cancellationToken: cancellationToken);
+
+        var dumpsys = await adb.RunAsync($"shell:dumpsys package {PackageName}", cancellationToken: cancellationToken);
+        var installed = VersionFromDumpsys(dumpsys);
+
+        var needsInstall = forceReinstall || installed is null || Versions.IsNewer(version, installed);
+        if (!needsInstall)
+        {
+            var startRes = await StartAppAsync(adb, cancellationToken);
+            if (!startRes.Contains("Error"))
+            {
+                return (installed!, false);
+            }
+        }
+
         await InstallAsync(adb, apkPath, cancellationToken);
-        await adb.RunAsync($"shell:am start -n {PackageName}/.MainActivity", cancellationToken: cancellationToken);
+        await StartAppAsync(adb, cancellationToken);
         return (version, true);
+    }
+
+    private static async Task<string> StartAppAsync(AdbConnection adb, CancellationToken cancellationToken)
+    {
+        var result = await adb.RunAsync($"shell:am start -n {PackageName}/.MainActivity", cancellationToken: cancellationToken);
+        if (result.Contains("Error"))
+        {
+            await adb.RunAsync($"shell:cmd package install-existing {PackageName}", cancellationToken: cancellationToken);
+            var cur = (await adb.RunAsync("shell:am get-current-user", cancellationToken: cancellationToken)).Trim();
+            if (!string.IsNullOrEmpty(cur))
+            {
+                await adb.RunAsync($"shell:cmd package install-existing --user {cur} {PackageName}", cancellationToken: cancellationToken);
+                result = await adb.RunAsync($"shell:am start --user {cur} -n {PackageName}/.MainActivity", cancellationToken: cancellationToken);
+            }
+        }
+        return result;
     }
 
     internal static string? VersionFromDumpsys(string output) =>
@@ -112,7 +143,7 @@ public sealed partial class AndroidTvInstaller(string host, string keyDirectory,
     {
         await using var apk = File.OpenRead(apkPath);
         // Android 7 ve sonrası: dosyayı TV'ye ayrıca kopyalamadan doğrudan paket yöneticisine akıtır.
-        return await adb.RunAsync($"exec:cmd package install -r -S {apk.Length}", apk, cancellationToken);
+        return await adb.RunAsync($"exec:cmd package install -r -d -g -S {apk.Length}", apk, cancellationToken);
     }
 
     private Task<AdbConnection> ConnectAsync(CancellationToken cancellationToken) =>

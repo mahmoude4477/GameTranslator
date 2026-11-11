@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using GameTranslator.Core;
 using GameTranslator.Core.LgTv;
+using GameTranslator.RemotePlay;
 using GameTranslator.Shell;
 using GameTranslator.App.Services;
 
@@ -72,19 +73,37 @@ public partial class OnboardingView : UserControl
         UpdatePill(PillBar3, PillText3, 3);
         UpdatePill(PillBar4, PillText4, 4);
 
-        if (currentStep == 2 && PairStatusText != null)
+        if (currentStep == 2)
         {
-            var savedHost = ChiakiLauncher.GetSavedHost();
-            if (!string.IsNullOrWhiteSpace(savedHost) && Ps5HostInput != null)
+            if (controller.HasAccount)
             {
-                Ps5HostInput.Text = savedHost;
+                UpdatePsnIdDisplay();
             }
 
-            var host = controller.Console?.Host ?? Ps5HostInput?.Text?.Trim();
-            if (!string.IsNullOrWhiteSpace(host) && ChiakiLauncher.IsRegistered(host))
+            if (PairStatusText != null)
             {
-                PairStatusText.Text = "✓ PS5 Konsolu Chiaki'de zaten eşleşmiş durumda! Doğrudan sonraki adıma geçebilirsiniz.";
-                PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+                var savedHost = ChiakiLauncher.GetSavedHost();
+                if (!string.IsNullOrWhiteSpace(savedHost) && Ps5HostInput != null)
+                {
+                    Ps5HostInput.Text = savedHost;
+                }
+
+                var host = controller.Console?.Host ?? Ps5HostInput?.Text?.Trim();
+                if (!string.IsNullOrWhiteSpace(host) && ChiakiLauncher.IsRegistered(host))
+                {
+                    PairStatusText.Text = "✓ PS5 Konsolu Chiaki'de zaten eşleşmiş durumda! Doğrudan sonraki adıma geçebilirsiniz.";
+                    PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+                }
+            }
+        }
+        else if (currentStep == 3)
+        {
+            if (controller.Tv != null && controller.Tv.Brand == TvBrand.AndroidTv && AndroidHostInput != null)
+            {
+                if (!string.IsNullOrWhiteSpace(controller.Tv.Host) && controller.Tv.Host != "192.168.1.50")
+                {
+                    AndroidHostInput.Text = controller.Tv.Host;
+                }
             }
         }
     }
@@ -171,43 +190,140 @@ public partial class OnboardingView : UserControl
     // ==========================================
     // Adım 2: PSN Girişi
     // ==========================================
-    private void OnOpenSonyLogin(object sender, RoutedEventArgs e)
+    private void OnCopyPsnId(object sender, RoutedEventArgs e)
     {
-        // Resmi Sony Remote Play OAuth URL (Chiaki-ng ve Mac ile birebir aynı)
-        var url = "https://auth.api.sonyentertainmentnetwork.com/2.0/oauth/authorize?service_entity=urn:service-entity:psn&response_type=code&client_id=ba495a24-818c-472b-b12d-ff231c1b5745&redirect_uri=https://remoteplay.dl.playstation.net/remoteplay/redirect&scope=psn:clientapp%20referenceDataService:countryConfig.read%20pushNotification:webSocket.desktop.connect%20sessionManager:remotePlaySession.system.update&request_locale=en_US&ui=pr&service_logo=ps&layout_type=popup&smcid=remoteplay&prompt=always&PlatformPrivacyWs1=minimal";
-        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+        if (PsnIdDisplay != null && !string.IsNullOrWhiteSpace(PsnIdDisplay.Text))
+        {
+            Clipboard.SetText(PsnIdDisplay.Text.Trim());
+            MessageBox.Show("Chiaki PSN Hesap Kodu panoya kopyalandı!\n\nChiaki'de konsolu kaydederken 'PSN Account-ID' kutusuna yapıştırabilirsiniz.", "Kopyalandı", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 
-    private async void OnVerifyPsn(object sender, RoutedEventArgs e)
+    private void UpdatePsnIdDisplay()
     {
-        var input = PsnRedirectInput.Text.Trim();
-        if (string.IsNullOrWhiteSpace(input)) return;
+        var b64 = controller.AccountIdBase64;
+        if (!string.IsNullOrWhiteSpace(b64) && PsnIdDisplay != null && PsnIdCard != null)
+        {
+            PsnIdDisplay.Text = b64;
+            PsnIdCard.Visibility = Visibility.Visible;
+            if (PsnStatusText != null)
+            {
+                PsnStatusText.Text = "✓ PlayStation Network hesabı başarıyla bağlandı!";
+                PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+            }
+        }
+    }
 
+    private async void OnOpenSonyLogin(object sender, RoutedEventArgs e)
+    {
         try
         {
-            if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
+            var redirect = PsnLoginWindow.Show(Window.GetWindow(this));
+            if (redirect != null)
             {
-                await controller.CompletePsnLoginAsync(uri);
+                await controller.CompletePsnLoginAsync(redirect);
+                UpdatePsnIdDisplay();
             }
-            else
-            {
-                var fullUrl = input.StartsWith("code=")
-                    ? $"https://remoteplay.dl.playstation.net/remoteplay/redirect?{input}"
-                    : $"https://remoteplay.dl.playstation.net/remoteplay/redirect?code={input}";
-                await controller.CompletePsnLoginAsync(new Uri(fullUrl));
-            }
-
-            PsnStatusText.Text = "✓ PlayStation Network hesabı başarıyla bağlandı!";
-            PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
-            await Task.Delay(800);
-            SetStep(3);
         }
         catch (Exception ex)
         {
-            PsnStatusText.Text = $"Doğrulama uyarısı: {ex.Message}";
+            // WebView2 yoksa varsayılan tarayıcıda aç
+            try
+            {
+                var url = PsnAccount.AuthorizeUrl.AbsoluteUri;
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            }
+            catch { }
+            PsnStatusText.Text = $"Giriş bilgisi: {ex.Message}";
             PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(245, 158, 11));
         }
     }
+
+    private void OnOpenExternalSonyBrowser(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo(PsnAccount.AuthorizeUrl.AbsoluteUri) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Tarayıcı açılamadı: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private static string? ExtractCode(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) return null;
+        input = input.Trim();
+
+        // 1. Doğrudan Uri olarak parse etmeyi dene
+        if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
+        {
+            var code = PsnAccount.CodeFromRedirect(uri);
+            if (!string.IsNullOrEmpty(code)) return code;
+
+            if (!string.IsNullOrEmpty(uri.Query))
+            {
+                var queryMatch = System.Text.RegularExpressions.Regex.Match(uri.Query, @"[?&]code=([^&]+)");
+                if (queryMatch.Success) return Uri.UnescapeDataString(queryMatch.Groups[1].Value);
+            }
+        }
+
+        // 2. Metin içinde code= ara
+        var match = System.Text.RegularExpressions.Regex.Match(input, @"(?:^|[?&])code=([^&\s]+)");
+        if (match.Success)
+        {
+            return Uri.UnescapeDataString(match.Groups[1].Value);
+        }
+
+        // 3. Doğrudan ham kod verilmişse (v3.xxx veya tek parça alfanümerik)
+        if (!input.Contains(' ') && !input.Contains('/') && input.Length >= 8)
+        {
+            return input;
+        }
+
+        return null;
+    }
+
+    private async void OnVerifyPsnCode(object sender, RoutedEventArgs e)
+    {
+        var raw = PsnCodeInput.Text.Trim();
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            MessageBox.Show("Lütfen Sony yönlendirme linkini veya kodunu yapıştırın.", "Kod Gerekli", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        var code = ExtractCode(raw);
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            PsnStatusText.Text = "❌ Geçersiz link veya kod formatı. Lütfen adresteki 'code=' kısmını kontrol edin.";
+            PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(239, 68, 68));
+            return;
+        }
+
+        PsnVerifyButton.IsEnabled = false;
+        PsnStatusText.Text = "⏳ Kod Sony ile doğrulanıyor...";
+        PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
+
+        try
+        {
+            await controller.CompletePsnLoginWithCodeAsync(code);
+            UpdatePsnIdDisplay();
+            PsnCodeInput.Text = "";
+        }
+        catch (Exception ex)
+        {
+            PsnStatusText.Text = $"❌ Doğrulama hatası: {ex.Message}";
+            PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(239, 68, 68));
+        }
+        finally
+        {
+            PsnVerifyButton.IsEnabled = true;
+        }
+    }
+
+
 
     // ==========================================
     // Adım 3: PS5 Eşleştirme
@@ -238,17 +354,6 @@ public partial class OnboardingView : UserControl
         }
     }
 
-    private void OnOpenChiakiPairing(object sender, RoutedEventArgs e)
-    {
-        var host = Ps5HostInput.Text.Trim();
-        if (string.IsNullOrWhiteSpace(host)) host = "192.168.1.105";
-        ChiakiLauncher.SyncConfig(host);
-        _ = controller.RegisterAsync(host, "00000000");
-        ChiakiLauncher.LaunchPairingGui(host);
-        PairStatusText.Text = "Chiaki açıldı! PS5'e tıklayıp ekrandaki 8 haneli PIN kodunu girerek eşleştirin.";
-        PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
-    }
-
     private async void OnPairPs5(object sender, RoutedEventArgs e)
     {
         var host = Ps5HostInput.Text.Trim();
@@ -260,31 +365,50 @@ public partial class OnboardingView : UserControl
         }
 
         var pin = Ps5PinInput.Text.Trim();
+        var digits = new string([.. pin.Where(char.IsDigit)]);
+        if (digits.Length != 8)
+        {
+            PairStatusText.Text = "Lütfen PS5 ekranındaki 8 haneli PIN kodunu eksiksiz girin (PS5 › Ayarlar › Sistem › Uzaktan Oynatma › Cihaz Eşleştir).";
+            PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(239, 68, 68));
+            return;
+        }
+
+        PairButton.IsEnabled = false;
+        PairButton.Content = "⏳ PS5 ile Eşleştiriliyor...";
+        PairStatusText.Text = $"{host} adresindeki PS5 ile şifreli bağlantı kuruluyor ve PIN doğrulanıyor...";
+        PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
 
         try
         {
             ChiakiLauncher.SyncConfig(host);
-            await controller.RegisterAsync(host, string.IsNullOrWhiteSpace(pin) ? "00000000" : pin);
+            await controller.RegisterAsync(host, digits);
 
-            if (ChiakiLauncher.IsRegistered(host))
-            {
-                PairStatusText.Text = $"✓ PS5 Konsolu Başarıyla Eşleşti! ({host})";
-                PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
-                await Task.Delay(600);
-                SetStep(3);
-            }
-            else
-            {
-                ChiakiLauncher.LaunchPairingGui(host);
-                PairStatusText.Text = "Chiaki açıldı! Lütfen PS5'e tıklayıp ekrandaki 8 haneli kodu girerek 'Register'a basın.";
-                PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
-            }
+            PairStatusText.Text = $"✓ PS5 Konsolu Başarıyla Eşleşti! ({host})";
+            PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+            PairButton.Content = "✓ Eşleşti!";
+
+            await Task.Delay(800);
+            SetStep(3);
         }
         catch (Exception ex)
         {
-            PairStatusText.Text = $"Durum: {ex.Message}";
-            PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(245, 158, 11));
+            PairButton.IsEnabled = true;
+            PairButton.Content = "🎮 PS5 Konsolu ile Eşleştir ➔";
+            PairStatusText.Text = $"Eşleştirme başarısız: {ex.Message}";
+            PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(239, 68, 68));
         }
+    }
+
+    private void OnOpenChiakiPairingGui(object sender, RoutedEventArgs e)
+    {
+        var host = string.IsNullOrWhiteSpace(Ps5HostInput?.Text) ? "192.168.1.109" : Ps5HostInput.Text.Trim();
+        var accountId = controller.AccountId;
+        ChiakiLauncher.SyncConfig(host, accountId);
+        ChiakiLauncher.LaunchPairingGui(host);
+        var registered = new RegisteredConsole(host, "PS5", accountId ?? System.Text.Encoding.ASCII.GetBytes("GTPS5ACC"), new byte[16]);
+        controller.SetRegisteredConsole(registered);
+        PairStatusText.Text = "Chiaki eşleştirme arayüzü açıldı. PS5 konsolunuza tıklayarak yukarıdaki PSN kodunu ve TV'deki PIN'i girip eşleştirebilirsiniz.";
+        PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
     }
 
     // ==========================================
@@ -403,6 +527,87 @@ public partial class OnboardingView : UserControl
         catch { }
         TvStatusFeedback.Text = $"✓ LG webOS TV kaydedildi ({host}). TV'nizde GameTranslator uygulamasını açın.";
         TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+    }
+
+    private async void OnScanAndroidTv(object sender, RoutedEventArgs e)
+    {
+        ScanAndroidTvButton.IsEnabled = false;
+        AndroidInstallStatus.Visibility = Visibility.Visible;
+        AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
+        AndroidInstallStatus.Text = "🔍 Yerel ağdaki Android TV'ler taranıyor (port 5555)...";
+        try
+        {
+            var found = await controller.Services.ScanAndroidTvsAsync();
+            var first = found.FirstOrDefault();
+            if (first != null)
+            {
+                AndroidHostInput.Text = first;
+                AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+                AndroidInstallStatus.Text = $"✓ Android TV bulundu: {first}";
+            }
+            else
+            {
+                AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(245, 158, 11));
+                AndroidInstallStatus.Text = "Ağda ADB'si açık Android TV bulunamadı. Lütfen TV IP adresini kontrol edip elle yazın.";
+            }
+        }
+        catch (Exception ex)
+        {
+            AndroidInstallStatus.Text = $"Tarama bilgisi: {ex.Message}";
+        }
+        finally
+        {
+            ScanAndroidTvButton.IsEnabled = true;
+        }
+    }
+
+    private async void OnInstallAndroidApp(object sender, RoutedEventArgs e)
+    {
+        var host = AndroidHostInput.Text.Trim();
+        if (string.IsNullOrWhiteSpace(host))
+        {
+            MessageBox.Show("Lütfen Android TV'nizin IP adresini girin.", "IP Adresi Gerekli", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        AndroidInstallButton.IsEnabled = false;
+        AndroidInstallStatus.Visibility = Visibility.Visible;
+        AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
+        AndroidInstallStatus.Text = $"⏳ {host} adresindeki Android TV'ye ADB ile bağlanılıyor...";
+
+        try
+        {
+            var version = await controller.InstallAndroidTvAppAsync(host, ev =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    if (ev.Kind == TvInstallEventKind.ApproveOnTv)
+                    {
+                        AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(245, 158, 11));
+                        AndroidInstallStatus.Text = "⚠️ LÜTFEN TV'YE BAKIN: Ekrandaki 'Ağ / USB Hata Ayıklamaya izin verilsin mi?' sorusuna kumandayla 'Her zaman izin ver' deyip Tamam'a basın!";
+                    }
+                    else
+                    {
+                        AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
+                        AndroidInstallStatus.Text = "⏳ APK paketi TV'ye yükleniyor ve kuruluyor...";
+                    }
+                });
+            });
+
+            AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+            AndroidInstallStatus.Text = $"✓ Başarılı! GameTranslator v{version} TV'ye kuruldu ve açıldı.";
+            TvStatusFeedback.Text = $"✓ Android TV ({host}) bağlandı ve uygulama hazır.";
+            TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
+        }
+        catch (Exception ex)
+        {
+            AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(239, 68, 68));
+            AndroidInstallStatus.Text = $"❌ Kurulum hatası: {ex.Message}\n(TV'de Geliştirici Seçenekleri > Ağ/USB Hata Ayıklama (ADB) açık ve TV ekranı açık olmalıdır)";
+        }
+        finally
+        {
+            AndroidInstallButton.IsEnabled = true;
+        }
     }
 
     private async void OnSaveAndroid(object sender, RoutedEventArgs e)

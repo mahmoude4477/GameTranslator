@@ -9,24 +9,32 @@ echo   Tek Tıkla Çalışabilen Bağımsız (Self-Contained) Windows EXE Üreti
 echo ======================================================================
 echo.
 
+set "DOTNET_CMD=dotnet"
 where dotnet >nul 2>nul
 if %ERRORLEVEL% neq 0 (
-    echo.
-    echo [HATA] Microsoft .NET SDK bulunamadı!
-    echo Lütfen resmi Microsoft sitesinden .NET SDK indirin: https://dotnet.microsoft.com/download
-    echo.
-    pause
-    exit /b 1
+    if exist "%LOCALAPPDATA%\Microsoft\dotnet\dotnet.exe" (
+        set "DOTNET_CMD=%LOCALAPPDATA%\Microsoft\dotnet\dotnet.exe"
+    ) else (
+        echo.
+        echo [HATA] Microsoft .NET SDK bulunamadı!
+        echo Lütfen resmi Microsoft sitesinden .NET SDK indirin: https://dotnet.microsoft.com/download
+        echo.
+        pause
+        exit /b 1
+    )
 )
 
 echo [1/2] Proje derleniyor ve bin\ klasörüne bağımsız EXE olarak paketleniyor...
-dotnet publish "windows\src\GameTranslator.App\GameTranslator.App.csproj" -c Release -r win-x64 --self-contained -o bin
+"%DOTNET_CMD%" publish "windows\src\GameTranslator.App\GameTranslator.App.csproj" -c Release -r win-x64 --self-contained -o bin
 if %ERRORLEVEL% neq 0 (
     echo.
     echo [HATA] Derleme sırasında hata oluştu.
     pause
     exit /b 1
 )
+
+echo [2/2] Dosya güvenlik izinleri düzenleniyor...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-ChildItem -Path 'bin' -Recurse | Unblock-File" >nul 2>&1
 
 echo.
 echo ======================================================================

@@ -11,9 +11,17 @@ const path = require('path');
 const dgram = require('dgram');
 const http = require('http');
 
+const fs = require('fs');
 // Resolve playactor modules from local node_modules
 const scriptDir = __dirname;
-const playactorDir = path.join(scriptDir, 'node_modules', 'playactor');
+const candidateDirs = [
+    path.join(scriptDir, 'ps5-register', 'node_modules', 'playactor'),
+    path.join(scriptDir, 'ps5-register', 'ps5-register', 'node_modules', 'playactor'),
+    path.join(scriptDir, 'node_modules', 'playactor'),
+    path.join(scriptDir, '..', 'scripts', 'ps5-register', 'node_modules', 'playactor'),
+    path.join(scriptDir, '..', 'scripts', 'ps5-register', 'ps5-register', 'node_modules', 'playactor')
+];
+let playactorDir = candidateDirs.find(d => fs.existsSync(path.join(d, 'dist', 'remoteplay', 'registration.js'))) || candidateDirs[0];
 
 let RemotePlayRegistration, DeviceType, DiscoveryVersions, RemotePlayCrypto, parseBody, parseHexBytes, CRYPTO_NONCE_LENGTH;
 

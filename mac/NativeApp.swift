@@ -1586,10 +1586,9 @@ final class AppState {
 
         let host = ps5Host.isEmpty ? (UserDefaults.standard.string(forKey: "gt_ps5_host") ?? "192.168.1.108") : ps5Host
         let chiakiCandidates = [
-            Bundle.main.bundlePath + "/Contents/Helpers/Chiaki.app/Contents/MacOS/chiaki",
-            "/Applications/GameTranslator.app/Contents/Helpers/Chiaki.app/Contents/MacOS/chiaki",
             "/Applications/Chiaki.app/Contents/MacOS/chiaki",
-            "/Applications/chiaki-ng.app/Contents/MacOS/chiaki"
+            "/Applications/chiaki-ng.app/Contents/MacOS/chiaki",
+            Bundle.main.bundlePath + "/Contents/Helpers/Chiaki.app/Contents/MacOS/chiaki"
         ]
         
         var chiakiPath: String? = nil

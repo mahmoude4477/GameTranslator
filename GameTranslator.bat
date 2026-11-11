@@ -23,28 +23,33 @@ if exist "bin\GameTranslator.App.exe" (
 )
 
 :: 2. .NET SDK Kontrolü
+set "DOTNET_CMD=dotnet"
 where dotnet >nul 2>nul
 if %ERRORLEVEL% neq 0 (
-    echo.
-    echo ======================================================================
-    echo   [UYARI] Bilgisayarınızda Microsoft .NET SDK bulunamadı!
-    echo ======================================================================
-    echo.
-    echo GameTranslator Windows uygulamasının çalışması için ücretsiz
-    echo .NET SDK paketinin bilgisayarınızda kurulu olması gerekmektedir.
-    echo.
-    echo Resmi Microsoft İndirme Adresi:
-    echo https://dotnet.microsoft.com/download
-    echo.
-    set /p OPEN_BROWSER="Resmi Microsoft indirme sayfasını tarayıcınızda açmak ister misiniz? (E/H): "
-    if /i "%OPEN_BROWSER%"=="E" (
-        start https://dotnet.microsoft.com/download
+    if exist "%LOCALAPPDATA%\Microsoft\dotnet\dotnet.exe" (
+        set "DOTNET_CMD=%LOCALAPPDATA%\Microsoft\dotnet\dotnet.exe"
+    ) else (
+        echo.
+        echo ======================================================================
+        echo   [UYARI] Bilgisayarınızda Microsoft .NET SDK bulunamadı!
+        echo ======================================================================
+        echo.
+        echo GameTranslator Windows uygulamasının çalışması için ücretsiz
+        echo .NET SDK paketinin bilgisayarınızda kurulu olması gerekmektedir.
+        echo.
+        echo Resmi Microsoft İndirme Adresi:
+        echo https://dotnet.microsoft.com/download
+        echo.
+        set /p OPEN_BROWSER="Resmi Microsoft indirme sayfasını tarayıcınızda açmak ister misiniz? (E/H): "
+        if /i "%OPEN_BROWSER%"=="E" (
+            start https://dotnet.microsoft.com/download
+        )
+        echo.
+        echo Kurulumu tamamladıktan sonra GameTranslator.bat dosyasını tekrar çift tıklayın.
+        echo.
+        pause
+        exit /b 1
     )
-    echo.
-    echo Kurulumu tamamladıktan sonra GameTranslator.bat dosyasını tekrar çift tıklayın.
-    echo.
-    pause
-    exit /b 1
 )
 
 :: 3. Proje Dosyası Kontrolü ve Başlatma
@@ -52,7 +57,7 @@ if exist "windows\src\GameTranslator.App\GameTranslator.App.csproj" (
     echo [MOTOR] Windows Masaüstü Arayüzü başlatılıyor (.NET 10 / WPF / DirectML)...
     echo Lütfen ilk açılışta paketlerin yüklenmesi için birkaç saniye bekleyin...
     echo.
-    dotnet run --project "windows\src\GameTranslator.App\GameTranslator.App.csproj"
+    "%DOTNET_CMD%" run --project "windows\src\GameTranslator.App\GameTranslator.App.csproj"
     if %ERRORLEVEL% neq 0 (
         echo.
         echo [HATA] Uygulama çalışırken bir sorun oluştu. Hata kodunu yukarıdan inceleyebilirsiniz.

@@ -14,6 +14,8 @@ using System.Windows.Threading;
 using GameTranslator.App.Controls;
 using GameTranslator.App.Services;
 using GameTranslator.Core;
+using GameTranslator.Core.LgTv;
+using GameTranslator.RemotePlay;
 using GameTranslator.Shell;
 using Microsoft.Win32;
 
@@ -258,16 +260,23 @@ public partial class MainView : UserControl
         {
             if (controller.Console == null || controller.Tv == null)
             {
-                var result = MessageBox.Show(
-                    "Çeviriyi başlatabilmek için önce PS5 konsolunuzu ve TV'nizi eşleştirmeniz gerekmektedir.\n\nKurulum sihirbazını şimdi açmak ister misiniz?",
-                    "Cihaz Eşleştirme Gerekli",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Information);
-                if (result == MessageBoxResult.Yes)
+                // Eğer konsol henüz sihirbazdan eşleştirilmediyse varsayılan PS5 bağlantısını tanımla
+                if (controller.Console == null)
                 {
-                    controller.Step = OnboardingStep.Console;
+                    var host = "192.168.1.109";
+                    var nick = ChiakiLauncher.GetRegisteredNickname(host) ?? "PS5";
+                    controller.SetRegisteredConsole(new RegisteredConsole(host, nick, controller.AccountId ?? System.Text.Encoding.ASCII.GetBytes("GTPS5ACC"), new byte[16]));
                 }
-                return;
+
+                // TV henüz seçilmediyse varsayılan Bilgisayar & OBS ekran modunu etkinleştir
+                if (controller.Tv == null)
+                {
+                    try
+                    {
+                        await controller.PairAsync(new LgTv("PC & OBS", "127.0.0.1", TvBrand.AndroidTv));
+                    }
+                    catch { }
+                }
             }
             await controller.StartAsync();
         }

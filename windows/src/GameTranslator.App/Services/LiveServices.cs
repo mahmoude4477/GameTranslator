@@ -198,10 +198,22 @@ public sealed class LiveServices : IAppServices
     public BundledTvApp? BundledApp(TvBrand brand)
     {
         var pattern = brand switch { TvBrand.Samsung => "*.wgt", TvBrand.AndroidTv => "*.apk", _ => null };
+        if (pattern is null) return null;
         var folder = Path.Combine(AppContext.BaseDirectory, "tv-app");
-        if (pattern is null || !Directory.Exists(folder)) return null;
-        var file = Directory.EnumerateFiles(folder, pattern).FirstOrDefault();
-        return file is not null && TvInstall.Versions.OfBundledFile(file) is { } version ? new BundledTvApp(file, version) : null;
+        string? file = null;
+        if (Directory.Exists(folder))
+        {
+            file = Directory.EnumerateFiles(folder, pattern).FirstOrDefault();
+        }
+        if (file is null)
+        {
+            var fallback = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "tv", "packages");
+            if (Directory.Exists(fallback))
+            {
+                file = Directory.EnumerateFiles(fallback, pattern).FirstOrDefault();
+            }
+        }
+        return file is not null && (TvInstall.Versions.OfBundledFile(file) ?? "1.0.0") is { } version ? new BundledTvApp(file, version) : null;
     }
 
     public Task<bool> IsSamsungDevModeOnAsync(string host) => SamsungTvInstaller.IsDevModeOnAsync(host);
@@ -305,27 +317,31 @@ public sealed class LiveServices : IAppServices
         public void Reconnect() => keeper.Reconnect();
     }
 
-    /// <summary>OPUS-MT modelleri; şimdilik yalnız İngilizce→Türkçe.</summary>
+    /// <summary>OPUS-MT modelleri ve Google GTX çeviri motoru hibriti.</summary>
     private sealed class MarianModel : ITranslationModel
     {
         private readonly ModelStore englishTurkish = new(Path.Combine(AppPaths.Models, "en-tr"));
         private MarianTranslator? translator;
 
-        public bool IsSupported(string source, string target) => source == "en" && target == "tr";
+        public bool IsSupported(string source, string target) => true;
 
-        public bool IsInstalled(string source, string target) => IsSupported(source, target) && englishTurkish.IsInstalled;
+        // Yerel Marian modeli indirilmemiş olsa bile dahili Google GTX motoru sıfır kurulumla hazırdır.
+        public bool IsInstalled(string source, string target) => true;
 
         public Task DownloadAsync(string source, string target, IProgress<double> progress, CancellationToken cancellationToken) =>
             englishTurkish.DownloadAsync(progress, cancellationToken);
 
-        // Model belleğe bir kez yüklenir; dil değişse de aynı çevirmen kullanılır. Yükleme 1–3 sn sürdüğü
-        // için hemen arka planda başlar; ilk altyazı beklemez.
+        // Yerel model indirilmişse Marian motorunu kullan; indirilmemişse anında Google GTX motoruna dön.
         public ITextTranslator Create(string source, string target)
         {
-            if (translator is not null) return translator;
-            translator = new MarianTranslator(englishTurkish.InstallDirectory);
-            _ = translator.WarmUpAsync();
-            return translator;
+            if (englishTurkish.IsInstalled)
+            {
+                if (translator is not null) return translator;
+                translator = new MarianTranslator(englishTurkish.InstallDirectory);
+                _ = translator.WarmUpAsync();
+                return translator;
+            }
+            return new GoogleGtxTranslator(source, target);
         }
     }
 }

@@ -48,6 +48,17 @@ try
             return 0;
         }
 
+        case "adb-shell":
+        {
+            var keyDir = Option("--key-dir");
+            var key = AndroidTvInstaller.LoadOrCreateKey(keyDir);
+            await using var adb = await AdbConnection.ConnectAsync(Option("--host"), 5555, key, cancellationToken: cancel.Token);
+            var cmd = Option("--cmd");
+            var res = await adb.RunAsync($"shell:{cmd}", cancellationToken: cancel.Token);
+            Console.WriteLine(res);
+            return 0;
+        }
+
         case "android-install":
         {
             var installer = new AndroidTvInstaller(Option("--host"), Option("--key-dir"))

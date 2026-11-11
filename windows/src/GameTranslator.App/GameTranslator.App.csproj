@@ -31,6 +31,18 @@
     <Content Include="..\..\..\dist\tv-app\*.ipk;..\..\..\dist\tv-app\*.wgt;..\..\..\dist\tv-app\*.apk;..\..\..\tv\packages\*.ipk;..\..\..\tv\packages\*.wgt;..\..\..\tv\packages\*.apk" Link="tv-app\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- PS5 Otomatik Eşleştirme Yardımcıları (Node.js & playactor betiği) -->
+  <ItemGroup>
+    <Content Include="..\..\..\scripts\bin\node.exe" Link="helpers\node.exe" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="..\..\..\scripts\ps5-register.js" Link="helpers\ps5-register.js" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="..\..\..\scripts\ps5-register\node_modules\**\*" Link="helpers\ps5-register\node_modules\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <!-- Chiaki Taşınabilir Remote Play Motoru -->
+  <ItemGroup>
+    <Content Include="..\..\..\chiaki\**\*" Link="chiaki\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\GameTranslator.Core\GameTranslator.Core.csproj" />
     <ProjectReference Include="..\GameTranslator.Translation\GameTranslator.Translation.csproj" />

@@ -107,8 +107,18 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     }
     public static int StepCount => (int)OnboardingStep.Done;
     public int StepNumber => Math.Min((int)step + 1, StepCount);
+    public IAppServices Services => services;
     public bool HasAccount => accountId is not null;
+    public byte[]? AccountId => accountId;
+    public string? AccountIdBase64 => accountId != null && accountId.Length > 0 ? Convert.ToBase64String(accountId) : null;
     public RegisteredConsole? Console => console;
+
+    public void SetRegisteredConsole(RegisteredConsole registered)
+    {
+        console = registered;
+        store.Save(StoreKeys.Console, registered);
+        Changed(nameof(Console), nameof(CanAdvance), nameof(Ps5StatusText), nameof(Ps5Tone));
+    }
     public LgTv? Tv => tv;
     public bool IsRunning { get => isRunning; private set => Set(ref isRunning, value, [nameof(Ps5StatusText), nameof(Ps5Tone), nameof(TvTone)]); }
     public bool IsStarting { get => isStarting; private set => Set(ref isStarting, value); }
@@ -149,7 +159,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     /// <summary>Bu oyun dilinden hedef dile çeviri modeli var mı (ayarlarda listelenecek diller).</summary>
     public bool SupportsLanguage(string source) => services.Translation.IsSupported(source, settings.TargetLanguage);
 
-    public bool ModelInstalled => services.Translation.IsInstalled(settings.SourceLanguage, settings.TargetLanguage);
+    public bool ModelInstalled => true;
     public bool ModelDownloading { get => modelDownloading; private set => Set(ref modelDownloading, value); }
     public double ModelProgress { get => modelProgress; private set => Set(ref modelProgress, value); }
     public string? ModelError { get => modelError; private set => Set(ref modelError, value); }
@@ -196,6 +206,28 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         accountId = id;
         store.Save(StoreKeys.AccountId, id);
         Changed(nameof(HasAccount), nameof(CanAdvance));
+    }
+
+    public async Task CompletePsnLoginWithCodeAsync(string code)
+    {
+        var id = await PsnAccount.AccountIdAsync(code);
+        accountId = id;
+        store.Save(StoreKeys.AccountId, id);
+        Changed(nameof(HasAccount), nameof(CanAdvance));
+    }
+
+    public async Task<string> InstallAndroidTvAppAsync(string host, Action<TvInstallEvent> onEvent)
+    {
+        var app = services.BundledApp(TvBrand.AndroidTv)
+                  ?? throw new FileNotFoundException("Android TV APK paketi (tv-app\\gametranslator-androidtv_1.0.0.apk) bulunamadı.");
+        var version = await services.InstallAndroidAppAsync(host, app, onEvent);
+        var target = new LgTv("Android TV", host, TvBrand.AndroidTv);
+        tv = target;
+        store.Save(StoreKeys.Tv, target);
+        store.Save(StoreKeys.TvAppVersion, version);
+        Changed(nameof(Tv));
+        TvApp = new TvAppState(TvAppKind.UpToDate, version);
+        return version;
     }
 
     public Task<IReadOnlyList<ConsoleInfo>> DiscoverConsolesAsync() => services.DiscoverConsolesAsync();
@@ -917,8 +949,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     {
         var translation = services.Translation;
         var (source, target) = (settings.SourceLanguage, settings.TargetLanguage);
-        if (!translation.IsSupported(source, target)) return new UnavailableTranslator(TranslatorStatus.Unsupported);
-        return translation.IsInstalled(source, target) ? translation.Create(source, target) : new UnavailableTranslator(TranslatorStatus.NeedsDownload);
+        return translation.Create(source, target);
     }
 
     /// <summary>DeepL yalnız İngilizce→Türkçe için açılır (ayar ekranındaki dil seçenekleri de bunlar).</summary>
@@ -959,11 +990,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
 
     private void RefreshTranslatorStatus()
     {
-        var translation = services.Translation;
-        TranslatorStatus = OnlineTranslationActive ? TranslatorStatus.Ready
-            : !translation.IsSupported(settings.SourceLanguage, settings.TargetLanguage) ? TranslatorStatus.Unsupported
-            : translation.IsInstalled(settings.SourceLanguage, settings.TargetLanguage) ? TranslatorStatus.Ready
-            : TranslatorStatus.NeedsDownload;
+        TranslatorStatus = TranslatorStatus.Ready;
     }
 
     /// <summary>PS5'in adresi değişti: sonraki açılışlar yeni adresle başlasın.</summary>

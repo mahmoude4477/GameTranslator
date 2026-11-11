@@ -91,7 +91,8 @@ public static class ChiakiLauncher
             if (!string.IsNullOrWhiteSpace(host))
             {
                 var nick = GetRegisteredNickname(host) ?? (string.IsNullOrWhiteSpace(consoleName) ? "PS5" : consoleName);
-                psi.Arguments = $"stream \"{nick}\" {host}";
+                var cleanNick = nick.Trim().Replace("\"", "");
+                psi.Arguments = cleanNick.Contains(' ') ? $"stream \"{cleanNick}\" {host}" : $"stream {cleanNick} {host}";
             }
             else
             {
@@ -182,13 +183,31 @@ public static class ChiakiLauncher
     }
 
     /// <summary>
-    /// Chiaki'nin INI dosyalarında gerçek bir kayıt anahtarı olup olmadığını kontrol eder.
+    /// Chiaki'nin Registry veya INI dosyalarında gerçek bir kayıt anahtarı olup olmadığını kontrol eder.
     /// Sahte dummy anahtarları kabul etmez.
     /// </summary>
     public static bool IsRegistered(string host)
     {
         try
         {
+            if (OperatingSystem.IsWindows())
+            {
+                using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Chiaki\Chiaki\registered_hosts\1");
+                if (key != null)
+                {
+                    var regBytes = key.GetValue("rp_regist_key") as byte[];
+                    if (regBytes != null && regBytes.Length >= 8)
+                    {
+                        return true;
+                    }
+                    var regStr = key.GetValue("regist_key") as string;
+                    if (!string.IsNullOrWhiteSpace(regStr) && !regStr.Contains("0123456789ABCDEF"))
+                    {
+                        return true;
+                    }
+                }
+            }
+
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (string.IsNullOrEmpty(appData)) return false;
 
@@ -212,12 +231,35 @@ public static class ChiakiLauncher
     }
 
     /// <summary>
-    /// Chiaki'nin INI dosyalarında daha önce girilmiş olan host IP'sini okur.
+    /// Chiaki'nin Registry veya INI dosyalarında daha önce girilmiş olan host IP'sini okur.
     /// </summary>
     public static string? GetSavedHost()
     {
         try
         {
+            if (OperatingSystem.IsWindows())
+            {
+                using var hostKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Chiaki\Chiaki\registered_hosts\1");
+                if (hostKey != null)
+                {
+                    var h = hostKey.GetValue("host") as string;
+                    if (!string.IsNullOrWhiteSpace(h) && System.Net.IPAddress.TryParse(h.Trim(), out _))
+                    {
+                        return h.Trim();
+                    }
+                }
+
+                using var manualKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Chiaki\Chiaki\manual_hosts\1");
+                if (manualKey != null)
+                {
+                    var h = manualKey.GetValue("host") as string;
+                    if (!string.IsNullOrWhiteSpace(h) && System.Net.IPAddress.TryParse(h.Trim(), out _))
+                    {
+                        return h.Trim();
+                    }
+                }
+            }
+
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (string.IsNullOrEmpty(appData)) return null;
 
@@ -250,13 +292,26 @@ public static class ChiakiLauncher
     }
 
     /// <summary>
-    /// Chiaki'nin INI dosyasında kayıtlı olan konsolun takma adını (nickname) okur.
+    /// Chiaki'nin Registry veya INI dosyasında kayıtlı olan konsolun takma adını (nickname) okur.
     /// Bulunamazsa null döner.
     /// </summary>
     public static string? GetRegisteredNickname(string host)
     {
         try
         {
+            if (OperatingSystem.IsWindows())
+            {
+                using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Chiaki\Chiaki\registered_hosts\1");
+                if (key != null)
+                {
+                    var nick = key.GetValue("server_nickname") as string;
+                    if (!string.IsNullOrWhiteSpace(nick))
+                    {
+                        return nick.Trim();
+                    }
+                }
+            }
+
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (string.IsNullOrEmpty(appData)) return null;
 
@@ -292,17 +347,44 @@ public static class ChiakiLauncher
 
     /// <summary>
     /// Chiaki yapılandırmasını hazırlar. Var olan gerçek kayıtları ASLA silmez.
-    /// Manuel host IP'sini ve varsa PSN Account ID'sini ekler.
+    /// Manuel host IP'sini, OpenGL görüntüleme ayarını ve varsa PSN Account ID'sini ekler.
     /// </summary>
     public static void SyncConfig(string host, byte[]? accountId = null)
     {
         try
         {
             if (string.IsNullOrWhiteSpace(host)) return;
+            string? b64Account = accountId != null && accountId.Length > 0 ? Convert.ToBase64String(accountId) : null;
+
+            if (OperatingSystem.IsWindows())
+            {
+                try
+                {
+                    using var baseKey = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\Chiaki\Chiaki");
+                    if (baseKey != null)
+                    {
+                        if (!string.IsNullOrWhiteSpace(b64Account))
+                        {
+                            baseKey.SetValue("user_id", b64Account, Microsoft.Win32.RegistryValueKind.String);
+                        }
+
+                        using var manualHosts = baseKey.CreateSubKey("manual_hosts");
+                        manualHosts.SetValue("size", 1, Microsoft.Win32.RegistryValueKind.DWord);
+                        using var manual1 = manualHosts.CreateSubKey("1");
+                        manual1.SetValue("host", host.Trim(), Microsoft.Win32.RegistryValueKind.String);
+
+                        using var settingsKey = baseKey.CreateSubKey("settings");
+                        settingsKey.SetValue("render_backend", "opengl", Microsoft.Win32.RegistryValueKind.String);
+                        settingsKey.SetValue("fullscreen", 0, Microsoft.Win32.RegistryValueKind.DWord);
+                        settingsKey.SetValue("remote_play_ask", 0, Microsoft.Win32.RegistryValueKind.DWord);
+                        settingsKey.SetValue("audio_volume", 0, Microsoft.Win32.RegistryValueKind.DWord);
+                    }
+                }
+                catch { }
+            }
+
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (string.IsNullOrEmpty(appData)) return;
-
-            string? b64Account = accountId != null && accountId.Length > 0 ? Convert.ToBase64String(accountId) : null;
 
             foreach (var folder in new[] { "chiaki-ng", "Chiaki" })
             {
@@ -368,6 +450,7 @@ public static class ChiakiLauncher
                     sb.AppendLine("[settings]");
                     sb.AppendLine("fullscreen=false");
                     sb.AppendLine("audio_volume=0");
+                    sb.AppendLine("render_backend=opengl");
                     File.WriteAllText(iniPath, sb.ToString(), Encoding.UTF8);
                 }
             }

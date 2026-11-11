@@ -142,7 +142,6 @@ public static class WindowCaptureService
                 {
                     ShowWindow(hWnd, SW_RESTORE);
                 }
-                SetForegroundWindow(hWnd);
             }
         }
         catch { }
