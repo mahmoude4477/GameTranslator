@@ -13,9 +13,9 @@ using Frame = GameTranslator.Core.Frame;
 namespace GameTranslator.App.Views;
 
 /// <summary>
-/// Serbest alan çevirisi (Num 5): oyunun o anki görüntüsü bilgisayarın ekranında donar, kullanıcı fareyle bir alan seçer,
-/// o alan bir kez okunup çevrilir. Sonuç ayara göre TV'de, bilgisayarda ya da ikisinde de görünür.
-/// Esc ya da sağ tık pencereyi kapatır; kapatmadan başka alanlar da seçilebilir.
+/// ترجمة المنطقة الحرة (Num 5): تتجمّد صورة اللعبة الحالية على شاشة الكمبيوتر، يحدّد المستخدم منطقة بالفأرة،
+/// فتُقرأ تلك المنطقة وتُترجم مرة واحدة. تظهر النتيجة بحسب الإعداد على التلفزيون أو الكمبيوتر أو كليهما.
+/// Esc أو النقر بالزر الأيمن يغلق النافذة؛ ويمكن تحديد مناطق أخرى قبل إغلاقها.
 /// </summary>
 public sealed class FreeAreaWindow : Window
 {
@@ -29,10 +29,10 @@ public sealed class FreeAreaWindow : Window
     private readonly TextBlock resultText;
     private Point start;
     private bool dragging;
-    /// <summary>Her seçim yeni numara alır; eski seçimin geç gelen sonucu yenisini ezmez.</summary>
+    /// <summary>كل تحديد يأخذ رقمًا جديدًا؛ فلا تطغى نتيجة تحديد قديم متأخرة على الجديد.</summary>
     private int version;
 
-    /// <summary>Pencereyi açar; zaten açıksa öne getirir. Çeviri sürmüyorsa (kare yoksa) hiçbir şey yapmaz.</summary>
+    /// <summary>يفتح النافذة؛ وإن كانت مفتوحة يجلبها إلى الأمام. لا يفعل شيئًا إذا لم تكن الترجمة جارية (لا إطار).</summary>
     public static void Open(AppController controller)
     {
         if (current is not null)
@@ -113,8 +113,8 @@ public sealed class FreeAreaWindow : Window
         canvas.MouseMove += OnMove;
         canvas.MouseLeftButtonUp += OnUp;
         MouseRightButtonDown += (_, _) => Close();
-        // Esc'in basılma olayı burada yutulur, pencere tuş bırakılınca kapanır: tuş basılı kalıp tekrarlansa bile
-        // olay arkadaki ayar penceresine ulaşıp onu da kapatmaz.
+        // حدث ضغط Esc يُستهلك هنا وتُغلق النافذة عند رفع المفتاح: حتى لو بقي المفتاح مضغوطًا وتكرّر
+        // لا يصل الحدث إلى نافذة الإعدادات في الخلف فيغلقها أيضًا.
         PreviewKeyDown += (_, e) =>
         {
             if (e.Key == Key.Escape) e.Handled = true;
@@ -149,7 +149,7 @@ public sealed class FreeAreaWindow : Window
         dragging = false;
         canvas.ReleaseMouseCapture();
         var rect = new Rect(start, ClampToFrame(e.GetPosition(canvas)));
-        // Tıklamak ya da çok küçük çizmek alan seçmez.
+        // النقر أو رسم منطقة صغيرة جدًا لا يحدّد منطقة.
         if (rect.Width < frame.Width * 0.01 || rect.Height < frame.Height * 0.01)
         {
             selection.Visibility = Visibility.Collapsed;
@@ -179,7 +179,7 @@ public sealed class FreeAreaWindow : Window
                 break;
         }
 
-        // Yalnız TV'de gösteriliyorsa bilgisayar ekranının işi bitmiştir; pencere kendiliğinden kapanır.
+        // إذا كانت النتيجة تُعرض على التلفزيون فقط فقد انتهى دور شاشة الكمبيوتر؛ تُغلق النافذة تلقائيًا.
         if (outcome == ExtraRegionOutcome.Shown && controller.Settings.FreeAreaTarget == ResultTarget.Tv)
         {
             await Task.Delay(700);
@@ -187,7 +187,7 @@ public sealed class FreeAreaWindow : Window
         }
     }
 
-    /// <summary>Metni seçilen alanın altına (sığmıyorsa üstüne) koyar.</summary>
+    /// <summary>يضع النص تحت المنطقة المحدّدة (أو فوقها إن لم يتّسع المكان).</summary>
     private void ShowResult(string text, Rect area)
     {
         resultText.Text = text;

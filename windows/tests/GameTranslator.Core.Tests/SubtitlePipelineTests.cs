@@ -15,7 +15,7 @@ internal sealed class FakeReader(params string[] texts) : ITextReader
     }
 }
 
-/// <summary>Satırları yerleriyle döndüren okuyucu.</summary>
+/// <summary>قارئ يعيد الأسطر مع مواضعها.</summary>
 internal sealed class LinesReader(Reading reading) : ITextReader
 {
     public string Read(Frame image) => reading.Text;
@@ -30,11 +30,11 @@ internal sealed class FakeTranslator : ITextTranslator
     {
         if (Error is not null) throw Error;
         if (FailuresLeft > 0) { FailuresLeft--; throw new TimeoutException(); }
-        return Task.FromResult("TR: " + text);
+        return Task.FromResult("AR:" + text);
     }
 }
 
-/// Çevirileri test bırakana kadar bekletir; açıldıktan sonra gelenler beklemez.
+/// يُبقي الترجمات منتظرة حتى يطلقها الاختبار؛ وما يأتي بعد الفتح لا ينتظر.
 internal sealed class GatedTranslator : ITextTranslator
 {
     private readonly object gate = new();
@@ -51,7 +51,7 @@ internal sealed class GatedTranslator : ITextTranslator
             if (!isOpen) { done = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously); waiting.Add((text, done)); }
         }
         if (done is not null) await done.Task;
-        return "TR: " + text;
+        return "AR:" + text;
     }
 
     public void Open()
@@ -59,7 +59,7 @@ internal sealed class GatedTranslator : ITextTranslator
         lock (gate) { isOpen = true; foreach (var w in waiting) w.Done.SetResult(); waiting.Clear(); }
     }
 
-    /// Yalnız bu satırın çevirisini bitirir (sırayı test belirler).
+    /// ينهي ترجمة هذا السطر فقط (الاختبار يحدد الترتيب).
     public async Task Release(string text)
     {
         while (true)
@@ -107,7 +107,7 @@ public class SubtitlePipelineTests
         var pipeline = new SubtitlePipeline(
             new FakeReader("R2 Swing", "R2 Swing", "Hold the gate\nR2 Swing", "Hold the gate\nR2 Swing"), new FakeTranslator(), sender);
         await Run(pipeline, 4);
-        Assert.Equal(["TR: Hold the gate"], sender.Sent);
+        Assert.Equal(["AR:Hold the gate"], sender.Sent);
     }
 
     [Fact]
@@ -143,7 +143,7 @@ public class SubtitlePipelineTests
         var sender = new FakeSender();
         var pipeline = new SubtitlePipeline(new FakeReader("Hold the gate", "Hold the gate", "Hold the gate"), new FakeTranslator(), sender);
         await Run(pipeline, 3);
-        Assert.Equal(["TR: Hold the gate"], sender.Sent);
+        Assert.Equal(["AR:Hold the gate"], sender.Sent);
         Assert.Equal("Hold the gate", pipeline.LastPair?.Source);
     }
 
@@ -175,10 +175,10 @@ public class SubtitlePipelineTests
         var pipeline = new SubtitlePipeline(new FakeReader("Hold the gate", "Hold the gate", "Hold the gate", "Hold the gate"),
             new FakeTranslator { FailuresLeft = 1 }, sender);
         await Run(pipeline, 4);
-        Assert.Equal(["TR: Hold the gate"], sender.Sent);
+        Assert.Equal(["AR:Hold the gate"], sender.Sent);
     }
 
-    /// Kareler saniyede ~20 kez okunur; tek tük okunamayan kare altyazıyı TV'den silmemeli.
+    /// تُقرأ الإطارات نحو 20 مرة في الثانية؛ إطار متفرق تعذّرت قراءته يجب ألا يمسح الترجمة النصية من التلفزيون.
     [Fact]
     public async Task ShortReadingGapDoesNotClearTheTv()
     {
@@ -186,7 +186,7 @@ public class SubtitlePipelineTests
         var pipeline = new SubtitlePipeline(new FakeReader("Hold the gate", "Hold the gate", "", "", "Hold the gate"), new FakeTranslator(), sender);
         await Run(pipeline, 5);
         Assert.Equal(0, sender.Clears);
-        Assert.Equal(["TR: Hold the gate"], sender.Sent);
+        Assert.Equal(["AR:Hold the gate"], sender.Sent);
     }
 
     [Fact]
@@ -198,7 +198,7 @@ public class SubtitlePipelineTests
         Assert.Equal(1, sender.Clears);
     }
 
-    /// Çeviri sürerken okuma durmamalı; yoksa kısa satırlar kaçar.
+    /// يجب ألا تتوقف القراءة أثناء الترجمة؛ وإلا فاتت الأسطر القصيرة.
     [Fact]
     public async Task ReadingContinuesWhileTranslating()
     {
@@ -210,7 +210,7 @@ public class SubtitlePipelineTests
         Assert.Equal(["Hold the gate", "Run"], translator.Requested);
     }
 
-    /// Hızlı konuşmada yeni satır gelse de önceki satırın çevirisi gösterilir; satır kaybolmaz.
+    /// في الحوار السريع تُعرض ترجمة السطر السابق حتى لو وصل سطر جديد؛ فلا يضيع السطر.
     [Fact]
     public async Task EarlierLineIsShownWhenItsTranslationArrivesFirst()
     {
@@ -222,10 +222,10 @@ public class SubtitlePipelineTests
         await WaitUntil(() => sender.Sent.Count == 1);
         await translator.Release("Run!");
         await pipeline.WaitForTranslationsAsync();
-        Assert.Equal(["TR: Hold the gate.", "TR: Run!"], sender.Sent);
+        Assert.Equal(["AR:Hold the gate.", "AR:Run!"], sender.Sent);
     }
 
-    /// Yeni satırın çevirisi zaten gösterildiyse eski satırınki onun üstüne yazılmaz.
+    /// إذا كانت ترجمة السطر الجديد قد عُرضت فلا تُكتب فوقها ترجمة السطر القديم.
     [Fact]
     public async Task OlderTranslationArrivingAfterNewerIsDropped()
     {
@@ -237,10 +237,10 @@ public class SubtitlePipelineTests
         await WaitUntil(() => sender.Sent.Count == 1);
         await translator.Release("Hold the gate.");
         await pipeline.WaitForTranslationsAsync();
-        Assert.Equal(["TR: Run!"], sender.Sent);
+        Assert.Equal(["AR:Run!"], sender.Sent);
     }
 
-    /// Satır ekrandan kalktıktan sonra çevirisi gelirse yine de okunacak kadar kısa süre gösterilir.
+    /// إذا وصلت ترجمة السطر بعد اختفائه من الشاشة فإنها تُعرض مع ذلك مدة قصيرة تكفي لقراءتها.
     [Fact]
     public async Task TranslationArrivingAfterLineLeftIsShownBriefly()
     {
@@ -251,11 +251,11 @@ public class SubtitlePipelineTests
         Assert.Equal(1, sender.Clears);
         translator.Open();
         await pipeline.WaitForTranslationsAsync();
-        Assert.Equal(["TR: Hold the gate."], sender.Sent);
-        Assert.Equal(2000 + "TR: Hold the gate.".Length * 60, sender.Durations[0]);
+        Assert.Equal(["AR:Hold the gate."], sender.Sent);
+        Assert.Equal(2000 + "AR:Hold the gate.".Length * 60, sender.Durations[0]);
     }
 
-    /// Çeviri durdurulduysa geç gelen çeviri TV'ye gönderilmez.
+    /// إذا أُوقفت الترجمة فلا تُرسل الترجمة المتأخرة إلى التلفزيون.
     [Fact]
     public async Task TranslationArrivingAfterStopIsDropped()
     {
@@ -288,7 +288,7 @@ public class ReadingFallbackTests
         Assert.Equal("Go!", text);
     }
 
-    /// İki yedek okuma da yazı bulursa ortadaki şeridinki seçilir.
+    /// إذا وجدت القراءتان الاحتياطيتان نصا تُختار قراءة الشريط الأوسط.
     [Fact]
     public void CenterStripReadingWinsOverZoomedRegion()
     {
@@ -305,11 +305,11 @@ public class ReadingFallbackTests
         Assert.Equal(1, calls);
     }
 
-    /// Bölge boşken iki yedek okuma art arda değil aynı anda yapılır; yeni satır daha erken fark edilir.
+    /// عندما تكون المنطقة فارغة تُجرى القراءتان الاحتياطيتان في الوقت نفسه لا بالتتابع؛ فيُلاحَظ السطر الجديد أبكر.
     [Fact]
     public void FallbackReadingsRunAtTheSameTime()
     {
-        // İki yedek okuma birbirini bekler; art arda yapılsalardı buluşamaz, süre dolardı.
+        // القراءتان الاحتياطيتان تنتظر كل منهما الأخرى؛ لو أُجريتا بالتتابع لما التقتا ولانتهت المهلة.
         using var barrier = new Barrier(2);
         var met = 0;
         ReadingFallback.FirstReading(Image, candidate =>
@@ -335,7 +335,7 @@ public class RegionCropperTests
     public void CropKeepsThePixelsOfTheRegion()
     {
         var image = Frame.Blank(10, 10);
-        image.Pixels[(9 * image.Stride) + (9 * 4)] = 200; // sağ alt köşe, mavi kanal
+        image.Pixels[(9 * image.Stride) + (9 * 4)] = 200; // الزاوية السفلية اليمنى، القناة الزرقاء
         var cropped = RegionCropper.Crop(image, new CropRegion(0.5, 1, 0.5, 1));
         Assert.Equal(200, cropped.Pixels[((cropped.Height - 1) * cropped.Stride) + ((cropped.Width - 1) * 4)]);
     }

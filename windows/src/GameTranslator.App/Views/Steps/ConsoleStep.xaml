@@ -27,7 +27,7 @@
             <Button x:Name="Connect" Content="{t:T 'Connect'}" Style="{StaticResource PrimaryButton}" Margin="0,16,0,0"
                     IsEnabled="False" Click="OnConnect" />
             <TextBlock x:Name="Error" Style="{StaticResource ErrorText}" Margin="0,12,0,0" />
-            <!-- Eşleştirme başarısızsa ve güvenlik duvarında izin yoksa -->
+            <!-- إذا فشل الاقتران ولم يكن هناك إذن في جدار الحماية -->
             <v:FirewallCard Margin="0,12,0,0" />
         </StackPanel>
     </c:StepLayout>

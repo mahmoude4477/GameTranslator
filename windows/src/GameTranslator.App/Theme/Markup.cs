@@ -8,14 +8,14 @@ using GameTranslator.Core;
 
 namespace GameTranslator.App.Theme;
 
-/// <summary>XAML'de ekran metni: <c>{t:T 'Start translating'}</c>. Metin Mac'le ortak katalogdan gelir.</summary>
+/// <summary>نص الواجهة في XAML: <c>{t:T 'Start translating'}</c>. يأتي النص من كتالوج النصوص.</summary>
 [MarkupExtensionReturnType(typeof(string))]
 public sealed class T(string key) : MarkupExtension
 {
     public override object ProvideValue(IServiceProvider serviceProvider) => Localizer.Current[key];
 }
 
-/// <summary>true → görünür; <c>ConverterParameter=invert</c> ile tersi.</summary>
+/// <summary>true ← ظاهر؛ والعكس مع <c>ConverterParameter=invert</c>.</summary>
 public sealed class VisibleIf : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
@@ -34,7 +34,7 @@ public sealed class VisibleIf : IValueConverter
     public object ConvertBack(object value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
 }
 
-/// <summary>Bool'u tersine çevirir (ör. IsEnabled="{Binding IsStarting, Converter={StaticResource Not}}").</summary>
+/// <summary>يعكس قيمة Bool (مثلًا IsEnabled="{Binding IsStarting, Converter={StaticResource Not}}").</summary>
 public sealed class Not : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value is not true;

@@ -140,8 +140,8 @@ public final class NativeSubtitleServer: @unchecked Sendable {
         broadcast(event: "subtitle", json: json)
     }
 
-    /// Sağdan sola yazılan satırı (Arapça, İbranice) yön işaretleriyle sarar: yönü kendisi ayarlamayan eski TV
-    /// uygulamalarında da noktalama ve konuşmacı adı doğru uçta durur. Her satır ayrı sarılır.
+    /// يحيط السطر المكتوب من اليمين إلى اليسار (العربية، العبرية) بعلامات الاتجاه: فتبقى علامات الترقيم واسم المتحدث
+    /// في الطرف الصحيح حتى في تطبيقات التلفزيون القديمة التي لا تضبط الاتجاه بنفسها. يُحاط كل سطر على حدة.
     static func directional(_ text: String) -> String {
         let rtl = text.unicodeScalars.contains { scalar in
             let v = scalar.value
@@ -196,10 +196,10 @@ public final class NativeSubtitleServer: @unchecked Sendable {
         } else if method == "GET" && path == "/hello" {
             respondAndClose(connection, status: "200 OK", body: #"{"app":"gametranslator","version":"2.0"}"#, type: "application/json")
         } else if (method == "GET" || method == "POST") && path == "/test" {
-            self.sendSubtitle(translation: "🎮 GameTranslator Canlı Altyazı Testi Başarılı!", original: "GameTranslator Live Subtitle Test Successful!", durationMs: 15000)
-            respondAndClose(connection, status: "200 OK", body: #"{"status":"ok","message":"Test altyazisi gonderildi"}"#, type: "application/json")
+            self.sendSubtitle(translation: "🎮 نجح اختبار الترجمة المباشرة في GameTranslator!", original: "GameTranslator Live Subtitle Test Successful!", durationMs: 15000)
+            respondAndClose(connection, status: "200 OK", body: #"{"status":"ok","message":"تم إرسال ترجمة الاختبار"}"#, type: "application/json")
         } else if (method == "GET" || method == "POST") && path == "/send" {
-            var text = "🎮 GameTranslator Canlı Altyazı"
+            var text = "🎮 الترجمة المباشرة من GameTranslator"
             var original = ""
             var duration = 12000
             if let query = target.components(separatedBy: "?").dropFirst().first {
@@ -215,7 +215,7 @@ public final class NativeSubtitleServer: @unchecked Sendable {
                 }
             }
             self.sendSubtitle(translation: text, original: original, durationMs: duration)
-            respondAndClose(connection, status: "200 OK", body: #"{"status":"ok","message":"Altyazi gonderildi"}"#, type: "application/json")
+            respondAndClose(connection, status: "200 OK", body: #"{"status":"ok","message":"تم إرسال الترجمة"}"#, type: "application/json")
         } else {
             respondAndClose(connection, status: "404 Not Found", body: "Not Found")
         }
@@ -314,7 +314,7 @@ public final class NativeSubtitleServer: @unchecked Sendable {
       ev.addEventListener('subtitle', e => {
         const d = JSON.parse(e.data);
         box.innerText = d.text;
-        // Arapça ve İbranice gibi diller sağdan sola dizilir (TV uygulamasıyla aynı kural).
+        // لغات مثل العربية والعبرية تُرتَّب من اليمين إلى اليسار (القاعدة نفسها في تطبيق التلفزيون).
         box.dir = Array.from(d.text || '').some(ch => {
           const c = ch.charCodeAt(0);
           return (c >= 0x590 && c <= 0x8FF) || (c >= 0xFB1D && c <= 0xFDFF) || (c >= 0xFE70 && c <= 0xFEFC);
@@ -430,11 +430,11 @@ enum SettingsTab: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .ocrArea: "Oyun Okuma Alanı"
-        case .display: "TV Görünümü"
-        case .models: "Çeviri & Modeller"
-        case .system: "Bağlantı & Sistem"
-        case .guide: "Hızlı Rehber"
+        case .ocrArea: "منطقة قراءة اللعبة"
+        case .display: "مظهر التلفزيون"
+        case .models: "الترجمة والنماذج"
+        case .system: "الاتصال والنظام"
+        case .guide: "دليل سريع"
         }
     }
 
@@ -450,11 +450,11 @@ enum SettingsTab: String, CaseIterable, Identifiable {
 }
 
 enum OCRAreaPreset: String, CaseIterable, Identifiable {
-    case bottomCenter = "Alt Orta (Standart)"
-    case bottomWide = "Geniş Alt Bant"
-    case fullBottom = "Tüm Alt Yarı"
-    case topBanner = "Üst Bölge (Görevler)"
-    case custom = "Özel Kutu"
+    case bottomCenter = "أسفل الوسط (قياسي)"
+    case bottomWide = "شريط سفلي عريض"
+    case fullBottom = "النصف السفلي كله"
+    case topBanner = "المنطقة العلوية (المهام)"
+    case custom = "مربّع مخصّص"
 
     var id: String { rawValue }
 }
@@ -469,9 +469,9 @@ public enum PSNAccount {
         
         public var errorDescription: String? {
             switch self {
-            case .badResponse: return "Sony sunucusundan geçersiz yanıt alındı."
-            case .invalidCode: return "Yönlendirme adresinde geçerli bir 'code' parametresi bulunamadı."
-            case .http(let code): return "Sony sunucu hatası (HTTP \(code))."
+            case .badResponse: return "تم استلام رد غير صالح من خادم Sony."
+            case .invalidCode: return "لم يُعثر على معامل 'code' صالح في عنوان إعادة التوجيه."
+            case .http(let code): return "خطأ في خادم Sony (HTTP \(code))."
             }
         }
     }
@@ -483,7 +483,7 @@ public enum PSNAccount {
 
     public static let redirectPrefix = "https://remoteplay.dl.playstation.net/remoteplay/redirect"
 
-    /// Sony'nin resmi PlayStation Network OAuth giriş sayfası (Tarayıcıda yeni sekmede açılır).
+    /// صفحة تسجيل الدخول الرسمية (OAuth) لـ PlayStation Network من Sony (تُفتح في تبويب جديد في المتصفح).
     public static let authorizeURL: URL = {
         var components = URLComponents(string: "https://auth.api.sonyentertainmentnetwork.com/2.0/oauth/authorize")!
         components.queryItems = [
@@ -503,7 +503,7 @@ public enum PSNAccount {
         return components.url!
     }()
 
-    /// Giriş bitince yönlendirilen adresten veya ham metinden tek kullanımlık kodu ayıklar.
+    /// يستخرج الرمز ذا الاستخدام الواحد من عنوان إعادة التوجيه بعد تسجيل الدخول أو من النص الخام.
     public static func code(from text: String) -> String? {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         if let url = URL(string: trimmed), let components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
@@ -523,7 +523,7 @@ public enum PSNAccount {
         return nil
     }
 
-    /// Kodu Sony OAuth token uç noktasına gönderir ve 8 baytlık hesap kimliğini çeker.
+    /// يرسل الرمز إلى نقطة نهاية رموز OAuth لدى Sony ويجلب معرّف الحساب المكوّن من 8 بايتات.
     public static func fetchAccountId(code: String) async throws -> (bytes: Data, userId: String, base64: String) {
         var tokenRequest = URLRequest(url: tokenURL)
         tokenRequest.httpMethod = "POST"
@@ -817,7 +817,7 @@ enum TVHelperBridge {
 
     static func installAndroidTV(host: String) -> (success: Bool, message: String) {
         guard let apk = bundledAPKURL else {
-            return (false, "gametranslator-androidtv APK paketi bulunamadı.")
+            return (false, "تعذّر العثور على حزمة gametranslator-androidtv APK.")
         }
 
         let pythonCandidates = ["/usr/local/bin/python3", "/opt/homebrew/bin/python3", "/usr/bin/python3"]
@@ -858,10 +858,10 @@ enum TVHelperBridge {
                            let obj = try? JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
                            let event = obj["event"] as? String {
                             if event == "done" {
-                                let msg = obj["message"] as? String ?? "✅ GameTranslator TV uygulaması televizyona başarıyla yüklendi ve açıldı!"
+                                let msg = obj["message"] as? String ?? "✅ تم تثبيت تطبيق GameTranslator TV على التلفزيون وفتحه بنجاح!"
                                 return (true, msg)
                             } else if event == "error" {
-                                let msg = obj["message"] as? String ?? "TV Kurulum Hatası."
+                                let msg = obj["message"] as? String ?? "خطأ في التثبيت على التلفزيون."
                                 return (false, msg)
                             }
                         }
@@ -873,7 +873,7 @@ enum TVHelperBridge {
         }
 
         guard let helper = helperURL else {
-            return (false, "gametranslator-tv-helper aracı uygulama içinde bulunamadı.")
+            return (false, "تعذّر العثور على أداة gametranslator-tv-helper داخل التطبيق.")
         }
 
         let process = Process()
@@ -904,16 +904,16 @@ enum TVHelperBridge {
                        let obj = try? JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
                        let event = obj["event"] as? String {
                         if event == "done" {
-                            return (true, "✅ GameTranslator TV uygulaması televizyona başarıyla yüklendi ve açıldı!")
+                            return (true, "✅ تم تثبيت تطبيق GameTranslator TV على التلفزيون وفتحه بنجاح!")
                         } else if event == "approve" {
                             return (false, "⚠️ Televizyon ekranında 'Bu bilgisayardan hata ayıklamaya her zaman izin verilsin mi?' sorusu belirdi. Lütfen TV kumandasıyla 'İzin Ver' / 'Tamam' seçeneğini işaretleyip tekrar 'TV'ye Otomatik Kur' butonuna basın.")
                         } else if event == "error" {
-                            let msg = obj["message"] as? String ?? "Yükleme tamamlanamadı."
+                            let msg = obj["message"] as? String ?? "تعذّر إكمال التثبيت."
                             let code = obj["code"] as? String ?? ""
                             if code == "Unreachable" {
-                                return (false, "Televizyona ulaşılamadı (\(host):5555). Lütfen TV'nizin açık ve 'Ağda Hata Ayıklama (ADB)' özelliğinin aktif olduğundan emin olun.")
+                                return (false, "تعذّر الوصول إلى التلفزيون (\(host):5555). يرجى التأكد من أن التلفزيون يعمل وأن خاصية 'تصحيح الأخطاء عبر الشبكة (ADB)' مفعّلة.")
                             }
-                            return (false, "TV Kurulum Hatası: \(msg)")
+                            return (false, "خطأ في التثبيت على التلفزيون: \(msg)")
                         }
                     }
                 }
@@ -921,7 +921,7 @@ enum TVHelperBridge {
         } catch {
             return (false, error.localizedDescription)
         }
-        return (false, "TV'den beklenen yanıt alınamadı.")
+        return (false, "لم يصل الرد المتوقع من التلفزيون.")
     }
 
     static func testAndroidTV(host: String) -> (success: Bool, message: String) {
@@ -936,7 +936,7 @@ enum TVHelperBridge {
         let scriptURL = scriptCandidates.first { FileManager.default.fileExists(atPath: $0.path) }
 
         guard let py = pythonBin, let script = scriptURL else {
-            return (false, "Python veya script bulunamadı.")
+            return (false, "تعذّر العثور على Python أو السكربت.")
         }
 
         let p = Process()
@@ -966,16 +966,16 @@ enum TVHelperBridge {
                        let obj = try? JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
                        let event = obj["event"] as? String {
                         if event == "done" {
-                            let msg = obj["message"] as? String ?? "✅ GameTranslator TV ekranına getirildi!"
+                            let msg = obj["message"] as? String ?? "✅ تم إظهار GameTranslator على شاشة التلفزيون!"
                             return (true, msg)
                         } else if event == "error" {
-                            let msg = obj["message"] as? String ?? "TV Hatası."
+                            let msg = obj["message"] as? String ?? "خطأ في التلفزيون."
                             return (false, msg)
                         }
                     }
                 }
             }
-            return (true, "TV altyazısı tetiklendi.")
+            return (true, "تم تشغيل ترجمة التلفزيون.")
         } catch {
             return (false, error.localizedDescription)
         }
@@ -1005,7 +1005,7 @@ enum PS5RegistrationBridge {
 
     static func register(host: String, pin: String, accountBase64: String) -> RegisterResult {
         guard let helper = helperURL else {
-            return RegisterResult(success: false, registKey: nil, rpKey: nil, message: "PS5 eşleştirme yardımcısı (gametranslator-ps5-register) bulunamadı.")
+            return RegisterResult(success: false, registKey: nil, rpKey: nil, message: "تعذّر العثور على مساعد إقران PS5 (gametranslator-ps5-register).")
         }
 
         let process = Process()
@@ -1047,7 +1047,7 @@ enum PS5RegistrationBridge {
                 if let done = lastDone {
                     let registKey = done["registKey"] as? String
                     let rpKey = done["rpKey"] as? String
-                    return RegisterResult(success: true, registKey: registKey, rpKey: rpKey, message: "PS5 başarıyla eşleşti!")
+                    return RegisterResult(success: true, registKey: registKey, rpKey: rpKey, message: "تم إقران PS5 بنجاح!")
                 } else if let err = lastError {
                     return RegisterResult(success: false, registKey: nil, rpKey: nil, message: err)
                 }
@@ -1055,7 +1055,7 @@ enum PS5RegistrationBridge {
         } catch {
             return RegisterResult(success: false, registKey: nil, rpKey: nil, message: error.localizedDescription)
         }
-        return RegisterResult(success: false, registKey: nil, rpKey: nil, message: "PS5'ten yanıt alınamadı. Konsolunuzun 'Cihaz Eşle' ekranında açık olduğunu kontrol edin.")
+        return RegisterResult(success: false, registKey: nil, rpKey: nil, message: "لم يصل رد من PS5. تأكد من أن جهاز الألعاب مفتوح على شاشة 'ربط الجهاز'.")
     }
 }
 
@@ -1083,7 +1083,7 @@ final class AppState {
     var ps5DiscoveredName: String? = nil
     var tvConnected: Bool = false
     var selectedTVPlatform: String = "Mac / OBS"
-    var tvDeviceName: String = "TV uygulaması bekleniyor"
+    var tvDeviceName: String = "في انتظار تطبيق التلفزيون"
     var tvHost: String = ""
     var tvError: String? = nil
     var tvSuccessMessage: String? = nil
@@ -1102,7 +1102,7 @@ final class AppState {
     var geminiApiKey: String = ""
     var deepLApiKey: String = ""
     
-    // TV Altyazı Ayarları
+    // إعدادات ترجمة التلفزيون
     var selectedColor: String = "#FFFFFF"
     var fontSize: Double = 46
     var bottomPercent: Double = 7
@@ -1111,11 +1111,11 @@ final class AppState {
     var placement: String = "cover"
     var lastBox: [String: Double]? = nil
     var language: String = "en"
-    /// Çevirinin dili (Google ve DeepL'e bu kodla gider). Arapça sağdan sola yazılır; TV ve OBS yönü metinden anlar.
+    /// لغة الترجمة (تُرسل بهذا الرمز إلى Google و DeepL). العربية تُكتب من اليمين إلى اليسار؛ التلفزيون و OBS يستنتجان الاتجاه من النص.
     var targetLanguage: String = UserDefaults.standard.string(forKey: "gt_target_language") ?? "ar"
     var isMuteComputerAudio: Bool = UserDefaults.standard.object(forKey: "gt_mute_computer_audio") as? Bool ?? true
     
-    // OCR Okuma Alanı (16:9 PS5 Oyun Ekranı ve Altyazı Koordinatları)
+    // منطقة قراءة OCR (شاشة لعبة PS5 بنسبة 16:9 وإحداثيات الترجمة)
     var cropTop: Double = 0.72
     var cropBottom: Double = 0.85
     var cropLeft: Double = 0.16
@@ -1123,8 +1123,8 @@ final class AppState {
     var selectedPreset: OCRAreaPreset = .bottomCenter
     var filterNoise: Bool = true
     
-    // Canlı altyazı & Geçmiş
-    var liveTranslation: String = "Siz oynarken altyazılar burada görünecek."
+    // الترجمة المباشرة والسجل
+    var liveTranslation: String = "ستظهر الترجمة هنا أثناء لعبك."
     var liveEnglish: String = "Subtitles will appear here as you play."
     var history: [SubtitleEntry] = []
     
@@ -1132,10 +1132,10 @@ final class AppState {
     var testSent: Bool = false
     var showAbout: Bool = false
     
-    // Gerçek PS5 Oyun Karesi (1920x1080 Remote Play Akış Görüntüsü)
+    // إطار لعبة PS5 حقيقي (صورة بث Remote Play بدقة 1920x1080)
     var gameFrameImage: NSImage? = nil
 
-    // macOS Ekran Kaydı İzni
+    // إذن تسجيل الشاشة في macOS
     var hasScreenRecordingPermission: Bool = true
     var showPermissionBanner: Bool = false
 
@@ -1193,7 +1193,7 @@ final class AppState {
         ps5SuccessMessage = nil
         ps5DiscoveredName = nil
         selectedTVPlatform = "Mac / OBS"
-        tvDeviceName = "TV uygulaması bekleniyor"
+        tvDeviceName = "في انتظار تطبيق التلفزيون"
         tvConnected = false
         tvHost = ""
         tvError = nil
@@ -1205,7 +1205,7 @@ final class AppState {
         setupStep = 1
         showSetup = true
         bypassSetup = false
-        liveTranslation = "Siz oynarken altyazılar burada görünecek."
+        liveTranslation = "ستظهر الترجمة هنا أثناء لعبك."
         liveEnglish = "Subtitles will appear here as you play."
         history = []
         selectedPreset = .bottomCenter
@@ -1256,10 +1256,10 @@ final class AppState {
             tvHost = first
             tvConnected = true
             tvDeviceName = "Android TV (\(first))"
-            tvSuccessMessage = "✓ Android TV bulundu: \(first)"
+            tvSuccessMessage = "✓ تم العثور على Android TV: \(first)"
             tvError = nil
         } else {
-            tvError = "Ağda açık bir Android TV bulunamadı. Televizyonunuzda Ayarlar › Geliştirici Seçenekleri › 'Ağda Hata Ayıklama (ADB)' özelliğinin AÇIK olduğundan ve bu Mac ile aynı Wi-Fi/LAN ağına bağlı olduğundan emin olun."
+            tvError = "لم يُعثر على Android TV يعمل على الشبكة. تأكد من أن خاصية 'تصحيح الأخطاء عبر الشبكة (ADB)' مفعّلة في التلفزيون من الإعدادات › خيارات المطوّر، وأنه متصل بنفس شبكة Wi-Fi/LAN التي يتصل بها هذا الـ Mac."
         }
     }
 
@@ -1279,12 +1279,12 @@ final class AppState {
         
         isInstallingTV = true
         tvError = nil
-        tvInstallMessage = "Android TV'ye bağlanılıyor ve APK yükleniyor..."
+        tvInstallMessage = "جارٍ الاتصال بـ Android TV وتثبيت APK..."
 
         Task.detached(priority: .userInitiated) {
             if trimmedHost.isEmpty {
                 await MainActor.run {
-                    self.tvInstallMessage = "Ağdaki Android TV aranıyor..."
+                    self.tvInstallMessage = "جارٍ البحث عن Android TV على الشبكة..."
                 }
                 let hosts = TVHelperBridge.scanAndroidTV()
                 if let first = hosts.first {
@@ -1293,14 +1293,14 @@ final class AppState {
                         self.tvHost = first
                         self.tvConnected = true
                         self.tvDeviceName = "Android TV (\(first))"
-                        self.tvSuccessMessage = "✓ Android TV bulundu: \(first)"
-                        self.tvInstallMessage = "Android TV bulundu (\(first)). APK yükleniyor..."
+                        self.tvSuccessMessage = "✓ تم العثور على Android TV: \(first)"
+                        self.tvInstallMessage = "تم العثور على Android TV (\(first)). جارٍ تثبيت APK..."
                     }
                 } else {
                     await MainActor.run {
                         self.isInstallingTV = false
                         self.tvInstallMessage = nil
-                        self.tvError = "Ağda açık bir Android TV bulunamadı. Lütfen TV IP adresini elle girin veya TV'de Hata Ayıklama (ADB) özelliğinin açık olduğunu kontrol edin."
+                        self.tvError = "لم يُعثر على Android TV يعمل على الشبكة. يرجى إدخال عنوان IP للتلفزيون يدويًا أو التأكد من تفعيل خاصية تصحيح الأخطاء (ADB) في التلفزيون."
                     }
                     return
                 }
@@ -1318,7 +1318,7 @@ final class AppState {
                     self.tvError = nil
                     UserDefaults.standard.set(finalHost, forKey: "gt_tv_host")
 
-                    // Televizyona otomatik hoş geldin ve bağlantı testi altyazısı gönder
+                    // أرسل إلى التلفزيون تلقائيًا ترجمة ترحيب واختبار اتصال
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                         self.server.sendSubtitle(
                             translation: "🎮 تم اتصال GameTranslator بالتلفزيون بنجاح! (جاهز)",
@@ -1376,7 +1376,7 @@ final class AppState {
 
     func processPSNRedirect(_ text: String) async {
         guard let code = PSNAccount.code(from: text) else {
-            psnError = "Geçersiz yönlendirme adresi veya kod. 'code=' içeren tam URL'i girin."
+            psnError = "عنوان إعادة التوجيه أو الرمز غير صالح. أدخل عنوان URL الكامل الذي يحتوي على 'code='."
             return
         }
         isConnectingPSN = true
@@ -1413,22 +1413,22 @@ final class AppState {
         if let first = discoveredConsoles.first {
             ps5Host = first.ip
             ps5DiscoveredName = first.name
-            ps5SuccessMessage = "✓ PS5 bulundu: \(first.name) (\(first.ip))"
+            ps5SuccessMessage = "✓ تم العثور على PS5: \(first.name) (\(first.ip))"
             ps5Error = nil
             UserDefaults.standard.set(first.ip, forKey: "gt_ps5_host")
         } else {
-            ps5Error = "Yerel ağda açık bir PS5 konsolu bulunamadı. Konsolunuzun açık olduğunu ve bu Mac ile aynı Wi-Fi/LAN ağına bağlı olduğunu kontrol edin veya konsol IP adresini elle girin."
+            ps5Error = "لم يُعثر على جهاز PS5 يعمل على الشبكة المحلية. تأكد من أن جهاز الألعاب يعمل ومتصل بنفس شبكة Wi-Fi/LAN التي يتصل بها هذا الـ Mac، أو أدخل عنوان IP للجهاز يدويًا."
         }
     }
 
     func pairPS5() {
         let pin = ps5Pin.filter(\.isNumber)
         guard pin.count == 8 else {
-            ps5Error = "Lütfen PS5 ekranındaki 8 haneli kodu tam olarak girin."
+            ps5Error = "يرجى إدخال الرمز المكوّن من 8 أرقام الظاهر على شاشة PS5 كاملًا."
             return
         }
         guard let account = psnAccountBase64, !account.isEmpty else {
-            ps5Error = "PSN hesabı bulunamadı. Lütfen 2. Adıma dönüp PSN hesabınızla giriş yapın."
+            ps5Error = "لم يُعثر على حساب PSN. يرجى العودة إلى الخطوة 2 وتسجيل الدخول بحساب PSN."
             return
         }
         let trimmedHost = ps5Host.trimmingCharacters(in: .whitespaces)
@@ -1452,7 +1452,7 @@ final class AppState {
                     self.ps5Paired = true
                     self.ps5Connected = true
                     self.ps5Host = finalHost
-                    self.ps5SuccessMessage = "✓ PS5 Başarıyla Eşleşti! (IP: \(finalHost))"
+                    self.ps5SuccessMessage = "✓ تم إقران PS5 بنجاح! (IP: \(finalHost))"
                     self.ps5Error = nil
                     
                     UserDefaults.standard.set(true, forKey: "gt_ps5_paired")
@@ -1544,7 +1544,7 @@ final class AppState {
         }
         CFPreferencesSynchronize("com.chiaki.Chiaki" as CFString, kCFPreferencesCurrentUser, kCFPreferencesAnyHost)
 
-        // cfprefsd ve Chiaki önbelleğini doğrudan güncelle
+        // حدّث الذاكرة المؤقتة لـ cfprefsd و Chiaki مباشرة
         let p1 = Process()
         p1.executableURL = URL(fileURLWithPath: "/usr/bin/defaults")
         p1.arguments = ["write", "com.chiaki.Chiaki", "settings.audio_volume", "-int", "\(vol)"]
@@ -1575,7 +1575,7 @@ final class AppState {
         try? p2.run()
         p2.waitUntilExit()
 
-        // Canlı yayın çalışıyorsa akışı 0.4 sn yenileyerek ses durumunu anında uygula
+        // إذا كان البث المباشر يعمل، طبّق حالة الصوت فورًا بإعادة تشغيل البث خلال 0.4 ث
         if isRunning {
             stopStreamAndOCR()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
@@ -1589,7 +1589,7 @@ final class AppState {
     func startStreamAndOCR() {
         _ = checkScreenCapturePermission()
 
-        // Chiaki'yi GameTranslator penceresinin tam altına gizle (kullanıcı arka planda görmesin)
+        // أخفِ Chiaki تمامًا خلف نافذة GameTranslator (حتى لا يراه المستخدم في الخلفية)
         var cx = 400
         var cy = 250
         if let win = NSApp.windows.first {
@@ -1637,7 +1637,7 @@ final class AppState {
             }
         }
 
-        // GameTranslator penceresini öne al ve Chiaki'yi tamamen arkasında ört
+        // اجلب نافذة GameTranslator إلى الأمام وغطِّ Chiaki تمامًا خلفها
         for delay in [0.1, 0.3, 0.6, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0] {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
                 guard let self = self, self.isRunning else { return }
@@ -1657,7 +1657,7 @@ final class AppState {
         RunLoop.main.add(t, forMode: .common)
         captureTimer = t
 
-        // İlk kareleri beklemeden yakalamayı tetikle
+        // ابدأ الالتقاط دون انتظار الإطارات الأولى
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self, self.isRunning else { return }
             self.tickStreamCaptureAndOCR()
@@ -1675,8 +1675,8 @@ final class AppState {
         self.gameFrameImage = nil
         self.ps5Connected = false
         self.lastSentText = ""
-        self.liveEnglish = "PS5 Canlı Akışı Bekleniyor"
-        self.liveTranslation = "Çeviri Durduruldu"
+        self.liveEnglish = "في انتظار البث المباشر من PS5"
+        self.liveTranslation = "تم إيقاف الترجمة"
 
         if let p = streamProcess, p.isRunning {
             p.terminate()
@@ -1721,7 +1721,7 @@ final class AppState {
                     self.hasScreenRecordingPermission = false
                     self.showPermissionBanner = true
                     self.liveEnglish = "Screen Capture Permission Required"
-                    self.liveTranslation = "⚠️ macOS Ekran Kaydı İzni Kapalı! Lütfen Sistem Ayarları'ndan GameTranslator'a izin verin."
+                    self.liveTranslation = "⚠️ إذن تسجيل الشاشة في macOS معطّل! يرجى منح GameTranslator الإذن من إعدادات النظام."
                 }
             }
             return
@@ -1734,7 +1734,7 @@ final class AppState {
             }
         }
 
-        // 16:9 Video Kırpma (macOS pencere başlık çubuğunu temizle -> Siyah kenarlıkları yok et)
+        // قصّ الفيديو بنسبة 16:9 (أزل شريط عنوان نافذة macOS -> تخلّص من الحواف السوداء)
         let rawW = CGFloat(rawCg.width)
         let rawH = CGFloat(rawCg.height)
         let videoH = rawW * 9.0 / 16.0
@@ -1850,7 +1850,7 @@ final class AppState {
                     self.liveEnglish = detectedText
                     self.lastBox = currentBox
 
-                    // Otomatik yerleşim konumunu hesapla
+                    // احسب موضع الترجمة التلقائي
                     if self.placement != "fixed" {
                         let top = currentBox["top"] ?? self.cropTop
                         let bottom = currentBox["bottom"] ?? self.cropBottom
@@ -2072,8 +2072,8 @@ final class AppState {
             server.sendSubtitle(translation: liveTranslation, original: liveEnglish)
             startStreamAndOCR()
         } else {
-            liveTranslation = "Çeviri Durduruldu"
-            liveEnglish = "Yeniden başlatmak için 'Çeviriyi Başlat' butonuna basın."
+            liveTranslation = "تم إيقاف الترجمة"
+            liveEnglish = "اضغط زر 'ابدأ الترجمة' لإعادة التشغيل."
             server.clearSubtitle()
             stopStreamAndOCR()
         }
@@ -2129,10 +2129,10 @@ final class AppState {
         if format == "json" {
             let data = (try? JSONEncoder().encode(history)) ?? Data()
             content = String(decoding: data, as: UTF8.self)
-            filename = "GameTranslator_Altyazi_Gecmisi.json"
+            filename = "GameTranslator_Subtitle_History.json"
         } else {
             content = history.map { "[\($0.timestamp)] AR: \($0.translation)\n     EN: \($0.english)\n" }.joined(separator: "\n")
-            filename = "GameTranslator_Altyazi_Gecmisi.txt"
+            filename = "GameTranslator_Subtitle_History.txt"
         }
         let savePanel = NSSavePanel()
         savePanel.nameFieldStringValue = filename
@@ -2156,11 +2156,11 @@ struct MainWindowView: View {
     @State private var activeTab: SettingsTab = .ocrArea
 
     let colorPalette: [(name: String, hex: String, color: Color)] = [
-        ("Klasik Beyaz", "#FFFFFF", Color.white),
-        ("Oyun Sarısı", "#FACC15", Color(red: 250/255, green: 204/255, blue: 21/255)),
-        ("Camgöbeği (Cyan)", "#38BDF8", Color(red: 56/255, green: 189/255, blue: 248/255)),
-        ("Neon Yeşil", "#4ADE80", Color(red: 74/255, green: 222/255, blue: 128/255)),
-        ("Açık Turuncu", "#FB923C", Color(red: 251/255, green: 146/255, blue: 60/255))
+        ("أبيض كلاسيكي", "#FFFFFF", Color.white),
+        ("أصفر الألعاب", "#FACC15", Color(red: 250/255, green: 204/255, blue: 21/255)),
+        ("سماوي (Cyan)", "#38BDF8", Color(red: 56/255, green: 189/255, blue: 248/255)),
+        ("أخضر نيون", "#4ADE80", Color(red: 74/255, green: 222/255, blue: 128/255)),
+        ("برتقالي فاتح", "#FB923C", Color(red: 251/255, green: 146/255, blue: 60/255))
     ]
 
     var body: some View {
@@ -2188,13 +2188,13 @@ struct MainWindowView: View {
             _ = state.checkScreenCapturePermission()
         }
         .alert("GameTranslator 2.0", isPresented: $state.showAbout) {
-            Button("Tamam", role: .cancel) { }
+            Button("موافق", role: .cancel) { }
         } message: {
-            Text("PlayStation 5 ve Akıllı TV için Sıfır Gecikmeli Yapay Zeka Çeviri Motoru.\n\nSürüm: 2.0.0 (Native Apple Silicon Frosted Glass)\nSSE TV Portu: 8787")
+            Text("ترجمة مباشرة للترجمة النصية في ألعاب PlayStation 5 على التلفزيون الذكي.\n\nالإصدار: 2.0.0 (Native Apple Silicon Frosted Glass)\nمنفذ SSE للتلفزيون: 8787")
         }
     }
 
-    // MARK: - SOL PANEL (Translation Hub)
+    // MARK: - اللوحة اليسرى (Translation Hub)
     private var solPanel: some View {
         VStack(spacing: 11) {
             headerBar
@@ -2243,7 +2243,7 @@ struct MainWindowView: View {
             HStack(spacing: 8) {
                 Image(systemName: state.isRunning ? "stop.fill" : "play.fill")
                     .font(.system(size: 14, weight: .bold))
-                Text(state.isRunning ? "Çeviriyi Durdur" : "Çeviriyi Başlat")
+                Text(state.isRunning ? "أوقف الترجمة" : "ابدأ الترجمة")
                     .font(.system(size: 14.5, weight: .semibold))
             }
             .foregroundColor(.white)
@@ -2269,7 +2269,7 @@ struct MainWindowView: View {
                 Image(systemName: "viewfinder.rectangular")
                     .font(.system(size: 11))
                     .foregroundStyle(Color(hex: "#38BDF8"))
-                Text("Oyun Okuma Alanı:")
+                Text("منطقة قراءة اللعبة:")
                     .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(Color.white.opacity(0.7))
                 Text(state.selectedPreset.rawValue)
@@ -2277,7 +2277,7 @@ struct MainWindowView: View {
                     .foregroundStyle(Color.white)
                     .lineLimit(1)
                 Spacer()
-                Text("Ayarla ➔")
+                Text("اضبط ➔")
                     .font(.system(size: 10, weight: .bold))
                     .foregroundStyle(Color(hex: "#0A84FF"))
             }
@@ -2289,7 +2289,7 @@ struct MainWindowView: View {
         .buttonStyle(.plain)
     }
 
-    // Sol Panelde Canlı Oyun Görüntüsü Küçük Önizlemesi (PS5 Remote Feed)
+    // معاينة مصغّرة لصورة اللعبة المباشرة في اللوحة اليسرى (PS5 Remote Feed)
     private var liveGameFeedThumbnail: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
@@ -2297,12 +2297,12 @@ struct MainWindowView: View {
                     Circle()
                         .fill(state.isRunning ? Color.green : Color.gray.opacity(0.6))
                         .frame(width: 5, height: 5)
-                    Text("PS5 Remote Play Canlı Akış")
+                    Text("البث المباشر من PS5 Remote Play")
                         .font(.system(size: 9.5, weight: .semibold))
                         .foregroundStyle(Color.white.opacity(0.75))
                 }
                 Spacer()
-                Text(state.isRunning ? "1080p CANLI" : "BEKLEMEDE")
+                Text(state.isRunning ? "1080p مباشر" : "في الانتظار")
                     .font(.system(size: 8.5, weight: .medium, design: .monospaced))
                     .foregroundStyle(state.isRunning ? Color(hex: "#38BDF8") : Color.white.opacity(0.4))
             }
@@ -2323,14 +2323,14 @@ struct MainWindowView: View {
                                 Image(systemName: "exclamationmark.shield.fill")
                                     .font(.system(size: 15))
                                     .foregroundStyle(Color(hex: "#F59E0B"))
-                                Text("İzin Gerekli")
+                                Text("الإذن مطلوب")
                                     .font(.system(size: 9, weight: .bold))
                                     .foregroundStyle(Color(hex: "#F59E0B"))
                             } else {
                                 Image(systemName: "gamecontroller")
                                     .font(.system(size: 15))
                                     .foregroundStyle(Color.white.opacity(0.35))
-                                Text(state.isRunning ? "PS5'e Bağlanılıyor..." : "PS5 Akışı Bekleniyor")
+                                Text(state.isRunning ? "جارٍ الاتصال بـ PS5..." : "في انتظار بث PS5")
                                     .font(.system(size: 9, weight: .medium))
                                     .foregroundStyle(Color.white.opacity(0.45))
                             }
@@ -2338,7 +2338,7 @@ struct MainWindowView: View {
                     }
                 }
 
-                // OCR Kutusunun minyatür pozisyonu (yalnızca çalışırken)
+                // موضع مصغّر لمربّع OCR (أثناء التشغيل فقط)
                 if state.isRunning {
                     VStack {
                         Spacer()
@@ -2375,10 +2375,10 @@ struct MainWindowView: View {
                     .font(.system(size: 11.5, weight: .semibold))
                     .foregroundStyle(Color.white.opacity(0.9))
                 Spacer()
-                Text(state.ps5Paired ? "Eşleşti (\(state.ps5Host.isEmpty ? "192.168.1.108" : state.ps5Host))" : "Eşleşmedi")
+                Text(state.ps5Paired ? "مقترن (\(state.ps5Host.isEmpty ? "192.168.1.108" : state.ps5Host))" : "غير مقترن")
                     .font(.system(size: 10))
                     .foregroundStyle(state.ps5Paired ? Color.white.opacity(0.85) : Color.white.opacity(0.45))
-                Button(state.ps5Paired ? "Ayarla" : "Eşle") {
+                Button(state.ps5Paired ? "اضبط" : "اقرن") {
                     state.setupStep = 3
                     state.showSetup = true
                 }
@@ -2390,19 +2390,19 @@ struct MainWindowView: View {
                 .buttonStyle(.plain)
             }
 
-            // Ekran / TV
+            // الشاشة / التلفزيون
             HStack {
                 Circle()
                     .fill(state.tvConnected ? Color(hex: "#10B981") : Color(hex: "#FF9F0A"))
                     .frame(width: 7, height: 7)
-                Text(state.selectedTVPlatform == "Mac / OBS" ? "Ekran" : "TV")
+                Text(state.selectedTVPlatform == "Mac / OBS" ? "الشاشة" : "التلفزيون")
                     .font(.system(size: 11.5, weight: .semibold))
                     .foregroundStyle(Color.white.opacity(0.9))
                 Spacer()
-                Text(state.tvConnected ? "\(state.tvDeviceName) (Hazır)" : "TV uygulaması bekleniyor")
+                Text(state.tvConnected ? "\(state.tvDeviceName) (جاهز)" : "في انتظار تطبيق التلفزيون")
                     .font(.system(size: 10))
                     .foregroundStyle(state.tvConnected ? Color.white.opacity(0.85) : Color(hex: "#FF9F0A"))
-                Button(state.tvConnected ? "Değiştir" : "Ayarla") {
+                Button(state.tvConnected ? "غيّر" : "اضبط") {
                     state.setupStep = 4
                     state.showSetup = true
                 }
@@ -2416,12 +2416,12 @@ struct MainWindowView: View {
 
             Divider().background(Color.white.opacity(0.08))
 
-            // Bilgisayar Oyun Sesi Kontrolü
+            // التحكم في صوت اللعبة على الكمبيوتر
             HStack {
                 Image(systemName: state.isMuteComputerAudio ? "speaker.slash.fill" : "speaker.wave.2.fill")
                     .font(.system(size: 10))
                     .foregroundStyle(state.isMuteComputerAudio ? Color(hex: "#EF4444") : Color(hex: "#10B981"))
-                Text("PC Sesi")
+                Text("صوت الكمبيوتر")
                     .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(Color.white.opacity(0.9))
                 Spacer()
@@ -2432,7 +2432,7 @@ struct MainWindowView: View {
                         Circle()
                             .fill(state.isMuteComputerAudio ? Color(hex: "#EF4444") : Color(hex: "#10B981"))
                             .frame(width: 5.5, height: 5.5)
-                        Text(state.isMuteComputerAudio ? "Sessiz (Muted)" : "Açık (Ses Var)")
+                        Text(state.isMuteComputerAudio ? "صامت (Muted)" : "مفعّل (الصوت يعمل)")
                             .font(.system(size: 9.5, weight: .bold))
                             .foregroundStyle(state.isMuteComputerAudio ? Color(hex: "#EF4444") : Color(hex: "#10B981"))
                     }
@@ -2441,7 +2441,7 @@ struct MainWindowView: View {
                     .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 4))
                 }
                 .buttonStyle(.plain)
-                .help("Oyun sesi zaten TV'den geldiği için bilgisayarınızın hoparlöründen ses gelmesini engeller veya açar.")
+                .help("بما أن صوت اللعبة يصدر من التلفزيون أصلًا، يكتم هذا الخيار صوت مكبّر الكمبيوتر أو يشغّله.")
             }
         }
         .padding(9)
@@ -2452,11 +2452,11 @@ struct MainWindowView: View {
     private var lastSubtitleCard: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text("Son Altyazı")
+                Text("آخر ترجمة")
                     .font(.system(size: 10.5, weight: .semibold))
                     .foregroundStyle(Color.white.opacity(0.55))
                 Spacer()
-                Text(state.isRunning ? "Canlı" : "Beklemede")
+                Text(state.isRunning ? "مباشر" : "في الانتظار")
                     .font(.system(size: 8.5, weight: .bold))
                     .foregroundStyle(state.isRunning ? Color.green : Color.white.opacity(0.45))
                     .padding(.horizontal, 4)
@@ -2505,11 +2505,11 @@ struct MainWindowView: View {
     private var historyCard: some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack {
-                Text("Altyazı Geçmişi")
+                Text("سجل الترجمة")
                     .font(.system(size: 10.5, weight: .semibold))
                     .foregroundStyle(Color.white.opacity(0.55))
                 Spacer()
-                Button("TXT İndir") {
+                Button("تنزيل TXT") {
                     state.exportHistory(format: "txt")
                 }
                 .font(.system(size: 9, weight: .medium))
@@ -2531,7 +2531,7 @@ struct MainWindowView: View {
             }
 
             if state.history.isEmpty {
-                Text("Henüz altyazı kaydedilmedi.")
+                Text("لم تُسجَّل أي ترجمة بعد.")
                     .font(.system(size: 10))
                     .foregroundStyle(Color.white.opacity(0.4))
                     .padding(8)
@@ -2562,7 +2562,7 @@ struct MainWindowView: View {
         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.white.opacity(0.1), lineWidth: 1))
     }
 
-    // MARK: - SAĞ PANEL (Ayarlar & Canlı Oyun Ekranı)
+    // MARK: - اللوحة اليمنى (الإعدادات وشاشة اللعبة المباشرة)
     private var sagPanel: some View {
         VStack(spacing: 0) {
             topTabSelector
@@ -2570,11 +2570,11 @@ struct MainWindowView: View {
                 HStack(spacing: 8) {
                     Image(systemName: "exclamationmark.shield.fill")
                         .foregroundStyle(Color(hex: "#F59E0B"))
-                    Text("Ekran Kaydı İzni Kapalı! PS5 ekranını alabilmek için izin verin.")
+                    Text("إذن تسجيل الشاشة معطّل! امنح الإذن لالتقاط شاشة PS5.")
                         .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(Color.white)
                     Spacer()
-                    Button("Ayarları Aç") {
+                    Button("افتح الإعدادات") {
                         state.requestScreenCapturePermission()
                     }
                     .font(.system(size: 10, weight: .bold))
@@ -2584,7 +2584,7 @@ struct MainWindowView: View {
                     .foregroundStyle(Color.black)
                     .buttonStyle(.plain)
 
-                    Button("Yeniden Başlat") {
+                    Button("أعد التشغيل") {
                         state.restartApp()
                     }
                     .font(.system(size: 10, weight: .semibold))
@@ -2651,7 +2651,7 @@ struct MainWindowView: View {
 
     private var bottomBar: some View {
         HStack(spacing: 10) {
-            Button("Yeniden Kur...") {
+            Button("أعد الإعداد...") {
                 state.setupStep = 1
                 state.showSetup = true
             }
@@ -2662,7 +2662,7 @@ struct MainWindowView: View {
             .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 6))
             .buttonStyle(.plain)
 
-            Button("Sıfırla (0-la)") {
+            Button("أعد الضبط (تصفير)") {
                 state.resetToZero()
             }
             .font(.system(size: 11, weight: .medium))
@@ -2672,7 +2672,7 @@ struct MainWindowView: View {
             .background(Color(hex: "#FF453A").opacity(0.12), in: RoundedRectangle(cornerRadius: 6))
             .buttonStyle(.plain)
 
-            Button("GameTranslator Hakkında") {
+            Button("حول GameTranslator") {
                 state.showAbout = true
             }
             .font(.system(size: 11))
@@ -2684,7 +2684,7 @@ struct MainWindowView: View {
 
             Spacer()
 
-            Button("Bitti") {
+            Button("تم") {
                 NSApp.keyWindow?.miniaturize(nil)
             }
             .font(.system(size: 11.5, weight: .semibold))
@@ -2700,15 +2700,15 @@ struct MainWindowView: View {
         .background(Color.black.opacity(0.2))
     }
 
-    // MARK: - 1. OYUN OKUMA ALANI (PS5 Canlı Görüntüsü & OCR Çerçevesi)
+    // MARK: - 1. منطقة قراءة اللعبة (صورة PS5 المباشرة وإطار OCR)
     private var ocrAreaTabContent: some View {
         VStack(alignment: .leading, spacing: 12) {
             VStack(alignment: .leading, spacing: 3) {
                 HStack {
                     Image(systemName: "viewfinder.rectangular").foregroundStyle(Color(hex: "#38BDF8"))
-                    Text("Oyun Ekranı Altyazı Okuma Alanı (PS5 Canlı Akış)").font(.system(size: 13, weight: .bold)).foregroundStyle(Color.white)
+                    Text("منطقة قراءة الترجمة على شاشة اللعبة (بث PS5 المباشر)").font(.system(size: 13, weight: .bold)).foregroundStyle(Color.white)
                 }
-                Text("PS5 konsolunuzun görüntüsü aşağıya canlı yansıtılır. Altyazının nereden okunacağını aşağıdaki mavi kutuyu ayarlayarak belirleyin.")
+                Text("تُعرض صورة جهاز PS5 مباشرةً في الأسفل. حدّد موضع قراءة الترجمة النصية بضبط المربّع الأزرق أدناه.")
                     .font(.system(size: 11)).foregroundStyle(Color.white.opacity(0.7))
             }
 
@@ -3153,7 +3153,7 @@ struct MainWindowView: View {
                         .frame(height: 125)
                         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(hex: "#0A84FF").opacity(0.4), lineWidth: 1.5))
 
-                    let displayText = state.isRunning ? (state.liveTranslation.isEmpty ? "Altyazı taranıyor..." : state.liveTranslation) : (state.liveTranslation.isEmpty ? "Çeviri Durduruldu" : state.liveTranslation)
+                    let displayText = state.isRunning ? (state.liveTranslation.isEmpty ? "Altyazı taranıyor..." : state.liveTranslation) : (state.liveTranslation.isEmpty ? "تم إيقاف الترجمة" : state.liveTranslation)
                     let origText = state.liveEnglish.isEmpty ? "Press any button to continue" : state.liveEnglish
                     let previewPad = CGFloat(state.bottomPercent * 1.05 + 4.0)
 

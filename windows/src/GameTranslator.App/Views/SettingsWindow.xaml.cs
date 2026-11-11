@@ -14,12 +14,12 @@ public partial class SettingsWindow : Window
     private static readonly (string Code, string Name)[] Languages =
         [("en", "English"), ("ja", "Japanese"), ("de", "German"), ("fr", "French"), ("es", "Spanish")];
 
-    /// <summary>Ek bölgeler ilk açıldığında (sağ üst köşe, sağ alt köşe, ekranın ortası) bu alanlarla başlar.</summary>
+    /// <summary>تبدأ المناطق الإضافية عند فتحها أول مرة بهذه المساحات (الزاوية العليا اليمنى، الزاوية السفلى اليمنى، وسط الشاشة).</summary>
     private static readonly CropRegion[] ExtraDefaults = [new(0.05, 0.28, 0.60, 0.97), new(0.72, 0.95, 0.60, 0.97), new(0.35, 0.65, 0.30, 0.70)];
 
     private readonly AppController controller;
     private bool loading = true;
-    /// <summary>Çerçevesi düzenlenen bölge: 0 altyazı, 1, 2 ve 3 ek bölgeler.</summary>
+    /// <summary>المنطقة التي يُحرَّر إطارها: 0 الترجمة النصية، و1 و2 و3 المناطق الإضافية.</summary>
     private int area;
 
     internal SettingsWindow(AppController controller)
@@ -34,7 +34,7 @@ public partial class SettingsWindow : Window
         ShowPlacement(settings.Style.Placement);
         BackgroundOpacity.Value = settings.Style.Background;
         Bold.IsChecked = settings.Style.Bold;
-        // Yalnız çeviri modeli olan diller listelenir; tek dil varsa seçim gösterilmez.
+        // تُسرد فقط اللغات التي يدعمها محرك الترجمة؛ وإن كانت لغة واحدة لا يُعرض الاختيار.
         foreach (var (code, name) in Languages.Where(l => controller.SupportsLanguage(l.Code)))
             GameLanguage.Items.Add(new ComboBoxItem { Content = Localizer.Current[name], Tag = code, IsSelected = code == settings.SourceLanguage });
         LanguageCard.Visibility = GameLanguage.Items.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
@@ -42,7 +42,7 @@ public partial class SettingsWindow : Window
         Region.Frame = controller.LastFrame;
         ObsAddress.Text = $"http://localhost:{controller.ServerPort}/obs";
         ShowArea(0);
-        // Num 8: oyunun o anki görüntüsü önizlemeye alınır.
+        // Num 8: تُنقل صورة اللعبة الحالية إلى المعاينة.
         controller.SnapshotRequested += OnSnapshot;
         Closed += (_, _) => controller.SnapshotRequested -= OnSnapshot;
         ShowDeepL();
@@ -127,7 +127,7 @@ public partial class SettingsWindow : Window
         Update(s => s with { FreeAreaTarget = target });
     }
 
-    /// <summary>Önizlemeyi oyunun şu anki görüntüsüyle yeniler (çerçeve olduğu gibi kalır).</summary>
+    /// <summary>يحدّث المعاينة بصورة اللعبة الحالية (يبقى الإطار كما هو).</summary>
     private void OnRefresh(object sender, RoutedEventArgs e) => Region.Frame = controller.LastFrame;
 
     private void OnSnapshot() => Dispatcher.Invoke(() => Region.Frame = controller.LastFrame);
@@ -145,7 +145,7 @@ public partial class SettingsWindow : Window
         Update(s => s with { Style = s.Style with { Placement = placement } });
     }
 
-    /// <summary>Elle ayarlanan yükseklik yalnız sabit yerleşimde anlamlıdır.</summary>
+    /// <summary>الارتفاع المضبوط يدويًا له معنى في الموضع الثابت فقط.</summary>
     private void ShowPlacement(SubtitlePlacement placement)
     {
         var isFixed = placement == SubtitlePlacement.Fixed;
@@ -175,7 +175,7 @@ public partial class SettingsWindow : Window
         if (!loading && sender is RadioButton { Tag: string tag }) ShowArea(int.Parse(tag));
     }
 
-    /// <summary>Seçilen bölgenin çerçevesini gösterir; ek bölge kapalıysa çerçeve düzenlenemez.</summary>
+    /// <summary>يعرض إطار المنطقة المحدّدة؛ وإن كانت المنطقة الإضافية معطّلة لا يمكن تحرير الإطار.</summary>
     private void ShowArea(int slot)
     {
         area = slot;

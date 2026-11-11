@@ -50,7 +50,7 @@ public class RegionTranslationTests
             Image, new CropRegion(), new LinesReader(Lines("R2 Swing", "Find the blacksmith.")), new FakeTranslator());
         Assert.NotNull(result);
         Assert.Equal("Find the blacksmith.", result.Source);
-        Assert.Equal("TR: Find the blacksmith.", result.Translation);
+        Assert.Equal("AR:Find the blacksmith.", result.Translation);
     }
 
     [Fact]
@@ -59,13 +59,13 @@ public class RegionTranslationTests
         var result = await RegionTranslation.TranslateOnceAsync(
             Image, new CropRegion(), new LinesReader(Lines("Find the blacksmith.", "Bring him three iron bars.")), new FakeTranslator());
         Assert.NotNull(result);
-        Assert.Equal("TR: Find the blacksmith.\nTR: Bring him three iron bars.", result.Translation);
+        Assert.Equal("AR:Find the blacksmith.\nAR:Bring him three iron bars.", result.Translation);
     }
 
     [Fact]
     public async Task BoxIsPlacedInsideTheWholeFrame()
     {
-        // Okunan kutu bölgeye göredir; sonuç bütün karenin oranlarıyla verilir.
+        // المربّع المقروء منسوب إلى المنطقة؛ والنتيجة تُعطى بنِسب الإطار كله.
         var region = new CropRegion(Top: 0.1, Bottom: 0.5, Left: 0.5, Right: 0.9);
         var reading = new Reading([new TextLine("Find the blacksmith.", new TextBox(0, 0, 1, 0.5))]);
         var result = await RegionTranslation.TranslateOnceAsync(Image, region, new LinesReader(reading), new FakeTranslator());

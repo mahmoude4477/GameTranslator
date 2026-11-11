@@ -3,29 +3,29 @@
 namespace GameTranslator.Core;
 
 /// <summary>
-/// Bir bölgeyi tek seferlik okuyup çevirir. Görev ya da bilgi paneli gibi, altyazı gibi akıp gitmeyen
-/// yazılar içindir: bölge sürekli taranmaz, kullanıcı bir tuşa basınca bir kez okunur.
+/// يقرأ منطقة ويترجمها مرة واحدة. مخصَّص للنصوص التي لا تمرّ كالترجمة النصية، مثل لوحة المهام أو المعلومات:
+/// لا تُمسح المنطقة باستمرار، بل تُقرأ مرة واحدة عندما يضغط المستخدم زرًّا.
 /// </summary>
 public static class RegionTranslation
 {
-    /// <param name="Source">Okunan yazı (bloklara ayrılmış, her blok ayrı satırda).</param>
-    /// <param name="Translation">Aynı blokların çevirisi; madde işaretli bloklar "• " ile başlar.</param>
-    /// <param name="Box">Yazının karedeki yeri, kenarlara oranla; TV çeviriyi buraya yerleştirir.</param>
-    /// <param name="Structured">Birden çok blok var (başlık, maddeler...): çeviri satır satır, sola yaslı gösterilmelidir.</param>
+    /// <param name="Source">النص المقروء (مقسَّمًا إلى كتل، كل كتلة في سطر مستقل).</param>
+    /// <param name="Translation">ترجمة الكتل نفسها؛ الكتل ذات علامة البند تبدأ بـ"• ".</param>
+    /// <param name="Box">موضع النص في الإطار، نسبةً إلى الحواف؛ يضع التلفزيون الترجمة هنا.</param>
+    /// <param name="Structured">يوجد أكثر من كتلة (عنوان، بنود...): يجب عرض الترجمة سطرًا سطرًا بمحاذاة بداية السطر.</param>
     public sealed record Result(string Source, string Translation, TextBox Box, bool Structured = false);
 
-    /// <summary>Panelde bir paragraf, başlık ya da madde. <paramref name="Bullet"/> madde işaretiyle başlıyorsa true (işaret metinden çıkarılır).</summary>
+    /// <summary>فقرة أو عنوان أو بند في اللوحة. <paramref name="Bullet"/> يساوي true إذا بدأ بعلامة بند (تُحذف العلامة من النص).</summary>
     public sealed record Block(string Text, bool Bullet);
 
-    /// <summary>Madde işareti olarak kullanılan simgeler.</summary>
+    /// <summary>الرموز المستخدمة علاماتٍ للبنود.</summary>
     private const string BulletChars = "◇◆◈◊♦♢•●○◦▪■□▫►▶‣∙·*-–—✓✔✦❖◉⬥";
 
-    /// <summary>Bölgede yazı yoksa null döner. Çevirmen kullanılamıyorsa <see cref="TranslatorException"/> fırlatır.</summary>
+    /// <summary>يعيد null إذا لم يكن في المنطقة نص. إذا تعذّر استخدام المترجم يرمي <see cref="TranslatorException"/>.</summary>
     public static async Task<Result?> TranslateOnceAsync(
         Frame frame, CropRegion region, ITextReader reader, ITextTranslator translator, CancellationToken cancellationToken = default)
     {
         var area = RegionCropper.Crop(frame, region);
-        // Tek okuma olduğu için "derin" okuma açık: boş görünen bölgede büyütülmüş okuma da denenir.
+        // لأنها قراءة واحدة فالقراءة «العميقة» مفعّلة: تُجرَّب أيضًا القراءة المكبَّرة في المنطقة التي تبدو فارغة.
         var reading = (await Task.Run(() => reader.ReadLines(area, true), cancellationToken).ConfigureAwait(false)).WithoutButtonPrompts();
         if (reading.Lines.Count == 0) return null;
 
@@ -41,17 +41,17 @@ public static class RegionTranslation
         return new Result(string.Join('\n', blocks.Select(block => block.Text)), string.Join('\n', translated), box, blocks.Count > 1);
     }
 
-    /// <summary>Blokların metinleri (madde işaretleri çıkarılmış).</summary>
+    /// <summary>نصوص الكتل (بعد حذف علامات البنود).</summary>
     public static IReadOnlyList<string> Paragraphs(Reading reading) => [.. Blocks(reading).Select(block => block.Text)];
 
     /// <summary>
-    /// Satırları bloklara toplar; böylece görev panelindeki başlık, açıklama ve maddeler ayrı ayrı çevrilir.
-    /// Yeni blok başlar: satır madde işaretiyle başlıyorsa; önceki satır cümleyi bitirdiyse; satırlar arasında belirgin boşluk
-    /// varsa; satır soldan belirgin biçimde dışarı çıkıyorsa (maddenin girintili devam satırından sonra yeni madde gibi).
-    /// Küçük harfle başlayan satır, önceki cümle bitmediyse öncekinin devamıdır (cümle iki satıra bölünmüş).
+    /// يجمع الأسطر في كتل؛ فيُترجم العنوان والوصف والبنود في لوحة المهام كلٌّ على حدة.
+    /// تبدأ كتلة جديدة: إذا بدأ السطر بعلامة بند؛ إذا أنهى السطر السابق الجملة؛ إذا وُجد بين السطرين فراغ واضح؛
+    /// إذا برز السطر إلى اليسار بوضوح (كبند جديد بعد سطر التتمة المُزاح لبند سابق).
+    /// السطر الذي يبدأ بحرف صغير تتمة لسابقه ما لم تنتهِ الجملة السابقة (جملة مقسومة على سطرين).
     /// </summary>
-    /// <param name="width">Okunan alanın genişliği (piksel); kutular oransal olduğu için yatay ve dikey ölçüyü aynı birime getirir.</param>
-    /// <param name="height">Okunan alanın yüksekliği (piksel).</param>
+    /// <param name="width">عرض المساحة المقروءة (بالبكسل)؛ ولأن المربّعات نسبية فهو يوحّد وحدة القياس الأفقي والرأسي.</param>
+    /// <param name="height">ارتفاع المساحة المقروءة (بالبكسل).</param>
     public static IReadOnlyList<Block> Blocks(Reading reading, double width = 1, double height = 1)
     {
         var heights = reading.Lines.Where(line => line.Box is not null)
@@ -93,17 +93,17 @@ public static class RegionTranslation
     private static bool StartsNewBlock(TextLine upper, TextLine lower, string lowerText, double typicalHeight, double width, double height)
     {
         var finished = SubtitleStabilizer.EndsSentence(upper.Text);
-        // Cümle bitmediyse ve satır küçük harfle başlıyorsa devam satırıdır.
+        // إذا لم تنتهِ الجملة وبدأ السطر بحرف صغير فهو سطر تتمة.
         if (!finished && char.IsLower(lowerText[0])) return false;
         if (finished) return true;
         if (upper.Box is not { } a || lower.Box is not { } b || typicalHeight <= 0) return false;
-        // Satırlar arasındaki boşluk satır yüksekliğinin %40'ından büyükse ayrı bloklardır.
+        // إذا زاد الفراغ بين السطرين على 40% من ارتفاع السطر فهما كتلتان منفصلتان.
         if (((b.Top - a.Bottom) * height) > typicalHeight * 0.4) return true;
-        // Soldan yarım satır yüksekliğinden fazla dışarı çıkıyorsa (girintili devam satırından sonra yeni madde) yeni bloktur.
+        // إذا برز إلى اليسار بأكثر من نصف ارتفاع السطر (بند جديد بعد سطر تتمة مُزاح) فهو كتلة جديدة.
         return ((a.Left - b.Left) * width) > typicalHeight * 0.5;
     }
 
-    /// <summary>Satırın başındaki madde işaretini ayırır. Yazı tanıma ◇ simgesini çoğu zaman "<>" ya da tek başına "o"/"0" okur.</summary>
+    /// <summary>يفصل علامة البند في أول السطر. يقرأ التعرّف على النص الرمز ◇ غالبًا على شكل "<>" أو "o"/"0" منفردة.</summary>
     private static (bool Bullet, string Text) StripBullet(string text)
     {
         if (text.Length >= 2 && BulletChars.Contains(text[0])) return (true, text[1..].TrimStart());

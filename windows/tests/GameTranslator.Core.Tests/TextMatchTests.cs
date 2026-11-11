@@ -28,7 +28,7 @@ public class TextMatchTests
         Assert.True(TextMatch.IsSameSubtitle(wordSwap, sent));
     }
 
-    /// İki satırlık altyazı solarken alt satır kaçırıldı: yeni satır değil. Uzayan metin ise yenidir.
+    /// فات السطر السفلي أثناء تلاشي ترجمة نصية من سطرين: ليس سطرا جديدا. أما النص الذي يطول فهو جديد.
     [Fact]
     public void RereadMissingALineIsSameSubtitle()
     {

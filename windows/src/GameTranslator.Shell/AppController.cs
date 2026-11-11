@@ -12,9 +12,9 @@ using GameTranslator.RemotePlay;
 namespace GameTranslator.Shell;
 
 /// <summary>
-/// Uygulamanın durumu ve akışı (Mac'teki AppModel'in karşılığı): kurulum sihirbazı, çeviriyi
-/// başlatma/durdurma, PS5 ve TV durumları. Arayüz bu nesneye bağlanır; olaylar <c>post</c> ile
-/// arayüz iş parçacığına aktarılır.
+/// حالة التطبيق وسير عمله: معالج الإعداد، بدء الترجمة وإيقافها،
+/// وحالتا PS5 والتلفزيون. ترتبط الواجهة بهذا الكائن؛ وتُنقل الأحداث عبر <c>post</c>
+/// إلى خيط الواجهة.
 /// </summary>
 public sealed class AppController : INotifyPropertyChanged, IDisposable
 {
@@ -33,9 +33,9 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     private RegisteredConsole? console;
     private LgTv? tv;
     private TvAppState tvApp = TvAppState.Unknown;
-    /// <summary>Son eşleşmede TV uygulaması açılamadı.</summary>
+    /// <summary>تعذّر فتح تطبيق التلفزيون في آخر اقتران.</summary>
     private bool tvAppMissing;
-    /// <summary>TV uygulaması denetimi sürüyor (bekleme ekranı ve çeviri başlangıcı aynı anda çağırabilir).</summary>
+    /// <summary>فحص تطبيق التلفزيون جارٍ (قد تستدعيه شاشة الانتظار وبدء الترجمة في الوقت نفسه).</summary>
     private bool refreshingTvApp;
     private int? devModeHoursLeft;
     private UserSettings settings;
@@ -58,11 +58,11 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     private IStreamSession? session;
     private IKeeper? keeper;
     private SubtitlePipeline? pipeline;
-    /// <summary>Hattın yazı okuyucusu; ek bölgelerin tek seferlik okuması da bunu kullanır.</summary>
+    /// <summary>قارئ النص في خط المعالجة؛ تستخدمه أيضا القراءة لمرة واحدة للمناطق الإضافية.</summary>
     private ITextReader? activeReader;
     private int extraBusy;
     private bool subtitlesPaused;
-    /// <summary>Oyundaki altyazının son görüldüğü yer; deneme altyazısı TV'de oraya yerleşir.</summary>
+    /// <summary>آخر مكان شوهدت فيه ترجمة اللعبة النصية؛ تُوضع الترجمة التجريبية هناك على التلفزيون.</summary>
     private TextBox? lastSubtitleBox;
     private int processing;
     private string? updateVersion;
@@ -89,14 +89,14 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         server.ClientsChanged += OnClientsChanged;
     }
 
-    // --- Durum ---
+    // --- الحالة ---
 
     public OnboardingStep Step
     {
         get => step;
         set
         {
-            // Eşleştirme adımındaki güvenlik duvarı önerisi başka adıma taşınmaz.
+            // اقتراح جدار الحماية في خطوة الاقتران لا ينتقل إلى خطوة أخرى.
             if (Set(ref step, value, [nameof(CanAdvance), nameof(StepNumber)])) ClearFirewallPrompt();
         }
     }
@@ -123,8 +123,8 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         get
         {
             if (isRunning) return StatusText(sessionState, isRunning, text);
-            if (console is not null) return $"Eşleşti ({console.Host})";
-            return "Eşleşmedi";
+            if (console is not null) return $"مقترن ({console.Host})";
+            return "غير مقترن";
         }
     }
     public StatusTone Ps5Tone => isRunning ? Ps5ToneFor(sessionState, isRunning) : (console is not null ? StatusTone.Good : StatusTone.Idle);
@@ -134,24 +134,24 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     {
         get
         {
-            if (tvClients > 0) return $"{tvClients} Cihaz Bağlı (Hazır)";
-            if (tv is not null) return $"{tv.Name} (Hazır)";
-            return "TV uygulaması bekleniyor";
+            if (tvClients > 0) return $"{tvClients} جهاز متصل (جاهز)";
+            if (tv is not null) return $"{tv.Name} (جاهز)";
+            return "في انتظار تطبيق التلفزيون";
         }
     }
     public string LastSource { get => lastSource; private set => Set(ref lastSource, value); }
     public string LastTranslation { get => lastTranslation; private set => Set(ref lastTranslation, value); }
     public TranslatorStatus TranslatorStatus { get => translatorStatus; private set => Set(ref translatorStatus, value); }
-    /// <summary>Bilgisayarda yazı tanıma dili yok; ayarlardan eklenmesi gerekir.</summary>
+    /// <summary>لا توجد لغة للتعرّف على النص في الكمبيوتر؛ يجب إضافتها من الإعدادات.</summary>
     public bool OcrMissing { get => ocrMissing; private set => Set(ref ocrMissing, value); }
-    /// <summary>Canlı altyazı çevirisi duraklatıldı (Num 0); ek bölge ve serbest alan çevirileri çalışmaya devam eder.</summary>
+    /// <summary>ترجمة النص الحية متوقفة مؤقتا (Num 0)؛ ترجمات المناطق الإضافية والمنطقة الحرة تواصل العمل.</summary>
     public bool SubtitlesPaused { get => subtitlesPaused; private set => Set(ref subtitlesPaused, value); }
     public Frame? LastFrame { get => lastFrame; private set => Set(ref lastFrame, value); }
     public string? ActiveSourceLanguage { get; private set; }
-    /// <summary>Sunucunun gerçekten dinlediği port (8787 doluysa rastgele bir port).</summary>
+    /// <summary>المنفذ الذي يستمع إليه الخادم فعلا (منفذ عشوائي إن كان 8787 مشغولا).</summary>
     public int ServerPort { get; private set; } = DefaultServerPort;
 
-    /// <summary>Bu oyun dilinden hedef dile çeviri modeli var mı (ayarlarda listelenecek diller).</summary>
+    /// <summary>هل الترجمة من لغة اللعبة هذه إلى اللغة الهدف مدعومة (اللغات التي تُعرض في الإعدادات).</summary>
     public bool SupportsLanguage(string source) => services.Translation.IsSupported(source, settings.TargetLanguage);
 
     public bool ModelInstalled => true;
@@ -177,14 +177,14 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         }
     }
 
-    // --- Sihirbaz ---
+    // --- المعالج ---
 
     public bool CanAdvance => true;
 
     public void Advance()
     {
         if (!CanAdvance || step == OnboardingStep.Done) return;
-        // Model büyük; kullanıcı diğer adımlarla uğraşırken arka planda iner.
+        // إن احتاج محرك الترجمة إلى تنزيل فإنه يجري في الخلفية بينما ينشغل المستخدم بالخطوات الأخرى.
         if (step == OnboardingStep.Welcome) StartModelDownload();
         Step = step + 1;
     }
@@ -213,7 +213,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     public async Task<string> InstallAndroidTvAppAsync(string host, Action<TvInstallEvent> onEvent)
     {
         var app = services.BundledApp(TvBrand.AndroidTv)
-                  ?? throw new FileNotFoundException("Android TV APK paketi (tv-app\\gametranslator-androidtv_1.0.0.apk) bulunamadı.");
+                  ?? throw new FileNotFoundException("لم يُعثر على حزمة APK الخاصة بـ Android TV (tv-app\\gametranslator-androidtv_1.0.0.apk).");
         var version = await services.InstallAndroidAppAsync(host, app, onEvent);
         var target = new LgTv("Android TV", host, TvBrand.AndroidTv);
         tv = target;
@@ -232,7 +232,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         if (digits.Length != 8 || !uint.TryParse(digits, out var value)) throw Error(AppError.InvalidPin);
         if (accountId is null)
         {
-            // Eğer PSN girişi yapılmadıysa varsayılan yerel eşleşme kimliği ata
+            // إن لم يُسجَّل الدخول إلى PSN فعيّن معرّف اقتران محلي افتراضي
             accountId = System.Text.Encoding.ASCII.GetBytes("GTPS5ACC");
             store.Save(StoreKeys.AccountId, accountId);
             Changed(nameof(HasAccount));
@@ -244,7 +244,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         }
         catch (RegistrationException error)
         {
-            // PS5 kendi kodunu bildirdiyse yanıt bize ulaşmıştır, güvenlik duvarı sebep değildir.
+            // إن أبلغ PS5 برمز الخطأ الخاص به فقد وصلنا الرد، وجدار الحماية ليس السبب.
             if (error.Reason is null && error.Failure != RegistrationFailure.WrongAccount) await OfferFirewallAsync();
             throw RegistrationError(error);
         }
@@ -259,7 +259,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         Changed(nameof(Console), nameof(CanAdvance), nameof(Ps5StatusText), nameof(Ps5Tone));
     }
 
-    /// <summary>Kullanıcıya gösterilen hata; destek bildirimleri teşhis edilebilsin diye PS5'in kodu da yazılır.</summary>
+    /// <summary>الخطأ المعروض للمستخدم؛ يُكتب معه رمز PS5 كي يمكن تشخيص بلاغات الدعم.</summary>
     private AppException RegistrationError(RegistrationException error)
     {
         var kind = error.Failure switch
@@ -305,7 +305,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         catch { }
     }
 
-    // --- TV uygulamasını kurma ---
+    // --- تثبيت تطبيق التلفزيون ---
 
     public TvAppState TvApp
     {
@@ -317,7 +317,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         }
     }
 
-    /// <summary>LG geliştirici modunun kalan süresi (saat); GameTranslator uzattıktan sonra bilinir.</summary>
+    /// <summary>المدة المتبقية لوضع المطوّر في LG (بالساعات)؛ تُعرف بعد أن يمدّدها GameTranslator.</summary>
     public int? DevModeHoursLeft
     {
         get => devModeHoursLeft;
@@ -328,19 +328,19 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         }
     }
 
-    /// <summary>Seçili TV'ye uygulamayı GameTranslator kurabilir mi (paket uygulamayla geldi mi)?</summary>
+    /// <summary>هل يستطيع GameTranslator تثبيت التطبيق على التلفزيون المحدد (هل جاءت الحزمة مع التطبيق)؟</summary>
     public bool CanInstallTvApp => tv is { } target &&
         (target.Brand == TvBrand.Lg ? services.BundledTvAppVersion is not null : services.BundledApp(target.Brand) is not null);
 
-    /// <summary>Samsung'un sertifika sayfasını tarayıcıda açar (arayüz atar; testlerde boş kalır).</summary>
+    /// <summary>يفتح صفحة شهادة Samsung في المتصفح (تعيّنه الواجهة؛ ويبقى فارغا في الاختبارات).</summary>
     public Action<Uri> OpenInBrowser { get; set; } = _ => { };
 
-    /// <summary>Samsung'da geliştirici modunda "Host PC IP" olarak yazılacak bu bilgisayarın adresi.</summary>
+    /// <summary>عنوان هذا الكمبيوتر الذي يُكتب في Samsung في خانة "Host PC IP" ضمن وضع المطوّر.</summary>
     public string? ComputerAddress => LocalAddress(tv is { Host.Length: > 0 } target ? target.Host : "192.168.1.1");
 
     /// <summary>
-    /// Geliştirici modu açık TV'de uygulamayı eksikse kurar, eskiyse günceller.
-    /// Anahtar yoksa ve uygulama çalışıyorsa kullanıcıdan bir şey istenmez.
+    /// على تلفزيون وضع المطوّر مفعّل فيه: يثبّت التطبيق إن كان ناقصا ويحدّثه إن كان قديما.
+    /// إن لم يوجد مفتاح والتطبيق يعمل فلا يُطلب شيء من المستخدم.
     /// </summary>
     public async Task RefreshTvAppAsync()
     {
@@ -382,13 +382,13 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         await InstallTvAppAsync(target, devKey, bundled);
     }
 
-    /// <summary>Kurulum hatasında TV'nin verdiği sebep de gösterilir; genel mesaj tek başına sorunu bulmaya yetmiyordu.</summary>
+    /// <summary>عند فشل التثبيت يُعرض أيضا السبب الذي ذكره التلفزيون؛ فالرسالة العامة وحدها لم تكن تكفي لمعرفة المشكلة.</summary>
     private static TvAppState FailedState(DevModeException error) =>
         new(TvAppKind.Failed, Error: error.Error,
             Reason: error.Error is DevModeError.InstallFailed or DevModeError.NotEnoughSpace && !string.IsNullOrWhiteSpace(error.Detail)
                 ? error.Detail.Trim() : null);
 
-    /// <summary>Samsung: geliştirici modu açıksa uygulamayı imzalayıp kurar. Sertifika yoksa Samsung girişi istenir.</summary>
+    /// <summary>Samsung: إن كان وضع المطوّر مفعّلا يوقّع التطبيق ويثبّته. إن لم توجد شهادة يُطلب تسجيل الدخول إلى Samsung.</summary>
     private async Task RefreshSamsungAppAsync(LgTv target)
     {
         if (services.BundledApp(TvBrand.Samsung) is not { } bundled) return;
@@ -416,14 +416,14 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         }
     }
 
-    /// <summary>Android TV: ağda ADB'si açık TV'yi bulur, uygulamayı kurar ve açar.</summary>
+    /// <summary>Android TV: يجد على الشبكة التلفزيون المفعّل فيه ADB، ثم يثبّت التطبيق ويفتحه.</summary>
     private async Task RefreshAndroidAppAsync(LgTv target)
     {
         if (services.BundledApp(TvBrand.AndroidTv) is not { } bundled) return;
         var host = target.Host;
         if (host.Length == 0 || !await services.IsAndroidDebugOnAsync(host))
         {
-            // Uygulama kuruluysa ve TV'de hata ayıklama kapalıysa yapılacak bir şey yok.
+            // إن كان التطبيق مثبّتا وتصحيح الأخطاء معطّلا في التلفزيون فلا شيء يُفعل.
             if (!NeedsInstall(bundled))
             {
                 TvApp = new TvAppState(TvAppKind.UpToDate, InstalledAppVersion ?? bundled.Version);
@@ -440,7 +440,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         try
         {
             var version = await services.InstallAndroidAppAsync(host, bundled, e => post(() => InstallEvent(e)));
-            // TV'nin adresi bundan sonra sürüm denetimi için kullanılır.
+            // عنوان التلفزيون يُستخدم بعد الآن لفحص الإصدار.
             var located = target with { Host = host };
             tv = located;
             store.Save(StoreKeys.Tv, located);
@@ -456,7 +456,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
 
     private void InstallEvent(TvInstallEvent e)
     {
-        // Kurulum bittikten sonra gelen geç olay sonucu ezmesin.
+        // حدث متأخر يصل بعد انتهاء التثبيت يجب ألا يطمس النتيجة.
         if (TvApp.Kind is not (TvAppKind.Working or TvAppKind.SignIn or TvAppKind.ApproveOnTv)) return;
         switch (e.Kind)
         {
@@ -473,7 +473,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         }
     }
 
-    /// <summary>Key Server'dan anahtarı alır (TV ekranındaki parolayla) ve uygulamayı kurar.</summary>
+    /// <summary>يجلب المفتاح من Key Server (بكلمة المرور الظاهرة على شاشة التلفزيون) ويثبّت التطبيق.</summary>
     public async Task InstallTvAppAsync(string passphrase)
     {
         if (tv is not { } target || services.BundledTvAppVersion is not { } bundled) return;
@@ -510,7 +510,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         }
         catch (DevModeException error) when (error.Error == DevModeError.KeyRefused)
         {
-            // Geliştirici modu yeniden açılınca TV yeni anahtar üretir; eskisi işe yaramaz.
+            // عند إعادة تفعيل وضع المطوّر يولّد التلفزيون مفتاحا جديدا؛ والقديم لا ينفع.
             store.Remove(StoreKeys.TvDevKey);
             TvApp = new TvAppState(TvAppKind.NeedsPassphrase);
         }
@@ -521,8 +521,8 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     }
 
     /// <summary>
-    /// LG geliştirici modunun 1000 saatlik süresini günde en çok bir kez baştan başlatır; kullanıcı TV'den uzatmak
-    /// zorunda kalmaz.
+    /// يعيد بدء مدة الـ 1000 ساعة لوضع المطوّر في LG مرة واحدة يوميا على الأكثر؛ فلا يضطر المستخدم
+    /// إلى تمديدها من التلفزيون.
     /// </summary>
     private async Task RenewDevSessionIfDueAsync(LgTv target, string devKey)
     {
@@ -543,10 +543,10 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
             return;
         }
         try { await services.PairTvAsync(target, store.Load<string>(StoreKeys.TvKey), ServerAddress(target)); }
-        catch (Exception) { /* TV uygulaması kuruldu; açılmadıysa kullanıcı açabilir */ }
+        catch (Exception) { /* ثُبّت تطبيق التلفزيون؛ إن لم يُفتح فالمستخدم يستطيع فتحه */ }
     }
 
-    /// <summary>TV ağda yeni bir adreste bulundu.</summary>
+    /// <summary>عُثر على التلفزيون في عنوان جديد على الشبكة.</summary>
     public void TvMoved(LgTv moved)
     {
         tv = moved;
@@ -581,7 +581,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
                 ModelDownloading = false;
                 Changed(nameof(ModelInstalled), nameof(CanAdvance));
                 RefreshTranslatorStatus();
-                // Çeviri sürerken model indiyse hat yeni çevirmenle kurulur.
+                // إن اكتمل التنزيل أثناء الترجمة يُعاد بناء خط المعالجة بالمترجم الجديد.
                 if (isRunning && TranslatorStatus == TranslatorStatus.Ready) MakePipeline();
             });
         }
@@ -597,15 +597,15 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     public void SendTestSubtitle()
     {
         server.SendStyle(settings.Style);
-        // Oyunda henüz altyazı görülmediyse altyazı bölgesinin altına yakın tipik bir yer kullanılır.
+        // إن لم تُشاهد ترجمة نصية في اللعبة بعد، يُستخدم مكان نموذجي قرب أسفل منطقة القراءة.
         var region = settings.Region;
         var box = lastSubtitleBox ?? new TextBox(0.3, region.Bottom - 0.1, 0.7, region.Bottom - 0.03);
         server.SendSubtitle(text["This is a test subtitle. Can you see it on top of the game?"], 8000, box);
     }
 
     /// <summary>
-    /// Num 0: canlı altyazı çevirisini duraklatır ya da sürdürür. Alan çevirirken sürekli çeviri de TV'de görünüp
-    /// karışmasın diye kullanılır. TV'de kısa bir bildirim çıkar. Çeviri sürmüyorsa bir şey yapmaz.
+    /// Num 0: يوقف ترجمة النص الحية مؤقتا أو يستأنفها. يُستخدم كي لا تظهر الترجمة المستمرة على التلفزيون
+    /// وتختلط أثناء ترجمة منطقة. يظهر إشعار قصير على التلفزيون. لا يفعل شيئا إن لم تكن الترجمة جارية.
     /// </summary>
     public void ToggleSubtitles()
     {
@@ -621,17 +621,17 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         server.SendSubtitle(text[pause ? "Subtitle translation paused" : "Subtitle translation resumed"], 1800);
     }
 
-    /// <summary>Num 8: ayar ekranı, oyunun şu anki görüntüsünü yeniden alsın.</summary>
+    /// <summary>Num 8: لتلتقط شاشة الإعدادات صورة اللعبة الحالية من جديد.</summary>
     public event Action? SnapshotRequested;
 
     public void RequestSnapshot() => SnapshotRequested?.Invoke();
 
-    /// <summary>Çeviri bilgisayarda da gösterilecekse (metin, kalma süresi ms) ile çağrılır.</summary>
+    /// <summary>يُستدعى بـ (النص، مدة البقاء بالمللي ثانية) إن كانت الترجمة ستُعرض على الكمبيوتر أيضا.</summary>
     public event Action<string, int>? PcResultReady;
 
     /// <summary>
-    /// 1, 2 ya da 3 numaralı ek bölgeyi şimdi bir kez okuyup çevirir; sonuç ayardaki yere (TV, bilgisayar ya da ikisi) gider
-    /// (görev paneli gibi yazılar için). Çeviri sürmüyorsa, bölge kapalıysa ya da önceki istek bitmediyse hiçbir şey yapılmaz.
+    /// يقرأ المنطقة الإضافية رقم 1 أو 2 أو 3 الآن مرة واحدة ويترجمها؛ تذهب النتيجة إلى المكان المحدد في الإعدادات (التلفزيون أو الكمبيوتر أو كليهما)
+    /// (لنصوص مثل لوحة المهام). لا يُفعل شيء إن لم تكن الترجمة جارية أو كانت المنطقة معطّلة أو لم ينتهِ الطلب السابق.
     /// </summary>
     public async Task<ExtraRegionOutcome> TranslateExtraRegionAsync(int slot)
     {
@@ -642,8 +642,8 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     }
 
     /// <summary>
-    /// Serbest alan (Num 5): verilen karedeki alanı bir kez okuyup çevirir. Sonuç, ayardaki hedefe göre TV'ye de gönderilir;
-    /// bilgisayarda gösterilmek üzere her durumda döner (serbest alan penceresi kendisi gösterir).
+    /// المنطقة الحرة (Num 5): يقرأ المنطقة في الإطار المعطى مرة واحدة ويترجمها. تُرسل النتيجة إلى التلفزيون أيضا حسب الهدف في الإعدادات؛
+    /// وتُعاد في كل الأحوال لتُعرض على الكمبيوتر (نافذة المنطقة الحرة تعرضها بنفسها).
     /// </summary>
     public Task<(ExtraRegionOutcome Outcome, RegionTranslation.Result? Result)> TranslateAreaAsync(Frame frame, CropRegion region) =>
         RunRegionAsync(frame, region, settings.FreeAreaTarget != ResultTarget.Pc, false);
@@ -652,7 +652,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     {
         var reader = activeReader;
         if (!isRunning || reader is null) return (ExtraRegionOutcome.NotRunning, null);
-        // Tuşa üst üste basılınca ikinci bir okuma başlamaz.
+        // الضغط المتكرر على المفتاح لا يبدأ قراءة ثانية.
         if (Interlocked.Exchange(ref extraBusy, 1) == 1) return (ExtraRegionOutcome.Busy, null);
         try
         {
@@ -701,14 +701,14 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         }
     }
 
-    /// <summary>Süren "ekranı çevir" işi; yeniden basılınca iptal edilir.</summary>
+    /// <summary>مهمة "ترجِم الشاشة" الجارية؛ تُلغى عند الضغط مجددا.</summary>
     private CancellationTokenSource? screenWork;
-    /// <summary>TV'deki ekran çevirilerinin kalkacağı an; bu andan önce yeniden basmak onları kaldırır.</summary>
+    /// <summary>اللحظة التي ستُزال فيها ترجمات الشاشة عن التلفزيون؛ الضغط مجددا قبلها يزيلها.</summary>
     private DateTime screenShownUntil;
 
     /// <summary>
-    /// Num 9: oyunun şu anki karesinin tamamını bir kez okur, her yazı grubunu ayrı çevirip TV'de kendi yerine koyar.
-    /// Çeviriler hazırlandıkça TV'ye gider. Çeviri sürerken ya da çeviriler TV'deyken yeniden basmak onları kaldırır.
+    /// Num 9: يقرأ كامل إطار اللعبة الحالي مرة واحدة، ويترجم كل مجموعة نص على حدة ويضعها في مكانها على التلفزيون.
+    /// تذهب الترجمات إلى التلفزيون فور تجهيزها. الضغط مجددا أثناء الترجمة أو أثناء ظهور الترجمات على التلفزيون يزيلها.
     /// </summary>
     public async Task<ScreenOutcome> TranslateScreenAsync()
     {
@@ -776,7 +776,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         server.Clear();
     }
 
-    /// <summary>Kurulumu baştan başlatır (kayıtlı her şeyi siler).</summary>
+    /// <summary>يعيد الإعداد من البداية (يحذف كل ما حُفظ).</summary>
     public void ResetSetup()
     {
         Stop();
@@ -790,23 +790,23 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         Changed(nameof(HasAccount), nameof(Console), nameof(Tv));
     }
 
-    /// <summary>Tüm kullanıcı ayarlarını varsayılana sıfırlar.</summary>
+    /// <summary>يعيد كل إعدادات المستخدم إلى قيمها الافتراضية.</summary>
     public void ResetSettings()
     {
         Settings = new UserSettings();
     }
 
-    // --- Çeviri ---
+    // --- الترجمة ---
 
     public async Task StartAsync()
     {
-        // Düğmeye iki kez basılması ya da beklerken tekrar çağrılması ikinci bir oturum açmaz.
+        // الضغط على الزر مرتين أو الاستدعاء مجددا أثناء الانتظار لا يفتح جلسة ثانية.
         if (isRunning || isStarting || console is null || accountId is null || tv is null) return;
         IsStarting = true;
         try
         {
             RefreshTranslatorStatus();
-            try { await StartServerAsync(); } catch { /* port açılamadıysa TV durumu "bekleniyor" kalır */ }
+            try { await StartServerAsync(); } catch { /* إن تعذّر فتح المنفذ تبقى حالة التلفزيون "في الانتظار" */ }
             server.SendStyle(settings.Style);
             SubtitlesPaused = false;
             MakePipeline();
@@ -818,7 +818,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
             stream.Start();
             session = stream;
 
-            // TV uygulamasını başlat ve açık tut; TV kapalıysa açıldığında bağlanır.
+            // شغّل تطبيق التلفزيون وأبقه مفتوحا؛ إن كان التلفزيون مطفأ يتصل عند تشغيله.
             var running = server;
             var tvKeeper = services.MakeKeeper(tv, store.Load<string>(StoreKeys.TvKey), new Dictionary<string, string> { ["server"] = ServerAddress(tv) },
                 () => running.ConnectedClients > 0, moved => post(() => TvMoved(moved)));
@@ -860,21 +860,21 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         ClearFirewallPrompt();
     }
 
-    /// <summary>Bilgisayar uykudan uyanınca bağlantıları hemen yenile.</summary>
+    /// <summary>عند استيقاظ الكمبيوتر من السكون تُجدَّد الاتصالات فورا.</summary>
     public void SystemResumed()
     {
         session?.ReconnectNow();
         keeper?.Reconnect();
     }
 
-    /// <summary>Çeviri başlamamışken bağlı olmamak bir sorun değildir; nokta gri kalır.</summary>
+    /// <summary>عدم الاتصال قبل بدء الترجمة ليس مشكلة؛ تبقى النقطة رمادية.</summary>
     public static StatusTone Ps5ToneFor(SessionState state, bool running) =>
         state.Phase == SessionPhase.Streaming ? StatusTone.Good : running ? StatusTone.Warning : StatusTone.Idle;
 
     public static StatusTone TvToneFor(int clients, bool running) =>
         clients > 0 ? StatusTone.Good : running ? StatusTone.Warning : StatusTone.Idle;
 
-    /// <summary>PS5 durumunun kullanıcıya gösterilecek metni.</summary>
+    /// <summary>نص حالة PS5 الذي يُعرض للمستخدم.</summary>
     public static string StatusText(SessionState state, bool running, Localizer text)
     {
         switch (state.Phase)
@@ -899,9 +899,9 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         server.Dispose();
     }
 
-    // --- İç işleyiş ---
+    // --- الآلية الداخلية ---
 
-    /// <summary>Okuma hattını güncel dillerle (yeniden) kurar.</summary>
+    /// <summary>يبني خط القراءة (من جديد) باللغات الحالية.</summary>
     private void MakePipeline()
     {
         pipeline?.Reset();
@@ -922,7 +922,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
                 if (box is not null) lastSubtitleBox = box;
             });
         };
-        // Model bu arada inmiş olabilir; her çeviri sonucu durumu günceller.
+        // قد يصبح المترجم جاهزا في هذه الأثناء؛ كل نتيجة ترجمة تحدّث الحالة.
         built.TranslationResult += error => post(() => TranslatorStatus = error ?? TranslatorStatus.Ready);
         pipeline = built;
     }
@@ -943,14 +943,14 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         return translation.Create(source, target);
     }
 
-    /// <summary>DeepL yalnız İngilizce oyunlarda açılır.</summary>
+    /// <summary>DeepL يُفعّل في الألعاب الإنجليزية فقط.</summary>
     private bool OnlineTranslationActive =>
         settings.OnlineTranslation && settings.SourceLanguage == "en" && HasDeepLKey;
 
-    /// <summary>Kayıtlı bir DeepL anahtarı var mı (anahtarın kendisi arayüze hiç dönmez).</summary>
+    /// <summary>هل يوجد مفتاح DeepL محفوظ (المفتاح نفسه لا يعود إلى الواجهة أبدا).</summary>
     public bool HasDeepLKey => store.Load<string>(StoreKeys.DeepLKey) is { Length: > 0 };
 
-    /// <summary>Anahtar denenir; geçerliyse (kotası bitmiş olsa da) şifreli depoya yazılır ve çevrimiçi çeviri açılır.</summary>
+    /// <summary>يُجرَّب المفتاح؛ إن كان صالحا (ولو انتهت حصته) يُكتب في المخزن المشفّر وتُفعّل الترجمة عبر الإنترنت.</summary>
     public async Task<OnlineKeyCheck> SetDeepLKeyAsync(string key)
     {
         key = key.Trim();
@@ -966,7 +966,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         return check;
     }
 
-    /// <summary>Kayıtlı anahtarın bu ayki kullanımı.</summary>
+    /// <summary>استخدام المفتاح المحفوظ في هذا الشهر.</summary>
     public Task<OnlineKeyCheck> CheckDeepLKeyAsync() =>
         store.Load<string>(StoreKeys.DeepLKey) is { Length: > 0 } key ? services.CheckOnlineKeyAsync(key)
             : Task.FromResult(new OnlineKeyCheck(OnlineKeyState.Invalid));
@@ -984,7 +984,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         TranslatorStatus = TranslatorStatus.Ready;
     }
 
-    /// <summary>PS5'in adresi değişti: sonraki açılışlar yeni adresle başlasın.</summary>
+    /// <summary>تغيّر عنوان PS5: لتبدأ التشغيلات التالية بالعنوان الجديد.</summary>
     private void ConsoleMoved(RegisteredConsole moved)
     {
         if (console is null) return;
@@ -997,7 +997,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     {
         SessionState = state;
         UpdateTroubleClocks();
-        // Bağlantı koptuysa TV'de eski altyazı kalmasın.
+        // إن انقطع الاتصال فلا تبقى ترجمة قديمة على التلفزيون.
         if (state.Phase == SessionPhase.Disconnected)
         {
             pipeline?.Reset();
@@ -1010,9 +1010,9 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     private async void HandleFrame(Frame frame)
     {
         post(() => LastFrame = frame);
-        // Duraklatıldıysa kare yalnız ek bölgeler ve serbest alan için saklanır; altyazı okunmaz.
+        // عند الإيقاف المؤقت يُحفظ الإطار للمناطق الإضافية والمنطقة الحرة فقط؛ ولا تُقرأ الترجمة النصية.
         if (subtitlesPaused) return;
-        // Önceki kare hâlâ işleniyorsa bu kare atlanır; okuma kareleri biriktirmez.
+        // إن كان الإطار السابق ما زال قيد المعالجة يُتجاوز هذا الإطار؛ فالقراءة لا تراكم الإطارات.
         var current = pipeline;
         if (current is null || Interlocked.Exchange(ref processing, 1) == 1) return;
         try
@@ -1021,7 +1021,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         }
         catch
         {
-            // Tek bir karenin okunamaması akışı durdurmaz.
+            // تعذّر قراءة إطار واحد لا يوقف سير العمل.
         }
         finally
         {
@@ -1038,7 +1038,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         }
         catch (SocketException)
         {
-            // 8787 başka bir uygulamada; TV'ye adres her seferinde bildirildiği için herhangi bir boş port olur.
+            // 8787 مستخدم في تطبيق آخر؛ ولأن العنوان يُبلَّغ للتلفزيون في كل مرة فأي منفذ حر يصلح.
             server.ClientsChanged -= OnClientsChanged;
             server = new SubtitleServer(0);
             server.ClientsChanged += OnClientsChanged;
@@ -1053,7 +1053,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         UpdateTroubleClocks();
     });
 
-    /// <summary>TV ile aynı ağdaki bilgisayar adresi.</summary>
+    /// <summary>عنوان الكمبيوتر على الشبكة نفسها مع التلفزيون.</summary>
     private string ServerAddress(LgTv target) => $"http://{LocalAddress(target.Host) ?? "127.0.0.1"}:{ServerPort}";
 
     public static string? LocalAddress(string near)
@@ -1076,29 +1076,29 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         return fallback;
     }
 
-    // --- Windows Güvenlik Duvarı ---
+    // --- جدار حماية Windows ---
 
-    /// <summary>PS5 bu kadar süre "Yeniden bağlanıyor…" kalırsa güvenlik duvarı kuralına bakılır.</summary>
+    /// <summary>إن بقي PS5 على "جارٍ إعادة الاتصال…" هذه المدة تُفحص قاعدة جدار الحماية.</summary>
     public static readonly TimeSpan Ps5TroubleDelay = TimeSpan.FromSeconds(20);
-    /// <summary>TV uygulaması bu kadar süre bağlanmazsa güvenlik duvarı kuralına bakılır.</summary>
+    /// <summary>إن لم يتصل تطبيق التلفزيون طوال هذه المدة تُفحص قاعدة جدار الحماية.</summary>
     public static readonly TimeSpan TvWaitDelay = TimeSpan.FromSeconds(60);
 
     private FirewallPrompt firewallPrompt;
-    /// <summary>Bu çeviri oturumunda kural bulundu; her denetimde kurallar yeniden taranmaz.</summary>
+    /// <summary>وُجدت القاعدة في جلسة الترجمة هذه؛ فلا تُفحص القواعد من جديد في كل تحقق.</summary>
     private bool firewallRuleSeen;
     private bool checkingFirewall;
     private DateTime? ps5TroubleSince;
     private DateTime? tvWaitingSince;
 
-    /// <summary>Güvenlik duvarı kartı ya da eşleştirme adımındaki düğme; yalnız kural eksikken önerilir.</summary>
+    /// <summary>بطاقة جدار الحماية أو الزر في خطوة الاقتران؛ يُقترح فقط عند غياب القاعدة.</summary>
     public FirewallPrompt FirewallPrompt { get => firewallPrompt; private set => Set(ref firewallPrompt, value); }
 
-    /// <summary>Zaman (testlerde ileri sarılır).</summary>
+    /// <summary>الوقت (يُقدَّم إلى الأمام في الاختبارات).</summary>
     public Func<DateTime> Clock { get; set; } = () => DateTime.UtcNow;
 
     /// <summary>
-    /// Ana ekran birkaç saniyede bir çağırır: PS5 20 saniyedir yeniden bağlanıyorsa ya da TV 60 saniyedir bağlanmadıysa ve
-    /// güvenlik duvarında GameTranslator'a izin yoksa kart önerilir. İkisi de bağlanınca kart kalkar.
+    /// تستدعيه الشاشة الرئيسية كل بضع ثوان: إن كان PS5 يعيد الاتصال منذ 20 ثانية أو لم يتصل التلفزيون منذ 60 ثانية
+    /// ولم يكن GameTranslator مسموحا به في جدار الحماية تُقترح البطاقة. وتُزال البطاقة حين يتصل الاثنان.
     /// </summary>
     public async Task CheckConnectionsAsync()
     {
@@ -1127,8 +1127,8 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     }
 
     /// <summary>
-    /// Kuralı yönetici izniyle ekler. Çeviri sürüyorsa PS5 ve TV hemen yeniden denenir; eşleştirmede kullanıcı yeni
-    /// kodla yeniden bağlanır.
+    /// يضيف القاعدة بإذن المسؤول. إن كانت الترجمة جارية يُعاد الاتصال بـ PS5 والتلفزيون فورا؛ وفي الاقتران يعيد المستخدم
+    /// الاتصال برمز جديد.
     /// </summary>
     public async Task<bool> AllowThroughFirewallAsync()
     {
@@ -1148,14 +1148,14 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         return true;
     }
 
-    /// <summary>Eşleştirme başarısız oldu: kural eksikse düğme önerilir.</summary>
+    /// <summary>فشل الاقتران: إن كانت القاعدة ناقصة يُقترح الزر.</summary>
     private async Task OfferFirewallAsync()
     {
         if (services.Firewall is not { } firewall || firewallPrompt == FirewallPrompt.Working) return;
         FirewallPrompt = await HasFirewallRuleAsync(firewall) ? FirewallPrompt.None : FirewallPrompt.Offer;
     }
 
-    /// <summary>Kurallar arka planda taranır; okunamazsa kural var sayılır (yersiz öneri yapılmaz).</summary>
+    /// <summary>تُفحص القواعد في الخلفية؛ إن تعذّرت قراءتها تُعدّ القاعدة موجودة (كي لا يُقدَّم اقتراح في غير محله).</summary>
     private static async Task<bool> HasFirewallRuleAsync(IFirewall firewall)
     {
         try { return await Task.Run(firewall.HasRule); }
@@ -1168,8 +1168,8 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     }
 
     /// <summary>
-    /// PS5'in ve TV'nin ne zamandan beri bağlanamadığı. PS5 uykudaysa, başka cihazdaysa ya da bağlantıyı reddettiyse
-    /// sorun güvenlik duvarı değildir; sayılmaz.
+    /// منذ متى يتعذّر اتصال PS5 والتلفزيون. إن كان PS5 في وضع السكون أو مستخدما على جهاز آخر أو رفض الاتصال
+    /// فالمشكلة ليست جدار الحماية؛ ولا يُحتسب ذلك.
     /// </summary>
     private void UpdateTroubleClocks()
     {
@@ -1180,17 +1180,17 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         tvWaitingSince = isRunning && tvClients == 0 ? tvWaitingSince ?? now : null;
     }
 
-    // --- Uygulama güncellemesi ---
+    // --- تحديث التطبيق ---
 
-    /// <summary>GitHub'da daha yeni sürüm varsa numarası.</summary>
+    /// <summary>رقم الإصدار الأحدث إن وُجد على GitHub.</summary>
     public string? UpdateVersion { get => updateVersion; private set => Set(ref updateVersion, value); }
     public bool Updating { get => updating; private set => Set(ref updating, value); }
     public double UpdateProgress { get => updateProgress; private set => Set(ref updateProgress, value); }
     public string? UpdateError { get => updateError; private set => Set(ref updateError, value); }
-    /// <summary>Kurulum dosyasıyla kurulduysa tek tıkla güncellenir; değilse sürüm sayfası açılır.</summary>
+    /// <summary>إن ثُبّت بملف التثبيت يُحدَّث بنقرة واحدة؛ وإلا تُفتح صفحة الإصدار.</summary>
     public bool CanUpdateItself => services.Updater?.CanUpdateItself == true;
 
-    /// <summary>Açılışta bir kez; ağ yoksa sessizce geçer.</summary>
+    /// <summary>مرة واحدة عند التشغيل؛ يمرّ بصمت إن لم توجد شبكة.</summary>
     public async Task CheckForUpdateAsync()
     {
         if (services.Updater is not { } updater) return;
@@ -1210,7 +1210,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         UpdateError = null;
         try
         {
-            // Çeviri sürüyorsa önce durur; uygulama güncellenip yeniden açılır.
+            // إن كانت الترجمة جارية تتوقف أولا؛ ثم يُحدَّث التطبيق ويُعاد فتحه.
             Stop();
             await updater.InstallAsync(new ImmediateProgress(value => post(() => UpdateProgress = value)));
         }
@@ -1227,7 +1227,7 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
 
     private AppException Error(AppError error) => new(error, AppException.Describe(error, text));
 
-    /// <summary>Değer değiştiyse yazar ve özelliği (ve ona bağlı olanları) bildirir.</summary>
+    /// <summary>يكتب القيمة إن تغيّرت ويُبلّغ عن الخاصية (وما يرتبط بها).</summary>
     private bool Set<T>(ref T field, T value, string[]? also = null, [CallerMemberName] string name = "")
     {
         if (EqualityComparer<T>.Default.Equals(field, value)) return false;
@@ -1241,21 +1241,21 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         foreach (var name in names) PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
-    /// <summary>Model eksikken ya da dil desteklenmezken kullanılan çevirmen: nedeni bildirir.</summary>
+    /// <summary>مترجم يُستخدم حين لا تتوفر الترجمة أو لا تكون اللغة مدعومة: يُبلّغ عن السبب.</summary>
     private sealed class UnavailableTranslator(TranslatorStatus status) : ITextTranslator
     {
         public Task<string> TranslateAsync(string text, CancellationToken cancellationToken = default) => throw new TranslatorException(status);
     }
 
-    /// <summary>İlerlemeyi bağlama yakalamadan doğrudan iletir (post zaten arayüze aktarır).</summary>
+    /// <summary>يمرّر التقدّم مباشرة دون التقاط السياق (post ينقله إلى الواجهة أصلا).</summary>
     private sealed class ImmediateProgress(Action<double> report) : IProgress<double>
     {
         public void Report(double value) => report(value);
     }
 }
 
-/// <summary>Ek bölgenin tek seferlik çevirisinin sonucu.</summary>
+/// <summary>نتيجة ترجمة المنطقة الإضافية لمرة واحدة.</summary>
 public enum ExtraRegionOutcome { Shown, NoText, NotConfigured, NotRunning, Busy, TranslatorUnavailable, Failed }
 
-/// <summary>"Ekranı çevir"in sonucu; <see cref="Cleared"/>: TV'deki çeviriler kaldırıldı ya da süren iş iptal edildi.</summary>
+/// <summary>نتيجة "ترجِم الشاشة"؛ <see cref="Cleared"/>: أُزيلت الترجمات عن التلفزيون أو أُلغيت المهمة الجارية.</summary>
 public enum ScreenOutcome { Shown, NoText, Cleared, NotRunning, TranslatorUnavailable, Failed }

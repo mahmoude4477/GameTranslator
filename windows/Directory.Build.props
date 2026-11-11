@@ -8,8 +8,8 @@
     <Company>Sefflex</Company>
     <Authors>Sefflex</Authors>
     <Product>GameTranslator</Product>
-    <Copyright>Telif Hakkı © 2026 Sefflex. AGPL-3.0. Uses chiaki-ng (AGPL-3.0).</Copyright>
-    <!-- WPF projesi Mac'te de derlenebilsin (çalıştırmak için Windows gerekir). -->
+    <Copyright>Copyright © 2026 Sefflex. AGPL-3.0. Uses chiaki-ng (AGPL-3.0).</Copyright>
+    <!-- ليُبنى مشروع WPF على Mac أيضًا (التشغيل يتطلب Windows). -->
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
 </Project>

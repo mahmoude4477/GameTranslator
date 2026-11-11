@@ -9,15 +9,15 @@ using System.Windows.Threading;
 namespace GameTranslator.App.Views;
 
 /// <summary>
-/// Ek bölgenin çevirisini bilgisayarda gösteren küçük kutu: ekranın altında ortada, her pencerenin üstünde durur,
-/// odağı almaz. Süre dolunca ya da tıklanınca kapanır.
+/// مربّع صغير يعرض ترجمة المنطقة الإضافية على الكمبيوتر: يقف أسفل الشاشة في الوسط فوق كل النوافذ،
+/// ولا يأخذ التركيز. يُغلق عند انتهاء المدة أو عند النقر عليه.
 /// </summary>
 public sealed class PcResultWindow : Window
 {
     private static PcResultWindow? current;
     private readonly DispatcherTimer timer;
 
-    /// <summary>Çeviriyi gösterir; önceki kutu varsa yerine geçer.</summary>
+    /// <summary>يعرض الترجمة؛ ويحلّ محل المربّع السابق إن وُجد.</summary>
     public static void Display(string text, int milliseconds)
     {
         current?.Close();
@@ -53,7 +53,7 @@ public sealed class PcResultWindow : Window
             },
         };
 
-        // Boyut ölçüldükten sonra altta ortaya yerleştirilir.
+        // يوضع في الوسط بالأسفل بعد قياس الحجم.
         Loaded += (_, _) =>
         {
             Left = work.Left + ((work.Width - ActualWidth) / 2);

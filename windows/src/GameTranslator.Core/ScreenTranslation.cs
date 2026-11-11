@@ -3,38 +3,38 @@
 namespace GameTranslator.Core;
 
 /// <summary>
-/// "Ekranı çevir": karenin tamamı bir kez okunur, yazılar yerlerine göre gruplara ayrılır (menü, görev paneli, bilgi
-/// kutusu, altyazı...) ve her grup ayrı çevrilir. TV her çeviriyi kendi İngilizce yazısının üstüne, o yazının
-/// boyutunda koyar. Sürekli çalışmaz; kullanıcı tuşa basınca bir kez yapılır (Mac: GameTranslatorCore/ScreenTranslation.swift).
+/// «ترجِم الشاشة»: يُقرأ الإطار كله مرة واحدة، وتُقسم النصوص إلى مجموعات بحسب مواضعها (قائمة، لوحة مهام، مربّع
+/// معلومات، ترجمة نصية...) وتُترجم كل مجموعة على حدة. يضع التلفزيون كل ترجمة فوق نصها الإنجليزي وبحجم ذلك
+/// النص. لا يعمل باستمرار؛ يُنفَّذ مرة واحدة عندما يضغط المستخدم الزر.
 /// </summary>
 public static class ScreenTranslation
 {
-    /// <summary>Ekrandaki bir yazı grubu.</summary>
-    /// <param name="Paragraphs">Grubun ayrı ayrı çevrilecek parçaları (başlık, cümle, menü satırı...).</param>
-    /// <param name="Box">Grubun karedeki yeri, kenarlara oranla.</param>
-    /// <param name="LineHeight">Satırlarının tipik yüksekliği, karenin yüksekliğine oranla; TV yazı boyunu buna göre seçer.</param>
+    /// <summary>مجموعة نصوص على الشاشة.</summary>
+    /// <param name="Paragraphs">أجزاء المجموعة التي تُترجم كلٌّ على حدة (عنوان، جملة، سطر قائمة...).</param>
+    /// <param name="Box">موضع المجموعة في الإطار، نسبةً إلى الحواف.</param>
+    /// <param name="LineHeight">الارتفاع المعتاد لأسطرها نسبةً إلى ارتفاع الإطار؛ يختار التلفزيون حجم الخط وفقًا له.</param>
     public sealed record Group(IReadOnlyList<string> Paragraphs, TextBox Box, double LineHeight);
 
-    /// <param name="Translation">Parçaların çevirisi, her parça ayrı satırda.</param>
+    /// <param name="Translation">ترجمة الأجزاء، كل جزء في سطر مستقل.</param>
     public sealed record Item(string Source, string Translation, TextBox Box, double LineHeight)
     {
-        /// <summary>Birden çok parça var: TV satır satır, sola yaslı gösterir.</summary>
+        /// <summary>يوجد أكثر من جزء: يعرضها التلفزيون سطرًا سطرًا بمحاذاة بداية السطر.</summary>
         public bool Paragraphs => Translation.Contains('\n');
     }
 
-    /// <summary>Kalabalık ekranda TV'yi kutuyla doldurmamak ve çeviriyi uzatmamak için en çok bu kadar grup çevrilir.</summary>
+    /// <summary>أقصى عدد من المجموعات يُترجم، حتى لا يمتلئ التلفزيون بالمربّعات ولا تطول الترجمة في الشاشات المزدحمة.</summary>
     public const int MaxGroups = 30;
 
     /// <summary>
-    /// Kareyi okuyup gruplarını sırayla çevirir. Her grup çevrilince o ana kadarki bütün sonuçlarla
-    /// <paramref name="progress"/> çağrılır; böylece TV çeviriler hazırlandıkça dolar. Çevirisi aslıyla aynı olan
-    /// (ad, sayı, zaten Türkçe yazı) grup gösterilmez. Çevirmen kullanılamıyorsa <see cref="TranslatorException"/> fırlatır.
+    /// يقرأ الإطار ويترجم مجموعاته بالترتيب. بعد ترجمة كل مجموعة يُستدعى <paramref name="progress"/> بكل النتائج
+    /// حتى تلك اللحظة؛ فيمتلئ التلفزيون كلما جهزت الترجمات. المجموعة التي تطابق ترجمتُها أصلَها
+    /// (اسم، رقم، نص بلغة الترجمة أصلًا) لا تُعرض. إذا تعذّر استخدام المترجم يرمي <see cref="TranslatorException"/>.
     /// </summary>
     public static async Task<IReadOnlyList<Item>> TranslateAsync(
         Frame frame, ITextReader reader, ITextTranslator translator,
         Action<IReadOnlyList<Item>>? progress = null, CancellationToken cancellationToken = default)
     {
-        // Küçük karede (720p) köşe yazıları birkaç piksel boyundadır; büyütmek yazı tanımanın onları da bulmasını sağlar.
+        // في الإطار الصغير (720p) يكون ارتفاع نصوص الزوايا بضعة بكسلات؛ والتكبير يجعل التعرّف على النص يجدها أيضًا.
         var reading = await Task.Run(() => reader.ReadLines(frame.Height < 900 ? frame.Scaled(2) : frame, false), cancellationToken)
             .ConfigureAwait(false);
         var items = new List<Item>();
@@ -58,9 +58,9 @@ public static class ScreenTranslation
     }
 
     /// <summary>
-    /// Satırları gruplara toplar. Kumanda ipuçları ve yazı tanıma çöpleri atılır; harfi olmayan ya da tek harfli
-    /// satırlar ("23m", "9", "+") göstergedir, çevrilmez. Bir satır, üstündeki satırın hemen altındaysa, yatayda onunla
-    /// üst üste biniyorsa ve yazı boyu benziyorsa o gruba katılır. Gruplar yukarıdan aşağı, en çok <see cref="MaxGroups"/>.
+    /// يجمع الأسطر في مجموعات. تُحذف تلميحات ذراع التحكم وشوائب التعرّف على النص؛ والأسطر التي بلا حروف أو بحرف واحد
+    /// ("23m"، "9"، "+") مؤشرات لا تُترجم. ينضم السطر إلى المجموعة إذا كان تحت سطرها الأخير مباشرة ومتراكبًا معه
+    /// أفقيًا وبحجم خط مقارب. المجموعات من الأعلى إلى الأسفل، وبحدّ أقصى <see cref="MaxGroups"/>.
     /// </summary>
     public static IReadOnlyList<Group> Groups(Reading reading)
     {
@@ -83,7 +83,7 @@ public static class ScreenTranslation
         })];
     }
 
-    /// <summary>Alt satır üsttekinin hemen altında (arada satır yüksekliğinin %80'inden az), yatayda onunla üst üste ve yazı boyu benzer.</summary>
+    /// <summary>السطر السفلي تحت العلوي مباشرة (الفاصل أقل من 80% من ارتفاع السطر)، متراكب معه أفقيًا وبحجم خط مقارب.</summary>
     private static bool Belongs(TextBox lower, TextBox upper)
     {
         double a = upper.Bottom - upper.Top, b = lower.Bottom - lower.Top;
@@ -95,9 +95,9 @@ public static class ScreenTranslation
     }
 
     /// <summary>
-    /// Grubun satırlarını ayrı çevrilecek parçalara böler. Önceki satır cümleyi bitirdiyse ya da kısa bir başlık/menü
-    /// satırıysa (en çok üç sözcük, noktalamasız) ve yeni satır büyük harfle başlıyorsa yeni parça başlar; yoksa satır
-    /// öncekinin devamıdır (cümle iki satıra sarılmış).
+    /// يقسم أسطر المجموعة إلى أجزاء تُترجم كلٌّ على حدة. يبدأ جزء جديد إذا أنهى السطر السابق الجملة، أو كان سطر
+    /// عنوان/قائمة قصيرًا (ثلاث كلمات على الأكثر بلا علامات ترقيم) والسطر الجديد يبدأ بحرف كبير؛ وإلا فالسطر
+    /// تتمة لسابقه (جملة ملتفّة على سطرين).
     /// </summary>
     internal static IReadOnlyList<string> Paragraphs(IReadOnlyList<TextLine> lines)
     {
@@ -114,14 +114,14 @@ public static class ScreenTranslation
         SubtitleStabilizer.EndsSentence(previous) ||
         (char.IsUpper(line[0]) && WordCount(previous) <= 3 && !previous.EndsWith(','));
 
-    /// <summary>En az iki harfi ve iki harfli bir sözcüğü olan satır yazıdır; geri kalanı sayı ve simgedir.</summary>
+    /// <summary>السطر الذي فيه حرفان على الأقل وكلمة من حرفين نصٌّ؛ والباقي أرقام ورموز.</summary>
     internal static bool IsWords(string text) =>
         text.Count(char.IsLetter) >= 2 &&
         text.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Any(word => word.Count(char.IsLetter) >= 2);
 
     private static int WordCount(string text) => text.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length;
 
-    /// <summary>Çevirilerin TV'de kalma süresi (ms): yazı çoksa daha uzun; tuşa yeniden basınca hemen kalkar.</summary>
+    /// <summary>مدة بقاء الترجمات على التلفزيون (ms): أطول كلما كثر النص؛ وتزول فورًا عند ضغط الزر من جديد.</summary>
     public static int DisplayMilliseconds(IReadOnlyList<Item> items) =>
         Math.Clamp(8000 + (items.Sum(item => item.Translation.Length) * 50), 12000, 60000);
 }

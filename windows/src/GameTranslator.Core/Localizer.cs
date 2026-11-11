@@ -7,8 +7,8 @@ using System.Text.Json;
 namespace GameTranslator.Core;
 
 /// <summary>
-/// Ekran metinleri. Mac uygulamasının Localizable.xcstrings dosyası gömülüdür ve doğrudan okunur;
-/// böylece iki uygulama aynı çevirileri kullanır. Anahtar İngilizce metnin kendisidir.
+/// نصوص الواجهة. الفهرس <c>Resources/Localizable.xcstrings</c> في هذا المشروع مضمَّن في التطبيق ويُقرأ مباشرة.
+/// المفتاح هو النص الإنجليزي نفسه.
 /// </summary>
 public sealed class Localizer
 {
@@ -19,7 +19,7 @@ public sealed class Localizer
 
     public static Localizer ForLanguage(string language) => new(language.ToLowerInvariant().StartsWith("en") ? "en" : "ar");
 
-    /// <summary>Windows'un arayüz diline göre: Türkçe değilse İngilizce.</summary>
+    /// <summary>لغة الواجهة عربية دائمًا (<see cref="ForLanguage"/> يعيد "ar" ما لم يبدأ الرمز بـ"en").</summary>
     public static Localizer Current { get; } = ForLanguage("ar");
 
     public string Language => language;
@@ -27,10 +27,10 @@ public sealed class Localizer
     public string this[string key] =>
         Catalog.Value.TryGetValue(key, out var values) && values.TryGetValue(language, out var value) ? value : key;
 
-    /// <summary>xcstrings biçim belirteçlerini (%@, %lld, %1$@ …) verilen değerlerle doldurur.</summary>
+    /// <summary>يملأ محدِّدات التنسيق في xcstrings (%@, %lld, %1$@ …) بالقيم المعطاة.</summary>
     public string Format(string key, params object[] args) => Fill(this[key], args);
 
-    /// <summary>Türkçesi (ya da verilen dili) eksik anahtarlar.</summary>
+    /// <summary>المفاتيح التي تنقصها ترجمة اللغة المعطاة (العربية مثلًا).</summary>
     public static IReadOnlyList<string> MissingTranslations(string language) =>
         [.. Catalog.Value.Where(entry => !entry.Value.ContainsKey(language)).Select(entry => entry.Key)];
 
@@ -51,7 +51,7 @@ public sealed class Localizer
                 position = int.Parse(format.AsSpan(j, digits - j), CultureInfo.InvariantCulture) - 1;
                 j = digits + 1;
             }
-            // Uzunluk belirteçleri (l, ll, h) atlanır; ardından gelen harf türdür.
+            // تُتخطى محدِّدات الطول (l, ll, h)؛ والحرف التالي هو النوع.
             while (j < format.Length && format[j] is 'l' or 'h' or 'q' or 'z') j++;
             if (j >= format.Length || !"@dDiuUxXfgs".Contains(format[j])) { result.Append(format[i]); continue; }
             var index = position >= 0 ? position : next++;
@@ -64,7 +64,7 @@ public sealed class Localizer
     private static Dictionary<string, Dictionary<string, string>> LoadCatalog()
     {
         using var stream = typeof(Localizer).Assembly.GetManifestResourceStream("Localizable.xcstrings")
-            ?? throw new InvalidOperationException("Localizable.xcstrings uygulamaya gömülmemiş");
+            ?? throw new InvalidOperationException("Localizable.xcstrings غير مضمَّن في التطبيق");
         using var document = JsonDocument.Parse(stream);
         var catalog = new Dictionary<string, Dictionary<string, string>>();
         foreach (var entry in document.RootElement.GetProperty("strings").EnumerateObject())

@@ -2,13 +2,13 @@
 
 namespace GameTranslator.Core;
 
-/// <summary>Yazının yeri, içinde bulunduğu alanın kenarlarına oranla (0–1, üstten ve soldan).</summary>
+/// <summary>موضع النص نسبةً إلى حواف المساحة التي يقع فيها (0–1، من الأعلى ومن اليسار).</summary>
 public readonly record struct TextBox(double Left, double Top, double Right, double Bottom)
 {
     public TextBox Union(TextBox other) =>
         new(Math.Min(Left, other.Left), Math.Min(Top, other.Top), Math.Max(Right, other.Right), Math.Max(Bottom, other.Bottom));
 
-    /// <summary>Bu kutu <paramref name="area"/> içindeki oranlarsa, aynı yerin <paramref name="area"/>'yı içeren çerçevedeki oranları.</summary>
+    /// <summary>إذا كان هذا المربّع نسبًا داخل <paramref name="area"/> فهذه نسب الموضع نفسه في الإطار الذي يحوي <paramref name="area"/>.</summary>
     public TextBox PlacedIn(TextBox area)
     {
         var width = area.Right - area.Left;
@@ -17,9 +17,9 @@ public readonly record struct TextBox(double Left, double Top, double Right, dou
     }
 
     /// <summary>
-    /// Ekranın ortasındaki altyazının kutusu ortaya göre simetrik genişletilir. Açık zeminde ya da renkli yazıda yazı
-    /// tanıma satırın bir ucunu okuyamayabilir; kutu yalnız okunan parçayı örterse İngilizcenin geri kalanı yanda görünür
-    /// ve çeviri ortalanmamış durur. Ortadan uzak (köşedeki) yazıya dokunulmaz (Mac: TextBox.centeredOnScreen).
+    /// مربّع الترجمة النصية الواقعة وسط الشاشة يُوسَّع بالتناظر حول المنتصف. على خلفية فاتحة أو مع نص ملوّن قد لا يقرأ
+    /// التعرّف على النص أحد طرفي السطر؛ وإذا غطّى المربّع الجزء المقروء فقط ظهر باقي الإنجليزية جانبًا
+    /// وبدت الترجمة غير موسَّطة. النص البعيد عن المنتصف (في الزاوية) لا يُمسّ.
     /// </summary>
     public TextBox CenteredOnScreen()
     {
@@ -29,10 +29,10 @@ public readonly record struct TextBox(double Left, double Top, double Right, dou
     }
 }
 
-/// <summary>Yazı tanımanın bulduğu bir satır; kutu okunan alana göredir, bilinmiyorsa null.</summary>
+/// <summary>سطر وجده التعرّف على النص؛ المربّع نسبةً إلى المساحة المقروءة، وnull إن لم يُعرف.</summary>
 public sealed record TextLine(string Text, TextBox? Box = null);
 
-/// <summary>Bir karenin okunan satırları, yukarıdan aşağı (Mac: GameTranslatorCore/Reading.swift).</summary>
+/// <summary>الأسطر المقروءة من إطار واحد، من الأعلى إلى الأسفل.</summary>
 public sealed class Reading
 {
     public static readonly Reading Empty = new([]);
@@ -42,22 +42,22 @@ public sealed class Reading
 
     public IReadOnlyList<TextLine> Lines { get; }
 
-    /// <summary>Satırları ayrı ayrı bilinmeyen okuyucular için: her satır sonu bir satırdır.</summary>
+    /// <summary>للقارئات التي لا تعطي الأسطر منفصلة: كل نهاية سطر تفصل سطرًا.</summary>
     public static Reading FromText(string text) =>
         new(text.Replace("\r\n", "\n").Split('\n').Select(line => new TextLine(line.Trim())));
 
     public string Text => string.Join('\n', Lines.Select(line => line.Text));
 
     /// <summary>
-    /// Aynı satırdaki iki sözcük arasındaki boşluk (piksel) ayrı yazılara mı işaret ediyor? Yalnız hem satır yüksekliğinin
-    /// dört katından hem görüntü genişliğinin %12'sinden genişse: soldaki menü ile sağdaki gösterge böyle ayrılır.
-    /// Daha dar boşluk çoğunlukla okunamayan sözcüklerdir (açık zemindeki ince altyazıda yazı tanıma bazı sözcükleri
-    /// atlar); orada bölmek cümleyi parçalara ayırır, parçanın çevirisi anlamsızlaşır ve kutusu satırı örtmez (GTA V).
+    /// هل تدل الفجوة (بالبكسل) بين كلمتين في السطر نفسه على نصّين منفصلين؟ فقط إذا تجاوزت أربعة أضعاف ارتفاع السطر
+    /// و12% من عرض الصورة معًا: هكذا تُفصل القائمة على اليسار عن المؤشر على اليمين.
+    /// الفجوة الأضيق غالبًا كلمات لم تُقرأ (في الترجمة النصية الرفيعة على خلفية فاتحة يتخطى التعرّف على النص بعض
+    /// الكلمات)؛ والتقسيم هناك يفتّت الجملة فتفقد ترجمة الجزء معناها ولا يغطي مربّعه السطر (GTA V).
     /// </summary>
     public static bool IsSeparateText(double gap, double lineHeight, double imageWidth) =>
         gap > lineHeight * 4 && gap > imageWidth * 0.12;
 
-    /// <summary>Bütün satırları içine alan kutu; hiçbir satırın yeri bilinmiyorsa null.</summary>
+    /// <summary>المربّع الذي يحوي كل الأسطر؛ null إذا لم يُعرف موضع أي سطر.</summary>
     public TextBox? Box
     {
         get
@@ -69,21 +69,21 @@ public sealed class Reading
         }
     }
 
-    /// <summary>Oyunun düğme ipuçları ("R2 Swing", "△ Pick up") çıkarılmış hali; bunlar altyazı değildir.</summary>
+    /// <summary>القراءة بعد حذف تلميحات أزرار اللعبة ("R2 Swing"، "△ Pick up")؛ فهي ليست ترجمة نصية.</summary>
     public Reading WithoutButtonPrompts() => new(Lines.Where(line => !ButtonPrompts.IsPrompt(line.Text)));
 
     /// <summary>
-    /// Yazı tanımanın uydurduğu sözcük çöpleri ("ou$3e", "waters2aljd") ayıklanmış hali; çevirmen bunları olduğu
-    /// gibi taşıyıp TV'de anlamsız harfler gösteriyordu.
+    /// القراءة بعد تنقيتها من الكلمات العشوائية التي يختلقها التعرّف على النص ("ou$3e"، "waters2aljd")؛ كان المترجم
+    /// ينقلها كما هي فتظهر على التلفزيون حروف بلا معنى.
     /// </summary>
     public Reading WithoutOcrNoise() => new(Lines.Select(line => line with { Text = OcrNoise.Clean(line.Text) }));
 
     /// <summary>
-    /// Alandaki altyazı bloğu. Seçilen alanda altyazının yanında menü ("MAP / HELP / SETTINGS" alt alta), köşedeki
-    /// gösterge ("9", "PHOTO MODE") da okunuyordu; hepsi tek cümle gibi çevrilip TV'de bütün alanı kaplayan kutuyla
-    /// gösteriliyordu. Satırlar yerlerine göre bloklara ayrılır; ortalanmış ve menü olmayan en alttaki blok altyazıdır.
-    /// Ortalanmış blok yoksa en az üç sözcüklü, menü olmayan en alttaki blok alınır. Satırların yeri bilinmiyorsa
-    /// okuma olduğu gibi kalır. <paramref name="area"/>, okunan alanın karedeki yeridir (Mac: Reading.subtitleBlock).
+    /// كتلة الترجمة النصية في المنطقة. كانت تُقرأ في المنطقة المحددة مع الترجمة النصية قائمةٌ ("MAP / HELP / SETTINGS"
+    /// تحت بعضها) ومؤشرُ الزاوية ("9"، "PHOTO MODE")؛ فيُترجم الكل كجملة واحدة ويُعرض على التلفزيون في مربّع يملأ
+    /// المنطقة كلها. تُقسم الأسطر إلى كتل بحسب مواضعها؛ وأسفل كتلة موسَّطة ليست قائمة هي الترجمة النصية.
+    /// إن لم توجد كتلة موسَّطة تؤخذ أسفل كتلة من ثلاث كلمات على الأقل ليست قائمة. إذا لم تُعرف مواضع الأسطر
+    /// تبقى القراءة كما هي. <paramref name="area"/> هو موضع المساحة المقروءة في الإطار.
     /// </summary>
     public Reading SubtitleBlock(TextBox area)
     {
@@ -106,7 +106,7 @@ public sealed class Reading
         return candidates.Where(reading => WordCount(reading.Text) >= 3).MaxBy(reading => reading.Box!.Value.Bottom) ?? Empty;
     }
 
-    /// <summary>Bloğun son satırının hemen altında ve yatayda onunla üst üste binen satır o bloğa aittir.</summary>
+    /// <summary>السطر الواقع تحت آخر سطر في الكتلة مباشرة والمتراكب معه أفقيًا ينتمي إلى تلك الكتلة.</summary>
     private static bool Belongs(TextBox box, List<TextLine> block, TextBox area)
     {
         var last = block[^1].Box!.Value.PlacedIn(area);
@@ -117,30 +117,30 @@ public sealed class Reading
         return overlap > 0 && overlap >= narrower * 0.5;
     }
 
-    /// <summary>Alt alta kısa ve noktalamasız satırlar ("MAP", "HELP", "SOCIAL CLUB") menüdür, konuşma değil.</summary>
+    /// <summary>الأسطر القصيرة المتتالية بلا علامات ترقيم ("MAP"، "HELP"، "SOCIAL CLUB") قائمة وليست حوارًا.</summary>
     internal bool IsMenu => Lines.Count >= 3 &&
         Lines.All(line => WordCount(line.Text) <= 3 && !SubtitleStabilizer.EndsSentence(line.Text));
 
     private static int WordCount(string text) => text.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length;
 
-    /// <summary>Satır kutularını <paramref name="area"/> içindeki oranlardan dış çerçevenin oranlarına taşır.</summary>
+    /// <summary>ينقل مربّعات الأسطر من النسب داخل <paramref name="area"/> إلى نسب الإطار الخارجي.</summary>
     public Reading PlacedIn(TextBox area) => new(Lines.Select(line => line with { Box = line.Box?.PlacedIn(area) }));
 }
 
 /// <summary>
-/// Oyunların ekranda gösterdiği kumanda ipuçlarını tanır: "R2 Swing", "L1 + R1 Spartan Rage", "△ Pick up",
-/// "Press ✕ to jump". Konuşma satırları dokunulmadan kalır (Mac'teki ButtonPrompts ile aynı kurallar).
+/// يتعرّف على تلميحات ذراع التحكم التي تعرضها الألعاب على الشاشة: "R2 Swing"، "L1 + R1 Spartan Rage"، "△ Pick up"،
+/// "Press ✕ to jump". أسطر الحوار تبقى دون مساس.
 /// </summary>
 public static class ButtonPrompts
 {
-    /// <summary>Her zaman kumanda düğmesi olan simgeler ve adlar (yazı tanıma bazen köşeli parantezle okur).</summary>
+    /// <summary>رموز وأسماء هي دائمًا أزرار ذراع التحكم (يقرؤها التعرّف على النص أحيانًا بين أقواس مربّعة).</summary>
     private static readonly HashSet<string> Buttons = new(StringComparer.OrdinalIgnoreCase)
     {
         "R1", "R2", "R3", "L1", "L2", "L3", "OPTIONS", "TOUCHPAD",
         "✕", "×", "⨯", "✖", "○", "◯", "●", "□", "▢", "◻", "■", "△", "▲", "⨂",
     };
 
-    /// <summary>Simge yazı tanımada harfe dönüşebilir; yalnız ipucu kalıbında düğme sayılır.</summary>
+    /// <summary>قد يتحول الرمز في التعرّف على النص إلى حرف؛ لا يُعدّ زرًّا إلا في صيغة التلميح.</summary>
     private static readonly HashSet<string> Lookalikes = new(StringComparer.Ordinal) { "X", "O" };
 
     private static readonly HashSet<string> Verbs = new(StringComparer.OrdinalIgnoreCase)
@@ -163,9 +163,9 @@ public static class ButtonPrompts
 
         // "R2 Swing", "△ Pick up", "L1 R1 Spartan Rage"
         if (Buttons.Contains(first)) return words <= 5;
-        // "PHOTO MODE L1 + R1": düğme sonda, önünde kısa ve noktalamasız bir eylem adı.
+        // "PHOTO MODE L1 + R1": الزر في الآخر وقبله اسم فعل قصير بلا علامات ترقيم.
         if (Buttons.Contains(tokens[^1]) && words <= 4 && !SubtitleStabilizer.EndsSentence(line)) return true;
-        // "X Interact", "O Back": ardından kısa, büyük harfle başlayan, noktalamasız bir eylem gelir.
+        // "X Interact", "O Back": يليه فعل قصير يبدأ بحرف كبير وبلا علامات ترقيم.
         if (Lookalikes.Contains(first) && tokens.Count is >= 2 and <= 4 && char.IsUpper(tokens[1][0]) &&
             !SubtitleStabilizer.EndsSentence(line))
             return true;

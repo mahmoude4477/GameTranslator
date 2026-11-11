@@ -15,8 +15,8 @@
     <InternalsVisibleTo Include="GameTranslator.RemotePlay.Tests" />
   </ItemGroup>
 
-  <!-- Yerel kütüphane CI'da (windows.yml, native işi) derlenip buraya konur; varsa çıktıya ve
-       yayın klasörüne kopyalanır (bu projeye başvuran uygulama ve testler de alır). -->
+  <!-- المكتبة الأصلية تُبنى على حدة (windows/native) وتوضع هنا؛ وإن وُجدت تُنسخ إلى مجلد المخرجات
+       ومجلد النشر (ويحصل عليها أيضًا التطبيق والاختبارات التي تشير إلى هذا المشروع). -->
   <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\bin\gametranslator_native.dll')">
     <None Include="$(MSBuildThisFileDirectory)..\..\native\bin\gametranslator_native.dll" Link="gametranslator_native.dll"
           CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Visible="false" />

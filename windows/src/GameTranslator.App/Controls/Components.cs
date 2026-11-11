@@ -6,10 +6,10 @@ using GameTranslator.Shell;
 
 namespace GameTranslator.App.Controls;
 
-// Ortak bileşenler (docs/TASARIM.md). Görünümleri Theme/Styles.xaml'daki şablonlarda; ölçü ve renkler
-// tokens.json'dan gelen kaynaklardan. Mac'teki bileşenlerle aynı adları taşır.
+// المكوّنات المشتركة (docs/DESIGN.md). مظهرها في قوالب Theme/Styles.xaml؛ والمقاسات والألوان
+// من الموارد القادمة من tokens.json.
 
-/// <summary>Sihirbaz adımlarının ortak düzeni: simge rozeti, başlık, açıklama, içerik.</summary>
+/// <summary>التخطيط المشترك لخطوات المعالج: شارة الأيقونة، العنوان، الوصف، المحتوى.</summary>
 public class StepLayout : ContentControl
 {
     public static readonly DependencyProperty GlyphProperty = DependencyProperty.Register(nameof(Glyph), typeof(string), typeof(StepLayout));
@@ -23,7 +23,7 @@ public class StepLayout : ContentControl
     public string Message { get => (string)GetValue(MessageProperty); set => SetValue(MessageProperty, value); }
 }
 
-/// <summary>Başlıklı ya da başlıksız içerik kartı.</summary>
+/// <summary>بطاقة محتوى بعنوان أو بدونه.</summary>
 public class Card : ContentControl
 {
     public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(nameof(Title), typeof(string), typeof(Card));
@@ -33,7 +33,7 @@ public class Card : ContentControl
     public string? Title { get => (string?)GetValue(TitleProperty); set => SetValue(TitleProperty, value); }
 }
 
-/// <summary>Numaralı talimat satırı.</summary>
+/// <summary>سطر تعليمات مرقّم.</summary>
 public class NumberedRow : Control
 {
     public static readonly DependencyProperty NumberProperty = DependencyProperty.Register(nameof(Number), typeof(int), typeof(NumberedRow));
@@ -45,7 +45,7 @@ public class NumberedRow : Control
     public string Text { get => (string)GetValue(TextProperty); set => SetValue(TextProperty, value); }
 }
 
-/// <summary>Renkli durum noktası, adı ve değeri.</summary>
+/// <summary>نقطة حالة ملوّنة مع اسمها وقيمتها.</summary>
 public class StatusRow : Control
 {
     public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(nameof(Title), typeof(string), typeof(StatusRow));
@@ -59,7 +59,7 @@ public class StatusRow : Control
     public StatusTone Tone { get => (StatusTone)GetValue(ToneProperty); set => SetValue(ToneProperty, value); }
 }
 
-/// <summary>Segoe Fluent Icons simge adları (Mac'teki SF Symbols karşılıkları).</summary>
+/// <summary>أسماء أيقونات Segoe Fluent Icons.</summary>
 public static class Glyphs
 {
     public const string Captions = "";

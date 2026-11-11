@@ -3,42 +3,42 @@
 
 namespace GameTranslator.Core;
 
-/// <summary>Kare → bölge → yazı tanıma → kararlılık → çeviri → TV.</summary>
+/// <summary>الإطار ← منطقة القراءة ← التعرّف على النص ← الاستقرار ← الترجمة ← التلفزيون.</summary>
 public sealed class SubtitlePipeline(ITextReader reader, ITextTranslator translator, ISubtitleSender sender, ReadScheduler? scheduler = null)
 {
     private readonly object gate = new();
-    /// <summary>Varsayılanı her kareyi okur; uygulama gereksiz okumaları atlayan planı verir.</summary>
+    /// <summary>الافتراضي يقرأ كل إطار؛ التطبيق يمرّر الخطة التي تتخطى القراءات غير اللازمة.</summary>
     private readonly ReadScheduler schedule = scheduler ?? ReadScheduler.Always();
-    /// <summary>Kareler saniyede ~20 kez okunur; yaklaşık 0,3 sn boş kalan bölge altyazının kalktığı anlamına gelir.</summary>
+    /// <summary>تُقرأ الإطارات نحو 20 مرة في الثانية؛ بقاء المنطقة فارغة نحو 0.3 ثانية يعني أن الترجمة النصية اختفت.</summary>
     private readonly SubtitleStabilizer stabilizer = new(emptyFramesToClear: 6);
     private readonly Dictionary<int, Task> translations = [];
     /// <summary>
-    /// Her çeviri isteği sıra numarası alır. Hızlı konuşmada çeviriler sırasız dönebilir:
-    /// daha yeni bir satırın çevirisi gösterilmediyse eski satırınki yine gösterilir.
+    /// يأخذ كل طلب ترجمة رقمًا تسلسليًا. في الحوار السريع قد تعود الترجمات بغير ترتيبها:
+    /// تُعرض ترجمة السطر الأقدم ما لم تكن ترجمة سطر أحدث قد عُرضت.
     /// </summary>
     private int lastRequested;
     private int lastShown;
-    /// <summary>Şu an oyun ekranında duran satırın numarası (bölge boşalınca null).</summary>
+    /// <summary>رقم السطر الظاهر الآن على شاشة اللعبة (null عندما تفرغ المنطقة).</summary>
     private int? lineOnScreen;
-    /// <summary>Okuma durdurulunca artar; önceki oturumdan dönen çeviriler gösterilmez.</summary>
+    /// <summary>يزداد عند إيقاف القراءة؛ لا تُعرض الترجمات العائدة من الجلسة السابقة.</summary>
     private int session;
-    /// <summary>Son okunan satırlar; kare değişmediyse yeniden okunmaz, bunlar kullanılır.</summary>
+    /// <summary>آخر الأسطر المقروءة؛ إذا لم يتغيّر الإطار لا يُقرأ من جديد بل تُستخدم هذه.</summary>
     private Reading lastReading = Reading.Empty;
 
     public (string Source, string Translation)? LastPair { get; private set; }
-    /// <summary>Son gösterilen çevirinin oyundaki altyazısının karedeki yeri.</summary>
+    /// <summary>موضع الترجمة النصية للعبة في الإطار، لآخر ترجمة عُرضت.</summary>
     public TextBox? LastBox { get; private set; }
     public TranslatorStatus? LastError { get; private set; }
 
-    /// <summary>Yeni çeviri gösterilince çağrılır (kaynak, çeviri).</summary>
+    /// <summary>يُستدعى عند عرض ترجمة جديدة (الأصل، الترجمة).</summary>
     public event Action<string, string>? PairShown;
-    /// <summary>Her çeviri denemesinden sonra çağrılır (başarılıysa null).</summary>
+    /// <summary>يُستدعى بعد كل محاولة ترجمة (null إذا نجحت).</summary>
     public event Action<TranslatorStatus?>? TranslationResult;
 
-    /// <summary>Okuma çeviriyi beklemez; böylece çeviri sürerken gelen satırlar da yakalanır.</summary>
+    /// <summary>القراءة لا تنتظر الترجمة؛ فتُلتقط أيضًا الأسطر التي تظهر أثناء الترجمة.</summary>
     public async Task ProcessAsync(Frame frame, CropRegion region)
     {
-        // Yazı tanıma uzun sürebilir; çağıranı (arayüzü) bekletmemek için iş parçacığı havuzunda yapılır.
+        // قد يطول التعرّف على النص؛ يُنفَّذ في مجمّع الخيوط حتى لا ينتظر المستدعي (الواجهة).
         var raw = await Task.Run(() =>
         {
             try
@@ -60,9 +60,9 @@ public sealed class SubtitlePipeline(ITextReader reader, ITextTranslator transla
             }
             catch { return Reading.Empty; }
         });
-        // Kumanda ipuçları ("R2 Swing") altyazı değildir; çevrilmez, yeri de altyazının yerine katılmaz.
-        // Yazı tanımanın uydurduğu sözcük çöpleri ("ou$3e") de çevirmene gitmez.
-        // Alandaki menü ve köşe göstergeleri de altyazı değildir; yalnız altyazı bloğu çevrilir ve kutusu ona göre olur.
+        // تلميحات ذراع التحكم ("R2 Swing") ليست ترجمة نصية؛ لا تُترجم ولا يدخل موضعها في موضع الترجمة النصية.
+        // والكلمات العشوائية التي يختلقها التعرّف على النص ("ou$3e") لا تصل إلى المترجم أيضًا.
+        // والقوائم ومؤشرات الزوايا في المنطقة ليست ترجمة نصية؛ تُترجم كتلة الترجمة النصية وحدها ويُحسب مربّعها منها.
         var area = new TextBox(region.Left, region.Top, region.Right, region.Bottom);
         var reading = raw.WithoutButtonPrompts().WithoutOcrNoise().SubtitleBlock(area);
 
@@ -79,8 +79,8 @@ public sealed class SubtitlePipeline(ITextReader reader, ITextTranslator transla
                     var number = ++lastRequested;
                     var current = session;
                     lineOnScreen = number;
-                    // Çevirmen burada, istek sırasıyla çağrılır (ayrı görevle başlatılsa sıra karışabilirdi).
-                    // Çeviri hemen bittiyse kendini zaten listeden çıkarmıştır; yeniden eklenmez.
+                    // يُستدعى المترجم هنا بترتيب الطلبات (لو بدأ في مهمة منفصلة لاختلط الترتيب).
+                    // إذا انتهت الترجمة فورًا فقد أزالت نفسها من القائمة؛ لا تُضاف من جديد.
                     var box = reading.Box?.PlacedIn(area).CenteredOnScreen();
                     var task = TranslateAndForget(action.Text!, box, number, current);
                     if (!task.IsCompleted) translations[number] = task;
@@ -89,7 +89,7 @@ public sealed class SubtitlePipeline(ITextReader reader, ITextTranslator transla
         }
     }
 
-    /// <summary>Süren bütün çevirilerin bitmesini bekler.</summary>
+    /// <summary>ينتظر انتهاء كل الترجمات الجارية.</summary>
     public async Task WaitForTranslationsAsync()
     {
         while (true)
@@ -101,7 +101,7 @@ public sealed class SubtitlePipeline(ITextReader reader, ITextTranslator transla
         }
     }
 
-    /// <summary>Satır ekrandan kalktıktan sonra gelen çevirinin TV'de kalacağı süre (TV uygulamasıyla aynı kural).</summary>
+    /// <summary>مدة بقاء الترجمة على التلفزيون إذا وصلت بعد اختفاء السطر من الشاشة (القاعدة نفسها في تطبيق التلفزيون).</summary>
     public static int ReadingTime(string text) => Math.Min(8000, 2000 + (text.Length * 60));
 
     private async Task TranslateAndForget(string source, TextBox? box, int number, int current)
@@ -122,7 +122,7 @@ public sealed class SubtitlePipeline(ITextReader reader, ITextTranslator transla
             lock (gate)
             {
                 if (current != session) return;
-                // Model eksikse ya da geçici bir hata olduysa satır ekranda kaldıkça yeniden denenir.
+                // إذا كان المترجم غير متاح أو حدث خطأ مؤقت تُعاد المحاولة ما دام السطر على الشاشة.
                 LastError = (error as TranslatorException)?.Status;
                 if (number == lineOnScreen) stabilizer.ForgetSent();
             }
@@ -141,7 +141,7 @@ public sealed class SubtitlePipeline(ITextReader reader, ITextTranslator transla
         {
             if (number <= lastShown || !stabilizer.ShouldSend(source, translated)) return;
             lastShown = number;
-            // Satır hâlâ ekrandaysa kalkınca silinir; kalktıysa okunacak kadar gösterilir.
+            // إذا كان السطر ما زال على الشاشة يُمسح عند اختفائه؛ وإن اختفى يُعرض مدة تكفي لقراءته.
             sender.SendSubtitle(translated, number == lineOnScreen ? 15000 : ReadingTime(translated), box);
             LastPair = (source, translated);
             LastBox = box;
@@ -149,7 +149,7 @@ public sealed class SubtitlePipeline(ITextReader reader, ITextTranslator transla
         PairShown?.Invoke(source, translated);
     }
 
-    /// <summary>Okuma durunca TV'deki son altyazıyı kaldırır.</summary>
+    /// <summary>يزيل آخر ترجمة نصية من التلفزيون عند توقف القراءة.</summary>
     public void Reset()
     {
         lock (gate)

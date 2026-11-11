@@ -8,8 +8,8 @@ using Microsoft.Win32;
 namespace GameTranslator.App.Theme;
 
 /// <summary>
-/// design/tokens.json'daki değerleri uygulama kaynaklarına çevirir. Renkler Windows'un uygulama
-/// temasını (açık/koyu) izler; XAML bunları DynamicResource ile kullanır, tema değişince anında güncellenir.
+/// يحوّل قيم design/tokens.json إلى موارد التطبيق. تُختار الألوان بحسب السمة (فاتحة/داكنة)؛
+/// ويستخدمها XAML عبر DynamicResource فتتحدّث فورًا عند إعادة تطبيق السمة.
 /// </summary>
 public static class ThemeManager
 {
@@ -17,7 +17,7 @@ public static class ThemeManager
 
     public static void Apply(ResourceDictionary resources, bool? forceDark = null)
     {
-        // GameTranslator bir oyun uygulamasıdır; her zaman modern ve şık Koyu Temayı (Dark Theme) kullanır.
+        // GameTranslator تطبيق ألعاب؛ يستخدم دائمًا السمة الداكنة (Dark Theme) العصرية والأنيقة.
         var dark = forceDark ?? true;
         foreach (var (name, pair) in Tokens.Color)
         {
@@ -47,7 +47,7 @@ public static class ThemeManager
         foreach (var (name, value) in Tokens.Size) resources[$"size.{name}"] = value;
     }
 
-    /// <summary>Tema değişince kaynakları yeniler.</summary>
+    /// <summary>يجدّد الموارد عند تغيّر السمة.</summary>
     public static void Follow(ResourceDictionary resources)
     {
         SystemEvents.UserPreferenceChanged += (_, e) =>

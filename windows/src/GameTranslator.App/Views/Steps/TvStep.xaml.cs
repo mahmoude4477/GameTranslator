@@ -27,7 +27,7 @@ public partial class TvStep : UserControl
     {
         Done.Text = Controller.Tv?.Name ?? "";
         Done.Visibility = Controller.Tv is null ? Visibility.Collapsed : Visibility.Visible;
-        // Uygulamayla TV paketi gelmediyse (geliştirici derlemesi) rehber gösterilir.
+        // إذا لم تأتِ حزمة التلفزيون مع التطبيق (بناء المطوّر) يُعرض الدليل.
         ManualInstall.Visibility = Controller.Tv is null or { Brand: TvBrand.Lg } || Controller.CanInstallTvApp
             ? Visibility.Collapsed : Visibility.Visible;
     }
@@ -62,7 +62,7 @@ public partial class TvStep : UserControl
         }
         catch (SsapException error) when (error.Reason != "cannot connect")
         {
-            // TV yanıt verdi ama reddetti ya da süre doldu: gerçek nedeni göster.
+            // التلفزيون ردّ لكنه رفض أو انتهت المهلة: اعرض السبب الحقيقي.
             Error.Text = $"{Localizer.Current["The TV did not respond. Make sure it is on and on the same network."]} ({error.Reason})";
         }
         catch (Exception)

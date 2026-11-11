@@ -8,7 +8,7 @@
     <StackPanel Margin="32">
         <Grid Width="88" Height="88">
                         <Image Source="/Assets/logo.png" RenderOptions.BitmapScalingMode="HighQuality" />
-                        <!-- Koyu temada logonun kenarı zeminden ayrılsın. -->
+                        <!-- ليتميّز طرف الشعار عن الخلفية في السمة الداكنة. -->
                         <Border BorderBrush="{DynamicResource borderBrush}" BorderThickness="1" CornerRadius="19.9" />
                     </Grid>
         <TextBlock Text="GameTranslator" Style="{StaticResource TitleText}" HorizontalAlignment="Center" Margin="0,12,0,0" />

@@ -7,7 +7,7 @@ using GameTranslator.Core;
 
 namespace GameTranslator.RemotePlay;
 
-/// <summary>Bağlantı koptuğunda yeniden deneme aralıkları: 2, 4, 8, 16, en çok 30 sn.</summary>
+/// <summary>فواصل إعادة المحاولة عند انقطاع الاتصال: 2، 4، 8، 16، وبحد أقصى 30 ثانية.</summary>
 internal sealed class ReconnectPolicy
 {
     private int attempt;
@@ -24,7 +24,7 @@ internal sealed class ReconnectPolicy
 
 internal static class DisconnectReasons
 {
-    /// <summary>Yerel kütüphanenin CS_QUIT_* değerini kullanıcıya anlatılabilecek nedene çevirir.</summary>
+    /// <summary>يحوّل قيمة CS_QUIT_* من المكتبة الأصلية إلى سبب يمكن شرحه للمستخدم.</summary>
     public static DisconnectReason FromNative(int quit, string? text) => quit switch
     {
         NativeMethods.QuitStopped => new(DisconnectKind.Stopped),
@@ -35,7 +35,7 @@ internal static class DisconnectReasons
     };
 }
 
-/// <summary>Sırayla çalışan tek iş parçacıklı kuyruk (Mac'teki seri DispatchQueue karşılığı).</summary>
+/// <summary>طابور بخيط واحد ينفّذ المهام بالتتابع.</summary>
 internal sealed class SerialQueue : IDisposable
 {
     private readonly Channel<Action> channel = Channel.CreateUnbounded<Action>(new UnboundedChannelOptions { SingleReader = true });
@@ -70,38 +70,38 @@ internal sealed class SerialQueue : IDisposable
     public void Dispose() => channel.Writer.TryComplete();
 }
 
-/// <summary>PS5'e (ikinci hesapla) Remote Play bağlantısı kurar ve görüntüyü kare kare verir.
-/// Ses kapalıdır, kol girdisi gönderilmez. Bağlantı koparsa kendiliğinden yeniden bağlanır.</summary>
+/// <summary>ينشئ اتصال Remote Play مع PS5 (بالحساب الثاني) ويسلّم الصورة إطارًا إطارًا.
+/// الصوت مغلق ولا تُرسل مدخلات ذراع التحكم. إذا انقطع الاتصال يعيد الاتصال تلقائيًا.</summary>
 public sealed class StreamSession : IStreamSession
 {
-    /// <summary>Yerel CChiaki / gametranslator_native DLL sistemde yüklenebiliyor mu.</summary>
+    /// <summary>هل يمكن تحميل مكتبة CChiaki / gametranslator_native الأصلية (DLL) على النظام.</summary>
     public static bool IsNativeAvailable => NativeMethods.IsAvailable;
 
-    /// <summary>Saniyede en çok bu kadar kare BGRA'ya çevrilir (Mac'teki gibi).</summary>
+    /// <summary>أقصى عدد من الإطارات يُحوَّل إلى BGRA في الثانية.</summary>
     internal const int MaxFps = 20;
 
-    /// <summary>Çözülmüş kare. Oturumun kare iş parçacığında çağrılır; işleyici meşgulken gelen kareler atlanır.</summary>
+    /// <summary>إطار مفكوك الترميز. يُستدعى في خيط إطارات الجلسة؛ والإطارات الواردة أثناء انشغال المعالج تُتخطى.</summary>
     public event Action<Frame>? FrameReceived;
-    /// <summary>Oturum kuyruğunun iş parçacığında çağrılır.</summary>
+    /// <summary>يُستدعى في خيط طابور الجلسة.</summary>
     public event Action<SessionState>? StateChanged;
-    /// <summary>Oturum kuyruğunun iş parçacığında çağrılır.</summary>
+    /// <summary>يُستدعى في خيط طابور الجلسة.</summary>
     public event Action<RegisteredConsole>? ConsoleMoved;
 
-    /// <summary>Tüm ağı taramak pahalı; PS5 kapalıyken her yeniden denemede yapılmaz.</summary>
+    /// <summary>مسح الشبكة كلها مكلف؛ فلا يُجرى في كل إعادة محاولة و PS5 مطفأ.</summary>
     private static readonly TimeSpan RelocateInterval = TimeSpan.FromSeconds(30);
 
-    /// <summary>Yalnız kuyrukta değişir (PS5'in adresi değişirse).</summary>
+    /// <summary>يتغيّر في الطابور وحده (إذا تغيّر عنوان PS5).</summary>
     private RegisteredConsole console;
     private DateTime nextRelocate = DateTime.MinValue;
     private readonly byte[] accountId;
     private readonly SerialQueue queue = new("GameTranslator stream session");
     private readonly FrameDelivery delivery;
     private readonly ReconnectPolicy policy = new();
-    /// <summary>Yalnız kuyrukta okunup yazılır.</summary>
+    /// <summary>يُقرأ ويُكتب في الطابور وحده.</summary>
     private SessionBox? box;
 
-    /// <summary>Durdurma isteği ve kuşak numarası; her başlat/durdur yeni bir kuşak açar ve eski
-    /// bloklar (yeniden deneme, eski oturumun kapanma olayı) kendini iptal eder.</summary>
+    /// <summary>طلب الإيقاف ورقم الجيل؛ كل بدء/إيقاف يفتح جيلًا جديدًا فتلغي الكتل القديمة
+    /// (إعادة المحاولة، حدث إغلاق الجلسة القديمة) نفسها.</summary>
     private readonly Lock stateLock = new();
     private bool running;
     private int generation;
@@ -125,14 +125,14 @@ public sealed class StreamSession : IStreamSession
         });
     }
 
-    /// <summary>Bloklamaz: oturum arka planda kapatılır.</summary>
+    /// <summary>لا يحجب: تُغلق الجلسة في الخلفية.</summary>
     public void Stop()
     {
         Bump(running: false);
         queue.Post(CloseBox);
     }
 
-    /// <summary>Bilgisayar uykudan uyandığında ya da ağ değiştiğinde uygulama tarafından çağrılır.</summary>
+    /// <summary>يستدعيه التطبيق عند استيقاظ الكمبيوتر من السكون أو عند تغيّر الشبكة.</summary>
     public void ReconnectNow()
     {
         if (!IsRunning) return;
@@ -160,7 +160,7 @@ public sealed class StreamSession : IStreamSession
         });
     }
 
-    // Durum
+    // الحالة
 
     private bool IsRunning
     {
@@ -181,14 +181,14 @@ public sealed class StreamSession : IStreamSession
         lock (stateLock) return running && generation == value;
     }
 
-    // Bağlantı (hepsi kuyrukta)
+    // الاتصال (كله في الطابور)
 
     private void Connect(int current)
     {
         if (!IsCurrent(current) || box is not null) return;
         Emit(SessionState.Connecting);
 
-        // PS5 uyuyorsa uyandır; uyanmayı kuyruğu bloklamadan, aralıklı kontrollerle bekle.
+        // إن كان PS5 نائمًا فأيقظه؛ وانتظر استيقاظه بفحوص متباعدة دون حجب الطابور.
         var info = ConsoleDiscovery.Discover(console.Host, TimeSpan.FromSeconds(2)).FirstOrDefault() ?? Relocate();
         if (info is { IsAwake: false })
         {
@@ -200,14 +200,14 @@ public sealed class StreamSession : IStreamSession
         OpenSession(current);
     }
 
-    /// <summary>Kayıtlı adreste PS5 yoksa (modem adresini değiştirmiş olabilir) ağda arar; bulursa adresi günceller.</summary>
+    /// <summary>إن لم يوجد PS5 على العنوان المسجَّل (ربما غيّر الراوتر عنوانه) يبحث في الشبكة؛ وإن وجده حدّث العنوان.</summary>
     private ConsoleInfo? Relocate()
     {
         if (DateTime.UtcNow < nextRelocate) return null;
         nextRelocate = DateTime.UtcNow + RelocateInterval;
         var moved = ConsoleDiscovery.PickMoved(ConsoleDiscovery.Discover(null, TimeSpan.FromSeconds(3)), console.Name);
         if (moved is null || moved.Host == console.Host) return null;
-        RemotePlayLog.Write(1, $"PS5 yeni adreste: {console.Host} -> {moved.Host}");
+        RemotePlayLog.Write(1, $"PS5 على عنوان جديد: {console.Host} -> {moved.Host}");
         console = console.WithHost(moved.Host);
         try { ConsoleMoved?.Invoke(console); }
         catch (Exception error) { RemotePlayLog.Write(0, $"ConsoleMoved handler: {error}"); }
@@ -240,7 +240,7 @@ public sealed class StreamSession : IStreamSession
         box = started;
     }
 
-    /// <summary>Geçerli oturumu kapatır. Kapatma join içerdiği için kuyruğu bekletmemek adına arka planda yapılır.</summary>
+    /// <summary>يغلق الجلسة الحالية. الإغلاق يتضمن join، لذا يُجرى في الخلفية حتى لا ينتظر الطابور.</summary>
     private void CloseBox()
     {
         if (box is not { } closing) return;
@@ -248,7 +248,7 @@ public sealed class StreamSession : IStreamSession
         Task.Run(closing.TearDown);
     }
 
-    /// <summary>Yerel kütüphanenin iş parçacığından çağrılır.</summary>
+    /// <summary>يُستدعى من خيط المكتبة الأصلية.</summary>
     private void Handle(int eventType, int quitReason, string? text, int eventGeneration)
     {
         switch (eventType)
@@ -262,7 +262,7 @@ public sealed class StreamSession : IStreamSession
                 });
                 break;
             case NativeMethods.EventLoginPin:
-                // Kol girdisi göndermediğimiz için şifre giremeyiz; yeniden denemek de aynı yere çıkar.
+                // لا نرسل مدخلات ذراع التحكم فلا يمكننا إدخال الرمز؛ وإعادة المحاولة تنتهي إلى النتيجة نفسها.
                 queue.Post(() =>
                 {
                     if (box?.Generation != eventGeneration) return;
@@ -273,10 +273,10 @@ public sealed class StreamSession : IStreamSession
                 break;
             case NativeMethods.EventQuit:
                 var reason = DisconnectReasons.FromNative(quitReason, text);
-                RemotePlayLog.Write(1, $"Oturum kapandı: neden {quitReason} ({reason.Kind}) {text}");
+                RemotePlayLog.Write(1, $"أُغلقت الجلسة: السبب {quitReason} ({reason.Kind}) {text}");
                 queue.Post(() =>
                 {
-                    // Eski bir oturumun (ör. ReconnectNow ile kapatılanın) kapanma olayı yeni oturumu etkilemez.
+                    // حدث إغلاق جلسة قديمة (مثل التي أُغلقت بـ ReconnectNow) لا يؤثر في الجلسة الجديدة.
                     if (box?.Generation != eventGeneration) return;
                     CloseBox();
                     ScheduleReconnect(eventGeneration, reason);
@@ -299,8 +299,8 @@ public sealed class StreamSession : IStreamSession
         catch (Exception error) { RemotePlayLog.Write(0, $"StateChanged handler: {error}"); }
     }
 
-    /// <summary>Tek bir yerel oturumun sahibi. Geri çağrılar bu kutuya gelir; kutu (ve GCHandle'ı) oturum
-    /// durdurulup iş parçacıkları beklenene kadar yaşar, böylece geri çağrı bırakılmış nesneye düşmez.</summary>
+    /// <summary>مالك جلسة أصلية واحدة. تصل ردود النداء إلى هذا الصندوق؛ ويبقى الصندوق (مع GCHandle الخاص به) حيًّا
+    /// حتى تُوقَف الجلسة ويُنتظر انتهاء خيوطها، فلا يقع رد نداء على كائن محرَّر.</summary>
     private sealed class SessionBox
     {
         public int Generation { get; }
@@ -323,7 +323,7 @@ public sealed class StreamSession : IStreamSession
             failure = null;
             if (!NativeMethods.IsAvailable)
             {
-                failure = "gametranslator_native DLL bulunamadı. Lütfen Chiaki veya ilgili bileşenleri kontrol edin.";
+                failure = "تعذر العثور على مكتبة gametranslator_native (DLL). تحقق من Chiaki أو المكونات المرتبطة به.";
                 return null;
             }
             try

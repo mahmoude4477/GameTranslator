@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// PSN girişiyle Remote Play kaydı için gereken hesap kimliğini alır.
-// Akış ve istemci bilgileri chiaki-ng'den (gui/include/psnaccountid.h, gui/src/psnaccountid.cpp).
+// يحصل عبر تسجيل الدخول إلى PSN على معرّف الحساب اللازم لتسجيل Remote Play.
+// التدفق وبيانات العميل مأخوذة من chiaki-ng (gui/include/psnaccountid.h, gui/src/psnaccountid.cpp).
 
 using System.Buffers.Binary;
 using System.Globalization;
@@ -12,7 +12,7 @@ namespace GameTranslator.RemotePlay;
 
 public sealed class PsnAccountException : Exception
 {
-    /// <summary>Sunucu hata durumu döndürdüyse HTTP kodu; yanıt anlaşılamadıysa null.</summary>
+    /// <summary>رمز HTTP إن أعاد الخادم حالة خطأ؛ و null إن تعذر فهم الرد.</summary>
     public int? StatusCode { get; }
 
     public PsnAccountException(int? statusCode = null)
@@ -30,7 +30,7 @@ public static class PsnAccount
 
     private static readonly HttpClient SharedClient = new() { Timeout = TimeSpan.FromSeconds(30) };
 
-    /// <summary>Uygulama içi tarayıcıda (WebView2) açılacak Sony giriş sayfası.</summary>
+    /// <summary>صفحة تسجيل الدخول لدى Sony التي تُفتح في متصفح التطبيق الداخلي (WebView2).</summary>
     public static Uri AuthorizeUrl { get; } = new("https://auth.api.sonyentertainmentnetwork.com/2.0/oauth/authorize?" + Query(
     [
         ("service_entity", "urn:service-entity:psn"),
@@ -47,7 +47,7 @@ public static class PsnAccount
         ("PlatformPrivacyWs1", "minimal"),
     ]));
 
-    /// <summary>Giriş bitince tarayıcının gittiği yönlendirme adresinden tek kullanımlık kodu çıkarır.</summary>
+    /// <summary>يستخرج الرمز ذا الاستخدام الواحد من عنوان إعادة التوجيه الذي ينتقل إليه المتصفح بعد تسجيل الدخول.</summary>
     public static string? CodeFromRedirect(Uri url)
     {
         if (!url.IsAbsoluteUri || !url.AbsoluteUri.StartsWith(RedirectPrefix, StringComparison.Ordinal)) return null;
@@ -60,7 +60,7 @@ public static class PsnAccount
         return null;
     }
 
-    /// <summary>Kodu token'a, token'ı hesap kimliğine (8 bayt) çevirir. Token saklanmaz.</summary>
+    /// <summary>يحوّل الرمز إلى token ثم الـ token إلى معرّف الحساب (8 بايتات). لا يُحفظ الـ token.</summary>
     public static Task<byte[]> AccountIdAsync(string code, CancellationToken ct = default) => AccountIdAsync(code, SharedClient, ct);
 
     internal static async Task<byte[]> AccountIdAsync(string code, HttpClient client, CancellationToken ct)
@@ -92,7 +92,7 @@ public static class PsnAccount
         return (text is null ? null : AccountIdBytes(text)) ?? throw new PsnAccountException();
     }
 
-    /// <summary>Ondalık <c>user_id</c>'yi 8 baytlık little-endian dizisine çevirir.</summary>
+    /// <summary>يحوّل <c>user_id</c> العشري إلى مصفوفة من 8 بايتات بترتيب little-endian.</summary>
     internal static byte[]? AccountIdBytes(string userId)
     {
         if (!ulong.TryParse(userId, NumberStyles.None, CultureInfo.InvariantCulture, out var value)) return null;
@@ -121,7 +121,7 @@ public static class PsnAccount
         throw new PsnAccountException();
     }
 
-    /// <summary>Mac'teki URLComponents gibi kodlar: sorguda izinli karakterler (":" ve "/" dahil) olduğu gibi kalır.</summary>
+    /// <summary>يرمّز الاستعلام: المحارف المسموح بها فيه (ومنها ":" و "/") تبقى كما هي.</summary>
     internal static string Query(IEnumerable<(string Name, string Value)> items) =>
         string.Join("&", items.Select(item => Encode(item.Name) + "=" + Encode(item.Value)));
 

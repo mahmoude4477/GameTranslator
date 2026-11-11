@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Mac uygulamasıyla ortak tek kaynaklar: tasarım değerleri ve metinler. -->
+    <!-- المصادر الوحيدة المضمَّنة في التطبيق: قيم التصميم ونصوص الواجهة. -->
     <EmbeddedResource Include="..\..\..\design\tokens.json" LogicalName="tokens.json" />
     <EmbeddedResource Include="Resources\obs-overlay.html" LogicalName="obs-overlay.html" />
     <EmbeddedResource Include="Resources\Localizable.xcstrings" LogicalName="Localizable.xcstrings" />

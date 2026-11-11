@@ -11,7 +11,7 @@ public partial class TranslationStep : UserControl
     public TranslationStep()
     {
         InitializeComponent();
-        // Sihirbaz başında indirme başlamamışsa (ör. ayarlardan geri gelindi) burada başlar.
+        // إذا لم يبدأ تجهيز محرك الترجمة في بداية المعالج (مثلًا عند العودة من الإعدادات) يبدأ هنا.
         Loaded += (_, _) => ((AppController)DataContext).StartModelDownload();
     }
 

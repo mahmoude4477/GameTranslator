@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 
 namespace GameTranslator.RemotePlay;
 
-/// <summary>gametranslator_native.dll (windows/native/gametranslator_native.h) çağrıları. Geri çağrılar
-/// <c>UnmanagedCallersOnly</c> durağan işlevlerdir; nesneye <c>GCHandle</c> ile ulaşılır.</summary>
+/// <summary>استدعاءات gametranslator_native.dll (windows/native/gametranslator_native.h). دوال رد النداء
+/// دوال ساكنة من نوع <c>UnmanagedCallersOnly</c>؛ ويُوصل إلى الكائن عبر <c>GCHandle</c>.</summary>
 internal static unsafe partial class NativeMethods
 {
     internal const string Library = "gametranslator_native";
@@ -63,7 +63,7 @@ internal static unsafe partial class NativeMethods
     private static readonly Lock InitLock = new();
     private static bool initialized;
 
-    /// <summary>Ağ yığını ilk kullanımda bir kez hazırlanır. Kütüphane yoksa DllNotFoundException.</summary>
+    /// <summary>يُجهَّز مكدس الشبكة مرة واحدة عند أول استخدام. إن غابت المكتبة يُرمى DllNotFoundException.</summary>
     internal static void EnsureInitialized()
     {
         lock (InitLock)
@@ -75,7 +75,7 @@ internal static unsafe partial class NativeMethods
         }
     }
 
-    /// <summary>Kütüphane bu makinede yüklenebiliyor mu (Mac'te ve DLL'siz derlemelerde hayır).</summary>
+    /// <summary>هل يمكن تحميل المكتبة على هذا الجهاز (لا على Mac ولا في البنيات الخالية من DLL).</summary>
     internal static bool IsAvailable
     {
         get
@@ -88,7 +88,7 @@ internal static unsafe partial class NativeMethods
 
     internal static string? Utf8(byte* text) => text == null ? null : Marshal.PtrToStringUTF8((nint)text);
 
-    /// <summary>C dizisini sıfırdan önceki kısmıyla dizgeye çevirir.</summary>
+    /// <summary>يحوّل مصفوفة C إلى سلسلة نصية بالجزء السابق للصفر.</summary>
     internal static string FixedString(byte* bytes, int length)
     {
         var end = 0;
@@ -96,7 +96,7 @@ internal static unsafe partial class NativeMethods
         return System.Text.Encoding.UTF8.GetString(bytes, end);
     }
 
-    /// <summary>Baytları sabit uzunlukta, sıfırla doldurulmuş diziye kopyalar (fazlası kesilir).</summary>
+    /// <summary>ينسخ البايتات إلى مصفوفة ثابتة الطول مكمَّلة بالأصفار (ويُقطع الزائد).</summary>
     internal static byte[] Padded(byte[] data, int length)
     {
         var result = new byte[length];
@@ -107,16 +107,16 @@ internal static unsafe partial class NativeMethods
     internal static string LevelName(int level) => level switch { 0 => "error", 1 => "warning", _ => "info" };
 }
 
-/// <summary>libchiaki'nin günlük satırları (hata, uyarı, bilgi). Tanı için; kayıt ve oturum sırasında gelir.</summary>
+/// <summary>أسطر سجل libchiaki (خطأ، تحذير، معلومة). للتشخيص؛ تصل أثناء التسجيل والجلسة.</summary>
 public static class RemotePlayLog
 {
-    /// <summary>Yerel kütüphanenin iş parçacığında çağrılır; hızlı dönmeli.</summary>
+    /// <summary>يُستدعى في خيط المكتبة الأصلية؛ ويجب أن يعود سريعًا.</summary>
     public static event Action<string>? MessageLogged;
 
     internal static void Write(int level, string? message)
     {
         if (message is null) return;
         try { MessageLogged?.Invoke($"[chiaki {NativeMethods.LevelName(level)}] {message}"); }
-        catch { /* günlük dinleyicisinin hatası yerel iş parçacığını düşürmemeli */ }
+        catch { /* خطأ مستمع السجل يجب ألا يُسقط الخيط الأصلي */ }
     }
 }

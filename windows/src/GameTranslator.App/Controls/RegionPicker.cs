@@ -12,14 +12,14 @@ using Frame = GameTranslator.Core.Frame;
 namespace GameTranslator.App.Controls;
 
 /// <summary>
-/// Son karenin üstünde bir bölgeyi gösteren ve fareyle çizilen çerçeve: boş yerde sürükleyince yeni bölge çizilir,
-/// kenar ve köşelerden tutunca boyutu, içinden tutunca yeri değişir.
+/// إطار يُظهر منطقة فوق آخر إطار فيديو ويُرسم بالفأرة: السحب في مكان فارغ يرسم منطقة جديدة،
+/// والإمساك بالحواف والزوايا يغيّر حجمها، والإمساك من داخلها يغيّر مكانها.
 /// </summary>
 public sealed class RegionPicker : UserControl
 {
-    /// <summary>Kenara bu kadar piksel yaklaşınca kenar tutulur.</summary>
+    /// <summary>تُمسك الحافة عند الاقتراب منها بهذا العدد من البكسلات.</summary>
     private const double Grab = 10;
-    /// <summary>Bölge her kenarda en az bu orana (0–1) sahip olur.</summary>
+    /// <summary>لا يقل طول المنطقة في كل اتجاه عن هذه النسبة (0–1).</summary>
     private const double MinSize = 0.03;
 
     [Flags]
@@ -31,7 +31,7 @@ public sealed class RegionPicker : UserControl
     private readonly Rectangle frameBox = new() { StrokeThickness = 2, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, IsHitTestVisible = false };
     private readonly Rectangle[] handles = [Handle(), Handle(), Handle(), Handle()];
     private CropRegion region = new();
-    /// <summary>Görüntünün en/boy oranı; önizleme genişliğe göre bu oranla boy alır (pencere büyüdükçe büyür).</summary>
+    /// <summary>نسبة عرض الصورة إلى ارتفاعها؛ يأخذ ارتفاع المعاينة هذه النسبة بحسب العرض (تكبر مع تكبير النافذة).</summary>
     private double aspect = 16.0 / 9;
     private Drag drag = Drag.None;
     private Edges dragEdges;
@@ -40,7 +40,7 @@ public sealed class RegionPicker : UserControl
 
     public event EventHandler<CropRegion>? RegionChanged;
 
-    /// <summary>"Alanı sıfırla" düğmesinin döneceği bölge (ek bölgelerin varsayılanı altyazınınkinden farklıdır).</summary>
+    /// <summary>المنطقة التي يعود إليها زر «إعادة ضبط المنطقة» (افتراضي المناطق الإضافية يختلف عن افتراضي الترجمة النصية).</summary>
     public CropRegion DefaultRegion { get; set; } = new();
 
     public RegionPicker()
@@ -87,14 +87,14 @@ public sealed class RegionPicker : UserControl
         }
     }
 
-    /// <summary>Bölgeyi olay göndermeden değiştirir (sekme değişirken ayar kaydedilmesin diye).</summary>
+    /// <summary>يغيّر المنطقة دون إرسال حدث (حتى لا يُحفظ الإعداد عند تبديل علامة التبويب).</summary>
     public void ShowRegion(CropRegion value)
     {
         region = value;
         Layout();
     }
 
-    /// <summary>Çeviri başlayınca oyun görüntüsü burada görünür.</summary>
+    /// <summary>تظهر صورة اللعبة هنا عند بدء الترجمة.</summary>
     public Frame? Frame
     {
         set
@@ -127,7 +127,7 @@ public sealed class RegionPicker : UserControl
         }
     }
 
-    // --- Fare ---
+    // --- الفأرة ---
 
     private void OnDown(object sender, MouseButtonEventArgs e)
     {
@@ -188,7 +188,7 @@ public sealed class RegionPicker : UserControl
         var finished = drag;
         drag = Drag.None;
         preview.ReleaseMouseCapture();
-        // Tıklamak ya da çok küçük çizmek bölgeyi bozmasın: önceki bölge kalır.
+        // النقر أو رسم منطقة صغيرة جدًا لا يفسد المنطقة: تبقى المنطقة السابقة.
         if (finished == Drag.Draw && (region.Right - region.Left < MinSize || region.Bottom - region.Top < MinSize))
             region = dragStart;
         Layout();
@@ -197,18 +197,18 @@ public sealed class RegionPicker : UserControl
 
     private static double Clamp01(double value) => Math.Clamp(value, 0, 1);
 
-    /// <summary>Çerçevenin görüntüdeki dikdörtgeni (piksel).</summary>
+    /// <summary>مستطيل الإطار داخل الصورة (بالبكسل).</summary>
     private Rect Bounds()
     {
         var (width, height) = (preview.ActualWidth, preview.ActualHeight);
         return new Rect(width * region.Left, height * region.Top, width * (region.Right - region.Left), height * (region.Bottom - region.Top));
     }
 
-    /// <summary>İmleç hangi kenarların yakınında (köşede iki kenar).</summary>
+    /// <summary>الحواف التي يقترب منها المؤشر (حافتان عند الزاوية).</summary>
     private Edges EdgesAt(Point point)
     {
         var bounds = Bounds();
-        // Çerçevenin dışında, kenardan fazla uzaktaysa hiçbir kenar tutulmaz.
+        // خارج الإطار وبعيدًا عن الحافة لا تُمسك أي حافة.
         var near = new Rect(bounds.X - Grab, bounds.Y - Grab, bounds.Width + (2 * Grab), bounds.Height + (2 * Grab));
         if (!near.Contains(point)) return Edges.None;
         var edges = Edges.None;
@@ -216,7 +216,7 @@ public sealed class RegionPicker : UserControl
         else if (Math.Abs(point.X - bounds.Right) <= Grab) edges |= Edges.Right;
         if (Math.Abs(point.Y - bounds.Top) <= Grab) edges |= Edges.Top;
         else if (Math.Abs(point.Y - bounds.Bottom) <= Grab) edges |= Edges.Bottom;
-        // Çok küçük bir çerçevede iki kenar üst üste gelebilir; yalnız köşe/kenar yatay ya da dikey olarak tutulur.
+        // في إطار صغير جدًا قد تتطابق حافتان؛ تُمسك حافة واحدة فقط أفقيًا وواحدة عموديًا.
         return edges;
     }
 
@@ -229,7 +229,7 @@ public sealed class RegionPicker : UserControl
         _ => inside ? Cursors.SizeAll : Cursors.Cross,
     };
 
-    /// <summary>Önizlemenin boyu, genişliğe ve görüntünün oranına göre ayarlanır.</summary>
+    /// <summary>يُضبط ارتفاع المعاينة بحسب العرض ونسبة الصورة.</summary>
     private void FitHeight()
     {
         if (ActualWidth <= 0) return;

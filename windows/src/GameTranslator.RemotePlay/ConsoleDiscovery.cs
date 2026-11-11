@@ -8,23 +8,23 @@ using System.Runtime.InteropServices;
 
 namespace GameTranslator.RemotePlay;
 
-/// <summary>Yerel ağdaki PS5'leri bulur ve uyutulmuş olanı uyandırır.</summary>
+/// <summary>يعثر على أجهزة PS5 في الشبكة المحلية ويوقظ الجهاز الموضوع في وضع السكون.</summary>
 public static class ConsoleDiscovery
 {
     internal const string Broadcast = "255.255.255.255";
 
-    /// <summary><paramref name="host"/> verilirse yalnız o adrese sorulur (genel yayın bazı ağlarda engellenebiliyor).
-    /// İptal, beklemeyi bırakır; arka plandaki arama süresi dolunca kendiliğinden biter.</summary>
+    /// <summary>إذا أُعطي <paramref name="host"/> يُسأل ذلك العنوان وحده (البث العام قد يُحجب في بعض الشبكات).
+    /// الإلغاء يترك الانتظار؛ والبحث في الخلفية ينتهي تلقائيًا عند انقضاء مدته.</summary>
     public static Task<IReadOnlyList<ConsoleInfo>> DiscoverAsync(string? host = null, TimeSpan? timeout = null, CancellationToken ct = default)
     {
         var duration = timeout ?? TimeSpan.FromSeconds(3);
-        // Arama süre boyunca uyuyarak bekler; iş havuzunu tutmamak için ayrı iş parçacığında çalışır.
+        // البحث ينتظر نائمًا طوال المدة؛ لذا يعمل في خيط مستقل حتى لا يشغل مجمع الخيوط.
         return Task.Factory.StartNew(() => Discover(host, duration), CancellationToken.None,
                                      TaskCreationOptions.LongRunning, TaskScheduler.Default).WaitAsync(ct);
     }
 
-    /// <summary>Taramada bulunanlar arasından kayıtlı PS5'i seçer: tek PS5 varsa odur, birden çoksa adı tek eşleşen.
-    /// Emin olunamıyorsa null (yanlış konsola bağlanmaya çalışmaktansa adres değiştirilmez).</summary>
+    /// <summary>يختار PS5 المسجَّل من نتائج البحث: إن وُجد جهاز واحد فهو المقصود، وإن تعددت فالوحيد المطابق للاسم.
+    /// عند عدم التأكد يعيد null (لا يُغيَّر العنوان بدل محاولة الاتصال بجهاز خاطئ).</summary>
     internal static ConsoleInfo? PickMoved(IReadOnlyList<ConsoleInfo> found, string name)
     {
         if (found.Count == 1) return found[0];
@@ -32,7 +32,7 @@ public static class ConsoleDiscovery
         return named.Count == 1 ? named[0] : null;
     }
 
-    /// <summary>Kayıtlı PS5'i dinlenme modundan uyandırır.</summary>
+    /// <summary>يوقظ PS5 المسجَّل من وضع الراحة.</summary>
     public static void Wake(RegisteredConsole console)
     {
         var credential = console.WakeCredential ?? throw new InvalidOperationException("Registration key is not a wake credential");
@@ -52,15 +52,15 @@ public static class ConsoleDiscovery
         public readonly Dictionary<string, ConsoleInfo> Hosts = [];
     }
 
-    /// <summary>Bloklayan arama (oturum kuyruğu ve DiscoverAsync kullanır).</summary>
+    /// <summary>بحث حاجب (يستخدمه طابور الجلسة و DiscoverAsync).</summary>
     internal static unsafe IReadOnlyList<ConsoleInfo> Discover(string? host, TimeSpan timeout)
     {
-        // 1. Önce saf .NET UDP soketiyle ara (DLL gerektirmez, sıfır çökme garantisi!)
+        // 1. ابحث أولًا بمقبس UDP من .NET وحده (لا يحتاج DLL، ولا خطر انهيار!)
         var managed = DiscoverPureManaged(host, timeout);
         if (managed.Count > 0 || !NativeMethods.IsAvailable)
             return managed;
 
-        // 2. Eğer yerel DLL varsa onu dene
+        // 2. إن وُجدت مكتبة DLL الأصلية فجرّبها
         try
         {
             var targets = host is null ? LocalTargets() : [host];
@@ -87,7 +87,7 @@ public static class ConsoleDiscovery
         }
         catch
         {
-            // Sessizce managed sonuca dön
+            // ارجع بصمت إلى نتيجة البحث المُدار
         }
 
         return managed;
@@ -149,13 +149,13 @@ public static class ConsoleDiscovery
                 }
                 catch
                 {
-                    // Diğer hatalarda döngüyü kesme
+                    // لا تقطع الحلقة عند الأخطاء الأخرى
                 }
             }
         }
         catch
         {
-            // Soket açma hatası
+            // خطأ في فتح المقبس
         }
         return [.. found.Values.OrderBy(c => c.Host, StringComparer.Ordinal)];
     }
@@ -171,11 +171,11 @@ public static class ConsoleDiscovery
         }
         catch
         {
-            // Yerel iş parçacığına istisna sızmamalı.
+            // يجب ألا يتسرب استثناء إلى الخيط الأصلي.
         }
     }
 
-    /// <summary>Bağlı IPv4 ağlarındaki tüm adresler (en çok /22, yani 1022 adres) ve genel yayın.</summary>
+    /// <summary>كل العناوين في شبكات IPv4 المتصلة (حتى /22، أي 1022 عنوانًا) مع عنوان البث العام.</summary>
     internal static IReadOnlyList<string> LocalTargets()
     {
         var result = new List<string>();
@@ -195,13 +195,13 @@ public static class ConsoleDiscovery
         }
         catch (NetworkInformationException)
         {
-            // Ağ bilgisi okunamazsa yalnız genel yayın kalır.
+            // إذا تعذرت قراءة معلومات الشبكة يبقى البث العام وحده.
         }
         result.Add(Broadcast);
         return [.. result.Distinct()];
     }
 
-    /// <summary>Ağdaki diğer adresler (ağ ve yayın adresi hariç); /22'den büyük ağlarda boş.</summary>
+    /// <summary>العناوين الأخرى في الشبكة (عدا عنواني الشبكة والبث)؛ فارغة في الشبكات الأكبر من /22.</summary>
     internal static IReadOnlyList<uint> Hosts(uint address, uint netmask)
     {
         var hostCount = ~netmask;

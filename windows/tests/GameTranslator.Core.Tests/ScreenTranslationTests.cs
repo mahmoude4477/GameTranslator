@@ -14,7 +14,7 @@ public class ScreenTranslationTests
     [Fact]
     public void LinesFarApartBecomeSeparateGroups()
     {
-        // Sol üstte görev paneli, sağ altta bilgi kutusu, ortada altyazı.
+        // لوحة المهمة أعلى اليسار، مربّع المعلومات أسفل اليمين، والترجمة النصية في الوسط.
         var groups = ScreenTranslation.Groups(new Reading([
             Line("Find the blacksmith in", 0.05, 0.10, 0.30),
             Line("the village square", 0.05, 0.135, 0.25),
@@ -82,7 +82,7 @@ public class ScreenTranslationTests
             Line("Leave the camp", 0.60, 0.80, 0.90),
         ])), new FakeTranslator(), list => reported.Add(list.Count));
         Assert.Equal(2, items.Count);
-        Assert.Equal("TR: Find the blacksmith.\nTR: Bring him three iron bars.", items[0].Translation);
+        Assert.Equal("AR:Find the blacksmith.\nAR:Bring him three iron bars.", items[0].Translation);
         Assert.True(items[0].Paragraphs);
         Assert.False(items[1].Paragraphs);
         Assert.Equal([1, 2], reported);
@@ -94,7 +94,7 @@ public class ScreenTranslationTests
         var items = await ScreenTranslation.TranslateAsync(Image, new LinesReader(new Reading([
             Line("KRATOS", 0.05, 0.10, 0.30), Line("Open the door.", 0.50, 0.80, 0.70),
         ])), new SameNameTranslator());
-        Assert.Equal("Kapıyı aç.", Assert.Single(items).Translation);
+        Assert.Equal("افتح الباب.", Assert.Single(items).Translation);
     }
 
     [Fact]
@@ -115,6 +115,6 @@ public class ScreenTranslationTests
     private sealed class SameNameTranslator : ITextTranslator
     {
         public Task<string> TranslateAsync(string text, CancellationToken cancellationToken = default) =>
-            Task.FromResult(text == "Open the door." ? "Kapıyı aç." : text);
+            Task.FromResult(text == "Open the door." ? "افتح الباب." : text);
     }
 }

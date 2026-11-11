@@ -6,7 +6,7 @@ namespace GameTranslator.Core.Tests;
 
 public class OcrNoiseTests
 {
-    /// Süslü yazıda bir sözcük her karede başka çöpe dönüşüyordu.
+    /// في الخط المزخرف كانت الكلمة تتحول في كل إطار إلى رموز عشوائية مختلفة.
     [Theory]
     [InlineData("Across the deep waters, Pbo ou$3e went, hoping a boat would carry him home.",
                 "Across the deep waters, Pbo went, hoping a boat would carry him home.")]
@@ -47,7 +47,7 @@ public class ReadingChoiceTests
         Assert.True(OcrNoise.Score("T hats the[lil Should be quiet now.") < OcrNoise.Score("That should be quiet now."));
     }
 
-    /// Koyu kenarlı beyaz yazı siyaha, parlak zemin ve kenar beyaza döner.
+    /// النص الأبيض ذو الحافة الداكنة يصير أسود، والخلفية الساطعة والحافة تصيران أبيضين.
     [Fact]
     public void WhiteTextOnlyKeepsOutlinedWhiteAndDropsBrightBackground()
     {

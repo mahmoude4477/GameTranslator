@@ -11,19 +11,19 @@ namespace GameTranslator.RemotePlay;
 
 public static class Registration
 {
-    /// <summary>libchiaki'nin CHIAKI_RP_APPLICATION_REASON_INVALID_PSN_ID değeri.</summary>
+    /// <summary>قيمة CHIAKI_RP_APPLICATION_REASON_INVALID_PSN_ID في libchiaki.</summary>
     internal const uint InvalidPsnIdReason = 0x80108b02;
     private const uint InUseReason = 0x80108b10;
     private const uint VersionReason = 0x80108b11;
     private const uint CrashReason = 0x80108b15;
 
-    /// <summary>Kod PS5'e gitmeden biten aşama: arama tek UDP paketiyle yapılır, paket kaybında yeniden denemek güvenlidir.</summary>
+    /// <summary>مرحلة تنتهي قبل وصول الرمز إلى PS5: البحث يتم بحزمة UDP واحدة، وإعادة المحاولة عند ضياعها آمنة.</summary>
     private const int SearchAttempts = 3;
     private const string ReasonPrefix = "Reported Application Reason: ";
 
-    /// <summary>PS5'in "Cihazı Bağla" ekranındaki 8 haneli kodla kayıt olur. Başarısızlıkta
-    /// <see cref="RegistrationException"/>; iptal beklemeyi bırakır (OperationCanceledException), PS5'le
-    /// konuşma kendi zaman aşımında (en çok ~30 sn) biter.</summary>
+    /// <summary>يسجّل بالرمز المكوّن من 8 أرقام في شاشة «ربط الجهاز» على PS5. عند الفشل يرمي
+    /// <see cref="RegistrationException"/>؛ والإلغاء يترك الانتظار (OperationCanceledException)، أما
+    /// المحادثة مع PS5 فتنتهي بمهلتها الخاصة (~30 ثانية على الأكثر).</summary>
     public static Task<RegisteredConsole> RegisterAsync(string host, byte[] accountId, uint pin, CancellationToken ct = default)
     {
         if (accountId.Length != 8) throw new ArgumentException("PSN account id must be 8 bytes", nameof(accountId));
@@ -31,8 +31,8 @@ public static class Registration
                                      TaskCreationOptions.LongRunning, TaskScheduler.Default).WaitAsync(ct);
     }
 
-    /// <summary>PS5'in bildirdiği nedenden kullanıcıya anlatılacak hata.</summary>
-    /// <param name="errors">Kayıt sırasında libchiaki'nin yazdığı hata satırları.</param>
+    /// <summary>الخطأ الذي يُشرح للمستخدم انطلاقًا من السبب الذي أبلغ به PS5.</summary>
+    /// <param name="errors">أسطر الخطأ التي كتبتها libchiaki أثناء التسجيل.</param>
     internal static RegistrationFailure FailureFrom(uint? reason, IReadOnlyList<string>? errors = null) => reason switch
     {
         InvalidPsnIdReason => RegistrationFailure.WrongAccount,
@@ -46,7 +46,7 @@ public static class Registration
     private static bool IsSearchFailure(string line) =>
         line.Contains("search response", StringComparison.Ordinal) || line.Contains("connect for search", StringComparison.Ordinal);
 
-    /// <summary>Hata iletisine eklenen ayrıntı: PS5'in kodu, o yoksa libchiaki'nin ilk (en belirleyici) hata satırı.</summary>
+    /// <summary>التفصيل المضاف إلى رسالة الخطأ: رمز PS5، وإن لم يوجد فأول سطر خطأ من libchiaki (وهو الأدل).</summary>
     internal static string? DetailFrom(IReadOnlyList<string> errors)
     {
         var reported = errors.FirstOrDefault(line => line.Contains(ReasonPrefix, StringComparison.Ordinal));
@@ -91,7 +91,7 @@ public static class Registration
             uint? reported = result == 1 && reason != 0 ? reason : null;
             var failure = result == 1 ? FailureFrom(reported, lines) : RegistrationFailure.Failed;
             var detail = DetailFrom(lines) ?? (result == 1 ? null : $"native error {result}");
-            RemotePlayLog.Write(0, $"PS5 kaydı başarısız ({host}, deneme {attempt}): {failure} {detail}");
+            RemotePlayLog.Write(0, $"فشل تسجيل PS5 ({host}، المحاولة {attempt}): {failure} {detail}");
             if (failure != RegistrationFailure.NoAnswer || attempt >= SearchAttempts)
                 throw new RegistrationException(failure, reported, detail);
             Thread.Sleep(500);
@@ -110,7 +110,7 @@ public static class Registration
         }
         catch
         {
-            // Yerel iş parçacığına istisna sızmamalı.
+            // يجب ألا يتسرب استثناء إلى الخيط الأصلي.
         }
     }
 
@@ -120,8 +120,8 @@ public static class Registration
         var script = FindRegisterScript();
         if (nodeExe == null || script == null)
         {
-            RemotePlayLog.Write(0, "ps5-register betiği veya node.exe bulunamadı.");
-            throw new RegistrationException(RegistrationFailure.Failed, null, "Sistemde ps5-register betiği veya node.exe bulunamadı.");
+            RemotePlayLog.Write(0, "تعذر العثور على سكربت ps5-register أو node.exe.");
+            throw new RegistrationException(RegistrationFailure.Failed, null, "تعذر العثور على سكربت ps5-register أو node.exe في النظام.");
         }
 
         string b64Account = Convert.ToBase64String(accountId);
@@ -137,7 +137,7 @@ public static class Registration
             StandardErrorEncoding = Encoding.UTF8
         };
 
-        RemotePlayLog.Write(2, $"ps5-register başlatılıyor: {host}, PIN: {pin:D8}");
+        RemotePlayLog.Write(2, $"جارٍ تشغيل ps5-register: {host}, PIN: {pin:D8}");
         using var process = new Process { StartInfo = psi };
         var outputLines = new List<string>();
         process.OutputDataReceived += (_, e) => { if (!string.IsNullOrWhiteSpace(e.Data)) lock (outputLines) outputLines.Add(e.Data); };
@@ -151,14 +151,14 @@ public static class Registration
         }
         catch (Exception ex)
         {
-            throw new RegistrationException(RegistrationFailure.Failed, null, $"ps5-register başlatılamadı: {ex.Message}");
+            throw new RegistrationException(RegistrationFailure.Failed, null, $"تعذر تشغيل ps5-register: {ex.Message}");
         }
 
         bool exited = process.WaitForExit(35000);
         if (!exited)
         {
             try { process.Kill(); } catch { }
-            throw new RegistrationException(RegistrationFailure.NoAnswer, null, "PS5 eşleştirme zaman aşımına uğradı (35 sn). Lütfen konsolun açık ve 'Cihaz Eşleştir' ekranında olduğunu kontrol edin.");
+            throw new RegistrationException(RegistrationFailure.NoAnswer, null, "انتهت مهلة ربط PS5 (35 ثانية). تأكد من أن جهاز الألعاب يعمل وأنه على شاشة «ربط الجهاز».");
         }
 
         string? lastDoneLine = null;
@@ -193,7 +193,7 @@ public static class Registration
             }
             catch (Exception ex)
             {
-                RemotePlayLog.Write(0, $"JSON parse hatası: {ex.Message}");
+                RemotePlayLog.Write(0, $"خطأ في تحليل JSON: {ex.Message}");
             }
         }
 
@@ -202,14 +202,14 @@ public static class Registration
             try
             {
                 using var doc = JsonDocument.Parse(lastErrorLine);
-                string msg = doc.RootElement.GetProperty("message").GetString() ?? "Bilinmeyen eşleştirme hatası";
+                string msg = doc.RootElement.GetProperty("message").GetString() ?? "خطأ غير معروف في الربط";
                 throw new RegistrationException(RegistrationFailure.Failed, null, msg);
             }
             catch (RegistrationException) { throw; }
             catch { }
         }
 
-        throw new RegistrationException(RegistrationFailure.Failed, null, "PS5 eşleştirme tamamlanamadı. Konsolun açık ve PIN kodunun doğru olduğunu kontrol edin.");
+        throw new RegistrationException(RegistrationFailure.Failed, null, "تعذر إكمال ربط PS5. تأكد من أن جهاز الألعاب يعمل ومن صحة رمز PIN.");
     }
 
     private static string? FindNodeExecutable()
@@ -343,11 +343,11 @@ public static class Registration
                 }
                 catch (Exception regEx)
                 {
-                    RemotePlayLog.Write(0, $"Chiaki registry yazma hatası: {regEx.Message}");
+                    RemotePlayLog.Write(0, $"خطأ في الكتابة إلى سجل Windows الخاص بـ Chiaki: {regEx.Message}");
                 }
             }
 
-            // 2. INI dosyaları (%APPDATA%\chiaki-ng ve %APPDATA%\Chiaki)
+            // 2. ملفات INI (%APPDATA%\chiaki-ng و %APPDATA%\Chiaki)
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (!string.IsNullOrEmpty(appData))
             {

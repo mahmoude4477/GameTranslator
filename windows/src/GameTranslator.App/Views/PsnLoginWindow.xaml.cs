@@ -8,7 +8,7 @@ using Microsoft.Web.WebView2.Core;
 
 namespace GameTranslator.App.Views;
 
-/// <summary>Sony'nin giriş sayfasını açar; giriş bitince yönlendirme adresini yakalar. Parola yalnız Sony'ye gider.</summary>
+/// <summary>يفتح صفحة تسجيل الدخول لدى Sony؛ ويلتقط عنوان إعادة التوجيه عند انتهاء الدخول. كلمة المرور تذهب إلى Sony فقط.</summary>
 public partial class PsnLoginWindow : Window
 {
     private Uri? redirect;
@@ -19,7 +19,7 @@ public partial class PsnLoginWindow : Window
         Loaded += async (_, _) => await OpenAsync();
     }
 
-    /// <summary>Giriş tamamlanırsa yönlendirme adresini, vazgeçilirse null döner.</summary>
+    /// <summary>يعيد عنوان إعادة التوجيه إذا اكتمل الدخول، و null عند الإلغاء.</summary>
     public static Uri? Show(Window? owner)
     {
         var window = new PsnLoginWindow { Owner = owner };
@@ -27,19 +27,19 @@ public partial class PsnLoginWindow : Window
         return window.redirect;
     }
 
-    // Tarayıcı süreci kapanana kadar ortam canlı kalmalı; yoksa BrowserProcessExited gelmez.
+    // يجب أن تبقى البيئة حيّة حتى تنتهي عملية المتصفح؛ وإلا لا يصل BrowserProcessExited.
     private static CoreWebView2Environment? lastEnvironment;
 
     private async Task OpenAsync()
     {
-        // Her girişte temiz oturum: önceki çerezler (ör. kendi hesabınız) karışmasın.
+        // جلسة نظيفة عند كل دخول: حتى لا تتداخل ملفات تعريف الارتباط السابقة (مثل حسابك الشخصي).
         var root = Path.Combine(AppPaths.Data, "webview");
         DeleteLeftovers(root);
         var folder = Path.Combine(root, Guid.NewGuid().ToString("N"));
         var environment = await CoreWebView2Environment.CreateAsync(null, folder);
         lastEnvironment = environment;
-        // WebView2 kapanırken dosyalarını (ör. BrowserMetrics-*.pma) bir süre açık tutar. Klasör ancak tarayıcı
-        // süreci bitince silinebilir; silinemeyen klasörü bir sonraki giriş temizler.
+        // يُبقي WebView2 ملفاته (مثل BrowserMetrics-*.pma) مفتوحة مدة عند الإغلاق. لا يمكن حذف المجلد إلا بعد
+        // انتهاء عملية المتصفح؛ والمجلد الذي تعذّر حذفه ينظّفه الدخول التالي.
         environment.BrowserProcessExited += (_, _) => TryDelete(folder);
         await Browser.EnsureCoreWebView2Async(environment);
         Browser.CoreWebView2.NavigationStarting += OnNavigation;

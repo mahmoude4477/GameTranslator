@@ -9,8 +9,8 @@ using GameTranslator.Shell;
 namespace GameTranslator.App.Views;
 
 /// <summary>
-/// Windows Güvenlik Duvarı izni: PS5 eşleştirmesi başarısız olunca ya da çeviri sürerken PS5 ve TV bağlanamayınca,
-/// kural eksikse görünür. Ana ekranda ve PS5 adımında aynı kart kullanılır.
+/// إذن جدار حماية Windows: يظهر إذا كانت القاعدة ناقصة عند فشل اقتران PS5 أو عند تعذّر اتصال PS5 والتلفزيون
+/// أثناء الترجمة. تُستخدم البطاقة نفسها في الشاشة الرئيسية وفي خطوة PS5.
 /// </summary>
 public partial class FirewallCard : UserControl
 {
@@ -42,7 +42,7 @@ public partial class FirewallCard : UserControl
         if (controller is null) return;
         var text = Localizer.Current;
         var prompt = controller.FirewallPrompt;
-        // Çeviri sürmüyorsa kart PS5 eşleştirmesi içindir.
+        // إذا لم تكن الترجمة جارية فالبطاقة خاصة باقتران PS5.
         var running = controller.IsRunning;
         Visibility = prompt == FirewallPrompt.None ? Visibility.Collapsed : Visibility.Visible;
         Allow.Visibility = prompt is FirewallPrompt.Offer or FirewallPrompt.Failed or FirewallPrompt.Working ? Visibility.Visible : Visibility.Collapsed;

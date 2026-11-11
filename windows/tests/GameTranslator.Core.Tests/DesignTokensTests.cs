@@ -4,8 +4,8 @@ using GameTranslator.Core;
 
 namespace GameTranslator.Core.Tests;
 
-/// Tasarım değerleri design/tokens.json'dan gelir (Mac sürümü de aynı dosyayı kullanır).
-/// Bu testler yazıların her iki görünümde de rahat okunmasını güvenceye alır.
+/// قيم التصميم تأتي من design/tokens.json.
+/// هذه الاختبارات تضمن سهولة قراءة النصوص في المظهرين الفاتح والداكن.
 public class DesignTokensTests
 {
     private readonly DesignTokens tokens = DesignTokens.Shared;

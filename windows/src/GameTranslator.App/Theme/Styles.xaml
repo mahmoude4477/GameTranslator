@@ -1,6 +1,6 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-only -->
-<!-- Bileşenlerin görünümü (docs/TASARIM.md). Renk ve ölçüler ThemeManager'ın tokens.json'dan
-     ürettiği kaynaklardan gelir; burada sabit renk ya da boyut yazılmaz. -->
+<!-- مظهر المكوّنات (docs/DESIGN.md). تأتي الألوان والمقاسات من الموارد التي يولّدها ThemeManager
+     من tokens.json؛ لا يُكتب هنا لون أو حجم ثابت. -->
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:c="clr-namespace:GameTranslator.App.Controls"
@@ -13,8 +13,8 @@
     <FontFamily x:Key="DisplayFont">Segoe UI Variable Display, Segoe UI</FontFamily>
     <FontFamily x:Key="IconFont">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
 
-    <!-- Yazı. Ana yazı rengi burada değil pencerede verilir (TextElement.Foreground): genel TextBlock
-         stilinde verilirse düğmelerin içindeki yazının rengini ezer (koyu temada sarı üstüne açık yazı). -->
+    <!-- النص. لون النص الأساسي يُحدَّد في النافذة لا هنا (TextElement.Foreground): لو حُدِّد في نمط TextBlock
+         العام لطغى على لون النص داخل الأزرار (نص فاتح فوق الأصفر في السمة الداكنة). -->
     <Style TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource TextFont}" />
         <Setter Property="FontSize" Value="{DynamicResource bodyFontSize}" />
@@ -66,7 +66,7 @@
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <!-- Düğmeler: birincil (sarı), ikincil (çerçeveli), tehlikeli (kırmızı). -->
+    <!-- الأزرار: أساسي (أصفر)، ثانوي (بإطار)، خطِر (أحمر). -->
     <Style x:Key="ButtonBase" TargetType="Button">
         <Setter Property="FontFamily" Value="{StaticResource TextFont}" />
         <Setter Property="FontSize" Value="{DynamicResource buttonFontSize}" />
@@ -134,7 +134,7 @@
         </Setter>
     </Style>
 
-    <!-- Metin alanı -->
+    <!-- حقل النص -->
     <Style TargetType="TextBox">
         <Setter Property="FontFamily" Value="{StaticResource TextFont}" />
         <Setter Property="FontSize" Value="{DynamicResource bodyFontSize}" />
@@ -162,7 +162,7 @@
         </Setter>
     </Style>
 
-    <!-- Bölmeli seçim (Mac'teki segmented denetimin karşılığı): yan yana RadioButton'lar. -->
+    <!-- اختيار مقسّم (segmented): أزرار RadioButton متجاورة. -->
     <Style x:Key="SegmentButton" TargetType="RadioButton">
         <Setter Property="FontFamily" Value="{StaticResource TextFont}" />
         <Setter Property="FontSize" Value="{DynamicResource calloutFontSize}" />
@@ -205,7 +205,7 @@
         <Setter Property="MinWidth" Value="200" />
         <Setter Property="HorizontalAlignment" Value="Left" />
     </Style>
-    <!-- Kaydırıcı: ince ray, dolu kısım sarı, yuvarlak tutamaç. -->
+    <!-- شريط التمرير المنزلق: مسار رفيع، الجزء الممتلئ أصفر، مقبض دائري. -->
     <Style x:Key="SliderThumb" TargetType="Thumb">
         <Setter Property="Template">
             <Setter.Value>
@@ -253,7 +253,7 @@
         <Setter Property="Margin" Value="0,12" />
     </Style>
 
-    <!-- Kaydırma çubuğu: ince, oksuz, temaya uygun (Windows'un varsayılanı koyu temada açık kalıyordu). -->
+    <!-- شريط التمرير: رفيع، بلا أسهم، متوافق مع السمة (افتراضي Windows كان يبقى فاتحًا في السمة الداكنة). -->
     <Style x:Key="ScrollThumb" TargetType="Thumb">
         <Setter Property="Template">
             <Setter.Value>
@@ -302,7 +302,7 @@
         </Style.Triggers>
     </Style>
 
-    <!-- İnce, yuvarlak uçlu ilerleme çubuğu. -->
+    <!-- شريط تقدّم رفيع بأطراف دائرية. -->
     <Style TargetType="ProgressBar">
         <Setter Property="Height" Value="6" />
         <Setter Property="Foreground" Value="{DynamicResource accentBrush}" />
@@ -319,7 +319,7 @@
         </Setter>
     </Style>
 
-    <!-- Kart -->
+    <!-- البطاقة -->
     <Style TargetType="c:Card">
         <Setter Property="Template">
             <Setter.Value>
@@ -341,7 +341,7 @@
         </Setter>
     </Style>
 
-    <!-- Sihirbaz adımı -->
+    <!-- خطوة المعالج -->
     <Style TargetType="c:StepLayout">
         <Setter Property="Template">
             <Setter.Value>

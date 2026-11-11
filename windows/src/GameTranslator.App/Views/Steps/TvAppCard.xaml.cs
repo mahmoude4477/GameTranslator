@@ -11,10 +11,10 @@ using GameTranslator.Shell;
 
 namespace GameTranslator.App.Views.Steps;
 
-/// <summary>TV uygulamasını geliştirici moduyla kurma adımları (LG, Samsung, Android TV). Yapılacak bir şey yoksa görünmez.</summary>
+/// <summary>خطوات تثبيت تطبيق التلفزيون عبر وضع المطوّر (LG، Samsung، Android TV). لا تظهر إن لم يكن هناك ما يُفعل.</summary>
 public partial class TvAppCard : UserControl
 {
-    // Kullanıcı TV'de geliştirici modunu açınca kendiliğinden devam eder.
+    // يتابع تلقائيًا عندما يفعّل المستخدم وضع المطوّر على التلفزيون.
     private readonly DispatcherTimer devModeWatch = new() { Interval = TimeSpan.FromSeconds(3) };
     private AppController? controller;
 
