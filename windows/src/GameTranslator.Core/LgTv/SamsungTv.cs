@@ -7,7 +7,7 @@ using System.Text.Json.Nodes;
 
 namespace GameTranslator.Core.LgTv;
 
-/// <summary>Samsung uzaktan kumanda WebSocket'inin iletileri. Samsung bunu belgelemez; alanlar topluluk kaynaklarından.</summary>
+/// <summary>رسائل WebSocket الخاص بالتحكم عن بُعد في Samsung. لا توثّقه Samsung؛ والحقول مأخوذة من مصادر المجتمع.</summary>
 public static class SamsungMessages
 {
     public static Uri Url(string host, string? token)
@@ -18,7 +18,7 @@ public static class SamsungMessages
         return new Uri(text);
     }
 
-    /// <summary>TV uygulaması parametreleri <c>PAYLOAD</c> içinde alır (bkz. tv-tizen/platform.js).</summary>
+    /// <summary>يستقبل تطبيق التلفزيون المعاملات داخل <c>PAYLOAD</c> (انظر tv-tizen/platform.js).</summary>
     public static string Launch(string appId, IReadOnlyDictionary<string, string> parameters) => new JsonObject
     {
         ["method"] = "ms.channel.emit",
@@ -35,7 +35,7 @@ public static class SamsungMessages
         },
     }.ToJsonString();
 
-    /// <summary>Bağlantı sonucu: onaylandıysa jeton (TV vermediyse boş), başka iletiyse null. Reddedildiyse hata.</summary>
+    /// <summary>نتيجة الاتصال: الرمز (token) إن وُوفق عليه (فارغ إن لم يعطه التلفزيون)، وnull إن كانت رسالة أخرى. وخطأ إن رُفض.</summary>
     public static string? ConnectResult(string text)
     {
         JsonNode? node;
@@ -48,7 +48,7 @@ public static class SamsungMessages
         };
     }
 
-    /// <summary><c>http://TV:8001/api/v2/</c> yanıtındaki TV adı.</summary>
+    /// <summary>اسم التلفزيون في رد <c>http://TV:8001/api/v2/</c>.</summary>
     public static string? DeviceName(string json)
     {
         try { return JsonNode.Parse(json)?["device"]?["name"]?.GetValue<string>()?.Replace("&quot;", "\""); }

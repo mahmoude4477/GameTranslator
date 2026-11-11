@@ -183,12 +183,12 @@ public sealed partial class SamsungTvInstaller(string host, string profilesDirec
             if (IsDuid(duid)) return duid;
             await Task.Delay(500, cancellationToken);
         }
-        throw new SamsungInstallException(SamsungInstallError.Unreachable, "DUID okunamadı");
+        throw new SamsungInstallException(SamsungInstallError.Unreachable, "تعذرت قراءة DUID");
     }
 
     internal static bool IsDuid(string text) => DuidPattern().IsMatch(text);
 
-    /// <summary>TizenInstaller sonucu konsola yazar; çıktıyı yakalayıp hatayı oradan anlarız.</summary>
+    /// <summary>TizenInstaller يكتب النتيجة إلى الكونسول؛ فنلتقط المخرجات ونستدل منها على الخطأ.</summary>
     private static readonly SemaphoreSlim ConsoleGate = new(1, 1);
 
     private static async Task<string> CaptureAsync(Func<Task> body)
@@ -214,8 +214,8 @@ public sealed partial class SamsungTvInstaller(string host, string profilesDirec
     }
 
     /// <summary>
-    /// TV, kurulum başarısız olsa da komutu başarılı bitirir; hata çıktıdadır (ör. <c>install failed[118]</c>).
-    /// İşaretler Apps2Samsung'un TizenInstallDiagnostics'inden.
+    /// التلفزيون ينهي الأمر بنجاح حتى لو فشل التثبيت؛ والخطأ في المخرجات (مثل <c>install failed[118]</c>).
+    /// العلامات مأخوذة من TizenInstallDiagnostics في Apps2Samsung.
     /// </summary>
     internal static bool InstallFailed(string log) =>
         log.Contains("install failed", StringComparison.OrdinalIgnoreCase) ||

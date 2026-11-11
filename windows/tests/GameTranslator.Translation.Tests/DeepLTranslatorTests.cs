@@ -92,9 +92,9 @@ public class DeepLTranslatorTests
         var local = new FakeLocal();
         var translator = new DeepLTranslator("abc:fx", local, "ar", new HttpClient(deepL));
 
-        Assert.Equal("محلي:Run!", await translator.TranslateAsync("Run!"));
+        Assert.Equal("محلي: Run!", await translator.TranslateAsync("Run!"));
         Assert.Equal(OnlineKeyState.QuotaExceeded, translator.LastError);
-        Assert.Equal("محلي:Hide!", await translator.TranslateAsync("Hide!"));
+        Assert.Equal("محلي: Hide!", await translator.TranslateAsync("Hide!"));
         Assert.Single(deepL.Requests);
         Assert.Equal(["Run!", "Hide!"], local.Calls);
     }

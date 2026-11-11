@@ -9,8 +9,8 @@ using GameTranslator.Shell;
 namespace GameTranslator.App.Services;
 
 /// <summary>
-/// Windows Güvenlik Duvarı'nda GameTranslator.exe'ye gelen bağlantı izni. Kurallar COM ile (HNetCfg.FwPolicy2) yönetici
-/// gerekmeden okunur; kural yönetici izniyle (UAC) netsh ile eklenir.
+/// إذن الاتصالات الواردة إلى GameTranslator.exe في جدار حماية Windows. تُقرأ القواعد عبر COM (HNetCfg.FwPolicy2) دون
+/// صلاحيات المسؤول؛ وتُضاف القاعدة عبر netsh بإذن المسؤول (UAC).
 /// </summary>
 /// <remarks>
 /// Velopack uygulamayı %LOCALAPPDATA%\GameTranslatorApp\current\GameTranslator.exe yoluna kurar ve güncellemede aynı klasörü

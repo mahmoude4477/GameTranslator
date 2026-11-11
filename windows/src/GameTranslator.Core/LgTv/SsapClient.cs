@@ -19,8 +19,8 @@ public sealed class SsapException(string reason) : Exception($"SSAP: {reason}")
 }
 
 /// <summary>
-/// LG TV ile SSAP (WebSocket) üzerinden konuşur. İlk bağlantıda TV ekranında izin sorulur;
-/// dönen client-key saklanırsa sonraki bağlantılar sorusuz olur.
+/// يخاطب تلفزيون LG عبر SSAP (WebSocket). في أول اتصال يُطلب الإذن على شاشة التلفزيون؛
+/// وإذا حُفظ client-key العائد تتم الاتصالات التالية بلا سؤال.
 /// </summary>
 public sealed class SsapClient : ITvControl
 {
@@ -31,7 +31,7 @@ public sealed class SsapClient : ITvControl
     private ClientWebSocket? socket;
     private int nextId = 1;
 
-    /// <summary>Önce şifreli (3001), olmazsa düz (3000) bağlantı denenir; eski webOS'lar yalnız 3000'i açar.</summary>
+    /// <summary>يُجرَّب أولًا الاتصال المشفَّر (3001) ثم غير المشفَّر (3000)؛ إصدارات webOS القديمة تفتح 3000 فقط.</summary>
     public SsapClient(LgTv tv, string? clientKey)
         : this([new Uri($"wss://{tv.Host}:3001"), new Uri($"ws://{tv.Host}:3000")], clientKey) { }
 
@@ -42,13 +42,13 @@ public sealed class SsapClient : ITvControl
         this.approvalTimeout = approvalTimeout ?? TimeSpan.FromSeconds(60);
     }
 
-    /// <summary>Eşleşir ve client-key'i döner. Kullanıcı TV'de onay verene kadar bekler (en çok 60 sn).</summary>
+    /// <summary>يقترن ويعيد client-key. ينتظر حتى يوافق المستخدم على التلفزيون (60 ثانية على الأكثر).</summary>
     public async Task<string> ConnectAsync(CancellationToken cancellationToken = default)
     {
         foreach (var url in endpoints)
         {
             var candidate = new ClientWebSocket();
-            // TV'nin 3001 portundaki sertifikası kendinden imzalıdır; bu bağlantı yalnız TV'nin adresine gittiği için kabul edilir.
+            // شهادة التلفزيون على المنفذ 3001 موقَّعة ذاتيًا؛ تُقبل لأن هذا الاتصال يذهب إلى عنوان التلفزيون فقط.
             candidate.Options.RemoteCertificateValidationCallback = (_, _, _, _) => true;
             try
             {
@@ -99,9 +99,9 @@ public sealed class SsapClient : ITvControl
         socket = null;
     }
 
-    // --- İç işleyiş ---
+    // --- الآلية الداخلية ---
 
-    /// <summary>TV'deki izin sorusu yanıtlanana kadar bekler; süre dolarsa vazgeçer.</summary>
+    /// <summary>ينتظر حتى يُجاب عن سؤال الإذن على التلفزيون؛ ويتوقف إذا انتهت المهلة.</summary>
     private async Task<string> WaitForRegistration(ClientWebSocket candidate, CancellationToken cancellationToken)
     {
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
@@ -118,7 +118,7 @@ public sealed class SsapClient : ITvControl
                     case "error":
                         throw new SsapException((string?)message["error"] ?? "register");
                     default:
-                        continue; // "response": TV soruyu gösterdi, onay bekleniyor
+                        continue; // "response": عرض التلفزيون السؤال والموافقة في الانتظار
                 }
             }
         }
@@ -150,7 +150,7 @@ public sealed class SsapClient : ITvControl
         }
     }
 
-    /// <summary>LG TV ikili çerçeveyi reddeder; mesajlar metin çerçevesiyle gider.</summary>
+    /// <summary>تلفزيون LG يرفض الإطار الثنائي (binary)؛ فتُرسل الرسائل في إطار نصي.</summary>
     private static Task SendText(ClientWebSocket socket, string text, CancellationToken cancellationToken) =>
         socket.SendAsync(Encoding.UTF8.GetBytes(text), WebSocketMessageType.Text, true, cancellationToken);
 

@@ -21,7 +21,7 @@ using Microsoft.Win32;
 
 namespace GameTranslator.App.Views;
 
-/// <summary>Altyazı geçmişi öğesi.</summary>
+/// <summary>عنصر في سجل الترجمة.</summary>
 public sealed class SubtitleHistoryItem
 {
     public required string Translation { get; init; }
@@ -30,7 +30,7 @@ public sealed class SubtitleHistoryItem
     public string Summary => $"[{Time}] 📺 {Translation}  |  🎮 {English}";
 }
 
-/// <summary>Ana ekran: Mac sürümüyle birebir aynı 2 panelli modern arayüz ve 5 sekme.</summary>
+/// <summary>الشاشة الرئيسية: واجهة عصرية بلوحتين و5 تبويبات.</summary>
 public partial class MainView : UserControl
 {
     private readonly AppController controller;
@@ -74,15 +74,15 @@ public partial class MainView : UserControl
         loading = true;
         var s = controller.Settings;
 
-        // Sliders & Ayarlar
+        // المنزلقات والإعدادات
         TextSizeSlider.Value = Math.Clamp(s.Style.FontSize, TextSizeSlider.Minimum, TextSizeSlider.Maximum);
         TextSizeLabel.Text = $"{Math.Round(TextSizeSlider.Value)} px";
 
         BackgroundSlider.Value = Math.Clamp(s.Style.Background, BackgroundSlider.Minimum, BackgroundSlider.Maximum);
-        BackgroundLabel.Text = $"%{Math.Round(BackgroundSlider.Value)}";
+        BackgroundLabel.Text = $"{Math.Round(BackgroundSlider.Value)}%";
 
         BottomPercentSlider.Value = Math.Clamp(s.Style.BottomPercent, BottomPercentSlider.Minimum, BottomPercentSlider.Maximum);
-        BottomPercentLabel.Text = $"%{Math.Round(BottomPercentSlider.Value)}";
+        BottomPercentLabel.Text = $"{Math.Round(BottomPercentSlider.Value)}%";
 
         // Renk
         selectedColor = s.Style.Color ?? "#FFFFFF";

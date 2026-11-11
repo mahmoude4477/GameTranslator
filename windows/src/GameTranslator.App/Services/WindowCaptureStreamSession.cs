@@ -6,7 +6,7 @@ using GameTranslator.RemotePlay;
 namespace GameTranslator.App.Services;
 
 /// <summary>
-/// Windows'ta Chiaki veya PlayStation Remote Play penceresini periyodik olarak yakalayan IStreamSession uygulaması.
+/// تنفيذ لـ IStreamSession يلتقط نافذة Chiaki أو PlayStation Remote Play على Windows بصورة دورية.
 /// </summary>
 public sealed class WindowCaptureStreamSession : IStreamSession
 {

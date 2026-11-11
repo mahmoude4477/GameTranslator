@@ -8,8 +8,8 @@ using GameTranslator.Core;
 namespace GameTranslator.App.Services;
 
 /// <summary>
-/// Windows'ta Chiaki veya PlayStation Remote Play pencerelerini güvenle yakalayan servis.
-/// Sadece uzaktan oynatma süreçlerine ait pencereleri yakalar, masaüstü veya dosya gezgini pencerelerini ASLA yakalamaz.
+/// خدمة تلتقط بأمان نوافذ Chiaki أو PlayStation Remote Play على Windows.
+/// تلتقط فقط النوافذ التابعة لعمليات اللعب عن بُعد، ولا تلتقط نوافذ سطح المكتب أو مستكشف الملفات أبدا.
 /// </summary>
 public static class WindowCaptureService
 {
@@ -148,8 +148,8 @@ public static class WindowCaptureService
     }
 
     /// <summary>
-    /// Sadece Chiaki veya Sony Remote Play süreçlerine ait açık oyun pencerelerini arar.
-    /// Explorer, tarayıcı veya masaüstü pencerelerini asla hedef olarak seçmez.
+    /// يبحث فقط عن نوافذ اللعبة المفتوحة التابعة لعمليات Chiaki أو Sony Remote Play.
+    /// لا يختار نوافذ Explorer أو المتصفح أو سطح المكتب هدفا أبدا.
     /// </summary>
     public static IntPtr FindTargetWindow(out string windowTitle)
     {
@@ -177,7 +177,7 @@ public static class WindowCaptureService
                     return true;
                 }
 
-                // Sadece yetkili PS Remote Play süreçlerini kabul et
+                // اقبل فقط عمليات PS Remote Play المعتمدة
                 if (!RemotePlayProcessNames.Contains(procName)) return true;
 
                 if (!GetClientRect(hWnd, out var rect) || rect.Width < 250 || rect.Height < 150)
@@ -187,7 +187,7 @@ public static class WindowCaptureService
                 GetWindowText(hWnd, sb, 256);
                 var title = sb.ToString();
 
-                // Yayın/oyun penceresine öncelik ver
+                // أعطِ الأولوية لنافذة البث/اللعبة
                 int score = 10;
                 if (title.Contains("Stream", StringComparison.OrdinalIgnoreCase)) score += 50;
                 if (title.Contains("PlayStation", StringComparison.OrdinalIgnoreCase)) score += 30;
@@ -211,8 +211,8 @@ public static class WindowCaptureService
     }
 
     /// <summary>
-    /// Hedef Chiaki veya Remote Play penceresinin görüntüsünü BGRA Frame olarak yakalar.
-    /// Pencere bulunamazsa veya geçersizse null döner; masaüstünü ASLA yakalamaz.
+    /// يلتقط صورة نافذة Chiaki أو Remote Play الهدف على هيئة Frame بصيغة BGRA.
+    /// يعيد null إن لم يُعثر على النافذة أو كانت غير صالحة؛ ولا يلتقط سطح المكتب أبدا.
     /// </summary>
     public static Frame? Capture(IntPtr hWnd)
     {
@@ -275,8 +275,8 @@ public static class WindowCaptureService
             var pixels = new byte[width * height * 4];
             GetDIBits(memDc, hBitmap, 0, (uint)height, pixels, ref bi, DIB_RGB_COLORS);
 
-            // Eğer PrintWindow tamamen siyah piksel verdiyse (DirectX/OpenGL pencerelerinde yaygın)
-            // ve pencere ekranda görünüyorsa doğrudan ekran DC'sinden BitBlt yap
+            // إن أعطى PrintWindow بكسلات سوداء تماما (شائع في نوافذ DirectX/OpenGL)
+            // وكانت النافذة ظاهرة على الشاشة فنفّذ BitBlt مباشرة من DC الشاشة
             if (IsFrameBlack(pixels, width, height) && srcX >= 0 && srcY >= 0 && srcX + width <= screenW && srcY + height <= screenH)
             {
                 BitBlt(memDc, 0, 0, width, height, srcDc, srcX, srcY, SRCCOPY);

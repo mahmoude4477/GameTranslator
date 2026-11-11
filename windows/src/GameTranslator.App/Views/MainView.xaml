@@ -686,12 +686,12 @@
                                     </Border>
                                     <StackPanel Grid.Column="1">
                                         <TextBlock Text="منطقة القراءة" FontWeight="SemiBold" FontSize="11.5" Foreground="White" Margin="0,0,0,2" />
-                                        <TextBlock Text="Oyununuzun altyazı konumuna göre 'Oyun Okuma Alanı' sekmesinden hazır şablon seçin veya mavi kutuyu ayarlayın." FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" TextWrapping="Wrap" />
+                                        <TextBlock Text="بحسب موضع الترجمة النصية في لعبتك، اختر قالبًا جاهزًا من تبويب «منطقة قراءة اللعبة» أو اضبط المربّع الأزرق." FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" TextWrapping="Wrap" />
                                     </StackPanel>
                                 </Grid>
                             </Border>
 
-                            <!-- 4. Başlat -->
+                            <!-- 4. ابدأ -->
                             <Border Background="#111622" BorderBrush="#1F293D" BorderThickness="1" CornerRadius="7" Padding="10" Margin="0,0,0,8">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -702,13 +702,13 @@
                                         <TextBlock Text="4" FontWeight="Bold" FontSize="11" Foreground="#0A84FF" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </Border>
                                     <StackPanel Grid.Column="1">
-                                        <TextBlock Text="Başlat" FontWeight="SemiBold" FontSize="11.5" Foreground="White" Margin="0,0,0,2" />
-                                        <TextBlock Text="Ana ekrandaki mavi '▶ Çeviriyi Başlat' butonuna tıklayın. Konsol görüntüsü taranıp altyazılar TV'ye Türkçe olarak yansır." FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" TextWrapping="Wrap" />
+                                        <TextBlock Text="ابدأ" FontWeight="SemiBold" FontSize="11.5" Foreground="White" Margin="0,0,0,2" />
+                                        <TextBlock Text="انقر الزر الأزرق «▶ ابدأ الترجمة» في الشاشة الرئيسية. تُقرأ صورة جهاز الألعاب وتظهر الترجمة على التلفزيون بالعربية." FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" TextWrapping="Wrap" />
                                     </StackPanel>
                                 </Grid>
                             </Border>
 
-                            <!-- 5. TV Görünümü -->
+                            <!-- 5. مظهر التلفزيون -->
                             <Border Background="#111622" BorderBrush="#1F293D" BorderThickness="1" CornerRadius="7" Padding="10">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -719,8 +719,8 @@
                                         <TextBlock Text="5" FontWeight="Bold" FontSize="11" Foreground="#0A84FF" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </Border>
                                     <StackPanel Grid.Column="1">
-                                        <TextBlock Text="TV Görünümü" FontWeight="SemiBold" FontSize="11.5" Foreground="White" Margin="0,0,0,2" />
-                                        <TextBlock Text="Altyazı rengini (sarı/beyaz), boyutunu ve konumunu zevkinize göre ayarlayın; TV ekranına anında yansır!" FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" TextWrapping="Wrap" />
+                                        <TextBlock Text="مظهر التلفزيون" FontWeight="SemiBold" FontSize="11.5" Foreground="White" Margin="0,0,0,2" />
+                                        <TextBlock Text="اضبط لون الترجمة (أصفر/أبيض) وحجمها وموضعها كما تحب؛ تنعكس فورًا على شاشة التلفزيون!" FontSize="10.5" Foreground="{DynamicResource textSecondaryBrush}" TextWrapping="Wrap" />
                                     </StackPanel>
                                 </Grid>
                             </Border>
