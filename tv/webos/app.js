@@ -470,7 +470,7 @@
   var SERVER_PORT = 8787;
   var SCAN_PARALLEL = 24;
   var SCAN_TIMEOUT_MS = 1200;
-  var SCAN_PAUSE_MS = 30000;
+  var SCAN_PAUSE_MS = 5000;
   var scanTimer = null;
   var scanning = false;
 

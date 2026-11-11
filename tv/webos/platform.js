@@ -94,6 +94,31 @@
       }
     },
 
+    localAddress: function (callback) {
+      var done = false;
+      function finish(ip) {
+        if (done) return;
+        done = true;
+        callback(ip);
+      }
+      try {
+        var bridge = new PalmServiceBridge();
+        bridge.onservicecallback = function (msg) {
+          try {
+            var res = JSON.parse(msg) || {};
+            var ip = (res.wired && res.wired.ipAddress) || (res.wifi && res.wifi.ipAddress);
+            if (ip && /^\d+\.\d+\.\d+\.\d+$/.test(ip)) return finish(ip);
+          } catch (e) {}
+          finish(null);
+        };
+        bridge.call('luna://com.palm.connectionmanager/getStatus', '{}');
+        window.__netBridge = bridge;
+        setTimeout(function () { finish(null); }, 2000);
+      } catch (e) {
+        finish(null);
+      }
+    },
+
     exit: function () {
       if (window.PalmSystem && window.PalmSystem.platformBack) window.PalmSystem.platformBack();
     }
