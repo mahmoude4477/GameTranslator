@@ -2,6 +2,7 @@
 
 The TV apps are not in the stores yet. Turn on developer mode on your TV and GameTranslator installs the TV app by itself.
 Developer mode is free and does not harm the TV. The desktop app shows these steps in its TV step and waits for the TV.
+The TV app shows the Arabic subtitles right-to-left over the game. A more detailed guide in Arabic: [tv-setup.ar.md](tv-setup.ar.md).
 
 | TV | Status | Guide |
 |---|---|---|

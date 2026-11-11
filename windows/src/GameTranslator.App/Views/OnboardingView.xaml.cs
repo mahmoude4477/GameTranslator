@@ -15,7 +15,7 @@ using GameTranslator.App.Services;
 
 namespace GameTranslator.App.Views;
 
-/// <summary>Kurulum sihirbazı: Mac sürümüyle birebir aynı 5 adımlı modern kurulum arayüzü.</summary>
+/// <summary>معالج الإعداد: واجهة إعداد عصرية متعددة الخطوات.</summary>
 public partial class OnboardingView : UserControl
 {
     private readonly AppController controller;
@@ -55,19 +55,19 @@ public partial class OnboardingView : UserControl
 
     private void UpdateStepView()
     {
-        StepBadgeText.Text = $"Adım {currentStep} / 4";
+        StepBadgeText.Text = $"الخطوة {currentStep} / 4";
 
-        // Panel Görünürlükleri
+        // إظهار اللوحات
         Step1Panel.Visibility = currentStep == 1 ? Visibility.Visible : Visibility.Collapsed;
         Step2Panel.Visibility = currentStep == 2 ? Visibility.Visible : Visibility.Collapsed;
         Step3Panel.Visibility = currentStep == 3 ? Visibility.Visible : Visibility.Collapsed;
         Step4Panel.Visibility = currentStep == 4 ? Visibility.Visible : Visibility.Collapsed;
 
-        // Butonlar
+        // الأزرار
         BackButton.Visibility = currentStep == 1 ? Visibility.Hidden : Visibility.Visible;
-        NextButton.Content = currentStep == 4 ? "Kurulumu Tamamla ✓" : "Devam Et ➔";
+        NextButton.Content = currentStep == 4 ? "أكمل الإعداد ✓" : "متابعة ➔";
 
-        // Kapsül Renkleri (Progress Pills)
+        // ألوان الكبسولات (Progress Pills)
         UpdatePill(PillBar1, PillText1, 1);
         UpdatePill(PillBar2, PillText2, 2);
         UpdatePill(PillBar3, PillText3, 3);
@@ -91,7 +91,7 @@ public partial class OnboardingView : UserControl
                 var host = controller.Console?.Host ?? Ps5HostInput?.Text?.Trim();
                 if (!string.IsNullOrWhiteSpace(host) && ChiakiLauncher.IsRegistered(host))
                 {
-                    PairStatusText.Text = "✓ PS5 Konsolu Chiaki'de zaten eşleşmiş durumda! Doğrudan sonraki adıma geçebilirsiniz.";
+                    PairStatusText.Text = "✓ جهاز PS5 مقترن مسبقًا في Chiaki! يمكنك الانتقال مباشرة إلى الخطوة التالية.";
                     PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
                 }
             }
@@ -188,14 +188,14 @@ public partial class OnboardingView : UserControl
     private void OnPill4(object sender, RoutedEventArgs e) => SetStep(4);
 
     // ==========================================
-    // Adım 2: PSN Girişi
+    // الخطوة 2: تسجيل الدخول إلى PSN
     // ==========================================
     private void OnCopyPsnId(object sender, RoutedEventArgs e)
     {
         if (PsnIdDisplay != null && !string.IsNullOrWhiteSpace(PsnIdDisplay.Text))
         {
             Clipboard.SetText(PsnIdDisplay.Text.Trim());
-            MessageBox.Show("Chiaki PSN Hesap Kodu panoya kopyalandı!\n\nChiaki'de konsolu kaydederken 'PSN Account-ID' kutusuna yapıştırabilirsiniz.", "Kopyalandı", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("تم نسخ رمز حساب PSN الخاص بـ Chiaki إلى الحافظة!\n\nيمكنك لصقه في خانة 'PSN Account-ID' عند تسجيل جهاز الألعاب في Chiaki.", "تم النسخ", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 
@@ -208,7 +208,7 @@ public partial class OnboardingView : UserControl
             PsnIdCard.Visibility = Visibility.Visible;
             if (PsnStatusText != null)
             {
-                PsnStatusText.Text = "✓ PlayStation Network hesabı başarıyla bağlandı!";
+                PsnStatusText.Text = "✓ تم ربط حساب PlayStation Network بنجاح!";
                 PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
             }
         }
@@ -227,14 +227,14 @@ public partial class OnboardingView : UserControl
         }
         catch (Exception ex)
         {
-            // WebView2 yoksa varsayılan tarayıcıda aç
+            // إذا لم يتوفر WebView2 فافتح في المتصفح الافتراضي
             try
             {
                 var url = PsnAccount.AuthorizeUrl.AbsoluteUri;
                 Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
             }
             catch { }
-            PsnStatusText.Text = $"Giriş bilgisi: {ex.Message}";
+            PsnStatusText.Text = $"معلومات تسجيل الدخول: {ex.Message}";
             PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(245, 158, 11));
         }
     }
@@ -247,7 +247,7 @@ public partial class OnboardingView : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Tarayıcı açılamadı: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"تعذّر فتح المتصفح: {ex.Message}", "خطأ", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -256,7 +256,7 @@ public partial class OnboardingView : UserControl
         if (string.IsNullOrWhiteSpace(input)) return null;
         input = input.Trim();
 
-        // 1. Doğrudan Uri olarak parse etmeyi dene
+        // 1. جرّب تحليله مباشرة كـ Uri
         if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
         {
             var code = PsnAccount.CodeFromRedirect(uri);
@@ -269,14 +269,14 @@ public partial class OnboardingView : UserControl
             }
         }
 
-        // 2. Metin içinde code= ara
+        // 2. ابحث عن code= داخل النص
         var match = System.Text.RegularExpressions.Regex.Match(input, @"(?:^|[?&])code=([^&\s]+)");
         if (match.Success)
         {
             return Uri.UnescapeDataString(match.Groups[1].Value);
         }
 
-        // 3. Doğrudan ham kod verilmişse (v3.xxx veya tek parça alfanümerik)
+        // 3. إذا أُعطي الرمز الخام مباشرة (v3.xxx أو قطعة واحدة من أحرف وأرقام)
         if (!input.Contains(' ') && !input.Contains('/') && input.Length >= 8)
         {
             return input;
@@ -290,20 +290,20 @@ public partial class OnboardingView : UserControl
         var raw = PsnCodeInput.Text.Trim();
         if (string.IsNullOrWhiteSpace(raw))
         {
-            MessageBox.Show("Lütfen Sony yönlendirme linkini veya kodunu yapıştırın.", "Kod Gerekli", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("الصق رابط إعادة التوجيه من Sony أو الرمز.", "الرمز مطلوب", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 
         var code = ExtractCode(raw);
         if (string.IsNullOrWhiteSpace(code))
         {
-            PsnStatusText.Text = "❌ Geçersiz link veya kod formatı. Lütfen adresteki 'code=' kısmını kontrol edin.";
+            PsnStatusText.Text = "❌ صيغة الرابط أو الرمز غير صالحة. تحقّق من الجزء 'code=' في العنوان.";
             PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(239, 68, 68));
             return;
         }
 
         PsnVerifyButton.IsEnabled = false;
-        PsnStatusText.Text = "⏳ Kod Sony ile doğrulanıyor...";
+        PsnStatusText.Text = "⏳ جارٍ التحقق من الرمز لدى Sony...";
         PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
 
         try
@@ -314,7 +314,7 @@ public partial class OnboardingView : UserControl
         }
         catch (Exception ex)
         {
-            PsnStatusText.Text = $"❌ Doğrulama hatası: {ex.Message}";
+            PsnStatusText.Text = $"❌ خطأ في التحقق: {ex.Message}";
             PsnStatusText.Foreground = new SolidColorBrush(Color.FromRgb(239, 68, 68));
         }
         finally
@@ -326,11 +326,11 @@ public partial class OnboardingView : UserControl
 
 
     // ==========================================
-    // Adım 3: PS5 Eşleştirme
+    // الخطوة 3: اقتران PS5
     // ==========================================
     private async void OnScanPs5(object sender, RoutedEventArgs e)
     {
-        PairStatusText.Text = "Yerel ağda PS5 konsolu taranıyor...";
+        PairStatusText.Text = "جارٍ البحث عن جهاز PS5 في الشبكة المحلية...";
         PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
         try
         {
@@ -339,18 +339,18 @@ public partial class OnboardingView : UserControl
             if (first != null)
             {
                 Ps5HostInput.Text = first.Host;
-                PairStatusText.Text = $"✓ PS5 Bulundu: {first.Host} ({first.Name})";
+                PairStatusText.Text = $"✓ عُثر على PS5: {first.Host} ({first.Name})";
                 PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
             }
             else
             {
-                PairStatusText.Text = "PS5 otomatik bulunamadı. Lütfen konsolun açık ve aynı ağda olduğunu kontrol edip IP'yi elle yazın.";
+                PairStatusText.Text = "لم يُعثر على PS5 تلقائيًا. تأكد أن جهاز الألعاب مشغّل وعلى الشبكة نفسها ثم اكتب عنوان IP يدويًا.";
                 PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(245, 158, 11));
             }
         }
         catch (Exception ex)
         {
-            PairStatusText.Text = $"Arama bilgisi: {ex.Message}";
+            PairStatusText.Text = $"معلومات البحث: {ex.Message}";
         }
     }
 
@@ -359,7 +359,7 @@ public partial class OnboardingView : UserControl
         var host = Ps5HostInput.Text.Trim();
         if (string.IsNullOrWhiteSpace(host))
         {
-            PairStatusText.Text = "Lütfen PS5 konsolunuzun IP adresini girin.";
+            PairStatusText.Text = "أدخل عنوان IP لجهاز PS5.";
             PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(239, 68, 68));
             return;
         }
@@ -368,14 +368,14 @@ public partial class OnboardingView : UserControl
         var digits = new string([.. pin.Where(char.IsDigit)]);
         if (digits.Length != 8)
         {
-            PairStatusText.Text = "Lütfen PS5 ekranındaki 8 haneli PIN kodunu eksiksiz girin (PS5 › Ayarlar › Sistem › Uzaktan Oynatma › Cihaz Eşleştir).";
+            PairStatusText.Text = "أدخل رمز PIN المكوّن من 8 أرقام الظاهر على شاشة PS5 كاملًا (PS5 › الإعدادات › النظام › Remote Play › Pair Device).";
             PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(239, 68, 68));
             return;
         }
 
         PairButton.IsEnabled = false;
-        PairButton.Content = "⏳ PS5 ile Eşleştiriliyor...";
-        PairStatusText.Text = $"{host} adresindeki PS5 ile şifreli bağlantı kuruluyor ve PIN doğrulanıyor...";
+        PairButton.Content = "⏳ جارٍ الاقتران مع PS5...";
+        PairStatusText.Text = $"جارٍ إنشاء اتصال مشفّر مع PS5 على العنوان {host} والتحقق من رمز PIN...";
         PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
 
         try
@@ -383,9 +383,9 @@ public partial class OnboardingView : UserControl
             ChiakiLauncher.SyncConfig(host);
             await controller.RegisterAsync(host, digits);
 
-            PairStatusText.Text = $"✓ PS5 Konsolu Başarıyla Eşleşti! ({host})";
+            PairStatusText.Text = $"✓ تم اقتران جهاز PS5 بنجاح! ({host})";
             PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
-            PairButton.Content = "✓ Eşleşti!";
+            PairButton.Content = "✓ تم الاقتران!";
 
             await Task.Delay(800);
             SetStep(3);
@@ -393,8 +393,8 @@ public partial class OnboardingView : UserControl
         catch (Exception ex)
         {
             PairButton.IsEnabled = true;
-            PairButton.Content = "🎮 PS5 Konsolu ile Eşleştir ➔";
-            PairStatusText.Text = $"Eşleştirme başarısız: {ex.Message}";
+            PairButton.Content = "🎮 اقرن مع جهاز PS5 ➔";
+            PairStatusText.Text = $"فشل الاقتران: {ex.Message}";
             PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(239, 68, 68));
         }
     }
@@ -407,12 +407,12 @@ public partial class OnboardingView : UserControl
         ChiakiLauncher.LaunchPairingGui(host);
         var registered = new RegisteredConsole(host, "PS5", accountId ?? System.Text.Encoding.ASCII.GetBytes("GTPS5ACC"), new byte[16]);
         controller.SetRegisteredConsole(registered);
-        PairStatusText.Text = "Chiaki eşleştirme arayüzü açıldı. PS5 konsolunuza tıklayarak yukarıdaki PSN kodunu ve TV'deki PIN'i girip eşleştirebilirsiniz.";
+        PairStatusText.Text = "فُتحت واجهة الاقتران في Chiaki. انقر على جهاز PS5 ثم أدخل رمز PSN أعلاه ورمز PIN الظاهر على التلفزيون لإتمام الاقتران.";
         PairStatusText.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
     }
 
     // ==========================================
-    // Adım 4: Akıllı TV Platform Seçimi & Eşleştirme
+    // الخطوة 4: اختيار منصة التلفزيون الذكي والاقتران
     // ==========================================
     private async void OnSelectTvPc(object sender, RoutedEventArgs e)
     {
@@ -423,7 +423,7 @@ public partial class OnboardingView : UserControl
             await controller.PairAsync(new LgTv("PC & OBS", "127.0.0.1", TvBrand.AndroidTv));
         }
         catch { }
-        TvStatusFeedback.Text = "✓ Bilgisayar & OBS modu kaydedildi.";
+        TvStatusFeedback.Text = "✓ تم حفظ وضع الكمبيوتر و OBS.";
         TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
     }
 
@@ -435,7 +435,7 @@ public partial class OnboardingView : UserControl
         {
             var host = string.IsNullOrWhiteSpace(SamsungHostInput.Text) ? "192.168.1.50" : SamsungHostInput.Text.Trim();
             await controller.PairAsync(new LgTv("Samsung Smart TV", host, TvBrand.Samsung));
-            TvStatusFeedback.Text = "✓ Samsung Smart TV modu seçildi.";
+            TvStatusFeedback.Text = "✓ تم اختيار وضع Samsung Smart TV.";
             TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
         }
         catch { }
@@ -449,7 +449,7 @@ public partial class OnboardingView : UserControl
         {
             var host = string.IsNullOrWhiteSpace(LgHostInput.Text) ? "192.168.1.50" : LgHostInput.Text.Trim();
             await controller.PairAsync(new LgTv("LG webOS TV", host, TvBrand.Lg));
-            TvStatusFeedback.Text = "✓ LG webOS TV modu seçildi.";
+            TvStatusFeedback.Text = "✓ تم اختيار وضع LG webOS TV.";
             TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
         }
         catch { }
@@ -463,7 +463,7 @@ public partial class OnboardingView : UserControl
         {
             var host = string.IsNullOrWhiteSpace(AndroidHostInput.Text) ? "192.168.1.50" : AndroidHostInput.Text.Trim();
             await controller.PairAsync(new LgTv("Android TV", host, TvBrand.AndroidTv));
-            TvStatusFeedback.Text = "✓ Android TV modu seçildi.";
+            TvStatusFeedback.Text = "✓ تم اختيار وضع Android TV.";
             TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
         }
         catch { }
@@ -474,19 +474,19 @@ public partial class OnboardingView : UserControl
         var blueBrush = new SolidColorBrush(Color.FromRgb(10, 132, 255));
         var defBrush = new SolidColorBrush(Color.FromRgb(35, 43, 62));
 
-        // Kenarlıklar
+        // الحدود
         TvBorderPc.BorderBrush = selectedTvPlatform == "PC" ? blueBrush : defBrush;
         TvBorderSamsung.BorderBrush = selectedTvPlatform == "Samsung" ? blueBrush : defBrush;
         TvBorderLg.BorderBrush = selectedTvPlatform == "LG" ? blueBrush : defBrush;
         TvBorderAndroid.BorderBrush = selectedTvPlatform == "Android" ? blueBrush : defBrush;
 
-        // Rozetler
+        // الشارات
         TvBadgePc.Visibility = selectedTvPlatform == "PC" ? Visibility.Visible : Visibility.Collapsed;
         TvBadgeSamsung.Visibility = selectedTvPlatform == "Samsung" ? Visibility.Visible : Visibility.Collapsed;
         TvBadgeLg.Visibility = selectedTvPlatform == "LG" ? Visibility.Visible : Visibility.Collapsed;
         TvBadgeAndroid.Visibility = selectedTvPlatform == "Android" ? Visibility.Visible : Visibility.Collapsed;
 
-        // Detay Panelleri
+        // لوحات التفاصيل
         TvDetailPc.Visibility = selectedTvPlatform == "PC" ? Visibility.Visible : Visibility.Collapsed;
         TvDetailSamsung.Visibility = selectedTvPlatform == "Samsung" ? Visibility.Visible : Visibility.Collapsed;
         TvDetailLg.Visibility = selectedTvPlatform == "LG" ? Visibility.Visible : Visibility.Collapsed;
@@ -496,21 +496,21 @@ public partial class OnboardingView : UserControl
     private void OnCopyObsUrl(object sender, RoutedEventArgs e)
     {
         Clipboard.SetText("http://localhost:8787/obs");
-        MessageBox.Show("OBS URL adresi panoya kopyalandı:\nhttp://localhost:8787/obs", "Kopyalandı", MessageBoxButton.OK, MessageBoxImage.Information);
+        MessageBox.Show("تم نسخ عنوان OBS إلى الحافظة:\nhttp://localhost:8787/obs", "تم النسخ", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private async void OnSaveSamsung(object sender, RoutedEventArgs e)
     {
         var host = SamsungHostInput.Text.Trim();
         if (string.IsNullOrWhiteSpace(host)) return;
-        TvStatusFeedback.Text = $"Samsung TV ({host}) kaydediliyor...";
+        TvStatusFeedback.Text = $"جارٍ حفظ تلفزيون Samsung ({host})...";
         TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
         try
         {
             await controller.PairAsync(new LgTv("Samsung Smart TV", host, TvBrand.Samsung));
         }
         catch { }
-        TvStatusFeedback.Text = $"✓ Samsung TV kaydedildi ({host}). TV'nizde GameTranslator uygulamasını açın.";
+        TvStatusFeedback.Text = $"✓ تم حفظ تلفزيون Samsung ({host}). افتح تطبيق GameTranslator على التلفزيون.";
         TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
     }
 
@@ -518,14 +518,14 @@ public partial class OnboardingView : UserControl
     {
         var host = LgHostInput.Text.Trim();
         if (string.IsNullOrWhiteSpace(host)) return;
-        TvStatusFeedback.Text = $"LG TV ({host}) kaydediliyor...";
+        TvStatusFeedback.Text = $"جارٍ حفظ تلفزيون LG ({host})...";
         TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
         try
         {
             await controller.PairAsync(new LgTv("LG webOS TV", host, TvBrand.Lg));
         }
         catch { }
-        TvStatusFeedback.Text = $"✓ LG webOS TV kaydedildi ({host}). TV'nizde GameTranslator uygulamasını açın.";
+        TvStatusFeedback.Text = $"✓ تم حفظ LG webOS TV ({host}). افتح تطبيق GameTranslator على التلفزيون.";
         TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
     }
 
@@ -534,7 +534,7 @@ public partial class OnboardingView : UserControl
         ScanAndroidTvButton.IsEnabled = false;
         AndroidInstallStatus.Visibility = Visibility.Visible;
         AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
-        AndroidInstallStatus.Text = "🔍 Yerel ağdaki Android TV'ler taranıyor (port 5555)...";
+        AndroidInstallStatus.Text = "🔍 جارٍ البحث عن أجهزة Android TV في الشبكة المحلية (port 5555)...";
         try
         {
             var found = await controller.Services.ScanAndroidTvsAsync();
@@ -543,17 +543,17 @@ public partial class OnboardingView : UserControl
             {
                 AndroidHostInput.Text = first;
                 AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
-                AndroidInstallStatus.Text = $"✓ Android TV bulundu: {first}";
+                AndroidInstallStatus.Text = $"✓ عُثر على Android TV: {first}";
             }
             else
             {
                 AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(245, 158, 11));
-                AndroidInstallStatus.Text = "Ağda ADB'si açık Android TV bulunamadı. Lütfen TV IP adresini kontrol edip elle yazın.";
+                AndroidInstallStatus.Text = "لم يُعثر في الشبكة على Android TV مفعّل فيه ADB. تحقّق من عنوان IP للتلفزيون واكتبه يدويًا.";
             }
         }
         catch (Exception ex)
         {
-            AndroidInstallStatus.Text = $"Tarama bilgisi: {ex.Message}";
+            AndroidInstallStatus.Text = $"معلومات البحث: {ex.Message}";
         }
         finally
         {
@@ -566,14 +566,14 @@ public partial class OnboardingView : UserControl
         var host = AndroidHostInput.Text.Trim();
         if (string.IsNullOrWhiteSpace(host))
         {
-            MessageBox.Show("Lütfen Android TV'nizin IP adresini girin.", "IP Adresi Gerekli", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("أدخل عنوان IP لجهاز Android TV.", "عنوان IP مطلوب", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 
         AndroidInstallButton.IsEnabled = false;
         AndroidInstallStatus.Visibility = Visibility.Visible;
         AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
-        AndroidInstallStatus.Text = $"⏳ {host} adresindeki Android TV'ye ADB ile bağlanılıyor...";
+        AndroidInstallStatus.Text = $"⏳ جارٍ الاتصال عبر ADB بجهاز Android TV على العنوان {host}...";
 
         try
         {
@@ -584,25 +584,25 @@ public partial class OnboardingView : UserControl
                     if (ev.Kind == TvInstallEventKind.ApproveOnTv)
                     {
                         AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(245, 158, 11));
-                        AndroidInstallStatus.Text = "⚠️ LÜTFEN TV'YE BAKIN: Ekrandaki 'Ağ / USB Hata Ayıklamaya izin verilsin mi?' sorusuna kumandayla 'Her zaman izin ver' deyip Tamam'a basın!";
+                        AndroidInstallStatus.Text = "⚠️ انظر إلى التلفزيون: عند سؤال السماح بتصحيح الأخطاء (USB / Network debugging) على الشاشة، اختر بالريموت «السماح دائمًا» (Always allow) ثم اضغط OK!";
                     }
                     else
                     {
                         AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
-                        AndroidInstallStatus.Text = "⏳ APK paketi TV'ye yükleniyor ve kuruluyor...";
+                        AndroidInstallStatus.Text = "⏳ جارٍ إرسال حزمة APK إلى التلفزيون وتثبيتها...";
                     }
                 });
             });
 
             AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
-            AndroidInstallStatus.Text = $"✓ Başarılı! GameTranslator v{version} TV'ye kuruldu ve açıldı.";
-            TvStatusFeedback.Text = $"✓ Android TV ({host}) bağlandı ve uygulama hazır.";
+            AndroidInstallStatus.Text = $"✓ تم بنجاح! ثُبّت GameTranslator v{version} على التلفزيون وفُتح.";
+            TvStatusFeedback.Text = $"✓ تم الاتصال بجهاز Android TV ({host}) والتطبيق جاهز.";
             TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
         }
         catch (Exception ex)
         {
             AndroidInstallStatus.Foreground = new SolidColorBrush(Color.FromRgb(239, 68, 68));
-            AndroidInstallStatus.Text = $"❌ Kurulum hatası: {ex.Message}\n(TV'de Geliştirici Seçenekleri > Ağ/USB Hata Ayıklama (ADB) açık ve TV ekranı açık olmalıdır)";
+            AndroidInstallStatus.Text = $"❌ خطأ في التثبيت: {ex.Message}\n(يجب أن يكون Developer options > USB / Network debugging (ADB) مفعّلًا على التلفزيون وأن تكون شاشته مشغّلة)";
         }
         finally
         {
@@ -614,14 +614,14 @@ public partial class OnboardingView : UserControl
     {
         var host = AndroidHostInput.Text.Trim();
         if (string.IsNullOrWhiteSpace(host)) return;
-        TvStatusFeedback.Text = $"Android TV ({host}) kaydediliyor...";
+        TvStatusFeedback.Text = $"جارٍ حفظ Android TV ({host})...";
         TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
         try
         {
             await controller.PairAsync(new LgTv("Android TV", host, TvBrand.AndroidTv));
         }
         catch { }
-        TvStatusFeedback.Text = $"✓ Android TV kaydedildi ({host}). TV'nizde GameTranslator uygulamasını açın.";
+        TvStatusFeedback.Text = $"✓ تم حفظ Android TV ({host}). افتح تطبيق GameTranslator على التلفزيون.";
         TvStatusFeedback.Foreground = new SolidColorBrush(Color.FromRgb(16, 185, 129));
     }
 
@@ -658,11 +658,11 @@ public partial class OnboardingView : UserControl
     }
 
     // ==========================================
-    // Adım 5: Test
+    // الخطوة 5: الاختبار
     // ==========================================
     private void OnTestTv(object sender, RoutedEventArgs e)
     {
         controller.SendTestSubtitle();
-        MessageBox.Show("TV'nize test altyazısı gönderildi! Ekranınızda görünüyorsa eşleştirme başarılıdır.", "Test Gönderildi", MessageBoxButton.OK, MessageBoxImage.Information);
+        MessageBox.Show("أُرسل سطر ترجمة تجريبي إلى التلفزيون! إذا ظهر على الشاشة فالاتصال ناجح.", "أُرسل الاختبار", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 }

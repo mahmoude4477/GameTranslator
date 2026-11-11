@@ -8,7 +8,7 @@ if [ ! -x "$NODE_BIN" ]; then
     NODE_BIN="/usr/local/bin/node"
 fi
 if [ ! -x "$NODE_BIN" ]; then
-    echo '{"event":"error","message":"Sistemde Node.js bulunamadı."}'
+    echo '{"event":"error","message":"تعذر العثور على Node.js في النظام."}'
     exit 1
 fi
 
@@ -39,7 +39,7 @@ if [ -z "$SCRIPT" ]; then
 fi
 
 if [ -z "$SCRIPT" ]; then
-    echo '{"event":"error","message":"ps5-register.js bulunamadı."}'
+    echo '{"event":"error","message":"تعذر العثور على ps5-register.js."}'
     exit 1
 fi
 

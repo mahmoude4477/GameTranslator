@@ -17,7 +17,7 @@ try:
 except ImportError:
     print(json.dumps({
         "event": "error",
-        "message": "Gerekli adb-shell kütüphanesi bulunamadı."
+        "message": "تعذر العثور على مكتبة adb-shell المطلوبة."
     }))
     sys.exit(1)
 
@@ -57,21 +57,21 @@ def main():
         if os.path.isfile(default_key):
             key_path = default_key
         else:
-            emit("error", message="ADB anahtarı bulunamadı.")
+            emit("error", message="تعذر العثور على مفتاح ADB.")
             sys.exit(1)
 
     try:
         with open(key_path) as f:
             signer = PythonRSASigner("", f.read())
     except Exception as e:
-        emit("error", message=f"ADB anahtarı okunamadı: {e}")
+        emit("error", message=f"تعذرت قراءة مفتاح ADB: {e}")
         sys.exit(1)
 
     device = AdbDeviceTcp(host, 5555, default_transport_timeout_s=12.0)
     try:
         device.connect(rsa_keys=[signer], auth_timeout_s=8)
     except Exception as e:
-        emit("error", message=f"Televizyona ADB ile bağlanılamadı ({host}:5555). Lütfen TV'nin açık ve 'Ağda Hata Ayıklama (ADB)' özelliğinin aktif olduğunu kontrol edin: {e}")
+        emit("error", message=f"تعذر الاتصال بالتلفزيون عبر ADB ({host}:5555). تأكد من أن التلفزيون يعمل وأن خيار «تصحيح الأخطاء عبر الشبكة (ADB)» مفعّل: {e}")
         sys.exit(1)
 
     current_user = device.shell("am get-current-user").strip()
@@ -82,19 +82,19 @@ def main():
     params_json = json.dumps({"server": local_ip, "hdmi": 1}).replace('"', '\\"')
 
     if action in ("test", "launch"):
-        emit("progress", message="Uygulama televizyon ekranına getiriliyor...")
+        emit("progress", message="جارٍ إظهار التطبيق على شاشة التلفزيون...")
         device.shell(f'am start -n com.gametranslator.tv/.MainActivity --user {current_user} -f 0x10000000 --es params "{params_json}"')
         device.shell("input keyevent 183") # PROG_RED - trigger subtitle
-        emit("done", message="✅ GameTranslator TV ekranında açıldı ve test altyazısı tetiklendi!")
+        emit("done", message="✅ فُتح GameTranslator على شاشة التلفزيون وأُرسلت ترجمة تجريبية!")
         return
 
     # Install action
     if not apk_path or not os.path.isfile(apk_path):
-        emit("error", message=f"APK dosyası bulunamadı: {apk_path}")
+        emit("error", message=f"تعذر العثور على ملف APK: {apk_path}")
         sys.exit(1)
 
-    emit("progress", message=f"Televizyona bağlanılıyor ({host}:5555)...")
-    emit("progress", message="Bağlantı kuruldu. APK televizyona aktarılıyor...")
+    emit("progress", message=f"جارٍ الاتصال بالتلفزيون ({host}:5555)...")
+    emit("progress", message="تم الاتصال. جارٍ نقل ملف APK إلى التلفزيون...")
 
     with open(apk_path, "rb") as f:
         apk_bytes = f.read()
@@ -115,7 +115,7 @@ def main():
     device.shell("base64 -d /data/local/tmp/gt_app.b64 > /data/local/tmp/gt_app.apk")
     device.shell("rm -f /data/local/tmp/gt_app.b64")
 
-    emit("progress", message="Uygulama televizyona kuruluyor...")
+    emit("progress", message="جارٍ تثبيت التطبيق على التلفزيون...")
 
     # Install for all users and specifically existing for current user
     install_out = device.shell(f"pm install -r -d --user {current_user} /data/local/tmp/gt_app.apk")
@@ -126,14 +126,14 @@ def main():
     device.shell(f"pm install-existing --user {current_user} com.gametranslator.tv")
     device.shell("rm -f /data/local/tmp/gt_app.apk")
 
-    emit("progress", message="Uygulama televizyonda başlatılıyor...")
+    emit("progress", message="جارٍ تشغيل التطبيق على التلفزيون...")
 
     # Force stop before starting to ensure clean launch
     device.shell("am force-stop com.gametranslator.tv")
     start_out = device.shell(f'am start -n com.gametranslator.tv/.MainActivity --user {current_user} --es params "{params_json}"')
     device.shell("input keyevent 183") # PROG_RED - trigger subtitle immediately
 
-    emit("done", installed=True, version="1.0.0", message="✅ GameTranslator TV uygulaması televizyona başarıyla yüklendi ve açıldı!")
+    emit("done", installed=True, version="1.0.0", message="✅ تم تثبيت تطبيق GameTranslator على التلفزيون وفتحه بنجاح!")
 
 if __name__ == "__main__":
     main()

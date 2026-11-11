@@ -554,7 +554,7 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <PasswordBox x:Name="GeminiKeyInput" MinHeight="30" VerticalContentAlignment="Center" Margin="0,0,8,0" />
-                                        <Button Grid.Column="1" Content="حفظ" Click="OnGeminiSave" Style="{StaticResource SecondaryButton}" Padding="10,3" FontSize="11" />
+                                        <Button Grid.Column="1" Content="احفظ" Click="OnGeminiSave" Style="{StaticResource SecondaryButton}" Padding="10,3" FontSize="11" />
                                     </Grid>
                                 </StackPanel>
                             </Border>
@@ -628,7 +628,7 @@
                                     </Grid>
                                     <Grid>
                                         <TextBlock x:Name="ObsText" Text="OBS overlay: http://localhost:8787/obs" FontSize="11" FontFamily="Consolas" Foreground="{DynamicResource textSecondaryBrush}" VerticalAlignment="Center" />
-                                        <Button Content="نسخ" HorizontalAlignment="Right" Click="OnCopyObs" Style="{StaticResource SecondaryButton}" Padding="8,2" FontSize="10.5" />
+                                        <Button Content="انسخ" HorizontalAlignment="Right" Click="OnCopyObs" Style="{StaticResource SecondaryButton}" Padding="8,2" FontSize="10.5" />
                                     </Grid>
                                 </StackPanel>
                             </Border>

@@ -38,7 +38,7 @@ try {
     parseHexBytes = protoModule.parseHexBytes;
     CRYPTO_NONCE_LENGTH = protoModule.CRYPTO_NONCE_LENGTH;
 } catch (e) {
-    console.log(JSON.stringify({ event: "error", message: "Gerekli kütüphaneler yüklenemedi: " + e.message }));
+    console.log(JSON.stringify({ event: "error", message: "تعذر تحميل المكتبات المطلوبة: " + e.message }));
     process.exit(1);
 }
 
@@ -64,7 +64,7 @@ async function run() {
     if (!options.host || !options.pin || !options.account) {
         console.log(JSON.stringify({
             event: "error",
-            message: "Eksik parametre. Kullanım: --host <ip> --pin <8_haneli_kod> --account <base64_id>"
+            message: "معاملات ناقصة. الاستخدام: --host <ip> --pin <8_digit_code> --account <base64_id>"
         }));
         process.exit(1);
     }
@@ -76,14 +76,14 @@ async function run() {
     if (pin.length !== 8) {
         console.log(JSON.stringify({
             event: "error",
-            message: "PIN kodu tam olarak 8 haneli olmalıdır."
+            message: "يجب أن يتكون رمز PIN من 8 أرقام بالضبط."
         }));
         process.exit(1);
     }
 
     console.log(JSON.stringify({
         event: "progress",
-        message: `${host} adresindeki PS5 ile eşleştirme başlatılıyor...`
+        message: `جارٍ بدء الربط مع PS5 على العنوان ${host}...`
     }));
 
     const device = {
@@ -102,7 +102,7 @@ async function run() {
     try {
         socket = dgram.createSocket('udp4');
     } catch (e) {
-        console.log(JSON.stringify({ event: "error", message: "UDP soketi oluşturulamadı: " + e.message }));
+        console.log(JSON.stringify({ event: "error", message: "تعذر إنشاء مقبس UDP: " + e.message }));
         process.exit(1);
     }
 
@@ -113,7 +113,7 @@ async function run() {
             if (!searchDone) {
                 searchDone = true;
                 try { socket.close(); } catch (_) {}
-                reject(new Error("PS5 eşleşme yanıtı vermedi (Zaman aşımı). Lütfen PS5 ekranında 'Ayarlar > Sistem > Uzaktan Oynatma > Cihaz Eşle' ekranının açık olduğundan emin olun."));
+                reject(new Error("لم يرد PS5 على طلب الربط (انتهت المهلة). تأكد من أن شاشة «الإعدادات > النظام > Remote Play > ربط الجهاز» مفتوحة على PS5."));
             }
         }, 15000);
 
@@ -149,7 +149,7 @@ async function run() {
                         clearTimeout(timeout);
                         searchDone = true;
                         try { socket.close(); } catch (_) {}
-                        reject(new Error("SRC3 gönderilemedi: " + err.message));
+                        reject(new Error("تعذر إرسال SRC3: " + err.message));
                     }
                 });
             }, 500);
@@ -168,7 +168,7 @@ async function run() {
 
     console.log(JSON.stringify({
         event: "progress",
-        message: "PS5 hazır sinyali (RES3) alındı. Şifreli kayıt paketi gönderiliyor..."
+        message: "وصلت إشارة جاهزية PS5 (RES3). جارٍ إرسال حزمة التسجيل المشفّرة..."
     }));
 
     // Wait 100ms for PS5 state transition
@@ -206,15 +206,15 @@ async function run() {
                 const reasonHeader = res.headers['rp-application-reason'] || '';
 
                 if (statusCode >= 300) {
-                    let errMsg = `PS5 kayıt hatası (HTTP ${statusCode})`;
+                    let errMsg = `خطأ في تسجيل PS5 (HTTP ${statusCode})`;
                     if (reasonHeader === '80108b09') {
-                        errMsg = "PIN kodu geçersiz veya süresi doldu! Lütfen PS5 ekranından yeni PIN kodu alıp tekrar deneyin.";
+                        errMsg = "رمز PIN غير صالح أو انتهت صلاحيته! احصل على رمز PIN جديد من شاشة PS5 ثم أعد المحاولة.";
                     } else if (reasonHeader === '80108b02') {
-                        errMsg = "PSN Hesap Uyuşmazlığı! Girdiğiniz PSN hesabı, PS5'te şu an açık olan profile ait değil. Lütfen PS5'teki aynı hesapla giriş yapın.";
+                        errMsg = "عدم تطابق حساب PSN! حساب PSN الذي أدخلته لا يخص الملف الشخصي المفتوح الآن على PS5. سجّل الدخول بالحساب نفسه المستخدم على PS5.";
                     } else if (reasonHeader === '80108b10') {
-                        errMsg = "PS5 Uzaktan Oynatma şu an başka bir cihaz tarafından kullanılıyor.";
+                        errMsg = "Remote Play على PS5 مستخدم الآن من جهاز آخر.";
                     } else if (reasonHeader) {
-                        errMsg += ` (Neden kodu: ${reasonHeader})`;
+                        errMsg += ` (رمز السبب: ${reasonHeader})`;
                     }
                     return reject(new Error(errMsg));
                 }
@@ -224,15 +224,15 @@ async function run() {
                     const parsed = parseBody(decrypted);
                     resolve(parsed);
                 } catch (decErr) {
-                    reject(new Error("PS5 yanıtı çözülemedi: " + decErr.message));
+                    reject(new Error("تعذر فك تشفير رد PS5: " + decErr.message));
                 }
             });
         });
 
-        req.on('error', (err) => reject(new Error("PS5 HTTP isteği başarısız: " + err.message)));
+        req.on('error', (err) => reject(new Error("فشل طلب HTTP إلى PS5: " + err.message)));
         req.on('timeout', () => {
             req.destroy();
-            reject(new Error("PS5 HTTP yanıt vermedi (Zaman aşımı)."));
+            reject(new Error("لم يرد PS5 على طلب HTTP (انتهت المهلة)."));
         });
 
         req.write(payloadBuffer);
@@ -247,7 +247,7 @@ async function run() {
         if (!registKey) {
             console.log(JSON.stringify({
                 event: "error",
-                message: "PS5'ten geçerli bir kayıt anahtarı (RegistKey) alınamadı."
+                message: "لم يصل من PS5 مفتاح تسجيل صالح (RegistKey)."
             }));
             process.exit(1);
         }
@@ -257,7 +257,7 @@ async function run() {
             success: true,
             registKey: registKey,
             rpKey: rpKey || "",
-            message: "PS5 başarıyla eşleşti!"
+            message: "تم ربط PS5 بنجاح!"
         }));
     } catch (err) {
         console.log(JSON.stringify({ event: "error", message: err.message }));

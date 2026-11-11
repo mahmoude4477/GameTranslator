@@ -1,7 +1,7 @@
 #!/bin/zsh
 # SPDX-License-Identifier: AGPL-3.0-only
-# Mac uygulamasına gömülen Samsung ve Android TV kurulum yardımcısını (windows/src/GameTranslator.TvHelper) Native AOT ile
-# derler: dist/tv-helper/gametranslator-tv-helper. Ardından XML imzasının AOT ile çalıştığını sınar.
+# يبني بـ Native AOT أداة تثبيت Samsung و Android TV المساعدة المضمَّنة في تطبيق Mac (windows/src/GameTranslator.TvHelper):
+# dist/tv-helper/gametranslator-tv-helper. ثم يختبر أن توقيع XML يعمل مع AOT.
 set -e
 setopt pipefail
 cd "${0:A:h}/.."
@@ -9,13 +9,13 @@ cd "${0:A:h}/.."
 OUT=dist/tv-helper
 rm -rf "$OUT"
 dotnet publish windows/src/GameTranslator.TvHelper -c Release -r osx-arm64 -o "$OUT" -nologo -v q
-# Hata ayıklama sembolleri pakete girmesin.
+# حتى لا تدخل رموز تصحيح الأخطاء في الحزمة.
 rm -rf "$OUT"/*.dSYM(N) "$OUT"/*.dbg(N) "$OUT"/*.pdb(N)
-[[ -x "$OUT/gametranslator-tv-helper" ]] || { echo "Yardımcı derlenemedi."; exit 1; }
-# Homebrew'un kaynaktan derlenmiş .NET'i Homebrew kitaplıklarına bağlar; öyle bir dosya başka Mac'te açılmaz.
-# Yayın derlemesi Microsoft'un .NET'iyle (actions/setup-dotnet) yapılır. Yerel sınama için ALLOW_LOCAL_LIBS=1.
+[[ -x "$OUT/gametranslator-tv-helper" ]] || { echo "تعذر بناء الأداة المساعدة."; exit 1; }
+# نسخة .NET المبنية من المصدر في Homebrew تربط الملف بمكتبات Homebrew؛ وملف كهذا لا يعمل على Mac آخر.
+# بنية الإصدار تُجرى بـ .NET من Microsoft (actions/setup-dotnet). للاختبار المحلي: ALLOW_LOCAL_LIBS=1.
 if otool -L "$OUT/gametranslator-tv-helper" | grep -q /opt/homebrew && [[ -z "$ALLOW_LOCAL_LIBS" ]]; then
-  echo "Yardımcı Homebrew kitaplıklarına bağlı; Microsoft'un .NET SDK'sıyla derleyin."; exit 1
+  echo "الأداة المساعدة مرتبطة بمكتبات Homebrew؛ ابنِها بـ .NET SDK من Microsoft."; exit 1
 fi
-"$OUT/gametranslator-tv-helper" self-test | grep -q '"event":"done"' || { echo "Yardımcı sınaması başarısız."; exit 1; }
-echo "Hazır: $OUT/gametranslator-tv-helper ($(du -h "$OUT/gametranslator-tv-helper" | cut -f1))"
+"$OUT/gametranslator-tv-helper" self-test | grep -q '"event":"done"' || { echo "فشل اختبار الأداة المساعدة."; exit 1; }
+echo "جاهز: $OUT/gametranslator-tv-helper ($(du -h "$OUT/gametranslator-tv-helper" | cut -f1))"
