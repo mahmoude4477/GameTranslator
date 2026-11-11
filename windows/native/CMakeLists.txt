@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: AGPL-3.0-only
-# gametranslator_native.dll: libchiaki + FFmpeg (h264 çözücü, swscale) tek DLL'de, statik bağlı.
-# Windows'ta MSYS2 mingw64 ile derlenir (.github/workflows/windows.yml); Mac'te de derlenir
-# (kod ve testler için; orada paylaşımlı kütüphane .dylib olur).
+# gametranslator_native.dll: libchiaki + FFmpeg (مفكك h264 و swscale) في DLL واحد بربط ساكن.
+# يُبنى على Windows بـ MSYS2 mingw64؛ ويُبنى على Mac أيضًا
+# (للكود والاختبارات؛ وهناك تكون المكتبة المشتركة .dylib).
 #
-#   cmake -S windows/native -B build/native -G Ninja -DFFMPEG_PREFIX=<statik FFmpeg kurulumu>
+#   cmake -S windows/native -B build/native -G Ninja -DFFMPEG_PREFIX=<تثبيت FFmpeg الساكن>
 #   cmake --build build/native
 cmake_minimum_required(VERSION 3.20)
 project(gametranslator_native C)
@@ -13,10 +13,10 @@ set(FFMPEG_PREFIX "" CACHE PATH "FFmpeg kurulumu (include/, lib/)")
 option(GAMETRANSLATOR_NATIVE_TESTS "Yerel testleri derle" ON)
 
 if(WIN32)
-	# Yalnız statik kütüphaneler bulunsun: DLL, MSYS2'nin çalışma zamanı DLL'lerine bağlı kalmamalı.
+	# لتُعثر على المكتبات الساكنة فقط: يجب ألا يعتمد الـ DLL على مكتبات DLL لوقت التشغيل في MSYS2.
 	set(CMAKE_FIND_LIBRARY_SUFFIXES .a)
 	set(OPENSSL_USE_STATIC_LIBS ON CACHE BOOL "" FORCE)
-	# miniupnpc başlıkları aksi halde __declspec(dllimport) bildirir.
+	# وإلا فإن ملفات miniupnpc الرأسية تعلن __declspec(dllimport).
 	add_compile_definitions(MINIUPNP_STATICLIB)
 endif()
 

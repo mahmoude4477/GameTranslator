@@ -1,57 +1,90 @@
-# TV mağazalarında yayın
+# النشر في متاجر التلفزيون
 
-Yayıncı: Sefflex (kurumsal satıcı hesabı). Uygulama adı her yerde **GameTranslator**. Ad, simge ve ekran
-görüntülerinde PlayStation/PS5 adı ya da logosu kullanılmaz. Açıklamada en fazla "HDMI ile bağlı oyun
-konsolları için", sonunda da Sony ile bağlantısızlık notu yer alır.
+الناشر في المشروع الأصلي: Sefflex (حساب بائع تجاري). من ينشر هذه النسخة العربية يسجّل حساب بائع باسمه.
+اسم التطبيق في كل مكان **GameTranslator**. لا يُستخدم اسم PlayStation/PS5 ولا شعاره في الاسم ولا في الأيقونة
+ولا في لقطات الشاشة. أقصى ما يُذكر في الوصف «لأجهزة الألعاب المتصلة عبر HDMI»، وفي آخره ملاحظة عدم الارتباط بـ Sony.
 
-## Ortak gereksinimler
+## المتطلبات المشتركة
 
-- Gizlilik politikası: https://github.com/Sefflex/GameTranslate/blob/main/PRIVACY.md
-- Destek: https://github.com/Sefflex/GameTranslate/issues
-- **Demo modu:** test eden kişide PS5 ve bilgisayar yok. Bekleme ekranındaki "Demoyu izle" (Tamam) ya da
-  Mavi tuş örnek altyazıları oynatır. Bu durum test notunda ve arayüz anlatımında (pptx) açıkça yazılır.
-- Kumanda: yön tuşları, Tamam ve Geri çalışır, seçili öğe belli olur. Geri tuşu giriş ekranında TV'nin
-  ana ekranına döner.
-- Kaynak kodda şifre, anahtar ya da token yoktur.
+- سياسة الخصوصية: https://github.com/mahmoude4477/GameTranslator/blob/main/PRIVACY.md
+- الدعم: https://github.com/mahmoude4477/GameTranslator/issues
+- **الوضع التجريبي (Demo):** من يختبر التطبيق في المتجر ليس لديه PS5 ولا كمبيوتر. زر مشاهدة العرض التجريبي في شاشة
+  الانتظار (زر OK) أو الزر الأزرق يشغّل ترجمات نموذجية. يُكتب ذلك بوضوح في ملاحظة الاختبار وفي شرح الواجهة (pptx).
+- الريموت: أزرار الاتجاهات و OK والرجوع تعمل، والعنصر المحدّد ظاهر. زر الرجوع في شاشة البداية يعود إلى الشاشة
+  الرئيسية للتلفزيون.
+- لا توجد في الشيفرة المصدرية كلمة مرور ولا مفتاح ولا token.
+- التطبيق يعرض الترجمة العربية من اليمين إلى اليسار؛ لقطات الشاشة تُظهر سطرًا عربيًا فوق صورة لعبة.
+
+## نص صفحة المتجر
+
+الحقول الإنجليزية مطلوبة في المتجرين؛ والنص العربي يُضاف لغةً ثانية.
+
+**App title:** GameTranslator
+
+**Short description (English):** Arabic subtitles on your TV for games on a console connected over HDMI.
+
+**Description (English):**
+
+> GameTranslator shows Arabic subtitles on top of your game. Your console stays connected to the TV over HDMI, so the
+> picture and sound are untouched. The free GameTranslator app on your Mac or Windows PC reads the game's English
+> subtitles, translates them to Arabic online, and sends the text to this TV app over your home network. The TV app
+> shows the Arabic line, right-to-left, over the game: covering the English line, above it, below it, or at a fixed
+> height.
+>
+> Requires the free GameTranslator computer app on the same network. Without it, press "Watch the demo" to see sample
+> subtitles.
+>
+> GameTranslator is not affiliated with Sony Interactive Entertainment.
+
+**الوصف المختصر (العربية):** ترجمة عربية على تلفزيونك لألعاب جهاز الألعاب المتصل عبر HDMI.
+
+**الوصف (العربية):**
+
+> يعرض GameTranslator الترجمة العربية فوق لعبتك. يبقى جهاز الألعاب متصلًا بالتلفزيون عبر HDMI، فلا تتأثر الصورة ولا
+> الصوت. تطبيق GameTranslator المجاني على كمبيوتر Mac أو Windows يقرأ الترجمة النصية الإنجليزية للعبة، ويترجمها إلى
+> العربية عبر الإنترنت، ويرسل النص إلى تطبيق التلفزيون هذا عبر شبكتك المنزلية. يعرض تطبيق التلفزيون السطر العربي من
+> اليمين إلى اليسار فوق اللعبة: مغطّيًا السطر الإنجليزي، أو فوقه، أو تحته، أو على ارتفاع ثابت.
+>
+> يتطلب تطبيق GameTranslator المجاني للكمبيوتر على الشبكة نفسها. ومن دونه اضغط زر العرض التجريبي لمشاهدة ترجمات
+> نموذجية.
+>
+> GameTranslator غير مرتبط بشركة Sony Interactive Entertainment.
 
 ## LG Content Store (Seller Lounge)
 
-1. seller.lgappstv.com üzerinde Sefflex adına **kurumsal satıcı** kaydı açılır (LG hesabıyla).
-2. Gönderimden önce Seller Lounge Q&A'dan yazılı soru sorulur: HDMI görüntüsü belgelenmemiş
-   `ext://hdmi` kaynağıyla gösteriliyor ve LG bunun için resmi API sunmuyor. Bu yöntemin mağaza
-   uygulamasında kabul edilip edilmediği sorulur. Gerekirse webOS Partner Zone'a başvurulur.
-   Soru metni: `store/lg/question.md`.
-3. Olumlu cevap gelirse gönderimde şunlar verilir (görseller ve metinler `store/lg/` altında,
-   Self-Checklist şablonu Seller Lounge'dan alınır):
-   - IPK (`release.yml` üretir)
-   - Simge: 400×400
-   - Ekran görüntüleri: 1 ana + 2–5 ek, 1280×720
-   - Açılış arka planı: 1920×1080
-   - Açıklama: 50–4000 karakter
-   - Yaş derecesi, kategori ve ülke seçimi
+1. يُفتح على seller.lgappstv.com تسجيل **بائع تجاري** باسم الناشر (بحساب LG).
+2. قبل الإرسال يُطرح سؤال مكتوب عبر Seller Lounge Q&A: صورة HDMI تُعرض بالمصدر غير الموثّق
+   `ext://hdmi`، ولا تقدّم LG واجهة API رسمية لذلك. يُسأل هل تُقبل هذه الطريقة في تطبيق متجر.
+   وعند الحاجة يُقدَّم طلب إلى webOS Partner Zone.
+3. إذا جاء الرد إيجابيًا يُقدَّم عند الإرسال ما يلي (قالب Self-Checklist يؤخذ من Seller Lounge):
+   - IPK (ينتجه `scripts/package-ipk.py`)
+   - الأيقونة: 400×400
+   - لقطات الشاشة: 1 رئيسية + 2–5 إضافية، 1280×720
+   - خلفية البداية: 1920×1080
+   - الوصف: 50–4000 حرف
+   - التصنيف العمري، والفئة، واختيار الدول
    - Self-Checklist (xlsx)
    - UX Scenario (pptx)
-4. İnceleme genelde 1–3 ay sürer.
+4. تستغرق المراجعة عادة من شهر إلى 3 أشهر.
 
-Mağaza onayı gelmezse kurulum geliştirici moduyla yapılır. Bu modun oturumu en çok 1000 saat sürer ve
-süre dolmadan uzatılmalıdır, yoksa kurulan uygulama silinir. Bu uzatmayı Mac ve Windows
-uygulamalarının kendiliğinden yapması planlanıyor (henüz yok).
+إذا لم تصل موافقة المتجر يُثبَّت التطبيق بوضع المطوّر. جلسة هذا الوضع تدوم 1000 ساعة على الأكثر ويجب تمديدها قبل
+انتهائها، وإلا حُذف التطبيق المثبَّت. تطبيق Windows يجدّد المدة بنفسه عند الاتصال بالتلفزيون
+(`DevModeInstaller.RenewSessionAsync`)؛ انظر [tv-setup.ar.md](tv-setup.ar.md#lg-tv).
 
 ## Samsung (TV Seller Office, Tizen)
 
-1. Seller Office'e Samsung hesabıyla üye olunur. Bu hesap ilk aşamada yalnız ABD'de yayın izni verir.
-2. Türkiye için **Partner Seller** olmak gerekir:
-   - Samsung (merkez ya da Samsung Türkiye) ile sözleşme imzalanır.
-   - Membership › Partnership menüsünden bölgenin içerik yöneticisinin e-postasıyla talep açılır. Bu
-     e-posta bilinmiyorsa 1:1 Q&A'dan istenir.
-   - En uzun süren adım budur; hemen başlanmalıdır.
-3. Tizen uygulaması `tizen.tvwindow` ile HDMI görüntüsünü HTML katmanının arkasında gösterir (`BEHIND`).
-   Bu API belgelidir ve yetki seviyesi public'tir. Gönderimden önce QN70F üzerinde geliştirici moduyla
-   denenir.
-4. Gönderimde şunlar verilir:
-   - .wgt paketi (author ve distributor imzalı; author sertifikası yedeklenir)
-   - Simge: 1920×1080
-   - Tam 4 ekran görüntüsü: 1920×1080, her biri en fazla 500 kB
+1. يُسجَّل في Seller Office بحساب Samsung. هذا الحساب يسمح في المرحلة الأولى بالنشر في الولايات المتحدة فقط.
+2. للنشر في دول أخرى (الدول العربية مثلًا) يجب أن يصبح الناشر **Partner Seller**:
+   - يُوقَّع عقد مع Samsung (المقر الرئيسي أو فرع Samsung في المنطقة).
+   - يُفتح طلب من القائمة Membership › Partnership ببريد مدير المحتوى في المنطقة. وإن لم يُعرف هذا
+     البريد يُطلب عبر 1:1 Q&A.
+   - هذه أطول الخطوات مدة؛ فيجب البدء بها فورًا.
+3. تطبيق Tizen يعرض صورة HDMI خلف طبقة HTML عبر `tizen.tvwindow` (`BEHIND`).
+   هذه الواجهة موثّقة ومستوى صلاحيتها public. قبل الإرسال يُجرَّب على QN70F بوضع المطوّر.
+4. يُقدَّم عند الإرسال ما يلي:
+   - حزمة ‎.wgt (موقّعة بشهادتَي author و distributor؛ وتُحفظ نسخة احتياطية من شهادة author)
+   - الأيقونة: 1920×1080
+   - 4 لقطات شاشة بالضبط: 1920×1080، كل واحدة 500 kB على الأكثر
    - App UI Description (pptx)
-   - Her dil için başlık ve açıklama
-5. İnceleme genelde 1–4 ay sürer.
+   - العنوان والوصف لكل لغة
+5. تستغرق المراجعة عادة من شهر إلى 4 أشهر.

@@ -13,7 +13,7 @@ static int failures = 0;
 /* --- يقسّم Annex-B إلى وحدات وصول (إطارات) كما يرسلها PS5 --- */
 
 typedef struct {
-	size_t start, end; /* başlangıç kodundan sonraki NAL baytları */
+	size_t start, end; /* بايتات NAL التالية لرمز البداية */
 } nal_range;
 
 static size_t find_nals(const uint8_t *data, size_t size, nal_range *out, size_t max)
@@ -105,7 +105,7 @@ static uint8_t *read_file(const char *path, size_t *size)
 	return data;
 }
 
-/* --- Testler --- */
+/* --- الاختبارات --- */
 
 static void check_frame(cs_decoder *decoder)
 {
@@ -113,7 +113,7 @@ static void check_frame(cs_decoder *decoder)
 	CHECK(decoder->width == 1920);
 	CHECK(decoder->height == 1080);
 	CHECK(decoder->stride >= 1920 * 4);
-	/* testsrc2 karesi tek renk değildir; dönüşüm gerçekten piksel yazmış olmalı. */
+	/* إطار testsrc2 ليس بلون واحد؛ فلا بد أن التحويل كتب بكسلات فعلًا. */
 	const uint8_t *row = decoder->bgra + (size_t)decoder->stride * 540;
 	bool varied = false;
 	for(int x = 4; x < 1920 * 4; x += 4)
@@ -124,7 +124,7 @@ static void check_frame(cs_decoder *decoder)
 	av_frame_unref(decoder->frame);
 }
 
-/* Çözücüde bekleyen kareleri boşaltır; çıkan kare sayısı. */
+/* يفرغ الإطارات المنتظرة في المفكك؛ ويعيد عدد الإطارات الخارجة. */
 static int flush(cs_decoder *decoder)
 {
 	int frames = 0;
@@ -203,13 +203,13 @@ static void test_fixture_decodes(const char *path)
 			check_frame(&decoder);
 		}
 	}
-	/* Kare sırası SPS'teki yeniden sıralama derinliği kadar gecikebilir (örnekte 2; PS5'te 0). */
+	/* قد يتأخر ترتيب الإطارات بمقدار عمق إعادة الترتيب في SPS (في العيّنة 2؛ وفي PS5 صفر). */
 	CHECK(frames >= 4);
 	frames += flush(&decoder);
 	CHECK(frames == 6);
 	cs_decoder_fini(&decoder);
 
-	/* Yeni bir çözücü yalnız ilk anahtar kareyle de 1080p görüntü üretmeli. */
+	/* مفكك جديد يجب أن ينتج صورة 1080p من الإطار المفتاحي الأول وحده أيضًا. */
 	CHECK(cs_decoder_init(&decoder) == 0);
 	CHECK(cs_decoder_decode(&decoder, units[0].data, units[0].size) >= 0);
 	CHECK(flush(&decoder) == 1);
@@ -230,7 +230,7 @@ static void test_garbage_does_not_crash(void)
 	cs_decoder_fini(&decoder);
 }
 
-/* --- Oturum yaşam döngüsü --- */
+/* --- دورة حياة الجلسة --- */
 
 typedef struct {
 	ChiakiMutex mutex;
@@ -257,7 +257,7 @@ static bool quit_pred(void *user)
 	return ((quit_wait *)user)->quit;
 }
 
-/* Bağlanamayan bir adreste oturum kapanmayı bildirmeli; durdurmak hızlı ve güvenli olmalı. */
+/* مع عنوان يتعذر الاتصال به يجب أن تبلّغ الجلسة عن الإغلاق؛ وأن يكون الإيقاف سريعًا وآمنًا. */
 static void test_session_to_closed_port_quits_and_stops(void)
 {
 	quit_wait wait = { 0 };
@@ -285,7 +285,7 @@ static void test_session_to_closed_port_quits_and_stops(void)
 	chiaki_mutex_fini(&wait.mutex);
 }
 
-/* Bağlanmaya çalışırken durdurmak da güvenli olmalı. */
+/* الإيقاف أثناء محاولة الاتصال يجب أن يكون آمنًا أيضًا. */
 static void test_stop_right_after_start(void)
 {
 	uint8_t key[16] = { 0 }, morning[16] = { 0 }, account[8] = { 0 };
