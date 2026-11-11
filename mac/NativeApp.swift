@@ -2169,9 +2169,9 @@ struct MainWindowView: View {
                 SetupWizardView(state: state)
             } else {
                 HStack(spacing: 0) {
-                    solPanel
+                    leftPanel
                     Divider().overlay(Color.white.opacity(0.12))
-                    sagPanel
+                    rightPanel
                 }
             }
         }
@@ -2195,7 +2195,7 @@ struct MainWindowView: View {
     }
 
     // MARK: - اللوحة اليسرى (Translation Hub)
-    private var solPanel: some View {
+    private var leftPanel: some View {
         VStack(spacing: 11) {
             headerBar
             actionButton
@@ -2563,7 +2563,7 @@ struct MainWindowView: View {
     }
 
     // MARK: - اللوحة اليمنى (الإعدادات وشاشة اللعبة المباشرة)
-    private var sagPanel: some View {
+    private var rightPanel: some View {
         VStack(spacing: 0) {
             topTabSelector
             if state.showPermissionBanner {

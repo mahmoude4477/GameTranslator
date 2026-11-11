@@ -18,7 +18,7 @@ public static class SamsungMessages
         return new Uri(text);
     }
 
-    /// <summary>يستقبل تطبيق التلفزيون المعاملات داخل <c>PAYLOAD</c> (انظر tv-tizen/platform.js).</summary>
+    /// <summary>يستقبل تطبيق التلفزيون المعاملات داخل <c>PAYLOAD</c> (انظر tv/tizen/platform.js).</summary>
     public static string Launch(string appId, IReadOnlyDictionary<string, string> parameters) => new JsonObject
     {
         ["method"] = "ms.channel.emit",

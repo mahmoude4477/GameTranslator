@@ -613,21 +613,21 @@ public partial class MainView : UserControl
         MessageBox.Show("تم التحقق من مفتاح DeepL API وحفظه!", "DeepL مفعّل", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
-    // --- Geçmiş Dışa Aktarma ---
+    // --- تصدير السجل ---
 
     private void OnExportTxt(object sender, RoutedEventArgs e)
     {
         if (history.Count == 0)
         {
-            MessageBox.Show("Dışa aktarılacak altyazı geçmişi henüz yok.", "Geçmiş Boş", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("لا يوجد سجل ترجمة للتصدير بعد.", "السجل فارغ", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
-        var dlg = new SaveFileDialog { Filter = "Metin Dosyası (*.txt)|*.txt", FileName = "GameTranslator_Altyazi_Gecmisi.txt" };
+        var dlg = new SaveFileDialog { Filter = "ملف نصي (*.txt)|*.txt", FileName = "GameTranslator_Subtitle_History.txt" };
         if (dlg.ShowDialog() == true)
         {
             var lines = history.Select(h => $"{h.Time}\tTV: {h.Translation}\tPS5: {h.English}");
             File.WriteAllLines(dlg.FileName, lines);
-            MessageBox.Show("Altyazı geçmişi başarıyla kaydedildi!", "Dışa Aktarıldı", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("تم حفظ سجل الترجمة بنجاح!", "تم التصدير", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 
@@ -635,24 +635,24 @@ public partial class MainView : UserControl
     {
         if (history.Count == 0)
         {
-            MessageBox.Show("Dışa aktarılacak altyazı geçmişi henüz yok.", "Geçmiş Boş", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("لا يوجد سجل ترجمة للتصدير بعد.", "السجل فارغ", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
-        var dlg = new SaveFileDialog { Filter = "JSON Dosyası (*.json)|*.json", FileName = "GameTranslator_Altyazi_Gecmisi.json" };
+        var dlg = new SaveFileDialog { Filter = "ملف JSON (*.json)|*.json", FileName = "GameTranslator_Subtitle_History.json" };
         if (dlg.ShowDialog() == true)
         {
             var json = JsonSerializer.Serialize(history, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(dlg.FileName, json);
-            MessageBox.Show("Altyazı geçmişi JSON formatında kaydedildi!", "Dışa Aktarıldı", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("تم حفظ سجل الترجمة بصيغة JSON!", "تم التصدير", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 
-    // --- Genel Aksiyonlar & Footer ---
+    // --- الإجراءات العامة والشريط السفلي ---
 
     private void OnCopyObs(object sender, RoutedEventArgs e)
     {
         Clipboard.SetText($"http://localhost:{controller.ServerPort}/obs");
-        MessageBox.Show("OBS URL adresi panoya kopyalandı:\nhttp://localhost:" + controller.ServerPort + "/obs", "Kopyalandı", MessageBoxButton.OK, MessageBoxImage.Information);
+        MessageBox.Show("تم نسخ عنوان OBS إلى الحافظة:\nhttp://localhost:" + controller.ServerPort + "/obs", "تم النسخ", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void OnAbout(object sender, RoutedEventArgs e)
@@ -662,7 +662,7 @@ public partial class MainView : UserControl
 
     private void OnResetAll(object sender, RoutedEventArgs e)
     {
-        if (MessageBox.Show("GameTranslator ayarları sıfırlansın mı?", "Ayarları Sıfırla",
+        if (MessageBox.Show("هل تريد إعادة ضبط إعدادات GameTranslator؟", "إعادة ضبط الإعدادات",
             MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
         {
             controller.ResetSettings();

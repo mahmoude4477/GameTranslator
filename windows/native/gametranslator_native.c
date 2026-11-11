@@ -138,7 +138,7 @@ CS_API int cs_discover(const char *const *targets, int target_count, int timeout
 	if(!targets || target_count <= 0 || !callback)
 		return 1;
 
-	/* Hedefsiz günlük: satırlar düşürülür (libchiaki'nin varsayılanı stdout'a yazardı). */
+	/* سجل بلا وجهة: تُهمل الأسطر (الوضع الافتراضي في libchiaki كان سيكتبها إلى stdout). */
 	ChiakiLog log;
 	chiaki_log_init(&log, CHIAKI_LOG_ERROR, cs_log_forward, NULL);
 
@@ -147,8 +147,8 @@ CS_API int cs_discover(const char *const *targets, int target_count, int timeout
 		return -1;
 
 #ifdef _WIN32
-	/* Windows'ta ulaşılamayan bir adrese gönderilen paketin ICMP yanıtı recvfrom'u WSAECONNRESET ile
-	 * bozar ve chiaki'nin arama iş parçacığı kapanır; tüm ağı taradığımız için bu kapatılmalı. */
+	/* في Windows رد ICMP على حزمة مرسلة إلى عنوان لا يمكن الوصول إليه يُفشل recvfrom بالخطأ WSAECONNRESET
+	 * فيتوقف خيط البحث في chiaki؛ ولأننا نمسح الشبكة كلها يجب تعطيل ذلك. */
 	{
 		BOOL report = FALSE;
 		DWORD returned = 0;
@@ -186,7 +186,7 @@ CS_API int cs_discover(const char *const *targets, int target_count, int timeout
 	packet.cmd = CHIAKI_DISCOVERY_CMD_SRCH;
 	packet.protocol_version = version;
 
-	/* Yanıt kaçmasın diye arama süre dolana kadar tekrarlanır. */
+	/* يُكرَّر البحث حتى انقضاء المدة كي لا يفوتنا رد. */
 	uint64_t end = chiaki_time_now_monotonic_ms() + (uint64_t)(timeout_ms > 0 ? timeout_ms : 0);
 	do
 	{
@@ -212,11 +212,11 @@ CS_API int cs_wake(const char *host, uint64_t credential)
 	return err == CHIAKI_ERR_SUCCESS ? 0 : (int)err;
 }
 
-/* --- Kayıt --- */
+/* --- التسجيل --- */
 
 static const char cs_reason_prefix[] = "Reported Application Reason: 0x";
 
-/* "Reported Application Reason: 0x80108b02 (...)" satırından nedeni okur; yoksa false. */
+/* يقرأ السبب من السطر "Reported Application Reason: 0x80108b02 (...)"؛ وإن لم يوجد يعيد false. */
 static bool cs_reason_from_log(const char *line, uint32_t *reason)
 {
 	const char *found = line ? strstr(line, cs_reason_prefix) : NULL;
@@ -246,7 +246,7 @@ typedef struct {
 static void cs_regist_log(ChiakiLogLevel level, const char *message, void *user)
 {
 	cs_regist_ctx *ctx = user;
-	/* PS5'in red nedeni olaya değil yalnız günlüğe yazılır; olaydan önce aynı iş parçacığında gelir. */
+	/* سبب رفض PS5 لا يُكتب في الحدث بل في السجل فقط؛ ويصل قبل الحدث في الخيط نفسه. */
 	uint32_t reason;
 	if(cs_reason_from_log(message, &reason))
 	{
@@ -332,7 +332,7 @@ CS_API int cs_register(const char *host, const uint8_t account_id[8], uint32_t p
 	else
 	{
 		chiaki_mutex_lock(&ctx->mutex);
-		/* libchiaki'nin kendi zaman aşımları var; yine de yanıt gelmezse 30 sn sonra iptal edilir. */
+		/* لدى libchiaki مهلها الخاصة؛ ومع ذلك إن لم يصل رد يُلغى بعد 30 ثانية. */
 		err = chiaki_cond_timedwait_pred(&ctx->cond, &ctx->mutex, 30000, cs_regist_done, ctx);
 		if(err == CHIAKI_ERR_TIMEOUT)
 		{
@@ -342,7 +342,7 @@ CS_API int cs_register(const char *host, const uint8_t account_id[8], uint32_t p
 			chiaki_cond_wait_pred(&ctx->cond, &ctx->mutex, cs_regist_done, ctx);
 		}
 		chiaki_mutex_unlock(&ctx->mutex);
-		/* Kayıt iş parçacığı geri çağrıdan sonra kapanır; bırakmadan önce beklenir. */
+		/* خيط التسجيل ينتهي بعد رد النداء؛ فيُنتظر قبل التحرير. */
 		chiaki_regist_fini(&regist);
 
 		if(ctx->type == CHIAKI_REGIST_EVENT_TYPE_FINISHED_SUCCESS && ctx->has_host)
@@ -370,9 +370,9 @@ CS_API int cs_register(const char *host, const uint8_t account_id[8], uint32_t p
 	return result;
 }
 
-/* --- Kare sınırlayıcı --- */
+/* --- محدِّد الإطارات --- */
 
-/* Saniyede en fazla belirli sayıda karenin geçmesine izin verir (Mac'teki FrameThrottle). */
+/* يسمح بمرور عدد محدد من الإطارات في الثانية على الأكثر. */
 typedef struct {
 	uint64_t min_interval_us;
 	uint64_t last_us;
@@ -395,7 +395,7 @@ static bool cs_throttle_should_pass(cs_throttle *throttle, uint64_t now_us)
 	return true;
 }
 
-/* --- H.264 çözücü --- */
+/* --- مفكك ترميز H.264 --- */
 
 typedef struct {
 	AVCodecContext *codec;
@@ -421,7 +421,7 @@ static int cs_decoder_init(cs_decoder *decoder)
 	decoder->frame = av_frame_alloc();
 	if(!decoder->codec || !decoder->packet || !decoder->frame)
 		goto fail;
-	/* Kare iş parçacıkları gecikme ekler; dilim iş parçacıkları eklemez. */
+	/* خيوط الإطارات تضيف تأخيرًا؛ وخيوط الشرائح لا تضيفه. */
 	decoder->codec->flags |= AV_CODEC_FLAG_LOW_DELAY;
 	decoder->codec->thread_type = FF_THREAD_SLICE;
 	decoder->codec->thread_count = 0;
@@ -445,7 +445,7 @@ static void cs_decoder_fini(cs_decoder *decoder)
 	av_freep(&decoder->bgra);
 }
 
-/* Son çözülen kareyi BGRA'ya çevirir. */
+/* يحوّل آخر إطار مفكوك الترميز إلى BGRA. */
 static bool cs_decoder_convert(cs_decoder *decoder, AVFrame *frame)
 {
 	int width = frame->width, height = frame->height;
@@ -469,7 +469,7 @@ static bool cs_decoder_convert(cs_decoder *decoder, AVFrame *frame)
 		return false;
 	if(changed)
 	{
-		/* PS5 akışı BT.709; renk alanı belirtilmemişse HD için 709 varsayılır (swscale'in varsayılanı 601). */
+		/* بث PS5 بنظام BT.709؛ وإن لم يُحدَّد فضاء الألوان يُفترض 709 للصورة HD (افتراضي swscale هو 601). */
 		int space = frame->colorspace == AVCOL_SPC_BT470BG || frame->colorspace == AVCOL_SPC_SMPTE170M
 			? SWS_CS_ITU601 : SWS_CS_ITU709;
 		int full = frame->color_range == AVCOL_RANGE_JPEG || frame->format == AV_PIX_FMT_YUVJ420P;
@@ -484,8 +484,8 @@ static bool cs_decoder_convert(cs_decoder *decoder, AVFrame *frame)
 	return sws_scale(decoder->sws, (const uint8_t *const *)frame->data, frame->linesize, 0, height, dst, dst_stride) == height;
 }
 
-/* Bir Annex-B örneğini çözer. Her örnek çözülmelidir (sonraki kareler öncekilere dayanır).
- * Dönüş: <0 çözücü hatası, 0 kare yok, 1 kare var (decoder->frame). */
+/* يفك ترميز عيّنة Annex-B واحدة. يجب فك ترميز كل عيّنة (الإطارات اللاحقة تعتمد على السابقة).
+ * الإرجاع: <0 خطأ في المفكك، 0 لا إطار، 1 يوجد إطار (decoder->frame). */
 static int cs_decoder_decode(cs_decoder *decoder, const uint8_t *data, size_t size)
 {
 	if(!data || !size)
@@ -496,7 +496,7 @@ static int cs_decoder_decode(cs_decoder *decoder, const uint8_t *data, size_t si
 	av_packet_unref(decoder->packet);
 	if(r == AVERROR(EAGAIN))
 	{
-		/* Çözücü dolu: bekleyen kareler alınıp yeniden gönderilir. */
+		/* المفكك ممتلئ: تُسحب الإطارات المنتظرة ثم يُعاد الإرسال. */
 		while(avcodec_receive_frame(decoder->codec, decoder->frame) == 0)
 			av_frame_unref(decoder->frame);
 		decoder->packet->data = (uint8_t *)data;
@@ -510,7 +510,7 @@ static int cs_decoder_decode(cs_decoder *decoder, const uint8_t *data, size_t si
 	AVFrame *next = av_frame_alloc();
 	if(!next)
 		return -1;
-	/* Birden çok kare çıkarsa yalnız sonuncusu tutulur. */
+	/* إن خرج أكثر من إطار يُحتفظ بالأخير فقط. */
 	while(avcodec_receive_frame(decoder->codec, next) == 0)
 	{
 		av_frame_unref(decoder->frame);
@@ -521,7 +521,7 @@ static int cs_decoder_decode(cs_decoder *decoder, const uint8_t *data, size_t si
 	return got;
 }
 
-/* --- Görüntü akışı --- */
+/* --- بث الصورة --- */
 
 struct cs_session {
 	ChiakiSession session;
@@ -557,7 +557,7 @@ static int cs_quit_reason(ChiakiQuitReason reason)
 	}
 }
 
-/* libchiaki'nin oturum iş parçacığında çağrılır. */
+/* يُستدعى في خيط الجلسة الخاص بـ libchiaki. */
 static void cs_session_event(ChiakiEvent *event, void *user)
 {
 	cs_session *session = user;
@@ -574,7 +574,7 @@ static void cs_session_event(ChiakiEvent *event, void *user)
 		case CHIAKI_EVENT_QUIT:
 		{
 			int reason = cs_quit_reason(event->quit.reason);
-			/* Diğer nedenlerde açıklama libchiaki'nin neden adıdır (Mac'teki .other(String) gibi). */
+			/* في الأسباب الأخرى يكون الشرح هو اسم السبب في libchiaki. */
 			const char *text = reason == CS_QUIT_OTHER ? chiaki_quit_reason_string(event->quit.reason) : event->quit.reason_str;
 			session->event(CS_EVENT_QUIT, reason, text, session->user);
 			break;
@@ -584,7 +584,7 @@ static void cs_session_event(ChiakiEvent *event, void *user)
 	}
 }
 
-/* Akış iş parçacığında çağrılır. Her örnek çözülür, görüntü en çok max_fps kez üretilir. */
+/* يُستدعى في خيط البث. يُفك ترميز كل عيّنة، وتُنتج الصورة بما لا يتجاوز max_fps مرة في الثانية. */
 static bool cs_session_video_sample(uint8_t *buf, size_t buf_size, int32_t frames_lost, bool frame_recovered, void *user)
 {
 	(void)frames_lost;
@@ -594,7 +594,7 @@ static bool cs_session_video_sample(uint8_t *buf, size_t buf_size, int32_t frame
 		return true;
 	int got = cs_decoder_decode(&session->decoder, buf, buf_size);
 	if(got < 0)
-		return false; /* libchiaki bozuk kare bildirip yeni anahtar kare ister */
+		return false; /* libchiaki تبلّغ عن إطار تالف وتطلب إطارًا مفتاحيًا جديدًا */
 	if(got == 0 || !session->frame)
 		return true;
 	if(!cs_throttle_should_pass(&session->throttle, chiaki_time_now_monotonic_us()))
@@ -635,7 +635,7 @@ CS_API cs_session *cs_session_start(const char *host, const uint8_t regist_key[0
 	ChiakiConnectInfo info;
 	memset(&info, 0, sizeof(info));
 	info.ps5 = true;
-	info.host = host; /* libchiaki adresi oturum açılırken kopyalar */
+	info.host = host; /* libchiaki تنسخ العنوان عند فتح الجلسة */
 	memcpy(info.regist_key, regist_key, sizeof(info.regist_key));
 	memcpy(info.morning, morning, sizeof(info.morning));
 	chiaki_connect_video_profile_preset(&info.video_profile, CHIAKI_VIDEO_RESOLUTION_PRESET_1080p, CHIAKI_VIDEO_FPS_PRESET_30);
@@ -665,7 +665,7 @@ CS_API cs_session *cs_session_start(const char *host, const uint8_t regist_key[0
 	err = chiaki_session_start(&session->session);
 	if(err != CHIAKI_ERR_SUCCESS)
 	{
-		/* Başlamamış oturumun beklenecek iş parçacığı yok; yalnız bellek bırakılır. */
+		/* الجلسة التي لم تبدأ لا خيوط لها تُنتظر؛ تُحرَّر الذاكرة فقط. */
 		cs_logf(log, user, 0, "Session start failed: %s", chiaki_error_string(err));
 		chiaki_session_fini(&session->session);
 		cs_decoder_fini(&session->decoder);
@@ -679,8 +679,8 @@ CS_API void cs_session_stop(cs_session *session)
 {
 	if(!session)
 		return;
-	/* Durdurma, iş parçacıkları beklenene (join) kadar sürer; sonrasında hiçbir geri çağrı gelmez
-	 * ve bellek güvenle bırakılabilir. Aynı oturum için yalnız bir kez çağrılmalı. */
+	/* الإيقاف يستمر حتى انتهاء انتظار الخيوط (join)؛ وبعده لا يصل أي رد نداء
+	 * ويمكن تحرير الذاكرة بأمان. يجب أن يُستدعى مرة واحدة فقط للجلسة نفسها. */
 	chiaki_session_stop(&session->session);
 	chiaki_session_join(&session->session);
 	chiaki_session_fini(&session->session);

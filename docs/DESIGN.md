@@ -1,127 +1,134 @@
-# GameTranslator tasarım standardı
+# معيار تصميم GameTranslator
 
-Mac ve Windows uygulamaları aynı görünür. Bu belge neyin nasıl göründüğünü, `design/tokens.json`
-ise sayısal değerleri tanımlar. Değer değişecekse yalnız `tokens.json` düzenlenir; uygulamalar onu
-doğrudan okur. Belge ile kod çelişirse `tokens.json` geçerlidir.
+تطبيقا Mac و Windows يظهران بالمظهر الداكن نفسه. تحدّد هذه الوثيقة شكل كل عنصر، ويحدّد `design/tokens.json`
+القيم الرقمية. إذا أُريد تغيير قيمة يُعدَّل `tokens.json` وحده: تطبيق Windows يضمّنه ويقرؤه مباشرة عند التشغيل.
+وإذا تعارضت الوثيقة مع الشيفرة فالمعتمد هو `tokens.json`. أما تطبيق Mac (`mac/NativeApp.swift`) فيعرّف ألوانه
+ومقاساته داخل الشيفرة، فتُراجَع فيه يدويًا عند تغيير قيمة.
 
-## İlke
+واجهة التطبيقين عربية، وتُعرض المخرجات (الترجمة على التلفزيون وطبقة OBS) من اليمين إلى اليسار.
 
-Sade ve klas. Tek vurgu rengi (altyazı sarısı), sakin zemin, bol boşluk, büyük ve okunaklı yazı.
-Süs yok: gölge, degrade, cam efekti, animasyonlu arka plan kullanılmaz. Uygulama TV karşısında,
-biraz uzaktan bakılarak kullanılır; her şey bir bakışta okunmalı.
+## المبدأ
 
-## Logo
+بسيط وأنيق. لون تمييز واحد (الأزرق `accent`)، وخلفية هادئة، وفراغات واسعة، وخط كبير سهل القراءة.
+بلا زخرفة في Windows والتلفزيون: لا ظلال ولا تدرّجات لونية ولا خلفيات متحركة. يُستخدم التطبيق أمام التلفزيون ويُنظر
+إليه من مسافة؛ فيجب أن يُقرأ كل شيء بنظرة واحدة.
 
-- Kaynak: `design/logo.svg` (vektör). Arkalığı ekran gibi duran, üstünde iki sarı altyazı satırı
-  olan bir kanepe; koyu grafit zemin.
-- Simgeler `swift scripts/make-icons.swift` ile üretilir (macOS simge seti, uygulama içi logo,
-  TV uygulaması simgeleri, `design/logo-1024.png`). Windows için `.ico` aynı SVG'den üretilir.
-- Logo değiştirilmez, yeniden renklendirilmez, gölge eklenmez. Uygulama içinde en az 32 pt.
+## الشعار
 
-## Renk
+- المصدر: `design/logo.svg` (رسم متّجهي). ذراع تحكم أزرق على مربّع كحلي داكن مستدير الزوايا، وتحته شريط ترجمة
+  نصية من سطرين.
+- الأيقونات الجاهزة: `design/AppIcon.icns` (macOS)، و`design/logo.png` و`design/logo-1024.png`، وأيقونة Windows
+  `windows/src/GameTranslator.App/Assets/GameTranslator.ico`، وأيقونات تطبيق التلفزيون في `tv/webos` و`tv/tizen`
+  و`tv/android`. عند تغيير الشعار تُعاد توليدها كلها من ملف SVG.
+- لا يُعدَّل الشعار ولا يُعاد تلوينه ولا يُضاف إليه ظل. أصغر مقاس له داخل التطبيق 32 pt.
 
-Her renk açık ve koyu görünüm için ayrı tanımlıdır; uygulama sistemin görünümünü izler.
+## الألوان
 
-| Ad | Kullanım |
+كل لون معرَّف مرتين: للمظهر الفاتح وللمظهر الداكن. تطبيق Windows يستخدم المظهر الداكن دائمًا (`ThemeManager`).
+
+| الاسم | الاستخدام |
 |---|---|
-| `background` | Pencere zemini |
-| `surface` | Kartlar, alt düğme çubuğu |
-| `border` | Kart çerçevesi, ayraçlar, ilerleme çubuğu zemini |
-| `textPrimary` | Ana metin |
-| `textSecondary` | Açıklamalar, ikincil bilgiler |
-| `accent` | Birincil düğme, ilerleme, seçili bölge (yalnız dolgu olarak; metin rengi değildir) |
-| `onAccent` | Sarı düğme üstündeki yazı |
-| `accentText` | Sarı tonda metin ve simgeler (açık görünümde koyulaştırılmış) |
-| `accentSoft` | Simge rozeti ve numara dairesi zemini |
-| `success` / `warning` / `danger` | Durum: bağlı / dikkat / hata ve "Durdur" |
-| `onDanger` | Kırmızı düğme üstündeki yazı |
+| `background` | خلفية النافذة |
+| `surface` | البطاقات، وشريط الأزرار السفلي |
+| `border` | إطار البطاقة، والفواصل، وخلفية شريط التقدّم |
+| `textPrimary` | النص الأساسي |
+| `textSecondary` | الشروح والمعلومات الثانوية |
+| `accent` | الزر الأساسي، والتقدّم، والجزء المحدّد (تعبئة فقط؛ ليس لون نص) |
+| `onAccent` | النص فوق الزر الأزرق |
+| `accentText` | النصوص والأيقونات بلون التمييز (بدرجة أغمق في المظهر الفاتح) |
+| `accentSoft` | خلفية شارة الأيقونة ودائرة الرقم |
+| `success` / `warning` / `danger` | الحالة: متصل / تنبيه / خطأ وزر «أوقف الترجمة» |
+| `onDanger` | النص فوق الزر الأحمر |
 
-Okunaklılık kuralı (Mac'te `ThemeTests` ile denetlenir; Windows'ta da aynı test yazılır):
-ana metin zeminlere karşı en az 7:1, diğer tüm metinler en az 4,5:1 kontrastta olur.
+قاعدة الوضوح (يتحقق منها الاختبار `DesignTokensTests` في `windows/tests/GameTranslator.Core.Tests`):
+تباين النص الأساسي مع الخلفيات 7:1 على الأقل، وتباين سائر النصوص 4.5:1 على الأقل.
 
-## Yazı
+## الخطوط
 
-Sistem yazı tipi: Mac'te SF Pro, Windows'ta Segoe UI Variable. Boyutlar nokta (pt) cinsinden;
-Windows'ta aynı sayılar efektif piksel (epx) olarak kullanılır.
+خط النظام: SF Pro في Mac، و Segoe UI Variable في Windows. المقاسات بالنقطة (pt)؛ وفي Windows تُستخدم الأرقام
+نفسها بالبكسل الفعّال (epx).
 
-| Ad | Boyut | Kalınlık | Kullanım |
+| الاسم | المقاس | السماكة | الاستخدام |
 |---|---|---|---|
-| `display` | 30 | yarı kalın | Sihirbaz adım başlığı |
-| `title` | 22 | yarı kalın | Ekran başlığı, son altyazının çevirisi |
-| `headline` | 17 | yarı kalın | Kart başlığı |
-| `body` | 15 | normal | Tüm metinler (varsayılan) |
-| `callout` | 14 | normal | Açıklama ve ipuçları |
-| `caption` | 12 | normal | Yasal notlar gibi küçük metinler |
-| `button` | 15 | yarı kalın | Düğme yazısı |
-| `code` | 22 | yarı kalın, eş genişlikli rakam | PS5 eşleme kodu |
+| `display` | 30 | شبه عريض | عنوان خطوة المعالج |
+| `title` | 22 | شبه عريض | عنوان الشاشة، وترجمة آخر سطر |
+| `headline` | 17 | شبه عريض | عنوان البطاقة |
+| `body` | 15 | عادي | كل النصوص (الافتراضي) |
+| `callout` | 14 | عادي | الشروح والتلميحات |
+| `caption` | 12 | عادي | النصوص الصغيرة مثل الملاحظات القانونية |
+| `button` | 15 | شبه عريض | نص الزر |
+| `code` | 22 | شبه عريض، أرقام متساوية العرض | رمز مطابقة PS5 |
 
-Paragraflarda satır arası yazı boyutunun yaklaşık 1,3 katıdır. 12 pt'nin altı kullanılmaz.
+تباعد الأسطر في الفقرات نحو 1.3 من مقاس الخط. لا يُستخدم مقاس أصغر من 12 pt.
+النصوص العربية تُحاذى إلى اليمين؛ أما الرموز والعناوين اللاتينية (عناوين IP، الروابط، رمز المطابقة) فتبقى من اليسار إلى اليمين.
 
-## Boşluk ve biçim
+## الفراغات والشكل
 
-- Boşluk ölçeği: `xs` 4, `s` 8, `m` 12, `l` 16, `xl` 24, `xxl` 32.
-- Pencere kenar boşluğu `xxl`, kartlar arası `l`–`xl`, kart iç boşluğu `xl`.
-- Köşe: denetimler (düğme, alan, rozet) `control` 10, kartlar `card` 14.
-- Pencere 640 × 720; Ayarlar penceresi 600 × 720.
+- سلّم الفراغات: `xs` 4، `s` 8، `m` 12، `l` 16، `xl` 24، `xxl` 32.
+- هامش النافذة `xxl`، وبين البطاقات `l`–`xl`، والهامش الداخلي للبطاقة `xl`.
+- الزوايا: عناصر التحكم (الزر، الخانة، الشارة) `control` 10، والبطاقات `card` 14.
+- النافذة الرئيسية 960 × 720 (`size.windowWidth` و`size.windowHeight`)؛ ونافذة الإعدادات في Windows 780 × 880.
 
-## Bileşenler
+## المكوّنات
 
-Her iki platformda aynı adla bulunur.
+في Windows تعريفها في `Controls/Components.cs` ومظهرها في `Theme/Styles.xaml`.
 
-- **LogoView** – logo, kenar boşluğu kırpılmış hâliyle; koyu temada kenarı seçilsin diye 1 pt `border` çerçeve.
-- **Düğme** – yükseklik 44 (`buttonHeight`), ana ekrandaki "Çeviriyi başlat/durdur" 52 (`primaryActionHeight`), yatay iç boşluk `xl`.
-  - *Birincil*: `accent` dolgu, `onAccent` yazı. Ekranda en fazla bir tane.
-  - *İkincil*: `surface` dolgu, `border` çerçeve, `textPrimary` yazı.
-  - *Tehlikeli*: `danger` dolgu, `onDanger` yazı (yalnız "Çeviriyi durdur").
-  - Devre dışı: %45 saydamlık.
-- **Card** – `surface` zemin, 1 pt `border` çerçeve, `card` köşe, isteğe bağlı `headline` başlık.
-- **IconBadge** – 48 × 48, `accentSoft` zemin, `accentText` simge.
-- **StepLayout** – sihirbaz adımı: IconBadge, `display` başlık, `body`/`textSecondary` açıklama, içerik.
-- **NumberedRow** – 26 pt `accentSoft` dairede numara, yanında `body` metin.
-- **StatusRow** – 10 pt durum noktası, kalın ad, sağda değer. Nokta: bağlı `success`, çeviri sürerken
-  bağlantı yok `warning`, çeviri başlamamışken `textSecondary` (boşta olmak uyarı değildir).
-- **Metin alanı** – `surface` zemin, 1 pt `border` çerçeve, `control` köşe, en az 40 yükseklik; PS5 kodu
-  alanı 52 yükseklik ve `code` yazı. Etiketi alanın üstünde `callout`/`textSecondary`.
-- **Bölmeli seçim** – yazı boyutu gibi 2–4 seçenek: `background` zeminli çerçeveli kutu, seçili parça
-  `accent` dolgu ve `onAccent` yazı (Mac'te sistemin segmented denetimi).
-- **Kaydırıcı** – ince ray (`border`), dolu kısım `accent`, yuvarlak tutamaç.
-- **Bağlantı** – `accentText` renginde.
-- **DoneLabel** – `success` renkli onay simgesi ve metin.
-- **HintText** – `callout`, `textSecondary`.
-- **ErrorText** – `callout`, `warning`, uyarı simgesi.
-- **ProgressBar** – 6 pt yüksek, yuvarlak uçlu; zemin `border`, dolu kısım `accent`.
+- **الشعار** – يُعرض مقصوص الهامش؛ وفي المظهر الداكن يحيط به إطار `border` بسماكة 1 pt ليتميّز طرفه.
+- **الزر** – الارتفاع 44 (`buttonHeight`)، وزر «ابدأ الترجمة / أوقف الترجمة» في الشاشة الرئيسية 52 (`primaryActionHeight`)، والهامش الداخلي الأفقي `xl`.
+  - *الأساسي*: تعبئة `accent` ونص `onAccent`. واحد على الأكثر في الشاشة.
+  - *الثانوي*: تعبئة `surface` وإطار `border` ونص `textPrimary`.
+  - *الخطِر*: تعبئة `danger` ونص `onDanger` (لزر «أوقف الترجمة» فقط).
+  - المعطَّل: شفافية 45%.
+- **Card** – خلفية `surface`، وإطار `border` بسماكة 1 pt، وزوايا `card`، وعنوان `headline` اختياري.
+- **IconBadge** – 48 × 48، خلفية `accentSoft` وأيقونة `accentText`.
+- **StepLayout** – خطوة المعالج: IconBadge، وعنوان `display`، وشرح `body`/`textSecondary`، ثم المحتوى.
+- **NumberedRow** – رقم في دائرة `accentSoft` قطرها 26 pt، وبجانبه نص `body`.
+- **StatusRow** – نقطة حالة قطرها 10 pt، واسم بخط عريض، والقيمة في الطرف المقابل. النقطة: متصل `success`، لا اتصال
+  والترجمة جارية `warning`، والترجمة لم تبدأ `textSecondary` (الخمول ليس تنبيهًا).
+- **خانة النص** – خلفية `surface`، وإطار `border` بسماكة 1 pt، وزوايا `control`، وارتفاع 40 على الأقل؛ خانة رمز PS5
+  ارتفاعها 52 وخطها `code`. تسميتها فوق الخانة بخط `callout`/`textSecondary`.
+- **الاختيار المقسَّم** – لخيارات من 2 إلى 4 مثل حجم الخط: مربّع مؤطَّر بخلفية `background`، والجزء المحدّد بتعبئة
+  `accent` ونص `onAccent`.
+- **شريط التمرير** – مسار رفيع (`border`)، والجزء الممتلئ `accent`، ومقبض دائري.
+- **الرابط** – بلون `accentText`.
+- **DoneText** – أيقونة تأكيد ونص بلون `success`.
+- **HintText** – `callout`، `textSecondary`.
+- **ErrorText** – `callout`، `warning`، مع أيقونة تنبيه.
+- **شريط التقدّم** – ارتفاعه 6 pt ومستدير الطرفين؛ الخلفية `border` والجزء الممتلئ `accent`.
 
-## Ekranlar
+## الشاشات
 
-**Kurulum sihirbazı**: üstte küçük logo + "GameTranslator" + sağda "Adım n / 6", altında ilerleme
-çubuğu; ortada kaydırılabilir StepLayout; en altta `surface` zeminli çubukta solda "Geri"
-(ikincil), sağda "Devam" (birincil).
+**معالج الإعداد**: في الأعلى عنوان المعالج وشارة «الخطوة n من 4» وأسماء الخطوات الأربع (البداية، PS5، التلفزيون،
+الاختبار والبدء)؛ في الوسط محتوى الخطوة قابل للتمرير؛ وفي الأسفل شريط فيه زر الرجوع (ثانوي)، وزر الانتقال إلى
+الشاشة الرئيسية، وزر المتابعة (أساسي).
 
-**Ana ekran** (yukarıdan aşağı): logo + "GameTranslator" + sağda ayar simgesi; tam genişlikte
-"Çeviriyi başlat" (birincil) ya da "Çeviriyi durdur" (tehlikeli); PS5 ve TV durumlarını gösteren
-kart; gerekiyorsa dil paketi uyarı kartı; "Son altyazı" kartında `title` boyutunda çeviri, altında
-`callout` boyutunda özgün metin.
+**الشاشة الرئيسية**: لوحتان. لوحة مركز الترجمة: الشعار و«GameTranslator»، وزر «ابدأ الترجمة» (أساسي) أو
+«أوقف الترجمة» (خطِر) بعرض اللوحة، ومعاينة بث PS5، وحالة اتصال PS5 والتلفزيون، وكتم صوت الكمبيوتر، وبطاقة
+«آخر ترجمة» مع السجل. ولوحة الإعدادات بتبويبات: منطقة القراءة، مظهر الترجمة على التلفزيون، الترجمة، الاتصال
+والنظام، الدليل السريع.
 
-**Ayarlar**: `title` başlık; sırasıyla "TV'de" (yazı boyutu, ekrandaki konum, test altyazısı),
-"Dil", "Altyazı bölgesi" kartları ve Hakkında / Yeniden kur düğmeleri; altta "Bitti" (birincil).
+**الإعدادات** (نافذة `SettingsWindow` في Windows): عنوان `title`؛ ثم بالترتيب بطاقة «على التلفزيون» (حجم الخط، موضع
+الترجمة، الموضع على الشاشة، الخلفية، ترجمة تجريبية)، وبطاقة «اللغة» (لغة اللعبة، والترجمة عبر الإنترنت بـ DeepL)،
+وبطاقة «منطقة الترجمة النصية» (المناطق الإضافية، ترجمة الشاشة، طبقة OBS)، وبطاقة تطبيق التلفزيون، وزرّا «حول
+GameTranslator» وإعادة الإعداد؛ وفي الأسفل زر «تم» (أساسي).
 
-**Hakkında**: 88 pt logo, ad, sürüm, lisans, teşekkür, bağlantılar, Sony ile ilişkisizlik notu.
+**حول**: شعار 88 pt، والاسم، والترخيص، والشكر، والروابط، وملاحظة عدم الارتباط بـ Sony.
 
-## TV uygulaması
+## تطبيق التلفزيون
 
-TV'de her zaman koyu temanın renkleri kullanılır (oyunun üstünde durur). Bilgi paneli ve "uygulamayı açın"
-ekranı `background` %92–94 saydam zemin, 2 px `border` çerçeve, 24–32 px köşe; başlıkta logo. Kumanda
-tuşları satır satır, tuş adı `accent` renginde. Altyazı kutusu siyah %72 saydam zemin üstünde beyaz,
-yarı kalın yazı (okunaklılık için tema rengi değil). Bekleme ekranı açıkken panel kendiliğinden açılmaz.
-Bekleme ekranında tek düğme "Demoyu izle"dir; seçili düğme `accent` dolgu ve beyaz çerçeveyle belli olur.
-Demo sırasında sağ üstte panel biçiminde "DEMO" notu durur. Geri tuşu önce demoyu ya da paneli kapatır,
-giriş ekranında TV'nin ana ekranına döner (mağaza kuralı).
+تُستخدم في التلفزيون دائمًا ألوان المظهر الداكن (لأنه يظهر فوق اللعبة). لوحة المعلومات وشاشة «افتح التطبيق»:
+خلفية `background` بشفافية 92–94%، وإطار `border` بسماكة 2 px، وزوايا 24–32 px؛ والشعار في العنوان. أزرار
+الريموت تُعرض سطرًا سطرًا، واسم الزر بالكهرماني `#F5B83D`. مربّع الترجمة: نص أبيض شبه عريض فوق خلفية سوداء
+بشفافية 72% (للوضوح، لا بلون السمة)، ويُعرض السطر العربي من اليمين إلى اليسار. لا تُفتح اللوحة تلقائيًا وشاشة
+الانتظار ظاهرة. في شاشة الانتظار زر واحد لمشاهدة العرض التجريبي؛ والزر المحدّد يُميَّز بتعبئة كهرمانية وإطار أبيض.
+أثناء العرض التجريبي تبقى في أعلى يمين الشاشة ملاحظة «DEMO» بشكل اللوحة. زر الرجوع يغلق العرض التجريبي أو اللوحة
+أولًا، وفي شاشة البداية يعود إلى الشاشة الرئيسية للتلفزيون (قاعدة المتاجر).
 
-## Windows'a aktarım
+## التطبيق في Windows
 
-- `tokens.json` uygulamayla birlikte paketlenir ve açılışta okunur (Mac ile aynı yöntem);
-  renkler açık/koyu tema kaynaklarına, boyutlar yazı ve boşluk kaynaklarına dönüştürülür.
-- Yazı tipi Segoe UI Variable; sayılar yukarıdaki tablodakiyle aynı.
-- Pencere zemini düz `background` rengidir (Mica/Acrylic gibi saydam efektler kullanılmaz).
-- Bileşenler yukarıdaki adlarla kurulur; ekran düzenleri birebir aynıdır.
-- Kontrast testi Windows test projesine de eklenir.
+- يُضمَّن `tokens.json` في `GameTranslator.Core` ويُقرأ عند التشغيل (`DesignTokens`)؛ ويحوّل `ThemeManager` الألوان
+  إلى موارد السمة، والمقاسات إلى موارد الخطوط والفراغات.
+- الخط Segoe UI Variable؛ والأرقام كما في الجدول أعلاه.
+- خلفية النافذة لون `background` مسطّح (لا تُستخدم مؤثرات شفافة مثل Mica/Acrylic).
+- تُبنى المكوّنات بالأسماء المذكورة أعلاه.
+- اختبار التباين ضمن مشروع اختبارات Windows (`DesignTokensTests`).

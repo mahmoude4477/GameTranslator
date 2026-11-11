@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: AGPL-3.0-only */
-/* gametranslator_native için testler. Kullanım: gametranslator_native_test <sample-1080p.h264>
- * (remoteplay/Tests/RemotePlayTests/Fixtures altındaki ffmpeg testsrc2, 6 kare, Annex-B). */
+/* اختبارات gametranslator_native. الاستخدام: gametranslator_native_test <sample-1080p.h264>
+ * (عيّنة ffmpeg testsrc2، 6 إطارات، Annex-B). */
 
 #include "../gametranslator_native.c"
 
@@ -10,7 +10,7 @@ static int failures = 0;
 	if(!(cond)) { fprintf(stderr, "FAIL %s:%d: %s\n", __FILE__, __LINE__, #cond); failures++; } \
 } while(0)
 
-/* --- Annex-B'yi PS5'in gönderdiği gibi erişim birimlerine (kare) böler --- */
+/* --- يقسّم Annex-B إلى وحدات وصول (إطارات) كما يرسلها PS5 --- */
 
 typedef struct {
 	size_t start, end; /* başlangıç kodundan sonraki NAL baytları */

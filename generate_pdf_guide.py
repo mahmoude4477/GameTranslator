@@ -512,26 +512,29 @@ def main():
         sys.exit('No Chrome/Chromium browser found. Install Chromium or Google Chrome, '
                  'or set the CHROME environment variable to the browser executable.')
 
-    # اكتب HTML في ملف مؤقت
-    with tempfile.NamedTemporaryFile('w', suffix='.html', prefix='gametranslator_tv_guide_',
-                                     encoding='utf-8', delete=False) as f:
-        f.write(html_content)
-        html_path = f.name
-
+    # اكتب HTML في ملف مؤقت، واطبع PDF إلى ملف مؤقت أيضًا حتى لا يُستبدل الملف القديم إن فشلت الطباعة
+    work_dir = tempfile.mkdtemp(prefix='gametranslator_tv_guide_')
     try:
-        os.makedirs(os.path.dirname(pdf_docs), exist_ok=True)
+        html_path = os.path.join(work_dir, 'guide.html')
+        pdf_tmp = os.path.join(work_dir, 'guide.pdf')
+        with open(html_path, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+
         # اطبع الصفحة إلى PDF بمتصفح بلا واجهة
         cmd = [browser, '--headless=new', '--disable-gpu', '--no-sandbox', '--no-pdf-header-footer',
-               f'--print-to-pdf={pdf_docs}', pathlib.Path(html_path).as_uri()]
+               f'--print-to-pdf={pdf_tmp}', pathlib.Path(html_path).as_uri()]
         res = subprocess.run(cmd, capture_output=True, text=True)
         print('Chrome returncode:', res.returncode)
-        if res.returncode != 0 or not os.path.isfile(pdf_docs):
-            sys.exit('PDF generation failed:\\n' + res.stderr)
-    finally:
-        os.remove(html_path)
+        if res.returncode != 0 or not os.path.isfile(pdf_tmp) or os.path.getsize(pdf_tmp) == 0:
+            sys.exit('PDF generation failed.\n' + res.stderr)
 
-    # انسخ الملف إلى جذر المستودع أيضًا
-    shutil.copyfile(pdf_docs, pdf_root)
+        # انسخ الناتج إلى docs/ وإلى جذر المستودع
+        os.makedirs(os.path.dirname(pdf_docs), exist_ok=True)
+        shutil.copyfile(pdf_tmp, pdf_docs)
+        shutil.copyfile(pdf_tmp, pdf_root)
+    finally:
+        shutil.rmtree(work_dir, ignore_errors=True)
+
     print('PDF generated successfully at:', pdf_docs)
     print('Copied to:', pdf_root)
     print('Size:', os.path.getsize(pdf_docs))
