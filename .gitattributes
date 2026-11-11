@@ -1,5 +1,5 @@
 # تطبيقات التلفزيون والسكربتات تُستخرج بنهايات أسطر LF على كل أنظمة التشغيل: حتى يطابق تطبيق LG/Samsung
 # المحزَّم على Windows CI نظيره على Linux تمامًا.
-tv-webos/** text=auto eol=lf
-tv-tizen/** text=auto eol=lf
+tv/webos/** text=auto eol=lf
+tv/tizen/** text=auto eol=lf
 scripts/*.sh text eol=lf

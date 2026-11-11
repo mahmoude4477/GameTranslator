@@ -137,8 +137,8 @@
                                         <TextBlock Text="🔊" FontSize="10" Margin="0,0,6,0" VerticalAlignment="Center" />
                                         <TextBlock Text="صوت الكمبيوتر" FontWeight="Medium" FontSize="11" Foreground="{DynamicResource textPrimaryBrush}" VerticalAlignment="Center" />
                                     </StackPanel>
-                                    <Button x:Name="PcSesiButton" Content="صامت (Muted)" HorizontalAlignment="Right" Padding="8,2.5" FontSize="9.5" FontWeight="Bold"
-                                            Foreground="#EF4444" Background="#1FEF4444" BorderBrush="#EF4444" BorderThickness="1" Click="OnPcSesiToggle">
+                                    <Button x:Name="PcAudioButton" Content="صامت (Muted)" HorizontalAlignment="Right" Padding="8,2.5" FontSize="9.5" FontWeight="Bold"
+                                            Foreground="#EF4444" Background="#1FEF4444" BorderBrush="#EF4444" BorderThickness="1" Click="OnPcAudioToggle">
                                         <Button.Resources>
                                             <Style TargetType="Border">
                                                 <Setter Property="CornerRadius" Value="4" />

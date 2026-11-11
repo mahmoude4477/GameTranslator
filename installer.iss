@@ -1,7 +1,7 @@
 #define MyAppName "GameTranslator"
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "GameTranslator"
-#define MyAppURL "https://github.com/gametranslator/gametranslator"
+#define MyAppURL "https://github.com/mahmoude4477/GameTranslator"
 #define MyAppExeName "GameTranslator.exe"
 #define MySourceDir "C:\GameTranslator"
 
@@ -15,9 +15,9 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={localappdata}\Programs\{#MyAppName}
 DisableProgramGroupPage=yes
-OutputDir=C:\Users\mehme\OneDrive\Desktop\GameTranslator-Release-v1.0.0
+OutputDir=dist
 OutputBaseFilename=GameTranslator-Setup-v1.0.0
-SetupIconFile=C:\Users\mehme\OneDrive\Belgeler\gametranslator\windows\src\GameTranslator.App\Assets\GameTranslator.ico
+SetupIconFile=windows\src\GameTranslator.App\Assets\GameTranslator.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2/ultra64
 SolidCompression=yes

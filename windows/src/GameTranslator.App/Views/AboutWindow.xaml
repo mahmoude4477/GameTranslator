@@ -15,7 +15,7 @@
         <TextBlock x:Name="Version" Style="{StaticResource HintText}" HorizontalAlignment="Center" Margin="0,4,0,12" />
         <TextBlock Text="{t:T 'Free and open source under the GNU AGPL-3.0 license.'}" TextAlignment="Center" />
         <TextBlock Text="{t:T 'Remote Play connection by chiaki-ng (AGPL-3.0). Thanks to its developers.'}" Style="{StaticResource SecondaryText}" TextAlignment="Center" Margin="0,12,0,0" />
-        <TextBlock Text="{t:T 'Translation model: OPUS-MT, University of Helsinki (CC BY 4.0).'}" Style="{StaticResource SecondaryText}" TextAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,0" />
+        <TextBlock Text="{t:T 'Translation: Google Translate or DeepL, online.'}" Style="{StaticResource SecondaryText}" TextAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,0" />
         <TextBlock TextAlignment="Center" Margin="0,12,0,0">
             <Hyperlink NavigateUri="https://github.com/mahmoude4477/GameTranslator" RequestNavigate="OnLink"><Run Text="{t:T 'Source code'}" /></Hyperlink>
             <Run Text="  ·  " />

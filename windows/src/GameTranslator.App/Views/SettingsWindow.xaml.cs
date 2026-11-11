@@ -68,7 +68,7 @@ public partial class SettingsWindow : Window
         {
             OnlineKeyState.Valid => Localizer.Current.Format("This month: %1$@ of %2$@ characters used.",
                 check.Used.ToString("N0"), check.Limit.ToString("N0")),
-            OnlineKeyState.QuotaExceeded => Localizer.Current["This month's DeepL limit is used up. Until it renews, the translation model on this computer translates."],
+            OnlineKeyState.QuotaExceeded => Localizer.Current["This month's DeepL limit is used up. Until it renews, Google Translate translates."],
             OnlineKeyState.Invalid => Localizer.Current["DeepL did not accept this key. Copy it again from your DeepL account page."],
             _ => Localizer.Current["DeepL could not be reached. Check your internet connection."],
         };

@@ -3409,12 +3409,12 @@
         }
       }
     },
-    "Translation model: OPUS-MT, University of Helsinki (CC BY 4.0)." : {
+    "Translation: Google Translate or DeepL, online." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Translation model: OPUS-MT, University of Helsinki (CC BY 4.0)."
+            "value" : "Translation: Google Translate or DeepL, online."
           }
         },
         "ar" : {
@@ -3825,12 +3825,12 @@
         }
       }
     },
-    "Optional. With your own free DeepL key, translations read more naturally. Subtitle text is sent to DeepL; when DeepL cannot be reached, the translation model on this computer takes over." : {
+    "Optional. With your own free DeepL key, translations read more naturally. Subtitle text is sent to DeepL; when DeepL cannot be reached, Google Translate takes over." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Optional. With your own free DeepL key, translations read more naturally. Subtitle text is sent to DeepL; when DeepL cannot be reached, the translation model on this computer takes over."
+            "value" : "Optional. With your own free DeepL key, translations read more naturally. Subtitle text is sent to DeepL; when DeepL cannot be reached, Google Translate takes over."
           }
         },
         "ar" : {
@@ -3937,12 +3937,12 @@
         }
       }
     },
-    "This month's DeepL limit is used up. Until it renews, the translation model on this computer translates." : {
+    "This month's DeepL limit is used up. Until it renews, Google Translate translates." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This month's DeepL limit is used up. Until it renews, the translation model on this computer translates."
+            "value" : "This month's DeepL limit is used up. Until it renews, Google Translate translates."
           }
         },
         "ar" : {

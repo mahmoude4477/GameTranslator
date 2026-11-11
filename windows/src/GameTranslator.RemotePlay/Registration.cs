@@ -222,7 +222,6 @@ public static class Registration
             Path.Combine(baseDir, "..", "..", "..", "scripts", "bin", "node.exe"),
             Path.Combine(baseDir, "..", "..", "..", "..", "scripts", "bin", "node.exe"),
             Path.Combine(baseDir, "..", "..", "..", "..", "..", "scripts", "bin", "node.exe"),
-            @"C:\Users\mehme\OneDrive\Belgeler\gametranslator\scripts\bin\node.exe",
             @"C:\Program Files\nodejs\node.exe"
         };
         foreach (var c in candidates)
@@ -241,8 +240,7 @@ public static class Registration
             Path.Combine(baseDir, "scripts", "ps5-register.js"),
             Path.Combine(baseDir, "..", "..", "..", "scripts", "ps5-register.js"),
             Path.Combine(baseDir, "..", "..", "..", "..", "scripts", "ps5-register.js"),
-            Path.Combine(baseDir, "..", "..", "..", "..", "..", "scripts", "ps5-register.js"),
-            @"C:\Users\mehme\OneDrive\Belgeler\gametranslator\scripts\ps5-register.js"
+            Path.Combine(baseDir, "..", "..", "..", "..", "..", "scripts", "ps5-register.js")
         };
         foreach (var c in candidates)
         {

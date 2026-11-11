@@ -102,7 +102,7 @@ public partial class MainView : UserControl
         // مربّعات الاختيار
         BoldCheck.IsChecked = s.Style.Bold;
         MutePcCheck.IsChecked = isMutePc;
-        UpdatePcSesiButton();
+        UpdatePcAudioButton();
 
         // قائمة موضع الترجمة
         foreach (ComboBoxItem item in PlacementBox.Items)
@@ -552,24 +552,24 @@ public partial class MainView : UserControl
     private void OnMutePc(object sender, RoutedEventArgs e)
     {
         isMutePc = MutePcCheck.IsChecked == true;
-        UpdatePcSesiButton();
+        UpdatePcAudioButton();
     }
 
-    private void OnPcSesiToggle(object sender, RoutedEventArgs e)
+    private void OnPcAudioToggle(object sender, RoutedEventArgs e)
     {
         isMutePc = !isMutePc;
         MutePcCheck.IsChecked = isMutePc;
-        UpdatePcSesiButton();
+        UpdatePcAudioButton();
     }
 
-    private void UpdatePcSesiButton()
+    private void UpdatePcAudioButton()
     {
-        if (PcSesiButton == null) return;
-        PcSesiButton.Content = isMutePc ? "صامت (Muted)" : "مفعّل (الصوت يعمل)";
+        if (PcAudioButton == null) return;
+        PcAudioButton.Content = isMutePc ? "صامت (Muted)" : "مفعّل (الصوت يعمل)";
         var color = isMutePc ? Color.FromRgb(239, 68, 68) : Color.FromRgb(16, 185, 129);
-        PcSesiButton.Foreground = new SolidColorBrush(color);
-        PcSesiButton.Background = new SolidColorBrush(Color.FromArgb(31, color.R, color.G, color.B));
-        PcSesiButton.BorderBrush = new SolidColorBrush(color);
+        PcAudioButton.Foreground = new SolidColorBrush(color);
+        PcAudioButton.Background = new SolidColorBrush(Color.FromArgb(31, color.R, color.G, color.B));
+        PcAudioButton.BorderBrush = new SolidColorBrush(color);
     }
 
     private void UpdateTvPreview()
