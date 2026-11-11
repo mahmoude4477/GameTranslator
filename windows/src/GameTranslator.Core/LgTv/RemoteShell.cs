@@ -6,17 +6,17 @@ using Renci.SshNet.Common;
 
 namespace GameTranslator.Core.LgTv;
 
-/// <summary>TV'de komut çalıştırır; <paramref name="inputFile"/> verilirse dosya komutun girişine akar.</summary>
+/// <summary>يشغّل أمرًا على التلفزيون؛ وإذا أُعطي <paramref name="inputFile"/> يُضخّ الملف في إدخال الأمر.</summary>
 public interface IRemoteShell
 {
     Task<CommandResult> RunAsync(string command, string? inputFile = null);
 }
 
 /// <summary>
-/// LG geliştirici modunun SSH sunucusuna (9922, kullanıcı prisoner) uygulamanın içinden bağlanır.
-/// Windows'un ssh.exe'si, pencere açmadan başlatılınca komut çıktısını vermeyebiliyordu: TV'deki sürüm boş okunuyor,
-/// kurulum bitmemiş sanılıyordu. SSH.NET ile dış araç ve konsol gerekmez. TV'nin anahtarı her fabrika ayarında
-/// değişir; anahtar denetlenmez (ssh'deki StrictHostKeyChecking=no gibi).
+/// يتصل من داخل التطبيق بخادم SSH في وضع المطوّر من LG (9922، المستخدم prisoner).
+/// كان ssh.exe في Windows عند تشغيله بلا نافذة قد لا يعطي مخرجات الأمر: فيُقرأ الإصدار على التلفزيون فارغًا
+/// ويُظن أن التثبيت لم ينتهِ. مع SSH.NET لا حاجة إلى أداة خارجية ولا إلى نافذة أوامر. مفتاح التلفزيون يتغيّر مع كل
+/// إعادة ضبط للمصنع؛ فلا يُتحقق من المفتاح (مثل StrictHostKeyChecking=no في ssh).
 /// </summary>
 public sealed class SshNetShell(string host, int port, string keyFile, string user = "prisoner") : IRemoteShell
 {
@@ -32,7 +32,7 @@ public sealed class SshNetShell(string host, int port, string keyFile, string us
         }
         catch (Exception error) when (error is SshException or InvalidOperationException or ArgumentException or IOException)
         {
-            throw new DevModeException(DevModeError.KeyRefused, $"anahtar okunamadı: {error.Message}");
+            throw new DevModeException(DevModeError.KeyRefused, $"تعذّرت قراءة المفتاح: {error.Message}");
         }
 
         using (key)
@@ -60,7 +60,7 @@ public sealed class SshNetShell(string host, int port, string keyFile, string us
                 var running = ssh.ExecuteAsync();
                 if (inputFile is not null)
                 {
-                    // Giriş kapatılınca komut dosyanın bittiğini anlar ("cat > dosya").
+                    // عند إغلاق الإدخال يعرف الأمر أن الملف انتهى ("cat > file").
                     await using var input = ssh.CreateInputStream();
                     await using var file = File.OpenRead(inputFile);
                     await file.CopyToAsync(input);

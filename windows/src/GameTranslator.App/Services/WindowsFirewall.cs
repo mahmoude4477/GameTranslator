@@ -13,15 +13,15 @@ namespace GameTranslator.App.Services;
 /// صلاحيات المسؤول؛ وتُضاف القاعدة عبر netsh بإذن المسؤول (UAC).
 /// </summary>
 /// <remarks>
-/// Velopack uygulamayı %LOCALAPPDATA%\GameTranslatorApp\current\GameTranslator.exe yoluna kurar ve güncellemede aynı klasörü
-/// yeniler; yol sürümle değişmediği için kural güncellemelerden sonra da geçerli kalır.
+/// يثبّت Velopack التطبيق في المسار %LOCALAPPDATA%\GameTranslatorApp\current\GameTranslator.exe ويجدّد المجلد نفسه عند
+/// التحديث؛ ولأن المسار لا يتغيّر مع الإصدار تبقى القاعدة سارية بعد التحديثات أيضا.
 /// </remarks>
 internal sealed class WindowsFirewall : IFirewall
 {
     private const string RuleName = "GameTranslator";
     // NET_FW_PROFILE2_DOMAIN, _PRIVATE, _PUBLIC
     private static readonly int[] Profiles = [1, 2, 4];
-    // NET_FW_IP_PROTOCOL_TCP, _UDP; 256 = herhangi biri
+    // NET_FW_IP_PROTOCOL_TCP, _UDP; 256 = أي بروتوكول
     private static readonly int[] Protocols = [6, 17];
     private const int AnyProtocol = 256;
     private const int Inbound = 1;
@@ -35,8 +35,8 @@ internal sealed class WindowsFirewall : IFirewall
         var type = Type.GetTypeFromProgID("HNetCfg.FwPolicy2");
         if (type is null) return true;
         dynamic policy = Activator.CreateInstance(type)!;
-        // Her (profil, protokol) için: izin kuralı var mı, engelleme kuralı var mı. Windows'ta engelleme kuralı izni ezer;
-        // kullanıcı ilk açılıştaki soruyu kapattıysa Windows bu exe için engelleme kuralı yazmış olabilir.
+        // لكل (ملف تعريف، بروتوكول): هل توجد قاعدة سماح، وهل توجد قاعدة حظر. في Windows قاعدة الحظر تغلب السماح؛
+        // إن أغلق المستخدم السؤال عند أول تشغيل فربما كتب Windows قاعدة حظر لهذا الملف التنفيذي.
         var allowed = new bool[Profiles.Length, Protocols.Length];
         var blocked = new bool[Profiles.Length, Protocols.Length];
         foreach (dynamic rule in (IEnumerable)policy.Rules)
@@ -58,7 +58,7 @@ internal sealed class WindowsFirewall : IFirewall
         }
         for (var p = 0; p < Profiles.Length; p++)
         {
-            // Güvenlik duvarı bu profilde kapalıysa kural gerekmez.
+            // إن كان جدار الحماية معطّلا في ملف التعريف هذا فلا حاجة إلى قاعدة.
             if (!FirewallEnabled(policy, Profiles[p])) continue;
             for (var q = 0; q < Protocols.Length; q++)
                 if (!allowed[p, q] || blocked[p, q]) return false;
@@ -67,8 +67,8 @@ internal sealed class WindowsFirewall : IFirewall
     }
 
     /// <summary>
-    /// Tek UAC sorusuyla: bu exe'nin gelen bağlantı kurallarının hepsi (Windows'un yazdığı engelleme kuralları da) silinir,
-    /// yerine her profilde, her protokolde izin veren tek kural eklenir.
+    /// بسؤال UAC واحد: تُحذف كل قواعد الاتصالات الواردة لهذا الملف التنفيذي (ومنها قواعد الحظر التي كتبها Windows)،
+    /// وتُضاف مكانها قاعدة واحدة تسمح في كل ملف تعريف وكل بروتوكول.
     /// </summary>
     public async Task<bool> AddRuleAsync()
     {
@@ -78,7 +78,7 @@ internal sealed class WindowsFirewall : IFirewall
                       + $" & netsh advfirewall firewall add rule name=\"{RuleName}\" dir=in action=allow {program} enable=yes profile=any protocol=any";
         try
         {
-            // /s: cmd yalnız baştaki ve sondaki tırnağı atar; yoldaki tırnaklar korunur.
+            // /s: يحذف cmd علامتي الاقتباس الأولى والأخيرة فقط؛ وتبقى علامات الاقتباس في المسار.
             using var process = Process.Start(new ProcessStartInfo("cmd.exe", $"/s /c \"{command}\"")
             {
                 UseShellExecute = true,
@@ -90,7 +90,7 @@ internal sealed class WindowsFirewall : IFirewall
         }
         catch (Win32Exception)
         {
-            // Kullanıcı Windows'un izin sorusunda Hayır dedi.
+            // أجاب المستخدم بـ "لا" عن سؤال الإذن من Windows.
             return false;
         }
         try { return await Task.Run(HasRule); }

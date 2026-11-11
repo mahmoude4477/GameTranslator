@@ -6,10 +6,10 @@ using System.Net.Sockets;
 
 namespace GameTranslator.Core.LgTv;
 
-/// <summary>Bilgisayarın yerel ağ adresleri ve TV aramak için taranacak komşu adresler.</summary>
+/// <summary>عناوين الكمبيوتر في الشبكة المحلية والعناوين المجاورة التي تُمسح بحثًا عن التلفزيون.</summary>
 public static class LocalNetwork
 {
-    /// <summary>Açık ağ bağdaştırıcılarının özel (ev ağı) IPv4 adresleri.</summary>
+    /// <summary>عناوين IPv4 الخاصة (الشبكة المنزلية) لمحوّلات الشبكة العاملة.</summary>
     public static IReadOnlyList<IPAddress> PrivateAddresses()
     {
         try
@@ -35,7 +35,7 @@ public static class LocalNetwork
         return b.Length == 4 && (b[0] == 10 || (b[0] == 172 && b[1] >= 16 && b[1] <= 31) || (b[0] == 192 && b[1] == 168));
     }
 
-    /// <summary>Her yerel adresin /24 ağındaki diğer adresler (kendisi hariç), tekrarsız.</summary>
+    /// <summary>العناوين الأخرى في شبكة /24 لكل عنوان محلي (عدا العنوان نفسه)، بلا تكرار.</summary>
     public static IEnumerable<string> ScanTargets(IEnumerable<IPAddress> locals)
     {
         var seen = new HashSet<string>();
@@ -51,7 +51,7 @@ public static class LocalNetwork
         }
     }
 
-    /// <summary>Verilen portu açık olan adresler.</summary>
+    /// <summary>العناوين التي فيها المنفذ المعطى مفتوح.</summary>
     public static async Task<IReadOnlyList<string>> HostsWithOpenPortAsync(int port, TimeSpan connectTimeout,
         CancellationToken cancellationToken = default)
     {

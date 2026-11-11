@@ -1,11 +1,11 @@
 
-import os, subprocess
+import os, pathlib, shutil, subprocess, sys, tempfile
 
 html_content = '''<!DOCTYPE html>
-<html lang="tr">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>GameTranslator TV Uygulaması Kurulum Rehberi</title>
+<title>دليل تثبيت تطبيق GameTranslator على التلفزيون</title>
 <style>
   @page {
     size: A4;
@@ -17,16 +17,24 @@ html_content = '''<!DOCTYPE html>
     padding: 0;
   }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: "Noto Naskh Arabic", "Noto Sans Arabic", "Geeza Pro", "Segoe UI", Tahoma, Arial, sans-serif;
     color: #1f2937;
     background-color: #ffffff;
-    line-height: 1.45;
+    direction: rtl;
+    text-align: right;
+    line-height: 1.6;
     font-size: 12.5px;
   }
 
   .page-break {
     page-break-before: always;
     break-before: page;
+  }
+
+  /* Latin runs (commands, paths, addresses) stay left-to-right inside the Arabic text */
+  code, .ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
   }
 
   /* Header */
@@ -39,10 +47,9 @@ html_content = '''<!DOCTYPE html>
     align-items: flex-end;
   }
   .title-group h1 {
-    font-size: 22px;
+    font-size: 21px;
     font-weight: 800;
     color: #0F172A;
-    letter-spacing: -0.5px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -61,14 +68,16 @@ html_content = '''<!DOCTYPE html>
     font-size: 10px;
     font-family: ui-monospace, SFMono-Regular, monospace;
     font-weight: 600;
+    direction: ltr;
+    white-space: nowrap;
   }
 
   /* Intro Box */
   .intro-box {
     background: #F0F7FF;
-    border-left: 4px solid #0A84FF;
+    border-right: 4px solid #0A84FF;
     padding: 10px 14px;
-    border-radius: 0 8px 8px 0;
+    border-radius: 8px 0 0 8px;
     margin-bottom: 16px;
     font-size: 11.5px;
     color: #1E3A8A;
@@ -120,7 +129,7 @@ html_content = '''<!DOCTYPE html>
     background: #F1F5F9;
     color: #334155;
     font-weight: 700;
-    text-align: left;
+    text-align: right;
     padding: 8px 10px;
     border-bottom: 1px solid #CBD5E1;
   }
@@ -128,6 +137,7 @@ html_content = '''<!DOCTYPE html>
     padding: 7px 10px;
     border-bottom: 1px solid #E2E8F0;
     color: #334155;
+    text-align: right;
   }
   tr:last-child td {
     border-bottom: none;
@@ -163,7 +173,7 @@ html_content = '''<!DOCTYPE html>
     gap: 6px;
   }
   .step-card ol, .step-card ul {
-    margin-left: 20px;
+    margin-right: 20px;
     color: #374151;
     font-size: 11.5px;
   }
@@ -178,9 +188,9 @@ html_content = '''<!DOCTYPE html>
   .tip-box {
     background: #ECFDF5;
     border: 1px solid #A7F3D0;
-    border-left: 4px solid #10B981;
+    border-right: 4px solid #10B981;
     padding: 8px 12px;
-    border-radius: 0 6px 6px 0;
+    border-radius: 6px 0 0 6px;
     font-size: 11px;
     color: #065F46;
     margin: 8px 0;
@@ -188,9 +198,9 @@ html_content = '''<!DOCTYPE html>
   .warn-box {
     background: #FFFBEB;
     border: 1px solid #FDE68A;
-    border-left: 4px solid #F59E0B;
+    border-right: 4px solid #F59E0B;
     padding: 8px 12px;
-    border-radius: 0 6px 6px 0;
+    border-radius: 6px 0 0 6px;
     font-size: 11px;
     color: #92400E;
     margin: 8px 0;
@@ -200,7 +210,7 @@ html_content = '''<!DOCTYPE html>
     color: #0F172A;
     padding: 1px 5px;
     border-radius: 4px;
-    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace;
     font-size: 10.5px;
     border: 1px solid #E2E8F0;
   }
@@ -223,6 +233,7 @@ html_content = '''<!DOCTYPE html>
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
     font-size: 10px;
     color: #64748B;
   }
@@ -230,30 +241,31 @@ html_content = '''<!DOCTYPE html>
 </head>
 <body>
 
-  <!-- SAYFA 1 -->
+  <!-- الصفحة 1 -->
   <div class="header">
     <div class="title-group">
-      <h1>🎮 GameTranslator TV Uygulaması Kurulum Rehberi</h1>
-      <div class="subtitle">Konsol Oyunları İçin Gerçek Zamanlı Türkçe Altyazı Sistemi — Sefflex Edition</div>
+      <h1>🎮 دليل تثبيت تطبيق GameTranslator على التلفزيون</h1>
+      <div class="subtitle">ترجمة نصية عربية فورية لألعاب PlayStation 5 — النسخة العربية</div>
     </div>
-    <div class="badge-repo">github.com/Sefflex/GameTranslator</div>
+    <div class="badge-repo">github.com/mahmoude4477/GameTranslator</div>
   </div>
 
   <div class="intro-box">
-    <strong>Önemli Bilgi:</strong> Televizyonunuz için harici veya karmaşık dosyalar aramanıza gerek yoktur. Bilgisayarınızdaki <strong>GameTranslator</strong> uygulaması, televizyonunuza tek tıkla ağ üzerinden bağlanır ve uygulamayı kendisi kurar. Sizin yapmanız gereken tek şey, televizyonunuzda bir defaya mahsus geliştirici modunu açmaktır. Geliştirici modu tamamen ücretsizdir, televizyona hiçbir zarar vermez ve garanti bozmaz.<br>
-    <strong>Temel Kural:</strong> Bilgisayarınız ve Televizyonunuz <u>aynı ev ağında (aynı Wi-Fi veya modem)</u> bulunmalıdır.
+    <strong>معلومة مهمة:</strong> لا تحتاج إلى البحث عن ملفات خارجية أو معقدة لتلفزيونك. تطبيق <strong>GameTranslator</strong> على الكمبيوتر يتصل بالتلفزيون عبر الشبكة ويثبّت تطبيق التلفزيون بنفسه، والحزم الجاهزة موجودة أيضًا في المجلد <code dir="ltr">tv/packages/</code> لمن يريد التثبيت اليدوي. كل ما عليك هو تفعيل وضع المطوّر في التلفزيون مرة واحدة؛ وهو مجاني تمامًا ولا يضر التلفزيون.<br>
+    <strong>القاعدة الأساسية:</strong> يجب أن يكون الكمبيوتر والتلفزيون على <u>الشبكة المنزلية نفسها (الراوتر نفسه أو شبكة Wi-Fi نفسها)</u>. ويحتاج الكمبيوتر إلى اتصال بالإنترنت أثناء اللعب، لأن الترجمة إلى العربية تجري عبر الإنترنت (Google Translate افتراضيًا، أو DeepL بمفتاحك الخاص).
   </div>
 
   <div class="section">
     <div class="section-title">
       <span class="num">1</span>
-      <span>Bilgisayar Uygulamasını İndirin & Başlatın</span>
+      <span>نزّل تطبيق الكمبيوتر وشغّله</span>
     </div>
     <div class="step-card">
       <ul>
-        <li><strong>🍏 Mac (Apple Silicon M1 / M2 / M3 / M4):</strong> Proje klasöründeki <code>GameTranslator.command</code> dosyasına çift tıklayın. Sistem motorları otomatik hazırlar ve uygulamayı doğrudan açar.</li>
-        <li><strong>🪟 Windows PC (Windows 10 / 11):</strong> Proje klasöründeki <code>GameTranslator.bat</code> dosyasına çift tıklayın (.NET 10 / WPF masaüstü arayüzü başlar). Bağımsız tek tıkla EXE üretmek isterseniz <code>Derle-Windows.bat</code> dosyasını çalıştırabilirsiniz.</li>
-        <li><strong>🔗 Resmi Açık Kaynak Deposu:</strong> <a href="https://github.com/Sefflex/GameTranslator" style="color:#0A84FF; text-decoration:none; font-weight:600;">https://github.com/Sefflex/GameTranslator</a></li>
+        <li><strong>🍏 Mac (معالجات Apple Silicon: M1 / M2 / M3 / M4):</strong> انقر مرتين على الملف <code dir="ltr">GameTranslator.command</code> في مجلد المشروع. يبني المشغّل التطبيق في المرة الأولى ثم يفتحه مباشرة.</li>
+        <li><strong>🪟 Windows (نظام Windows 10 / 11):</strong> انقر مرتين على الملف <code dir="ltr">GameTranslator.bat</code> في مجلد المشروع (يحتاج إلى .NET 10 SDK، وتفتح بعده واجهة سطح المكتب). وإن أردت ملف EXE مستقلًا فشغّل <code dir="ltr">Build-Windows.bat</code>.</li>
+        <li><strong>🔗 مستودع المشروع المفتوح المصدر:</strong> <a class="ltr" dir="ltr" href="https://github.com/mahmoude4477/GameTranslator" style="color:#0A84FF; text-decoration:none; font-weight:600;">https://github.com/mahmoude4477/GameTranslator</a></li>
+        <li><strong>المشروع الأصلي:</strong> GameTranslator من تطوير Sefflex — <a class="ltr" dir="ltr" href="https://github.com/Sefflex/GameTranslator" style="color:#0A84FF; text-decoration:none; font-weight:600;">https://github.com/Sefflex/GameTranslator</a></li>
       </ul>
     </div>
   </div>
@@ -261,69 +273,69 @@ html_content = '''<!DOCTYPE html>
   <div class="section">
     <div class="section-title">
       <span class="num">2</span>
-      <span>Televizyonunuz Destekleniyor mu? (TV Uyumluluk Tablosu)</span>
+      <span>هل تلفزيونك مدعوم؟ (جدول توافق التلفزيونات)</span>
     </div>
     <table>
       <thead>
         <tr>
-          <th>Televizyon Modeli / İşletim Sistemi</th>
-          <th>Destek Durumu</th>
-          <th>Kurulum Yöntemi</th>
+          <th>طراز التلفزيون / نظام التشغيل</th>
+          <th>حالة الدعم</th>
+          <th>طريقة التثبيت</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>Android TV / Google TV</strong><br><small>TCL, Philips, Sony, Xiaomi, Vestel, Beko, Grundig vb.</small></td>
-          <td class="status-yes">✓ Tam Uyumlu</td>
-          <td>GameTranslator'dan Tek Tıkla (ADB) veya USB'den APK</td>
+          <td><strong>Android TV / Google TV</strong><br><small>TCL و Philips و Sony و Xiaomi و Vestel و Beko و Grundig وغيرها</small></td>
+          <td class="status-yes">✓ مدعوم بالكامل</td>
+          <td>من GameTranslator عبر الشبكة (ADB)، أو ملف APK بذاكرة USB</td>
         </tr>
         <tr>
-          <td><strong>LG Smart TV</strong><br><small>webOS 4.0 ve üstü (2018 ve sonrası tüm OLED, QNED, NanoCell)</small></td>
-          <td class="status-yes">✓ Tam Uyumlu</td>
-          <td>LG Developer Mode uygulaması ile IPK paketi</td>
+          <td><strong>LG Smart TV</strong><br><small>webOS 4.0 وما بعده (كل طرازات OLED و QNED و NanoCell منذ 2018)</small></td>
+          <td class="status-yes">✓ مدعوم بالكامل</td>
+          <td>حزمة IPK مع تطبيق LG Developer Mode</td>
         </tr>
         <tr>
-          <td><strong>Samsung Smart TV</strong><br><small>Tizen OS (2019 ve sonrası tüm QLED, Crystal UHD modeller)</small></td>
-          <td class="status-yes">✓ Tam Uyumlu</td>
-          <td>Kumandadan 1-2-3-4-5 Geliştirici Modu ile WGT paketi</td>
+          <td><strong>Samsung Smart TV</strong><br><small>Tizen OS (كل طرازات QLED و Crystal UHD منذ 2019)</small></td>
+          <td class="status-yes">✓ مدعوم بالكامل</td>
+          <td>حزمة WGT مع وضع المطوّر (<span class="ltr" dir="ltr">1-2-3-4-5</span> من الريموت)</td>
         </tr>
         <tr>
-          <td><strong>Linux Tabanlı TV'ler / Diğerleri</strong><br><small>Vestel/Beko eski Linux, Philips Saphi, Titan OS vb.</small></td>
-          <td class="status-no">✕ Desteklenmiyor</td>
-          <td>HDMI üstü katman açılamaz (Mac/PC veya Mobil ekrandan izlenir)</td>
+          <td><strong>تلفزيونات Linux وغيرها</strong><br><small>طرازات Linux القديمة من Vestel و Beko، و Philips Saphi، و Titan OS وغيرها</small></td>
+          <td class="status-no">✕ غير مدعوم</td>
+          <td>لا يمكن عرض طبقة فوق صورة HDMI (تُتابَع الترجمة من شاشة الكمبيوتر أو الهاتف)</td>
         </tr>
       </tbody>
     </table>
     <div class="tip-box">
-      <strong>TV'm Android mi?</strong> Televizyonunuzun ana menüsünde <em>Google Play Store</em> veya <em>Google TV</em> yazısı varsa Android tabanlıdır. Yalnızca üreticinin kendi mağazası varsa genellikle Linux veya özel sistemdir.
+      <strong>هل تلفزيوني يعمل بنظام Android؟</strong> إذا ظهر في القائمة الرئيسية للتلفزيون <em>Google Play Store</em> أو <em>Google TV</em> فهو يعمل بنظام Android. وإن لم يكن فيه إلا متجر الشركة المصنّعة فهو غالبًا يعمل بنظام Linux أو بنظام خاص.
     </div>
   </div>
 
-  <!-- SAYFA 2 -->
+  <!-- الصفحة 2 -->
   <div class="page-break"></div>
 
   <div class="header">
     <div class="title-group">
-      <h1>📱 Android TV & Google TV Kurulumu</h1>
-      <div class="subtitle">TCL, Philips, Sony, Xiaomi, Vestel ve Diğer Android / Google TV Modelleri</div>
+      <h1>📱 التثبيت على Android TV و Google TV</h1>
+      <div class="subtitle">TCL و Philips و Sony و Xiaomi و Vestel وبقية طرازات Android TV / Google TV</div>
     </div>
-    <div class="badge-repo">TCL / Android TV</div>
+    <div class="badge-repo">Android TV / Google TV</div>
   </div>
 
   <div class="section">
     <div class="section-title">
       <span class="num">1</span>
-      <span>Televizyonda Hata Ayıklama (ADB) Modunu Açın</span>
+      <span>فعّل وضع تصحيح الأخطاء (ADB) في التلفزيون</span>
     </div>
     <div class="step-card">
       <ol>
-        <li>TV kumandanızdan <strong>Ayarlar ➔ Cihaz Tercihleri ➔ Hakkında</strong> yolunu izleyin (Google TV modellerinde: <strong>Ayarlar ➔ Sistem ➔ Hakkında</strong>).</li>
-        <li>Açılan menüde <strong>Yapı Numarası (Build Number)</strong> seçeneğini bulun ve kumandanın <strong>Tamam (OK)</strong> tuşuna arka arkaya <strong>7 kez</strong> basın. Ekranda <em>"Artık bir geliştiricisiniz!"</em> uyarısı belirecektir.</li>
-        <li>Bir önceki menüye dönüp <strong>Geliştirici Seçenekleri</strong> bölümüne girin.</li>
-        <li><strong>"USB Hata Ayıklama"</strong> özelliğini <strong>AÇIK</strong> yapın. Menüde varsa <strong>"Ağ Üzerinden Hata Ayıklama"</strong> seçeneğini de aktif hale getirin.</li>
+        <li>من ريموت التلفزيون افتح <strong>«الإعدادات» ← «تفضيلات الجهاز» ← «لمحة»</strong> (في طرازات Google TV: <strong>«الإعدادات» ← «النظام» ← «لمحة»</strong>). بالإنجليزية: <code dir="ltr">Settings › Device Preferences › About</code>.</li>
+        <li>ابحث في القائمة عن <strong>«رقم الإصدار» (Build Number)</strong> واضغط زر <strong>«موافق» (OK)</strong> في الريموت <strong>7 مرات</strong> متتالية. تظهر على الشاشة رسالة <em>«أنت الآن مطوّر!»</em>.</li>
+        <li>ارجع إلى القائمة السابقة وادخل إلى <strong>«خيارات المطوّرين» (Developer options)</strong>.</li>
+        <li>فعّل خيار <strong>«تصحيح أخطاء USB» (USB debugging)</strong>. وإن وجدت في القائمة خيار <strong>«تصحيح الأخطاء عبر الشبكة» (Network debugging)</strong> ففعّله أيضًا.</li>
       </ol>
       <div class="warn-box">
-        <em>Not:</em> Menü başlıkları televizyonunuzun markasına ve arayüz sürümüne göre çok küçük farklılıklar gösterebilir.
+        <em>ملاحظة:</em> قد تختلف أسماء القوائم قليلًا حسب ماركة التلفزيون وإصدار واجهته.
       </div>
     </div>
   </div>
@@ -331,111 +343,115 @@ html_content = '''<!DOCTYPE html>
   <div class="section">
     <div class="section-title">
       <span class="num">2</span>
-      <span>GameTranslator TV Uygulamasını Kurun</span>
+      <span>ثبّت تطبيق GameTranslator على التلفزيون</span>
     </div>
     <div class="two-cols">
       <div class="step-card">
-        <h3>🟢 Yöntem A: Tek Tıkla Otomatik Kur (Önerilen)</h3>
+        <h3>🟢 الطريقة (أ): تثبيت تلقائي من الكمبيوتر (موصى بها)</h3>
         <ol>
-          <li>Bilgisayarınızda <strong>GameTranslator</strong> uygulamasını açın ve <strong>Adım 4 (Akıllı TV)</strong> ekranına gelin.</li>
-          <li>TV IP Adresi alanına televizyonunuzun yerel IP'sini yazın (örn: <code>192.168.1.108</code>) veya <em>Ağda Tara</em> butonuna basın.</li>
-          <li>Mavi <strong>"TV'ye Otomatik Kur"</strong> butonuna tıklayın.</li>
-          <li>TV ekranında <em>"USB hata ayıklamaya izin verilsin mi?"</em> sorusu çıkar. <strong>"Bu bilgisayardan her zaman izin ver"</strong> kutusunu işaretleyip <strong>İzin Ver</strong>'e basın.</li>
-          <li>Uygulama televizyonunuza otomatik yüklenir ve açılır!</li>
+          <li>افتح تطبيق <strong>GameTranslator</strong> على الكمبيوتر، وانتقل في الإعداد إلى <strong>خطوة التلفزيون</strong> واختر Android TV.</li>
+          <li>اكتب عنوان IP المحلي للتلفزيون (مثال: <code dir="ltr">192.168.1.108</code>) أو دع التطبيق يبحث عن التلفزيون في الشبكة.</li>
+          <li>اضغط زر <strong>التثبيت التلقائي على التلفزيون</strong>.</li>
+          <li>يظهر على شاشة التلفزيون السؤال <em>«هل تريد السماح بتصحيح أخطاء USB؟»</em>. ضع علامة على <strong>«السماح دائمًا من هذا الكمبيوتر»</strong> ثم اضغط <strong>«سماح»</strong>.</li>
+          <li>يُثبَّت التطبيق على التلفزيون ويُفتح تلقائيًا.</li>
         </ol>
       </div>
 
       <div class="step-card">
-        <h3>💾 Yöntem B: USB Bellek ile Kurulum</h3>
+        <h3>💾 الطريقة (ب): التثبيت بذاكرة USB</h3>
         <ol>
-          <li>Proje klasöründeki <code>tv/packages/gametranslator-androidtv_1.0.0.apk</code> dosyasını bir USB flash belleğe kopyalayın.</li>
-          <li>USB belleği televizyonunuza takın.</li>
-          <li>TV'deki herhangi bir Dosya Yöneticisi (File Commander vb.) uygulamasından APK dosyasına tıklayıp yüklemeyi tamamlayın.</li>
-          <li>Yüklenen <strong>GameTranslator</strong> uygulamasını televizyonunuzda açın.</li>
+          <li>انسخ الملف <code dir="ltr">tv/packages/gametranslator-androidtv_1.0.0.apk</code> من مجلد المشروع إلى ذاكرة USB.</li>
+          <li>صِل ذاكرة USB بالتلفزيون.</li>
+          <li>افتح ملف APK من أي تطبيق لإدارة الملفات على التلفزيون وأكمل التثبيت.</li>
+          <li>افتح تطبيق <strong>GameTranslator</strong> الذي ثُبّت على التلفزيون.</li>
         </ol>
       </div>
     </div>
     <div class="tip-box">
-      <strong>Görüntü Kontrolü:</strong> TV'de GameTranslator açıldığında oyunun HDMI görüntüsü arka planda görünür. Eğer arka plan siyah kalırsa kumandadan <strong>Tamam (OK)</strong> tuşuna basarak paneli açın ve kumandanın sol/sağ oklarıyla PS5'inizin bağlı olduğu HDMI portunu (örn: HDMI 1) seçin.
+      <strong>التحقق من الصورة:</strong> عند فتح GameTranslator على التلفزيون تظهر صورة اللعبة القادمة من HDMI في الخلفية. إذا بقيت الخلفية سوداء فاضغط زر <strong>«موافق» (OK)</strong> في الريموت لفتح اللوحة، ثم اختر بسهمَي اليمين واليسار منفذ HDMI الموصول به جهاز PS5 (مثل HDMI 1).
     </div>
   </div>
 
-  <!-- SAYFA 3 -->
+  <!-- الصفحة 3 -->
   <div class="page-break"></div>
 
   <div class="header">
     <div class="title-group">
-      <h1>📺 LG Smart TV Kurulumu (webOS)</h1>
-      <div class="subtitle">webOS 4.0+ (OLED, QNED, NanoCell, UHD Modelleri)</div>
+      <h1>📺 التثبيت على تلفزيون LG (webOS)</h1>
+      <div class="subtitle">webOS 4.0 وما بعده (طرازات OLED و QNED و NanoCell و UHD)</div>
     </div>
     <div class="badge-repo">LG webOS</div>
   </div>
 
   <div class="section">
     <div class="step-card">
-      <h3>1. Ücretsiz LG Geliştirici Hesabı Açın</h3>
+      <h3>1. أنشئ حساب مطوّر LG مجانيًا</h3>
       <ol>
-        <li>Bilgisayarınızın tarayıcısından <code>webostv.developer.lge.com</code> adresine gidin.</li>
-        <li>Sağ üstten <strong>SIGN IN</strong>, ardından <strong>Create Account</strong> seçeneğine tıklayarak ücretsiz bir geliştirici hesabı oluşturun.</li>
+        <li>من متصفح الكمبيوتر افتح العنوان <code dir="ltr">webostv.developer.lge.com</code>.</li>
+        <li>اضغط <strong>SIGN IN</strong> في أعلى الصفحة ثم <strong>Create Account</strong> وأنشئ حساب مطوّر مجانيًا.</li>
       </ol>
     </div>
 
     <div class="step-card">
-      <h3>2. TV'de Developer Mode Uygulamasını Başlatın</h3>
+      <h3>2. شغّل تطبيق Developer Mode على التلفزيون</h3>
       <ol>
-        <li>Televizyonunuzun internete bağlı olduğundan emin olun.</li>
-        <li>TV'deki <strong>LG Content Store (Uygulama Mağazası)</strong>'nı açın, arama kısmına <strong>"Developer Mode"</strong> yazarak resmi uygulamayı TV'nize yükleyin.</li>
-        <li>Developer Mode uygulamasını açın; açtığınız LG hesabının e-posta ve şifresiyle giriş yapın.</li>
-        <li><strong>Dev Mode Status</strong> ayarını <strong>ON (Açık)</strong> yapın. Televizyon otomatik olarak yeniden başlayacaktır.</li>
+        <li>تأكد أن التلفزيون متصل بالإنترنت.</li>
+        <li>افتح متجر <strong>LG Content Store</strong> على التلفزيون، واكتب في البحث <strong>"Developer Mode"</strong> وثبّت التطبيق الرسمي.</li>
+        <li>افتح تطبيق Developer Mode وسجّل الدخول ببريد حساب LG الذي أنشأته وكلمة مروره.</li>
+        <li>اجعل خيار <strong>Dev Mode Status</strong> على <strong>ON</strong>. يُعاد تشغيل التلفزيون تلقائيًا.</li>
       </ol>
     </div>
 
     <div class="step-card">
-      <h3>3. GameTranslator TV Uygulamasını Kurun</h3>
+      <h3>3. ثبّت تطبيق GameTranslator على التلفزيون</h3>
       <ol>
-        <li>TV açılınca <strong>Developer Mode</strong> uygulamasını tekrar açın ve <strong>Key Server</strong> seçeneğini <strong>ON</strong> yapın. Uygulamayı ekranda açık bırakın.</li>
-        <li>TV ekranının sol altında 6 karakterli bir <strong>Passphrase</strong> kodu belirecektir.</li>
-        <li>Bilgisayarınızda GameTranslator uygulamasını açın, LG TV sekmesinde TV'nizi seçip bu Passphrase kodunu girin ve <strong>"TV'ye Kur"</strong> butonuna tıklayın.</li>
-        <li>GameTranslator <code>tv/packages/com.gametranslator.tv_1.0.0_all.ipk</code> paketini TV'nize yükler ve çalıştırır.</li>
+        <li>بعد إعادة التشغيل افتح تطبيق <strong>Developer Mode</strong> من جديد واجعل خيار <strong>Key Server</strong> على <strong>ON</strong>. اترك التطبيق مفتوحًا على الشاشة.</li>
+        <li>يظهر في أسفل يسار شاشة التلفزيون رمز <strong>Passphrase</strong> من 6 أحرف.</li>
+        <li>في تطبيق GameTranslator على الكمبيوتر (Windows) اختر تلفزيون LG في خطوة التلفزيون، وأدخل رمز Passphrase مع مراعاة الأحرف الكبيرة والصغيرة، ثم اضغط زر <strong>التثبيت على التلفزيون</strong>.</li>
+        <li>يثبّت GameTranslator الحزمة <code dir="ltr">tv/packages/com.gametranslator.tv_1.0.0_all.ipk</code> على التلفزيون ويشغّلها.</li>
       </ol>
       <div class="tip-box">
-        <em>Süre Notu:</em> LG geliştirici modu 1000 saat açık kalır. GameTranslator uygulamanızı her kullandığınızda bu süreyi otomatik olarak baştan başlatır.
+        <em>ملاحظة عن المدة:</em> يبقى وضع المطوّر في LG مفعّلًا 1000 ساعة. يعيد تطبيق GameTranslator في Windows بدء هذه المدة تلقائيًا في كل مرة تستخدمه. وإن كنت لن تستخدمه مدة طويلة فاضغط <strong>EXTEND</strong> في تطبيق Developer Mode قبل انتهاء المدة.
+      </div>
+      <div class="warn-box">
+        <em>التثبيت اليدوي:</em> إن لم يتوفر التثبيت التلقائي في تطبيق الكمبيوتر لديك (كما في تطبيق Mac) فثبّت الحزمة نفسها ببرنامج <strong>webOS Dev Manager</strong> على الكمبيوتر: اتصل بالتلفزيون بعنوان IP الخاص به ثم اسحب ملف IPK إليه.
       </div>
     </div>
   </div>
 
-  <!-- SAYFA 4 -->
+  <!-- الصفحة 4 -->
   <div class="page-break"></div>
 
   <div class="header">
     <div class="title-group">
-      <h1>📺 Samsung Smart TV Kurulumu (Tizen)</h1>
-      <div class="subtitle">Tizen OS 2019 ve Sonrası Modeller</div>
+      <h1>📺 التثبيت على تلفزيون Samsung (Tizen)</h1>
+      <div class="subtitle">طرازات Tizen OS منذ 2019</div>
     </div>
     <div class="badge-repo">Samsung Tizen</div>
   </div>
 
   <div class="section">
     <div class="step-card">
-      <h3>1. TV'de Geliştirici Modunu Açın</h3>
+      <h3>1. فعّل وضع المطوّر في التلفزيون</h3>
       <ol>
-        <li>Televizyonunuzda <strong>Uygulamalar (Apps)</strong> ekranına girin.</li>
-        <li>Kumandanızın rakam tuşlarıyla sırasıyla <strong>1 - 2 - 3 - 4 - 5</strong> tuşlarına basın (kumandada rakam yoksa ekran klavyesiyle yazın).</li>
-        <li>Ekrana <strong>Developer Mode</strong> penceresi açılacaktır. <strong>Developer Mode'u ON</strong> konumuna getirin.</li>
-        <li><strong>Host PC IP</strong> alanına bilgisayarınızın yerel IP adresini yazıp <strong>OK</strong> tuşuna basın (Bilgisayarınızın IP adresi GameTranslator uygulamasında TV adımında açıkça gösterilir).</li>
-        <li>Kumandanın Güç (Kapatma) tuşunu ekranda <strong>Samsung logosu çıkana kadar basılı tutarak</strong> televizyonu yeniden başlatın. Açıldığında Uygulamalar ekranında üstte <em>"Develop Mode"</em> yazısını göreceksiniz.</li>
+        <li>افتح شاشة <strong>«التطبيقات» (Apps)</strong> في التلفزيون.</li>
+        <li>اضغط بأزرار الأرقام في الريموت <strong><span class="ltr" dir="ltr">1 - 2 - 3 - 4 - 5</span></strong> بالترتيب (إن لم تكن في الريموت أزرار أرقام فاكتبها بلوحة المفاتيح على الشاشة).</li>
+        <li>تظهر على الشاشة نافذة <strong>Developer Mode</strong>. اجعل <strong>Developer Mode</strong> على <strong>ON</strong>.</li>
+        <li>اكتب في خانة <strong>Host PC IP</strong> عنوان IP المحلي للكمبيوتر ثم اضغط <strong>OK</strong> (يعرض تطبيق GameTranslator عنوان IP للكمبيوتر بوضوح في خطوة التلفزيون).</li>
+        <li>أعد تشغيل التلفزيون <strong>بالضغط المطوّل على زر التشغيل في الريموت إلى أن يظهر شعار Samsung</strong>. بعد التشغيل ترى في أعلى شاشة التطبيقات عبارة <em>"Develop Mode"</em>.</li>
       </ol>
     </div>
 
     <div class="step-card">
-      <h3>2. GameTranslator ile TV Paketini Yükleyin</h3>
+      <h3>2. ثبّت حزمة التلفزيون من GameTranslator</h3>
       <ol>
-        <li>Bilgisayarınızda GameTranslator'ın TV adımında Samsung TV'nizi seçip <strong>Bağlan</strong> butonuna basın.</li>
-        <li>TV ekranında bağlantı izin penceresi çıkarsa kumandayla <strong>İzin Ver</strong>'e basın.</li>
-        <li>GameTranslator TV'nize özel <code>gametranslator-samsung_1.0.0.wgt</code> paketini kurar ve başlatır.</li>
+        <li>في خطوة التلفزيون داخل GameTranslator على الكمبيوتر (Windows) اختر تلفزيون Samsung واضغط زر <strong>الاتصال</strong>.</li>
+        <li>إذا ظهرت على شاشة التلفزيون نافذة إذن الاتصال فاختر <strong>«سماح»</strong> بالريموت.</li>
+        <li>تطلب Samsung توقيع التطبيق لكل تلفزيون على حدة، لذلك يفتح GameTranslator صفحة تسجيل الدخول إلى Samsung في المتصفح مرة واحدة. سجّل الدخول بحساب Samsung مجاني.</li>
+        <li>يوقّع GameTranslator الحزمة <code dir="ltr">tv/packages/gametranslator-samsung_1.0.0.wgt</code> لتلفزيونك ثم يثبّتها ويشغّلها.</li>
       </ol>
       <div class="warn-box">
-        <strong>Sorun Giderme:</strong> Eğer TV bilgisayarı kabul etmezse Host PC IP adresinizin bilgisayarınızın şu anki IP'siyle uyuştuğunu kontrol edip TV'yi kumandanın güç tuşuyla yeniden başlatın.
+        <strong>حل المشكلات:</strong> إذا لم يقبل التلفزيون الكمبيوتر فتأكد أن عنوان Host PC IP يطابق عنوان IP الحالي للكمبيوتر، ثم أعد تشغيل التلفزيون بزر التشغيل في الريموت.
       </div>
     </div>
   </div>
@@ -443,39 +459,83 @@ html_content = '''<!DOCTYPE html>
   <div class="section">
     <div class="section-title">
       <span class="num">✨</span>
-      <span>Kurulduğunu Nasıl Anlarım & Akıllı Özellikler</span>
+      <span>كيف أعرف أن التثبيت نجح؟ ومزايا ذكية</span>
     </div>
     <div class="step-card">
       <ul>
-        <li><strong>Tanı ve Durum Paneli:</strong> TV'de GameTranslator açıkken kumandanızın <strong>Tamam (OK)</strong> tuşuna basarsanız ekranın altında bilgi paneli açılır. Burada seçili <strong>HDMI portu</strong>, bilgisayarınızın IP adresi ve <strong>Bağlantı: bağlı (ok)</strong> ibaresi görünür. Paneli kapatmak için tekrar <strong>Tamam (OK)</strong> tuşuna basabilirsiniz.</li>
-        <li><strong>İngilizce Altyazının Üstünü Otomatik Örtme:</strong> GameTranslator'da <em>"İngilizce altyazının üstünü örtsün"</em> seçeneğini açtığınızda, Vision OCR altyazının boyutunu ve koordinatlarını milimetrik hesaplayarak orijinal İngilizce yazıyı kapatan akıllı bir siyah kutu oluşturur ve Türkçe çeviriyi tam üzerine yerleştirir.</li>
-        <li><strong>Bilgisayar Oyun Sesini Kapatma (Mute):</strong> Oyunun sesi zaten HDMI ile televizyonunuzdan geldiği için, GameTranslator arayüzünden tek tıkla <strong>"PC Sesi: Sessiz (Mute)"</strong> modunu açarak bilgisayar hoparlörünü sessize alabilirsiniz.</li>
+        <li><strong>لوحة الحالة والتشخيص:</strong> وتطبيق GameTranslator مفتوح على التلفزيون اضغط زر <strong>«موافق» (OK)</strong> في الريموت فتظهر لوحة المعلومات. ترى فيها <strong>منفذ HDMI</strong> المختار، وعنوان IP للكمبيوتر أمام <strong>«التطبيق»</strong>، وعبارة <strong>«الاتصال: متصل»</strong>. اضغط <strong>«موافق» (OK)</strong> مرة أخرى لإغلاق اللوحة.</li>
+        <li><strong>تغطية السطر الإنجليزي تلقائيًا:</strong> عند اختيار وضع تغطية الترجمة الإنجليزية في GameTranslator، يحسب التعرّف على النص (OCR) مكان السطر الإنجليزي وحجمه بدقة، فيُرسم مربّع داكن يغطي النص الأصلي وتوضع الترجمة العربية فوقه تمامًا، من اليمين إلى اليسار.</li>
+        <li><strong>كتم صوت اللعبة على الكمبيوتر:</strong> صوت اللعبة يصل أصلًا من التلفزيون عبر HDMI، لذا يمكنك من واجهة GameTranslator كتم صوت الكمبيوتر بنقرة واحدة حتى لا تسمع الصوت مرتين.</li>
       </ul>
     </div>
   </div>
 
   <div class="footer">
-    <div>🎮 GameTranslator v1.0 Pro — Sefflex Edition | Tamamen Ücretsiz & Açık Kaynak</div>
-    <div>Destek & Katkı: <strong>github.com/Sefflex/GameTranslator</strong></div>
+    <div>🎮 GameTranslator — النسخة العربية | مجاني ومفتوح المصدر (AGPL-3.0) | المشروع الأصلي: GameTranslator من تطوير Sefflex</div>
+    <div>الدعم والمساهمة: <strong class="ltr" dir="ltr">github.com/mahmoude4477/GameTranslator</strong></div>
   </div>
 
 </body>
 </html>
 '''
 
-html_path = '/tmp/gametranslator_kurulum_rehberi.html'
-with open(html_path, 'w', encoding='utf-8') as f:
-    f.write(html_content)
+# كل المسارات نسبةً إلى مجلد هذا السكربت (جذر المستودع)
+script_dir = os.path.dirname(os.path.abspath(__file__))
+pdf_docs = os.path.join(script_dir, 'docs', 'GameTranslator_TV_Setup_Guide.pdf')
+pdf_root = os.path.join(script_dir, 'GameTranslator_TV_Setup_Guide.pdf')
 
-chrome = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-pdf_repo = os.path.abspath('GameTranslator_TV_Kurulum_Rehberi.pdf')
-pdf_artifact = '/Users/sefflex/.gemini/antigravity/brain/d24ae91f-b40c-43d3-b017-0a5746c34d96/GameTranslator_TV_Kurulum_Rehberi.pdf'
 
-cmd = [chrome, '--headless=new', '--disable-gpu', '--no-pdf-header-footer', f'--print-to-pdf={pdf_repo}', html_path]
-res = subprocess.run(cmd, capture_output=True, text=True)
-print('Chrome returncode:', res.returncode)
+def find_browser():
+    """يبحث عن متصفح مبني على Chromium يستطيع الطباعة إلى PDF."""
+    # 1. متغيّر البيئة CHROME
+    env_browser = os.environ.get('CHROME')
+    if env_browser:
+        found = env_browser if os.path.isfile(env_browser) else shutil.which(env_browser)
+        if found:
+            return found
+        print('Warning: CHROME is set but was not found:', env_browser, file=sys.stderr)
+    # 2. مسار Google Chrome في macOS
+    mac_chrome = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+    if os.path.isfile(mac_chrome):
+        return mac_chrome
+    # 3. الأسماء المعتادة في PATH
+    for name in ('chromium', 'chromium-browser', 'google-chrome'):
+        found = shutil.which(name)
+        if found:
+            return found
+    return None
 
-import shutil
-shutil.copyfile(pdf_repo, pdf_artifact)
-print('PDF generated successfully at:', pdf_repo)
-print('Size:', os.path.getsize(pdf_repo))
+
+def main():
+    browser = find_browser()
+    if not browser:
+        sys.exit('No Chrome/Chromium browser found. Install Chromium or Google Chrome, '
+                 'or set the CHROME environment variable to the browser executable.')
+
+    # اكتب HTML في ملف مؤقت
+    with tempfile.NamedTemporaryFile('w', suffix='.html', prefix='gametranslator_tv_guide_',
+                                     encoding='utf-8', delete=False) as f:
+        f.write(html_content)
+        html_path = f.name
+
+    try:
+        os.makedirs(os.path.dirname(pdf_docs), exist_ok=True)
+        # اطبع الصفحة إلى PDF بمتصفح بلا واجهة
+        cmd = [browser, '--headless=new', '--disable-gpu', '--no-sandbox', '--no-pdf-header-footer',
+               f'--print-to-pdf={pdf_docs}', pathlib.Path(html_path).as_uri()]
+        res = subprocess.run(cmd, capture_output=True, text=True)
+        print('Chrome returncode:', res.returncode)
+        if res.returncode != 0 or not os.path.isfile(pdf_docs):
+            sys.exit('PDF generation failed:\\n' + res.stderr)
+    finally:
+        os.remove(html_path)
+
+    # انسخ الملف إلى جذر المستودع أيضًا
+    shutil.copyfile(pdf_docs, pdf_root)
+    print('PDF generated successfully at:', pdf_docs)
+    print('Copied to:', pdf_root)
+    print('Size:', os.path.getsize(pdf_docs))
+
+
+if __name__ == '__main__':
+    main()

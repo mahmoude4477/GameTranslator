@@ -4,10 +4,10 @@ using System.Text.Json.Nodes;
 
 namespace GameTranslator.Core.LgTv;
 
-/// <summary>LG webOS'un ikinci ekran arayüzü (SSAP) mesajları.</summary>
+/// <summary>رسائل واجهة الشاشة الثانية (SSAP) في LG webOS.</summary>
 public static class SsapMessages
 {
-    /// <summary>Uygulamanın TV'den istediği izinler: uygulama başlatma ve önplandaki uygulamayı okuma.</summary>
+    /// <summary>الأذونات التي يطلبها التطبيق من التلفزيون: تشغيل التطبيقات وقراءة التطبيق الظاهر في المقدمة.</summary>
     internal static readonly string[] Permissions = ["LAUNCH", "LAUNCH_WEBAPP", "APP_TO_APP", "READ_RUNNING_APPS", "READ_INSTALLED_APPS"];
 
     public static string Register(string? clientKey)

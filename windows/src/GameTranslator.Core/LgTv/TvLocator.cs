@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace GameTranslator.Core.LgTv;
 
-/// <summary>Kayıtlı TV'ye ulaşılamazsa ağda yeniden arar: modem TV'ye yeni adres verdiğinde eşleşme bozulmaz.</summary>
+/// <summary>إذا تعذّر الوصول إلى التلفزيون المحفوظ يبحث عنه في الشبكة من جديد: فلا يفسد الاقتران عندما يعطي المودم التلفزيون عنوانًا جديدًا.</summary>
 public sealed class TvLocator(
     LgTv tv,
     Func<LgTv, Task<ITvControl>> connect,
@@ -24,7 +24,7 @@ public sealed class TvLocator(
         }
         catch (Exception) when (SearchDue())
         {
-            // TV kapalıyken de buraya gelinir; ağ her denemede taranmaz.
+            // يصل التنفيذ إلى هنا أيضًا والتلفزيون مطفأ؛ فلا تُمسح الشبكة في كل محاولة.
             var moved = Moved(current, await search());
             if (moved is null) throw;
             var control = await connect(moved);
@@ -41,7 +41,7 @@ public sealed class TvLocator(
         return true;
     }
 
-    /// <summary>Bulunanlar içinde kayıtlı TV'nin yeni adresi. Birden çok tanımadığı TV varsa tahmin etmez.</summary>
+    /// <summary>العنوان الجديد للتلفزيون المحفوظ بين ما عُثر عليه. إذا وُجد أكثر من تلفزيون غير معروف لا يخمّن.</summary>
     public static LgTv? Moved(LgTv saved, IReadOnlyList<LgTv> all)
     {
         var found = all.Where(tv => tv.Brand == saved.Brand).ToList();

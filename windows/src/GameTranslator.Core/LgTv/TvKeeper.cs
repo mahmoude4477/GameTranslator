@@ -3,13 +3,13 @@
 namespace GameTranslator.Core.LgTv;
 
 /// <summary>
-/// TV uygulamasını açık tutar: TV kendi HDMI ya da yayın girişine geçerse (SimpLink/CEC) uygulamayı
-/// yeniden öne getirir. TV kapalıysa ya da bağlantı koparsa bir sonraki kontrolde yeniden bağlanır.
+/// يُبقي تطبيق التلفزيون مفتوحًا: إذا انتقل التلفزيون من نفسه إلى مدخل HDMI أو مدخل البث (SimpLink/CEC) يعيد
+/// التطبيق إلى المقدمة. إذا كان التلفزيون مطفأ أو انقطع الاتصال يعيد الاتصال في الفحص التالي.
 /// </summary>
 /// <param name="appConnected">
-/// Verilirse (Samsung) TV'ye yalnız TV uygulaması bilgisayara bağlı değilken ve en çok <paramref name="relaunchInterval"/>'da
-/// bir dokunulur: uygulama açılır, bağlantı hemen kapatılır. Samsung önplandaki uygulamayı söylemediği için sürekli açık
-/// "uzaktan kumanda" bağlantısı gereksizdi; yeniden kurulan bağlantı TV'de bildirim çıkarıp PS5 kolunu düşürüyordu (#5).
+/// إذا أُعطي (Samsung) لا يُمسّ التلفزيون إلا عندما يكون تطبيق التلفزيون غير متصل بالكمبيوتر، ومرة واحدة على الأكثر كل
+/// <paramref name="relaunchInterval"/>: يُفتح التطبيق ويُغلق الاتصال فورًا. ولأن Samsung لا يفصح عن التطبيق الظاهر في المقدمة
+/// لم تكن لاتصال «التحكم عن بُعد» المفتوح دائمًا فائدة؛ وكانت إعادة إنشائه تُظهر إشعارًا على التلفزيون وتفصل ذراع تحكم PS5 (#5).
 /// </param>
 public sealed class TvKeeper(Func<Task<ITvControl>> connect, string appId, IReadOnlyDictionary<string, string> parameters,
                              Func<bool>? appConnected = null, TimeSpan? relaunchInterval = null) : IDisposable
@@ -19,13 +19,13 @@ public sealed class TvKeeper(Func<Task<ITvControl>> connect, string appId, IRead
     private CancellationTokenSource? loop;
     private DateTime? lastLaunch;
 
-    /// <summary>Kullanıcının bilerek açtığı uygulamalara (Netflix vb.) dokunulmaz; yalnız giriş ve yayın ekranları.</summary>
+    /// <summary>التطبيقات التي فتحها المستخدم عمدًا (Netflix وغيره) لا تُمسّ؛ فقط شاشات المداخل والبث.</summary>
     public static bool IsInputOrLiveTv(string appId) =>
         appId.StartsWith("com.webos.app.hdmi", StringComparison.Ordinal)
         || appId.StartsWith("com.webos.app.externalinput", StringComparison.Ordinal)
         || appId == "com.webos.app.livetv";
 
-    /// <summary>Bir kontrol. Hata fırlatmaz; bağlantı sorununda bir sonraki kontrolde yeniden dener.</summary>
+    /// <summary>فحص واحد. لا يرمي خطأ؛ وعند مشكلة في الاتصال يعيد المحاولة في الفحص التالي.</summary>
     public async Task TickAsync()
     {
         await tickLock.WaitAsync();
@@ -69,7 +69,7 @@ public sealed class TvKeeper(Func<Task<ITvControl>> connect, string appId, IRead
         }
         catch (Exception)
         {
-            // TV kapalı ya da ulaşılamıyor; bir sonraki denemede yeniden.
+            // التلفزيون مطفأ أو يتعذّر الوصول إليه؛ تُعاد المحاولة في المرة التالية.
         }
     }
 
@@ -89,7 +89,7 @@ public sealed class TvKeeper(Func<Task<ITvControl>> connect, string appId, IRead
         });
     }
 
-    /// <summary>Bilgisayar uykudan uyandığında: bağlantıyı yenile.</summary>
+    /// <summary>عند استيقاظ الكمبيوتر من السكون: يجدّد الاتصال.</summary>
     public void Reconnect()
     {
         control?.Dispose();

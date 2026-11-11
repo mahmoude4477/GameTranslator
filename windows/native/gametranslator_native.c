@@ -1,6 +1,5 @@
 /* SPDX-License-Identifier: AGPL-3.0-only */
-/* gametranslator_native.h arayüzünün libchiaki + FFmpeg üstündeki gerçeklemesi.
- * Davranış Mac sürümüyle (remoteplay/Sources/RemotePlay) aynıdır. */
+/* تنفيذ واجهة gametranslator_native.h فوق libchiaki + FFmpeg. */
 
 #include "gametranslator_native.h"
 
@@ -58,7 +57,7 @@ static int cs_level(ChiakiLogLevel level)
 	return 2;
 }
 
-/* --- Günlük --- */
+/* --- السجل --- */
 
 typedef struct {
 	cs_log_cb cb;
@@ -81,14 +80,14 @@ static void cs_logf(cs_log_cb cb, void *user, int level, const char *fmt, const 
 	cb(level, line, user);
 }
 
-/* --- Başlatma --- */
+/* --- التهيئة --- */
 
 static int cs_init_result = -1;
 
-/* chiaki_lib_init WSAStartup'ı ve FEC'in Galois tablolarını hazırlar; bir kez yeterli. */
+/* chiaki_lib_init يجهّز WSAStartup وجداول Galois الخاصة بـ FEC؛ وتكفي مرة واحدة. */
 static void cs_init_once(void)
 {
-	/* FFmpeg günlüğü kapalı: uygulama penceresinde stderr yok, bozuk karelerde satır yağar. */
+	/* سجل FFmpeg مغلق: لا stderr في نافذة التطبيق، والإطارات التالفة تُغرقه بالأسطر. */
 	av_log_set_level(AV_LOG_QUIET);
 	cs_init_result = (int)chiaki_lib_init();
 }
@@ -118,7 +117,7 @@ CS_API int cs_init(void)
 	return cs_init_result;
 }
 
-/* --- PS5 arama ve uyandırma --- */
+/* --- البحث عن PS5 وإيقاظه --- */
 
 typedef struct {
 	cs_console_cb cb;

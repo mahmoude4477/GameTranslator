@@ -56,7 +56,7 @@ public static class SamsungMessages
     }
 }
 
-/// <summary>Samsung TV ile uzaktan kumanda WebSocket'i üzerinden konuşur. İlk bağlantıda TV izin sorar.</summary>
+/// <summary>يخاطب تلفزيون Samsung عبر WebSocket الخاص بالتحكم عن بُعد. في أول اتصال يطلب التلفزيون الإذن.</summary>
 public sealed class SamsungClient(Uri url, TimeSpan? approvalTimeout = null) : ITvControl
 {
     public const string AppId = "GameTranslatorT.GameTranslator";
@@ -65,11 +65,11 @@ public sealed class SamsungClient(Uri url, TimeSpan? approvalTimeout = null) : I
 
     public SamsungClient(LgTv tv, string? token) : this(SamsungMessages.Url(tv.Host, token)) { }
 
-    /// <summary>Bağlanır ve jetonu döner. Kullanıcı TV'de onay verene kadar bekler.</summary>
+    /// <summary>يتصل ويعيد الرمز (token). ينتظر حتى يوافق المستخدم على التلفزيون.</summary>
     public async Task<string> ConnectAsync(CancellationToken cancellationToken = default)
     {
         var candidate = new ClientWebSocket();
-        // TV'nin 8002 portundaki sertifikası kendinden imzalıdır; bu bağlantı yalnız TV'nin adresine gider.
+        // شهادة التلفزيون على المنفذ 8002 موقَّعة ذاتيًا؛ وهذا الاتصال يذهب إلى عنوان التلفزيون فقط.
         candidate.Options.RemoteCertificateValidationCallback = (_, _, _, _) => true;
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeout.CancelAfter(approvalTimeout ?? TimeSpan.FromSeconds(60));
@@ -108,7 +108,7 @@ public sealed class SamsungClient(Uri url, TimeSpan? approvalTimeout = null) : I
         await socket.SendAsync(data, WebSocketMessageType.Text, true, cancellationToken);
     }
 
-    /// <summary>Samsung önplandaki uygulamayı söylemez; bağlantı ayakta mı diye bakılır, boş döner.</summary>
+    /// <summary>Samsung لا يفصح عن التطبيق الظاهر في المقدمة؛ يُفحص هل الاتصال قائم ويُعاد نص فارغ.</summary>
     public Task<string> ForegroundAppIdAsync(CancellationToken cancellationToken = default) =>
         socket is { State: WebSocketState.Open } ? Task.FromResult("") : throw new SsapException("cannot connect");
 
@@ -120,7 +120,7 @@ public sealed class SamsungClient(Uri url, TimeSpan? approvalTimeout = null) : I
     }
 }
 
-/// <summary>Yerel ağdaki Samsung TV'leri SSDP ile bulur.</summary>
+/// <summary>يعثر على أجهزة تلفزيون Samsung في الشبكة المحلية عبر SSDP.</summary>
 public static class SamsungDiscovery
 {
     internal const string SearchTarget = "urn:samsung.com:device:RemoteControlReceiver:1";
@@ -134,13 +134,13 @@ public static class SamsungDiscovery
         {
             string? name = null;
             try { name = SamsungMessages.DeviceName(await Http.GetStringAsync($"http://{host}:8001/api/v2/", cancellationToken)); }
-            catch (Exception) { /* ad okunamazsa genel ad kullanılır */ }
+            catch (Exception) { /* إذا تعذّرت قراءة الاسم يُستخدم اسم عام */ }
             tvs.Add(new LgTv(name ?? "Samsung TV", host, TvBrand.Samsung));
         }
         if (tvs.Count > 0) return tvs;
 
-        // SSDP yanıtı gelmediyse (bazı modemler ve TV'ler çok noktaya yayını geçirmez) ağdaki adresler tek tek denenir:
-        // Samsung TV 8001 portunda kendi adını veren bir arayüz sunar.
+        // إذا لم يصل رد SSDP (بعض أجهزة المودم والتلفزيون لا تمرّر البث المتعدد) تُجرَّب عناوين الشبكة واحدًا واحدًا:
+        // تلفزيون Samsung يقدّم على المنفذ 8001 واجهة تعطي اسمه.
         foreach (var host in await LocalNetwork.HostsWithOpenPortAsync(8001, TimeSpan.FromMilliseconds(700), cancellationToken))
         {
             try

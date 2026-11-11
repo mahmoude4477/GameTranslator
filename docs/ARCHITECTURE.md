@@ -206,7 +206,7 @@ data: {
    $$\text{Scale} = \max\left(1, \text{round}\left(\frac{\text{عرض الشاشة} \times 100}{1920}\right)\right)$$
    فتأخذ أحجام الترجمة وإحداثيات المربّع المقاس نفسه على كل شاشة.
 
-**الحزم:** `scripts/package-ipk.py` ينتج حزمة LG ‏(`tv/packages/com.gametranslator.tv_1.0.0_all.ipk`)،
+**الحزم:** `scripts/package-ipk.py` ينتج حزمة LG (`tv/packages/com.gametranslator.tv_1.0.0_all.ipk`)،
 و`scripts/package-tizen.sh` ينتج حزمة Samsung غير الموقّعة (انظر [tv-samsung.md](tv-samsung.md))، ومشروع Gradle في
 `tv/android` ينتج ملف APK. النسخ الجاهزة في `tv/packages/`؛ وملف APK الموجود هناك من البناء الأقدم (لم يُعَد بناؤه) ويعرض
 الترجمة العربية بشكل صحيح بفضل علامات الاتجاه. خطوات التثبيت للمستخدم: [tv-setup.ar.md](tv-setup.ar.md).
@@ -218,10 +218,10 @@ data: {
 | المسار | المحتوى |
 |---|---|
 | `mac/NativeApp.swift`، `mac/build.sh`، `mac/Resources/` | تطبيق macOS (ملف Swift واحد؛ Apple Silicon، macOS 14 فما فوق) |
-| `windows/src/GameTranslator.App` | واجهة WPF (‎.NET 10) والخدمات الخاصة بـ Windows (OCR، التقاط النافذة، جدار الحماية، الاختصارات) |
+| `windows/src/GameTranslator.App` | واجهة WPF (.NET 10) والخدمات الخاصة بـ Windows (OCR، التقاط النافذة، جدار الحماية، الاختصارات) |
 | `windows/src/GameTranslator.Shell` | المتحكّم `AppController` وعقود الخدمات |
-| `windows/src/GameTranslator.Core` | مسار الترجمة (`SubtitlePipeline`)، خادم الترجمة، التحكم بتلفزيونات LG و Samsung، النصوص (`Resources/Localizable.xcstrings`) |
-| `windows/src/GameTranslator.Translation` | Google ‏(GTX)، DeepL، تقسيم الجمل |
+| `windows/src/GameTranslator.Core` | مسار الترجمة (`SubtitlePipeline`)، خادم الترجمة، التحكم بتلفزيونات LG و Samsung وتثبيت تطبيق LG، النصوص (`Resources/Localizable.xcstrings`) |
+| `windows/src/GameTranslator.Translation` | Google (GTX)، DeepL، تقسيم الجمل |
 | `windows/src/GameTranslator.RemotePlay` | الاتصال بـ PS5 والمطابقة |
 | `windows/src/GameTranslator.TvInstall`، `GameTranslator.TvHelper` | تثبيت تطبيق التلفزيون على Samsung و Android TV، وأداة سطر الأوامر المقابلة |
 | `windows/tests/`، `windows/native/` | الاختبارات، وواجهة C فوق chiaki |
@@ -231,7 +231,7 @@ data: {
 
 - **Mac:** `bash mac/build.sh` (يشغّله `GameTranslator.command` عند أول تشغيل) يبني `mac/NativeApp.swift` بـ `swiftc`،
   ويجمع `dist/GameTranslator.app` مع حزم التلفزيون والمساعدات، ويوقّعه وينسخه إلى `/Applications`.
-- **Windows:** يحتاج إلى ‎.NET 10 SDK. `GameTranslator.bat` يبني ويشغّل، و`Build-Windows.bat` ينتج نسخة مستقلة في
+- **Windows:** يحتاج إلى .NET 10 SDK. `GameTranslator.bat` يبني ويشغّل، و`Build-Windows.bat` ينتج نسخة مستقلة في
   `bin\GameTranslator.exe`؛ أو يدويًا:
   `dotnet publish windows/src/GameTranslator.App/GameTranslator.App.csproj -c Release -r win-x64 --self-contained -o bin`.
   الاختبارات: `dotnet test windows/GameTranslator.Windows.slnx`. شرح المستخدم: [WINDOWS_SETUP.md](WINDOWS_SETUP.md).

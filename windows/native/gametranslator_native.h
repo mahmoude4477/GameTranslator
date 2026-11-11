@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: AGPL-3.0-only */
-/* GameTranslator'ın Windows uygulaması için libchiaki üstünde düz C arayüzü (gametranslator_native.dll).
- * C# tarafı yalnız bu başlıktaki işlevleri P/Invoke ile çağırır; libchiaki yapılarına doğrudan dokunmaz.
- * Bütün dizgeler UTF-8, bütün işlevler iş parçacığı güvenlidir. Dönüş değeri 0 = başarı, diğerleri hata. */
+/* واجهة C بسيطة فوق libchiaki لتطبيق GameTranslator على Windows (gametranslator_native.dll).
+ * جانب C# يستدعي دوال هذا الملف الرأسي فقط عبر P/Invoke؛ ولا يمس بنى libchiaki مباشرة.
+ * كل السلاسل النصية UTF-8 وكل الدوال آمنة مع تعدد الخيوط. قيمة الإرجاع 0 = نجاح، وغيرها خطأ. */
 #ifndef GAMETRANSLATOR_NATIVE_H
 #define GAMETRANSLATOR_NATIVE_H
 
@@ -17,67 +17,67 @@
 extern "C" {
 #endif
 
-/* libchiaki günlük satırı. level: 0 hata, 1 uyarı, 2 bilgi. */
+/* سطر من سجل libchiaki. level: 0 خطأ، 1 تحذير، 2 معلومة. */
 typedef void (*cs_log_cb)(int level, const char *message, void *user);
 
-/* Ağ yığınını hazırlar (WSAStartup). Uygulama açılışında bir kez çağrılır. */
+/* يجهّز مكدس الشبكة (WSAStartup). يُستدعى مرة واحدة عند بدء التطبيق. */
 CS_API int cs_init(void);
 
-/* --- PS5 arama ve uyandırma --- */
+/* --- البحث عن PS5 وإيقاظه --- */
 
-/* Bulunan her PS5 için çağrılır. awake: 1 açık, 0 dinlenme modunda. */
+/* يُستدعى لكل PS5 يُعثر عليه. awake: 1 يعمل، 0 في وضع الراحة. */
 typedef void (*cs_console_cb)(const char *host, const char *name, int awake, void *user);
 
-/* targets: sorulacak IPv4 adresleri (ör. "192.168.1.20", "255.255.255.255"). timeout_ms boyunca
- * aramayı 500 ms'de bir tekrarlar; aynı PS5 birden çok kez bildirilebilir. Bloklar. */
+/* targets: عناوين IPv4 التي تُسأل (مثل "192.168.1.20", "255.255.255.255"). يكرر البحث كل 500 ms
+ * طوال timeout_ms؛ وقد يُبلَّغ عن PS5 نفسه أكثر من مرة. حاجب. */
 CS_API int cs_discover(const char *const *targets, int target_count, int timeout_ms, cs_console_cb callback, void *user);
 
-/* Kayıtlı PS5'i dinlenme modundan uyandırır. credential: kayıt anahtarının onaltılık değeri. */
+/* يوقظ PS5 المسجَّل من وضع الراحة. credential: القيمة الست عشرية لمفتاح التسجيل. */
 CS_API int cs_wake(const char *host, uint64_t credential);
 
-/* --- Kayıt (PS5'in "Cihazı Eşleştir" kodu) --- */
+/* --- التسجيل (رمز «ربط الجهاز» في PS5) --- */
 
 typedef struct {
-    char nickname[0x20];      /* sıfırla biten PS5 adı */
-    uint8_t regist_key[0x10]; /* ASCII onaltılık, sıfırla doldurulmuş */
+    char nickname[0x20];      /* اسم PS5 منتهيًا بصفر */
+    uint8_t regist_key[0x10]; /* ست عشري بترميز ASCII، مكمَّل بالأصفار */
     uint8_t morning[0x10];
 } cs_registered_console;
 
-/* Bloklar (en çok ~30 sn). Başarısızlıkta *reason, PS5'in bildirdiği nedeni taşır
- * (ör. 0x80108b02 = hesap tanınmadı); bilinmiyorsa 0. Dönüş: 0 başarı, 1 başarısız, 2 iptal, <0 başlatılamadı. */
+/* حاجب (~30 ثانية على الأكثر). عند الفشل يحمل *reason السبب الذي أبلغ به PS5
+ * (مثل 0x80108b02 = لم يُتعرَّف على الحساب)؛ و 0 إن كان مجهولًا. الإرجاع: 0 نجاح، 1 فشل، 2 إلغاء، <0 تعذر البدء. */
 CS_API int cs_register(const char *host, const uint8_t account_id[8], uint32_t pin,
                        cs_registered_console *out, uint32_t *reason, cs_log_cb log, void *user);
 
-/* --- Görüntü akışı --- */
+/* --- بث الصورة --- */
 
-/* Çözülmüş kare: BGRA, satır başına stride bayt. Bellek yalnız geri çağrı süresince geçerlidir. */
+/* إطار مفكوك الترميز: BGRA، وفي كل سطر stride بايتًا. الذاكرة صالحة طوال رد النداء فقط. */
 typedef void (*cs_frame_cb)(const uint8_t *bgra, int width, int height, int stride, void *user);
 
-/* Oturum olayları. */
+/* أحداث الجلسة. */
 enum {
     CS_EVENT_CONNECTED = 0,
-    CS_EVENT_QUIT = 1,            /* quit_reason: aşağıdaki CS_QUIT_* değerlerinden biri */
-    CS_EVENT_LOGIN_PIN = 2        /* ikinci kullanıcının PS5 giriş şifresi var */
+    CS_EVENT_QUIT = 1,            /* quit_reason: إحدى قيم CS_QUIT_* أدناه */
+    CS_EVENT_LOGIN_PIN = 2        /* للمستخدم الثاني رمز دخول على PS5 */
 };
 enum {
     CS_QUIT_STOPPED = 0,
-    CS_QUIT_IN_USE = 1,           /* Remote Play başka cihazda kullanılıyor */
-    CS_QUIT_REFUSED = 2,          /* bağlantı reddedildi / kayıt geçersiz */
-    CS_QUIT_NETWORK = 3,          /* bağlantı koptu */
-    CS_QUIT_OTHER = 4             /* reason_text açıklar */
+    CS_QUIT_IN_USE = 1,           /* Remote Play مستخدم على جهاز آخر */
+    CS_QUIT_REFUSED = 2,          /* رُفض الاتصال / التسجيل غير صالح */
+    CS_QUIT_NETWORK = 3,          /* انقطع الاتصال */
+    CS_QUIT_OTHER = 4             /* يشرحه reason_text */
 };
 typedef void (*cs_event_cb)(int event, int quit_reason, const char *reason_text, void *user);
 
 typedef struct cs_session cs_session;
 
-/* Ses ve kol girdisi kapalı, 1080p/30 H.264 akışı açar. Her kare çözülür; en çok max_fps kez
- * BGRA'ya çevrilip frame geri çağrısına verilir. Hata olursa NULL. Geri çağrılar oturumun kendi
- * iş parçacığında gelir. */
+/* يفتح بث H.264 بدقة 1080p/30 والصوت ومدخلات ذراع التحكم مغلقة. يُفك ترميز كل إطار؛ ويُحوَّل إلى BGRA
+ * ويُسلَّم إلى رد النداء frame بما لا يتجاوز max_fps مرة في الثانية. عند الخطأ NULL. ردود النداء تصل في خيط
+ * الجلسة نفسها. */
 CS_API cs_session *cs_session_start(const char *host, const uint8_t regist_key[0x10], const uint8_t morning[0x10],
                                     const uint8_t account_id[8], int max_fps,
                                     cs_frame_cb frame, cs_event_cb event, cs_log_cb log, void *user);
 
-/* Oturumu durdurur, iş parçacıklarını bekler ve belleği bırakır. Geri çağrı içinden çağrılmamalı. */
+/* يوقف الجلسة وينتظر خيوطها ويحرر الذاكرة. يجب ألا يُستدعى من داخل رد نداء. */
 CS_API void cs_session_stop(cs_session *session);
 
 #ifdef __cplusplus

@@ -2943,7 +2943,7 @@ struct MainWindowView: View {
                         HStack {
                             Text("الحد العلوي").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.75))
                             Spacer()
-                            Text("%\(Int(state.cropTop * 100))").font(.system(size: 10, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
+                            Text("\(Int(state.cropTop * 100))%").font(.system(size: 10, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
                         }
                         Slider(value: $state.cropTop, in: 0.0...0.85, step: 0.01) { _ in state.selectedPreset = .custom }
                     }
@@ -2952,7 +2952,7 @@ struct MainWindowView: View {
                         HStack {
                             Text("الحد السفلي").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.75))
                             Spacer()
-                            Text("%\(Int(state.cropBottom * 100))").font(.system(size: 10, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
+                            Text("\(Int(state.cropBottom * 100))%").font(.system(size: 10, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
                         }
                         Slider(value: $state.cropBottom, in: 0.15...1.0, step: 0.01) { _ in state.selectedPreset = .custom }
                     }
@@ -2963,7 +2963,7 @@ struct MainWindowView: View {
                         HStack {
                             Text("الحد الأيسر").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.75))
                             Spacer()
-                            Text("%\(Int(state.cropLeft * 100))").font(.system(size: 10, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
+                            Text("\(Int(state.cropLeft * 100))%").font(.system(size: 10, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
                         }
                         Slider(value: $state.cropLeft, in: 0.0...0.45, step: 0.01) { _ in state.selectedPreset = .custom }
                     }
@@ -2972,7 +2972,7 @@ struct MainWindowView: View {
                         HStack {
                             Text("الحد الأيمن").font(.system(size: 10.5)).foregroundStyle(Color.white.opacity(0.75))
                             Spacer()
-                            Text("%\(Int(state.cropRight * 100))").font(.system(size: 10, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
+                            Text("\(Int(state.cropRight * 100))%").font(.system(size: 10, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
                         }
                         Slider(value: $state.cropRight, in: 0.55...1.0, step: 0.01) { _ in state.selectedPreset = .custom }
                     }
@@ -3042,7 +3042,7 @@ struct MainWindowView: View {
                     HStack {
                         Text("عتامة الخلفية").font(.system(size: 11, weight: .medium)).foregroundStyle(Color.white.opacity(0.85))
                         Spacer()
-                        Text("%\(Int(state.backgroundOpacity))").font(.system(size: 10.5, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
+                        Text("\(Int(state.backgroundOpacity))%").font(.system(size: 10.5, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
                     }
                     Slider(value: $state.backgroundOpacity, in: 0...100, step: 2) { _ in state.syncStyleToTV() }
                 }
@@ -3053,7 +3053,7 @@ struct MainWindowView: View {
                 HStack {
                     Text("الموضع على الشاشة (الارتفاع من الأسفل)").font(.system(size: 11, weight: .medium)).foregroundStyle(Color.white.opacity(0.85))
                     Spacer()
-                    Text("%\(Int(state.bottomPercent))").font(.system(size: 10.5, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
+                    Text("\(Int(state.bottomPercent))%").font(.system(size: 10.5, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: "#38BDF8"))
                 }
                 Slider(value: $state.bottomPercent, in: 2...30, step: 1) { _ in state.syncStyleToTV() }
             }

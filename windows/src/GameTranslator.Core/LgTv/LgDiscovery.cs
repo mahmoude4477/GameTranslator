@@ -10,14 +10,14 @@ public enum TvBrand
 {
     Lg,
     Samsung,
-    /// <summary>Android TV: bilgisayar TV'yi denetlemez, TV uygulaması bilgisayarı kendisi bulur.</summary>
+    /// <summary>Android TV: الكمبيوتر لا يتحكم في التلفزيون، وتطبيق التلفزيون يجد الكمبيوتر بنفسه.</summary>
     AndroidTv,
 }
 
-/// <param name="Brand">Eski kayıtlarda marka yoktur; hepsi LG'dir.</param>
+/// <param name="Brand">السجلات القديمة بلا علامة تجارية؛ وكلها LG.</param>
 public sealed record LgTv(string Name, string Host, TvBrand Brand = TvBrand.Lg);
 
-/// <summary>Yerel ağdaki LG webOS TV'leri SSDP ile bulur.</summary>
+/// <summary>يعثر على أجهزة تلفزيون LG webOS في الشبكة المحلية عبر SSDP.</summary>
 public static class LgDiscovery
 {
     internal const string SearchTarget = "urn:lge-com:service:webos-second-screen:1";
@@ -32,7 +32,7 @@ public static class LgDiscovery
         return tvs;
     }
 
-    /// <summary>SSDP yanıtından TV'nin adresini çıkarır; LG'nin ikinci ekran servisi değilse null.</summary>
+    /// <summary>يستخرج عنوان التلفزيون من رد SSDP؛ وnull إن لم يكن الرد من خدمة الشاشة الثانية في LG.</summary>
     public static string? HostFromSsdpResponse(string response, string searchTarget = SearchTarget)
     {
         string? location = null;
@@ -56,8 +56,8 @@ public static class LgDiscovery
         var request = Encoding.ASCII.GetBytes(
             $"M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\nMAN: \"ssdp:discover\"\r\nMX: 2\r\nST: {searchTarget}\r\n\r\n");
         var target = new IPEndPoint(IPAddress.Parse("239.255.255.250"), 1900);
-        // İstek her ağ bağdaştırıcısından ayrı gönderilir: varsayılan bağdaştırıcı VPN ya da sanal ağ (Hyper-V, WSL)
-        // olabilir ve TV o ağda değildir. Yanıtlar bu soketin portuna tek tek gelir.
+        // يُرسل الطلب من كل محوّل شبكة على حدة: قد يكون المحوّل الافتراضي VPN أو شبكة افتراضية (Hyper-V, WSL)
+        // والتلفزيون ليس في تلك الشبكة. تصل الردود إلى منفذ هذا المقبس واحدًا واحدًا.
         var interfaces = LocalNetwork.PrivateAddresses();
         for (var i = 0; i < 2; i++)
         {
@@ -69,7 +69,7 @@ public static class LgDiscovery
                     udp.Client.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastInterface, local.GetAddressBytes());
                     await udp.SendAsync(request, target, cancellationToken);
                 }
-                catch (SocketException) { /* bu bağdaştırıcıdan gönderilemedi; diğerleri denenir */ }
+                catch (SocketException) { /* تعذّر الإرسال من هذا المحوّل؛ تُجرَّب البقية */ }
             }
         }
 
@@ -87,10 +87,10 @@ public static class LgDiscovery
         return hosts;
     }
 
-    /// <summary>TV'nin ağdaki adını (ör. "[LG] webOS TV UK7550") cihaz tanımından okur.</summary>
+    /// <summary>يقرأ اسم التلفزيون في الشبكة (مثل "[LG] webOS TV UK7550") من وصف الجهاز.</summary>
     private static async Task<string?> FriendlyName(string host)
     {
-        // webOS cihaz tanımı 1990 numaralı portta yayınlanır; okunamazsa genel ad kullanılır.
+        // وصف جهاز webOS يُنشر على المنفذ 1990؛ وإذا تعذّرت قراءته يُستخدم اسم عام.
         try
         {
             var xml = await Http.GetStringAsync($"http://{host}:1990/");

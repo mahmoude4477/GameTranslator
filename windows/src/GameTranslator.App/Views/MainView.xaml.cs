@@ -84,27 +84,27 @@ public partial class MainView : UserControl
         BottomPercentSlider.Value = Math.Clamp(s.Style.BottomPercent, BottomPercentSlider.Minimum, BottomPercentSlider.Maximum);
         BottomPercentLabel.Text = $"{Math.Round(BottomPercentSlider.Value)}%";
 
-        // Renk
+        // اللون
         selectedColor = s.Style.Color ?? "#FFFFFF";
         UpdateColorSelection();
 
-        // Kırpma Alanı (CropRegion)
+        // منطقة الاقتصاص (CropRegion)
         CropTopSlider.Value = s.Region.Top;
         CropBottomSlider.Value = s.Region.Bottom;
         CropLeftSlider.Value = s.Region.Left;
         CropRightSlider.Value = s.Region.Right;
 
-        CropTopLabel.Text = $"%{Math.Round(s.Region.Top * 100)}";
-        CropBottomLabel.Text = $"%{Math.Round(s.Region.Bottom * 100)}";
-        CropLeftLabel.Text = $"%{Math.Round(s.Region.Left * 100)}";
-        CropRightLabel.Text = $"%{Math.Round(s.Region.Right * 100)}";
+        CropTopLabel.Text = $"{Math.Round(s.Region.Top * 100)}%";
+        CropBottomLabel.Text = $"{Math.Round(s.Region.Bottom * 100)}%";
+        CropLeftLabel.Text = $"{Math.Round(s.Region.Left * 100)}%";
+        CropRightLabel.Text = $"{Math.Round(s.Region.Right * 100)}%";
 
-        // Checkboxlar
+        // مربّعات الاختيار
         BoldCheck.IsChecked = s.Style.Bold;
         MutePcCheck.IsChecked = isMutePc;
         UpdatePcSesiButton();
 
-        // Yerleşim Dropdown
+        // قائمة موضع الترجمة
         foreach (ComboBoxItem item in PlacementBox.Items)
         {
             if (string.Equals((string)item.Tag, s.Style.Placement.ToString(), StringComparison.OrdinalIgnoreCase))
@@ -114,7 +114,7 @@ public partial class MainView : UserControl
             }
         }
 
-        // Dil Dropdown
+        // قائمة اللغة
         foreach (ComboBoxItem item in LanguageBox.Items)
         {
             if (string.Equals((string)item.Tag, s.SourceLanguage, StringComparison.OrdinalIgnoreCase))
@@ -152,7 +152,7 @@ public partial class MainView : UserControl
             MonitorTranslationText.Text = controller.LastTranslation;
             MonitorEnglishText.Text = string.IsNullOrWhiteSpace(controller.LastSource) ? "Subtitles active" : controller.LastSource;
 
-            // Geçmiş listesine ekle
+            // أضف إلى قائمة السجل
             history.Insert(0, new SubtitleHistoryItem
             {
                 Translation = controller.LastTranslation,
@@ -169,7 +169,7 @@ public partial class MainView : UserControl
         Toggle.Background = new SolidColorBrush(
             running ? Color.FromRgb(220, 38, 38) : Color.FromRgb(10, 132, 255));
         ToggleGlyph.Text = running ? Glyphs.Stop : Glyphs.Play;
-        ToggleText.Text = running ? "Çeviriyi Durdur" : "Çeviriyi Başlat";
+        ToggleText.Text = running ? "أوقف الترجمة" : "ابدأ الترجمة";
 
         bool hasFrame = LiveStreamImage?.Source != null;
         bool isStreaming = running && hasFrame;
@@ -177,27 +177,27 @@ public partial class MainView : UserControl
         StreamThumbnailDot.Fill = new SolidColorBrush(isStreaming
             ? Color.FromRgb(16, 185, 129)
             : (running ? Color.FromRgb(245, 158, 11) : Color.FromRgb(156, 163, 175)));
-        StreamThumbnailBadge.Text = isStreaming ? "1080p CANLI" : (running ? "BAĞLANIYOR" : "BEKLEMEDE");
+        StreamThumbnailBadge.Text = isStreaming ? "1080p مباشر" : (running ? "جارٍ الاتصال" : "في الانتظار");
         StreamThumbnailBadge.Foreground = new SolidColorBrush(isStreaming ? Color.FromRgb(56, 189, 248) : Color.FromArgb(140, 255, 255, 255));
-        ThumbnailStatusText.Text = isStreaming ? "PS5 Canlı Akışı Aktif" : (running ? "PS5 Yayını Bekleniyor..." : "PS5 Akışı Bekleniyor");
-        LiveBadgeText.Text = isStreaming ? "Canlı" : (running ? "Bekleniyor" : "Beklemede");
+        ThumbnailStatusText.Text = isStreaming ? "بث PS5 المباشر يعمل" : (running ? "في انتظار بث PS5..." : "في انتظار بث PS5");
+        LiveBadgeText.Text = isStreaming ? "مباشر" : (running ? "في الانتظار" : "متوقف");
 
-        // PS5 Durum Satırı
+        // سطر حالة PS5
         if (Ps5StatusDot != null && Ps5StatusLabel != null)
         {
             var paired = controller.Console != null;
             Ps5StatusDot.Fill = new SolidColorBrush(paired ? Color.FromRgb(16, 185, 129) : Color.FromRgb(156, 163, 175));
-            Ps5StatusLabel.Text = paired ? $"Eşleşti ({controller.Console!.Host})" : "Eşleşmedi";
+            Ps5StatusLabel.Text = paired ? $"مقترن ({controller.Console!.Host})" : "غير مقترن";
         }
 
-        // TV Durum Satırı
+        // سطر حالة التلفزيون
         if (TvStatusDot != null && TvStatusLabel != null)
         {
             var tvReady = controller.TvClients > 0 || controller.Tv != null;
             TvStatusDot.Fill = new SolidColorBrush(tvReady ? Color.FromRgb(16, 185, 129) : Color.FromRgb(245, 158, 11));
             TvStatusLabel.Text = controller.TvClients > 0
-                ? $"{controller.TvClients} Cihaz Bağlı (Hazır)"
-                : (controller.Tv != null ? $"{controller.Tv.Name} (Hazır)" : "TV uygulaması bekleniyor");
+                ? $"الأجهزة المتصلة: {controller.TvClients} (جاهز)"
+                : (controller.Tv != null ? $"{controller.Tv.Name} (جاهز)" : "في انتظار تطبيق التلفزيون");
         }
 
         if (!running)
@@ -207,8 +207,8 @@ public partial class MainView : UserControl
             if (StreamPlaceholder != null)
             {
                 StreamPlaceholder.Visibility = Visibility.Visible;
-                if (StreamPlaceholderTitle != null) StreamPlaceholderTitle.Text = "PS5 Canlı Akışı Başlatılmadı";
-                if (StreamPlaceholderSubtitle != null) StreamPlaceholderSubtitle.Text = "PS5 ekranını canlı görmek için sol menüden '▶ Çeviriyi Başlat'a basın.";
+                if (StreamPlaceholderTitle != null) StreamPlaceholderTitle.Text = "لم يبدأ بث PS5 المباشر";
+                if (StreamPlaceholderSubtitle != null) StreamPlaceholderSubtitle.Text = "لمشاهدة شاشة PS5 مباشرة اضغط «▶ ابدأ الترجمة» في القائمة اليسرى.";
                 if (BtnLaunchChiaki != null) BtnLaunchChiaki.Visibility = Visibility.Collapsed;
             }
             if (ThumbnailPlaceholder != null) ThumbnailPlaceholder.Visibility = Visibility.Visible;
@@ -218,8 +218,8 @@ public partial class MainView : UserControl
             if (LiveStreamImage?.Source == null && StreamPlaceholder != null)
             {
                 StreamPlaceholder.Visibility = Visibility.Visible;
-                if (StreamPlaceholderTitle != null) StreamPlaceholderTitle.Text = "PS5 Canlı Yayını Bekleniyor...";
-                if (StreamPlaceholderSubtitle != null) StreamPlaceholderSubtitle.Text = "Lütfen Chiaki veya PS Remote Play üzerinden PS5'inize bağlanın.\nKonsol bağlandığında görüntü otomatik buraya yansıyacaktır.";
+                if (StreamPlaceholderTitle != null) StreamPlaceholderTitle.Text = "في انتظار بث PS5 المباشر...";
+                if (StreamPlaceholderSubtitle != null) StreamPlaceholderSubtitle.Text = "اتصل بجهاز PS5 عبر Chiaki أو PS Remote Play.\nعند اتصال جهاز الألعاب ستظهر الصورة هنا تلقائيًا.";
                 if (BtnLaunchChiaki != null) BtnLaunchChiaki.Visibility = Visibility.Visible;
             }
         }
@@ -240,11 +240,11 @@ public partial class MainView : UserControl
             if (StreamThumbnailDot != null) StreamThumbnailDot.Fill = new SolidColorBrush(Color.FromRgb(16, 185, 129));
             if (StreamThumbnailBadge != null)
             {
-                StreamThumbnailBadge.Text = "1080p CANLI";
+                StreamThumbnailBadge.Text = "1080p مباشر";
                 StreamThumbnailBadge.Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248));
             }
-            if (ThumbnailStatusText != null) ThumbnailStatusText.Text = "PS5 Canlı Akışı Aktif";
-            if (LiveBadgeText != null) LiveBadgeText.Text = "Canlı";
+            if (ThumbnailStatusText != null) ThumbnailStatusText.Text = "بث PS5 المباشر يعمل";
+            if (LiveBadgeText != null) LiveBadgeText.Text = "مباشر";
         }
         catch { }
     }
@@ -259,7 +259,7 @@ public partial class MainView : UserControl
         {
             if (controller.Console == null || controller.Tv == null)
             {
-                // Eğer konsol henüz sihirbazdan eşleştirilmediyse varsayılan PS5 bağlantısını tanımla
+                // إذا لم يُقترن جهاز الألعاب عبر المعالج بعد فعرّف اتصال PS5 الافتراضي
                 if (controller.Console == null)
                 {
                     var host = "192.168.1.109";
@@ -267,7 +267,7 @@ public partial class MainView : UserControl
                     controller.SetRegisteredConsole(new RegisteredConsole(host, nick, controller.AccountId ?? System.Text.Encoding.ASCII.GetBytes("GTPS5ACC"), new byte[16]));
                 }
 
-                // TV henüz seçilmediyse varsayılan Bilgisayar & OBS ekran modunu etkinleştir
+                // إذا لم يُختر تلفزيون بعد ففعّل وضع العرض الافتراضي على الكمبيوتر و OBS
                 if (controller.Tv == null)
                 {
                     try
@@ -281,7 +281,7 @@ public partial class MainView : UserControl
         }
     }
 
-    // --- Sekme Yönetimi ---
+    // --- إدارة التبويبات ---
 
     private void OnTabChanged(object sender, RoutedEventArgs e)
     {
@@ -307,7 +307,7 @@ public partial class MainView : UserControl
         TabSystem.IsChecked = true;
     }
 
-    // --- Tab 1: Oyun Okuma Alanı & Şablonlar ---
+    // --- التبويب 1: منطقة قراءة اللعبة والقوالب ---
 
     private void OnPresetClick(object sender, RoutedEventArgs e)
     {
@@ -322,31 +322,31 @@ public partial class MainView : UserControl
                 CropBottomSlider.Value = 0.85;
                 CropLeftSlider.Value = 0.16;
                 CropRightSlider.Value = 0.84;
-                ShortcutPresetText.Text = "Alt Orta (Standart)";
+                ShortcutPresetText.Text = "أسفل الوسط (قياسي)";
                 break;
             case "BottomWide":
                 CropTopSlider.Value = 0.65;
                 CropBottomSlider.Value = 0.94;
                 CropLeftSlider.Value = 0.08;
                 CropRightSlider.Value = 0.92;
-                ShortcutPresetText.Text = "Geniş Alt Bant";
+                ShortcutPresetText.Text = "شريط سفلي عريض";
                 break;
             case "FullBottom":
                 CropTopSlider.Value = 0.50;
                 CropBottomSlider.Value = 0.98;
                 CropLeftSlider.Value = 0.02;
                 CropRightSlider.Value = 0.98;
-                ShortcutPresetText.Text = "Tüm Alt Yarı";
+                ShortcutPresetText.Text = "النصف السفلي كله";
                 break;
             case "TopBanner":
                 CropTopSlider.Value = 0.03;
                 CropBottomSlider.Value = 0.22;
                 CropLeftSlider.Value = 0.08;
                 CropRightSlider.Value = 0.92;
-                ShortcutPresetText.Text = "Üst Bölge (Görevler)";
+                ShortcutPresetText.Text = "المنطقة العليا (المهام)";
                 break;
             case "Custom":
-                ShortcutPresetText.Text = "Özel Kutu";
+                ShortcutPresetText.Text = "مربّع مخصّص";
                 break;
         }
 
@@ -362,7 +362,7 @@ public partial class MainView : UserControl
     {
         if (loading) return;
         selectedPreset = "Custom";
-        ShortcutPresetText.Text = "Özel Kutu";
+        ShortcutPresetText.Text = "مربّع مخصّص";
 
         controller.Settings = controller.Settings with
         {
@@ -402,10 +402,10 @@ public partial class MainView : UserControl
         OcrBoxBorder.Width = boxW;
         OcrBoxBorder.Height = boxH;
 
-        CropTopLabel.Text = $"%{Math.Round(top * 100)}";
-        CropBottomLabel.Text = $"%{Math.Round(bottom * 100)}";
-        CropLeftLabel.Text = $"%{Math.Round(left * 100)}";
-        CropRightLabel.Text = $"%{Math.Round(right * 100)}";
+        CropTopLabel.Text = $"{Math.Round(top * 100)}%";
+        CropBottomLabel.Text = $"{Math.Round(bottom * 100)}%";
+        CropLeftLabel.Text = $"{Math.Round(left * 100)}%";
+        CropRightLabel.Text = $"{Math.Round(right * 100)}%";
     }
 
     private void OnLaunchChiakiManual(object sender, RoutedEventArgs e)
@@ -421,15 +421,15 @@ public partial class MainView : UserControl
             if (!ChiakiLauncher.LaunchOrBringToFront(host, name))
             {
                 MessageBox.Show(
-                    "Chiaki uygulaması bulunamadı. Lütfen 'chiaki/chiaki.exe' dosyasının uygulama klasöründe olduğunu kontrol edin.",
-                    "Chiaki Bulunamadı",
+                    "لم يُعثر على تطبيق Chiaki. تأكد من وجود الملف 'chiaki/chiaki.exe' في مجلد التطبيق.",
+                    "لم يُعثر على Chiaki",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Chiaki başlatılamadı: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show($"تعذّر تشغيل Chiaki: {ex.Message}", "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 
@@ -450,20 +450,20 @@ public partial class MainView : UserControl
             }
 
             MessageBox.Show(
-                "Chiaki veya PlayStation Remote Play penceresi bulunamadı veya henüz görüntü vermiyor.\n\n" +
-                "Lütfen bilgisayarınızda Chiaki veya PS Remote Play uygulamasını açıp konsolunuza bağlandığınızdan emin olun.\n" +
-                "İpucu: '🎮 Chiaki'yi Aç' butonuna tıklayarak Chiaki'yi hemen başlatabilirsiniz.",
-                "PS5 Penceresi Bulunamadı",
+                "لم يُعثر على نافذة Chiaki أو PlayStation Remote Play، أو أنها لا تعرض صورة بعد.\n\n" +
+                "تأكد من فتح تطبيق Chiaki أو PS Remote Play على الكمبيوتر ومن الاتصال بجهاز الألعاب.\n" +
+                "تلميح: يمكنك تشغيل Chiaki فورًا بالنقر على زر «🎮 افتح Chiaki».",
+                "لم يُعثر على نافذة PS5",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Pencere arama hatası: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show($"خطأ في البحث عن النافذة: {ex.Message}", "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 
-    // --- Tab 2: TV Görünümü & Renkler ---
+    // --- التبويب 2: مظهر التلفزيون والألوان ---
 
     private void OnColorWhite(object sender, RoutedEventArgs e) => SelectColor("#FFFFFF");
     private void OnColorYellow(object sender, RoutedEventArgs e) => SelectColor("#FFE600");
@@ -507,7 +507,7 @@ public partial class MainView : UserControl
     {
         if (loading) return;
         var val = (int)Math.Round(e.NewValue);
-        BackgroundLabel.Text = $"%{val}";
+        BackgroundLabel.Text = $"{val}%";
         controller.Settings = controller.Settings with { Style = controller.Settings.Style with { Background = val } };
         controller.SyncStyle();
         UpdateTvPreview();
@@ -517,7 +517,7 @@ public partial class MainView : UserControl
     {
         if (loading) return;
         var val = (int)Math.Round(e.NewValue);
-        BottomPercentLabel.Text = $"%{val}";
+        BottomPercentLabel.Text = $"{val}%";
         controller.Settings = controller.Settings with { Style = controller.Settings.Style with { BottomPercent = val } };
         controller.SyncStyle();
         UpdateTvPreview();
@@ -565,7 +565,7 @@ public partial class MainView : UserControl
     private void UpdatePcSesiButton()
     {
         if (PcSesiButton == null) return;
-        PcSesiButton.Content = isMutePc ? "Sessiz (Muted)" : "Açık (Ses Var)";
+        PcSesiButton.Content = isMutePc ? "صامت (Muted)" : "مفعّل (الصوت يعمل)";
         var color = isMutePc ? Color.FromRgb(239, 68, 68) : Color.FromRgb(16, 185, 129);
         PcSesiButton.Foreground = new SolidColorBrush(color);
         PcSesiButton.Background = new SolidColorBrush(Color.FromArgb(31, color.R, color.G, color.B));
@@ -597,12 +597,12 @@ public partial class MainView : UserControl
 
     private void OnTestSubtitle(object sender, RoutedEventArgs e) => controller.SendTestSubtitle();
 
-    // --- Tab 3: Modeller ---
+    // --- التبويب 3: محرّكات الترجمة ---
 
     private void OnGeminiSave(object sender, RoutedEventArgs e)
     {
         if (string.IsNullOrWhiteSpace(GeminiKeyInput.Password)) return;
-        MessageBox.Show("Google Gemini API anahtarı kaydedildi ve aktif hale getirildi.", "Model Ayarlandı", MessageBoxButton.OK, MessageBoxImage.Information);
+        MessageBox.Show("Google Gemini غير مدعوم في هذا الإصدار، ولم يُحفظ المفتاح.", "غير مدعوم", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private async void OnDeepLSave(object sender, RoutedEventArgs e)
@@ -610,7 +610,7 @@ public partial class MainView : UserControl
         if (string.IsNullOrWhiteSpace(DeepLKeyInput.Password)) return;
         await controller.SetDeepLKeyAsync(DeepLKeyInput.Password);
         controller.SendTestSubtitle();
-        MessageBox.Show("DeepL API anahtarı doğrulandı ve kaydedildi!", "DeepL Aktif", MessageBoxButton.OK, MessageBoxImage.Information);
+        MessageBox.Show("تم التحقق من مفتاح DeepL API وحفظه!", "DeepL مفعّل", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     // --- Geçmiş Dışa Aktarma ---
