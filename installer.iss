@@ -27,7 +27,7 @@ CloseApplications=yes
 RestartApplications=no
 
 [Languages]
-Name: "turkish"; MessagesFile: "compiler:Languages\Turkish.isl"
+Name: "arabic"; MessagesFile: "compiler:Languages\Arabic.isl"
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]

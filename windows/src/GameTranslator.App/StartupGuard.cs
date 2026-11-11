@@ -38,10 +38,8 @@ internal static class StartupGuard
         catch { }
     }
 
-    static bool Turkish => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "tr";
-
     static string LogPath =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GameTranslator", "hata.log");
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GameTranslator", "error.log");
 
     /// <summary>
     /// deps.json'da listelenen ama klasörde olmayan DLL'ler. Antivirüs bir dosyayı karantinaya alınca .NET açılışta
@@ -71,25 +69,16 @@ internal static class StartupGuard
     public static string MissingMessage(IReadOnlyList<string> files)
     {
         var list = string.Join("\n", files.Take(8).Select(f => "  • " + f)) + (files.Count > 8 ? "\n  • …" : "");
-        return Turkish
-            ? $"GameTranslator açılamadı: program klasöründe şu dosyalar yok:\n\n{list}\n\n" +
-              "Bunun en sık nedeni antivirüs programının dosyayı karantinaya almasıdır. Windows Güvenliği › Virüs ve tehdit " +
-              "koruması › Koruma geçmişi'nden dosyayı geri yükleyin ya da GameTranslator-windows-x64.zip'i yeniden indirip " +
-              "\"Tümünü ayıkla\" ile bir klasöre çıkarın. Programı zip'in içinden çalıştırmayın."
-            : $"GameTranslator could not start: these files are missing from its folder:\n\n{list}\n\n" +
-              "This usually means an antivirus moved them to quarantine. Restore them from Windows Security › Virus & threat " +
-              "protection › Protection history, or download GameTranslator-windows-x64.zip again and use \"Extract all\". " +
-              "Do not run the app from inside the zip.";
+        return $"تعذّر تشغيل GameTranslator: الملفات التالية غير موجودة في مجلد البرنامج:\n\n{list}\n\n" +
+               "السبب الأكثر شيوعًا أن برنامج مكافحة الفيروسات نقل الملف إلى الحجر الصحي. استعد الملف من أمان Windows › الحماية من " +
+               "الفيروسات والمخاطر › محفوظات الحماية، أو نزّل GameTranslator-windows-x64.zip من جديد واستخرجه في مجلد " +
+               "عبر \"استخراج الكل\". لا تشغّل البرنامج من داخل ملف zip.";
     }
 
     public static string ErrorMessage(Exception error) =>
-        (Turkish
-            ? "GameTranslator beklenmeyen bir hatayla karşılaştı:\n\n"
-            : "GameTranslator ran into an unexpected error:\n\n") +
+        "واجه GameTranslator خطأ غير متوقع:\n\n" +
         $"{error.GetType().Name}: {error.Message}\n\n" +
-        (Turkish
-            ? $"Ayrıntılar {LogPath} dosyasında. Sorunu bu dosyayla birlikte GitHub'daki Issues sayfasından bildirebilirsiniz."
-            : $"Details are in {LogPath}. Please report it on the GitHub Issues page with that file.");
+        $"التفاصيل في الملف {LogPath}. يمكنك الإبلاغ عن المشكلة مع هذا الملف من صفحة Issues على GitHub.";
 
     /// <summary>Hatayı kaydeder, gösterir ve uygulamayı kapatır. Ekran görüntüsü kipinde pencere yerine errors.txt yazılır.</summary>
     public static void Fail(Application app, string message, Exception? error, string? renderFolder)

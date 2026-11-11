@@ -17,10 +17,10 @@ public sealed class Localizer
 
     private Localizer(string language) => this.language = language;
 
-    public static Localizer ForLanguage(string language) => new(language.ToLowerInvariant().StartsWith("tr") ? "tr" : "en");
+    public static Localizer ForLanguage(string language) => new(language.ToLowerInvariant().StartsWith("en") ? "en" : "ar");
 
     /// <summary>Windows'un arayüz diline göre: Türkçe değilse İngilizce.</summary>
-    public static Localizer Current { get; } = ForLanguage(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);
+    public static Localizer Current { get; } = ForLanguage("ar");
 
     public string Language => language;
 

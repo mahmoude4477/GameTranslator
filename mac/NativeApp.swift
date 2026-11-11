@@ -126,10 +126,10 @@ public final class NativeSubtitleServer: @unchecked Sendable {
         }
     }
 
-    public func sendSubtitle(turkish: String, original: String = "", box: [String: Double]? = nil, durationMs: Int = 12000) {
+    public func sendSubtitle(translation: String, original: String = "", box: [String: Double]? = nil, durationMs: Int = 12000) {
         let at = Int(Date().timeIntervalSince1970 * 1000)
         var json: [String: Any] = [
-            "text": Self.directional(turkish),
+            "text": Self.directional(translation),
             "original": original,
             "duration": durationMs,
             "at": at
@@ -196,7 +196,7 @@ public final class NativeSubtitleServer: @unchecked Sendable {
         } else if method == "GET" && path == "/hello" {
             respondAndClose(connection, status: "200 OK", body: #"{"app":"gametranslator","version":"2.0"}"#, type: "application/json")
         } else if (method == "GET" || method == "POST") && path == "/test" {
-            self.sendSubtitle(turkish: "🎮 GameTranslator Canlı Altyazı Testi Başarılı!", original: "GameTranslator Live Subtitle Test Successful!", durationMs: 15000)
+            self.sendSubtitle(translation: "🎮 GameTranslator Canlı Altyazı Testi Başarılı!", original: "GameTranslator Live Subtitle Test Successful!", durationMs: 15000)
             respondAndClose(connection, status: "200 OK", body: #"{"status":"ok","message":"Test altyazisi gonderildi"}"#, type: "application/json")
         } else if (method == "GET" || method == "POST") && path == "/send" {
             var text = "🎮 GameTranslator Canlı Altyazı"
@@ -214,7 +214,7 @@ public final class NativeSubtitleServer: @unchecked Sendable {
                     }
                 }
             }
-            self.sendSubtitle(turkish: text, original: original, durationMs: duration)
+            self.sendSubtitle(translation: text, original: original, durationMs: duration)
             respondAndClose(connection, status: "200 OK", body: #"{"status":"ok","message":"Altyazi gonderildi"}"#, type: "application/json")
         } else {
             respondAndClose(connection, status: "404 Not Found", body: "Not Found")
@@ -378,7 +378,7 @@ struct WindowConfigurator: NSViewRepresentable {
 
 struct SubtitleEntry: Identifiable, Codable {
     var id = UUID()
-    let turkish: String
+    let translation: String
     let english: String
     let timestamp: String
 }
@@ -1125,7 +1125,7 @@ final class AppState {
     var filterNoise: Bool = true
     
     // Canlı altyazı & Geçmiş
-    var liveTurkish: String = "Siz oynarken altyazılar burada görünecek."
+    var liveTranslation: String = "Siz oynarken altyazılar burada görünecek."
     var liveEnglish: String = "Subtitles will appear here as you play."
     var history: [SubtitleEntry] = []
     
@@ -1206,7 +1206,7 @@ final class AppState {
         setupStep = 1
         showSetup = true
         bypassSetup = false
-        liveTurkish = "Siz oynarken altyazılar burada görünecek."
+        liveTranslation = "Siz oynarken altyazılar burada görünecek."
         liveEnglish = "Subtitles will appear here as you play."
         history = []
         selectedPreset = .bottomCenter
@@ -1322,8 +1322,7 @@ final class AppState {
                     // Televizyona otomatik hoş geldin ve bağlantı testi altyazısı gönder
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                         self.server.sendSubtitle(
-                            turkish: self.sample(tr: "🎮 GameTranslator Televizyonunuza Başarıyla Bağlandı! (Hazır)",
-                                                 ar: "🎮 تم اتصال GameTranslator بالتلفزيون بنجاح! (جاهز)"),
+                            translation: "🎮 تم اتصال GameTranslator بالتلفزيون بنجاح! (جاهز)",
                             original: "GameTranslator TV Connected Successfully! (Ready)",
                             durationMs: 15000
                         )
@@ -1336,17 +1335,11 @@ final class AppState {
         }
     }
 
-    /// TV'ye giden örnek satırlar çeviri dilinde olur; Arapçada sağdan sola dizilişi de sınar.
-    func sample(tr: String, ar: String) -> String {
-        targetLanguage == "ar" ? ar : tr
-    }
-
     func sendTVTestSubtitle() {
         testSent = true
-        let testTr = sample(tr: "🎮 GameTranslator Canlı Altyazı Testi Başarılı! (TCL Smart TV)",
-                            ar: "🎮 نجح اختبار الترجمة المباشرة من GameTranslator! (TCL Smart TV)")
+        let testText = "🎮 نجح اختبار الترجمة المباشرة من GameTranslator! (TCL Smart TV)"
         let testEn = "GameTranslator Live Subtitle Test Successful!"
-        let entry = SubtitleEntry(turkish: testTr, english: testEn, timestamp: currentTime())
+        let entry = SubtitleEntry(translation: testText, english: testEn, timestamp: currentTime())
         history.insert(entry, at: 0)
 
         let testBox: [String: Double] = [
@@ -1368,7 +1361,7 @@ final class AppState {
             }
         }
         syncStyleToTV()
-        server.sendSubtitle(turkish: testTr, original: testEn, box: testBox, durationMs: 15000)
+        server.sendSubtitle(translation: testText, original: testEn, box: testBox, durationMs: 15000)
 
         let host = self.tvHost.trimmingCharacters(in: .whitespaces)
         if !host.isEmpty {
@@ -1684,7 +1677,7 @@ final class AppState {
         self.ps5Connected = false
         self.lastSentText = ""
         self.liveEnglish = "PS5 Canlı Akışı Bekleniyor"
-        self.liveTurkish = "Çeviri Durduruldu"
+        self.liveTranslation = "Çeviri Durduruldu"
 
         if let p = streamProcess, p.isRunning {
             p.terminate()
@@ -1729,7 +1722,7 @@ final class AppState {
                     self.hasScreenRecordingPermission = false
                     self.showPermissionBanner = true
                     self.liveEnglish = "Screen Capture Permission Required"
-                    self.liveTurkish = "⚠️ macOS Ekran Kaydı İzni Kapalı! Lütfen Sistem Ayarları'ndan GameTranslator'a izin verin."
+                    self.liveTranslation = "⚠️ macOS Ekran Kaydı İzni Kapalı! Lütfen Sistem Ayarları'ndan GameTranslator'a izin verin."
                 }
             }
             return
@@ -1782,7 +1775,7 @@ final class AppState {
 
             let request = VNRecognizeTextRequest()
             request.recognitionLevel = .accurate
-            request.recognitionLanguages = ["en-US", "tr-TR"]
+            request.recognitionLanguages = ["en-US"]
             request.usesLanguageCorrection = true
 
             let handler = VNImageRequestHandler(cgImage: cropped, options: [:])
@@ -1874,12 +1867,12 @@ final class AppState {
                     }
 
                     Task {
-                        let turkish = await self.translateText(detectedText)
+                        let translation = await self.translateText(detectedText)
                         await MainActor.run {
-                            self.liveTurkish = turkish
-                            self.server.sendSubtitle(turkish: turkish, original: detectedText, box: currentBox)
+                            self.liveTranslation = translation
+                            self.server.sendSubtitle(translation: translation, original: detectedText, box: currentBox)
 
-                            let entry = SubtitleEntry(turkish: turkish, english: detectedText, timestamp: self.currentTime())
+                            let entry = SubtitleEntry(translation: translation, english: detectedText, timestamp: self.currentTime())
                             self.history.insert(entry, at: 0)
                             if self.history.count > 50 { self.history.removeLast() }
                         }
@@ -2075,12 +2068,12 @@ final class AppState {
         isRunning.toggle()
         if isRunning {
             ps5Connected = true
-            liveTurkish = sample(tr: "PS5 Canlı Akışına Bağlanılıyor...", ar: "جارٍ الاتصال ببث PS5 المباشر...")
+            liveTranslation = "جارٍ الاتصال ببث PS5 المباشر..."
             liveEnglish = "Starting Remote Play session..."
-            server.sendSubtitle(turkish: liveTurkish, original: liveEnglish)
+            server.sendSubtitle(translation: liveTranslation, original: liveEnglish)
             startStreamAndOCR()
         } else {
-            liveTurkish = "Çeviri Durduruldu"
+            liveTranslation = "Çeviri Durduruldu"
             liveEnglish = "Yeniden başlatmak için 'Çeviriyi Başlat' butonuna basın."
             server.clearSubtitle()
             stopStreamAndOCR()
@@ -2089,10 +2082,9 @@ final class AppState {
     
     func sendTestSubtitle() {
         testSent = true
-        let testTr = sample(tr: "GameTranslator canlı altyazı testi başarılı! 🎮",
-                            ar: "نجح اختبار الترجمة المباشرة من GameTranslator! 🎮")
+        let testText = "نجح اختبار الترجمة المباشرة من GameTranslator! 🎮"
         let testEn = "GameTranslator live subtitle test successful!"
-        let entry = SubtitleEntry(turkish: testTr, english: testEn, timestamp: currentTime())
+        let entry = SubtitleEntry(translation: testText, english: testEn, timestamp: currentTime())
         history.insert(entry, at: 0)
         let testBox: [String: Double] = [
             "left": cropLeft,
@@ -2112,7 +2104,7 @@ final class AppState {
             }
         }
         syncStyleToTV()
-        server.sendSubtitle(turkish: testTr, original: testEn, box: testBox)
+        server.sendSubtitle(translation: testText, original: testEn, box: testBox)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
             self.testSent = false
         }
@@ -2140,7 +2132,7 @@ final class AppState {
             content = String(decoding: data, as: UTF8.self)
             filename = "GameTranslator_Altyazi_Gecmisi.json"
         } else {
-            content = history.map { "[\($0.timestamp)] TR: \($0.turkish)\n     EN: \($0.english)\n" }.joined(separator: "\n")
+            content = history.map { "[\($0.timestamp)] AR: \($0.translation)\n     EN: \($0.english)\n" }.joined(separator: "\n")
             filename = "GameTranslator_Altyazi_Gecmisi.txt"
         }
         let savePanel = NSSavePanel()
@@ -2479,7 +2471,7 @@ struct MainWindowView: View {
                         Text("📺 TV:")
                             .font(.system(size: 9.5, weight: .bold))
                             .foregroundStyle(Color(hex: "#0A84FF"))
-                        Text(state.liveTurkish)
+                        Text(state.liveTranslation)
                             .font(.system(size: 12, weight: .bold))
                             .foregroundStyle(Color.white)
                             .lineLimit(2)
@@ -2494,7 +2486,7 @@ struct MainWindowView: View {
                             .lineLimit(2)
                     }
                 } else {
-                    Text(state.liveTurkish)
+                    Text(state.liveTranslation)
                         .font(.system(size: 11))
                         .foregroundStyle(Color.white.opacity(0.55))
                         .lineLimit(2)
@@ -2550,7 +2542,7 @@ struct MainWindowView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         ForEach(state.history) { item in
                             VStack(alignment: .leading, spacing: 1) {
-                                Text(item.turkish)
+                                Text(item.translation)
                                     .font(.system(size: 10.5, weight: .semibold))
                                     .foregroundStyle(Color.white.opacity(0.92))
                                 Text(item.english)
@@ -2934,7 +2926,7 @@ struct MainWindowView: View {
                         Text("📺 TV Ekranı (Türkçe):")
                             .font(.system(size: 8.5, weight: .semibold))
                             .foregroundStyle(Color(hex: "#38BDF8"))
-                        Text(state.isRunning ? state.liveTurkish : "Türkçe çeviri burada görünecek")
+                        Text(state.isRunning ? state.liveTranslation : "Türkçe çeviri burada görünecek")
                             .font(.system(size: 10, weight: .bold))
                             .foregroundStyle(state.isRunning ? Color.white : Color.white.opacity(0.45))
                             .lineLimit(1)
@@ -3098,9 +3090,9 @@ struct MainWindowView: View {
                             }
                         }
                         state.syncStyleToTV()
-                        let textToSend = state.liveTurkish.isEmpty ? "Altyazı Yerleşim Testi" : state.liveTurkish
+                        let textToSend = state.liveTranslation.isEmpty ? "Altyazı Yerleşim Testi" : state.liveTranslation
                         let origToSend = state.liveEnglish.isEmpty ? "Subtitle Placement Test" : state.liveEnglish
-                        state.server.sendSubtitle(turkish: textToSend, original: origToSend, box: boxToSend)
+                        state.server.sendSubtitle(translation: textToSend, original: origToSend, box: boxToSend)
                     }
                 }
 
@@ -3166,7 +3158,7 @@ struct MainWindowView: View {
                         .frame(height: 125)
                         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(hex: "#0A84FF").opacity(0.4), lineWidth: 1.5))
 
-                    let displayText = state.isRunning ? (state.liveTurkish.isEmpty ? "Altyazı taranıyor..." : state.liveTurkish) : (state.liveTurkish.isEmpty ? "Çeviri Durduruldu" : state.liveTurkish)
+                    let displayText = state.isRunning ? (state.liveTranslation.isEmpty ? "Altyazı taranıyor..." : state.liveTranslation) : (state.liveTranslation.isEmpty ? "Çeviri Durduruldu" : state.liveTranslation)
                     let origText = state.liveEnglish.isEmpty ? "Press any button to continue" : state.liveEnglish
                     let previewPad = CGFloat(state.bottomPercent * 1.05 + 4.0)
 

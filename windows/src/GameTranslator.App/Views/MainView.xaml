@@ -352,7 +352,7 @@
                                         <!-- Sağ: TV Türkçe -->
                                         <StackPanel Grid.Column="2">
                                             <TextBlock Text="📺 TV Ekranı (Türkçe):" FontSize="9" FontWeight="SemiBold" Foreground="#38BDF8" Margin="0,0,0,2" />
-                                            <TextBlock x:Name="MonitorTurkishText" Text="Türkçe çeviri burada görünecek" FontSize="10.5" FontWeight="Bold" Foreground="{DynamicResource textPrimaryBrush}" TextTrimming="CharacterEllipsis" />
+                                            <TextBlock x:Name="MonitorTranslationText" Text="Türkçe çeviri burada görünecek" FontSize="10.5" FontWeight="Bold" Foreground="{DynamicResource textPrimaryBrush}" TextTrimming="CharacterEllipsis" />
                                         </StackPanel>
                                     </Grid>
                                 </StackPanel>

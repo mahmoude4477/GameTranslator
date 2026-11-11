@@ -24,10 +24,10 @@ namespace GameTranslator.App.Views;
 /// <summary>Altyazı geçmişi öğesi.</summary>
 public sealed class SubtitleHistoryItem
 {
-    public required string Turkish { get; init; }
+    public required string Translation { get; init; }
     public required string English { get; init; }
     public required string Time { get; init; }
-    public string Summary => $"[{Time}] 📺 {Turkish}  |  🎮 {English}";
+    public string Summary => $"[{Time}] 📺 {Translation}  |  🎮 {English}";
 }
 
 /// <summary>Ana ekran: Mac sürümüyle birebir aynı 2 panelli modern arayüz ve 5 sekme.</summary>
@@ -149,13 +149,13 @@ public partial class MainView : UserControl
 
         if (e.PropertyName == nameof(AppController.LastTranslation) && !string.IsNullOrWhiteSpace(controller.LastTranslation))
         {
-            MonitorTurkishText.Text = controller.LastTranslation;
+            MonitorTranslationText.Text = controller.LastTranslation;
             MonitorEnglishText.Text = string.IsNullOrWhiteSpace(controller.LastSource) ? "Subtitles active" : controller.LastSource;
 
             // Geçmiş listesine ekle
             history.Insert(0, new SubtitleHistoryItem
             {
-                Turkish = controller.LastTranslation,
+                Translation = controller.LastTranslation,
                 English = controller.LastSource ?? string.Empty,
                 Time = DateTime.Now.ToString("HH:mm:ss")
             });
@@ -625,7 +625,7 @@ public partial class MainView : UserControl
         var dlg = new SaveFileDialog { Filter = "Metin Dosyası (*.txt)|*.txt", FileName = "GameTranslator_Altyazi_Gecmisi.txt" };
         if (dlg.ShowDialog() == true)
         {
-            var lines = history.Select(h => $"{h.Time}\tTV: {h.Turkish}\tPS5: {h.English}");
+            var lines = history.Select(h => $"{h.Time}\tTV: {h.Translation}\tPS5: {h.English}");
             File.WriteAllLines(dlg.FileName, lines);
             MessageBox.Show("Altyazı geçmişi başarıyla kaydedildi!", "Dışa Aktarıldı", MessageBoxButton.OK, MessageBoxImage.Information);
         }

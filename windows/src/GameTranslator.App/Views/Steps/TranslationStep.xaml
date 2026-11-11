@@ -4,14 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:c="clr-namespace:GameTranslator.App.Controls"
              xmlns:t="clr-namespace:GameTranslator.App.Theme">
-    <c:StepLayout Glyph="{x:Static c:Glyphs.Download}" Title="{t:T 'Download the translation model'}"
-                  Message="{t:T 'GameTranslator translates on this computer, without the internet. The English–Turkish model (about 530 MB) is downloaded once and kept on this computer.'}">
+    <c:StepLayout Glyph="{x:Static c:Glyphs.Download}" Title="{t:T 'Translation engine'}"
+                  Message="{t:T 'GameTranslator translates online with Google Translate, or with DeepL if you add your own key in Settings. There is nothing to download.'}">
         <StackPanel>
             <StackPanel Visibility="{Binding ModelDownloading, Converter={StaticResource VisibleIf}}">
                 <TextBlock Text="{t:T 'Downloading…'}" Style="{StaticResource HintText}" Margin="0,0,0,8" />
                 <ProgressBar Minimum="0" Maximum="1" Value="{Binding ModelProgress, Mode=OneWay}" />
             </StackPanel>
-            <TextBlock Text="{t:T 'The model is ready.'}" Style="{StaticResource DoneText}"
+            <TextBlock Text="{t:T 'Translation is ready.'}" Style="{StaticResource DoneText}"
                        Visibility="{Binding ModelInstalled, Converter={StaticResource VisibleIf}}" />
             <StackPanel Visibility="{Binding ModelError, Converter={StaticResource VisibleIf}}">
                 <TextBlock Text="{t:T 'The download did not complete. Check your internet connection and try again.'}" Style="{StaticResource ErrorText}" Margin="0,0,0,12" />
