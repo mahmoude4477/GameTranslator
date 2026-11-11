@@ -497,7 +497,6 @@
                             <Grid Margin="0,0,0,12">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <CheckBox x:Name="BoldCheck" Content="Kalın yazı (Bold)" Checked="OnBold" Unchecked="OnBold" Margin="0,0,14,0" VerticalAlignment="Center" FontSize="11" />
-                                    <CheckBox x:Name="DubbingCheck" Content="Türkçe Dublaj (Ses)" Checked="OnDubbing" Unchecked="OnDubbing" Margin="0,0,14,0" VerticalAlignment="Center" FontSize="11" />
                                     <CheckBox x:Name="MutePcCheck" Content="PC Sesini Kapat (Mute)" Checked="OnMutePc" Unchecked="OnMutePc" VerticalAlignment="Center" FontSize="11" IsChecked="True" />
                                 </StackPanel>
                                 <Button Content="📺 TV'ye Anında Test Gönder" HorizontalAlignment="Right" Click="OnTestSubtitle" Style="{StaticResource SecondaryButton}" Padding="10,4" FontSize="10.5" FontWeight="SemiBold" />

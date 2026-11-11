@@ -17,10 +17,10 @@ public sealed class GoogleGtxTranslator : ITextTranslator
     private readonly string _source;
     private readonly string _target;
 
-    public GoogleGtxTranslator(string source = "en", string target = "tr")
+    public GoogleGtxTranslator(string source = "en", string target = "ar")
     {
         _source = string.IsNullOrWhiteSpace(source) ? "en" : source.ToLowerInvariant();
-        _target = string.IsNullOrWhiteSpace(target) ? "tr" : target.ToLowerInvariant();
+        _target = string.IsNullOrWhiteSpace(target) ? "ar" : target.ToLowerInvariant();
     }
 
     public async Task<string> TranslateAsync(string text, CancellationToken cancellationToken = default)

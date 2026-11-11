@@ -59,8 +59,8 @@ if [ -f "$ROOT_DIR/design/AppIcon.icns" ]; then
     cp "$ROOT_DIR/design/AppIcon.icns" "$RES_DIR/AppIcon.icns"
 fi
 
-if [ -f "$DIR/GameTranslator/Resources/game-frame.png" ]; then
-    cp "$DIR/GameTranslator/Resources/game-frame.png" "$RES_DIR/game-frame.png"
+if [ -f "$DIR/Resources/game-frame.png" ]; then
+    cp "$DIR/Resources/game-frame.png" "$RES_DIR/game-frame.png"
 fi
 
 # 4. TV Paketleri (Android TV APK, webOS IPK, Tizen WGT)

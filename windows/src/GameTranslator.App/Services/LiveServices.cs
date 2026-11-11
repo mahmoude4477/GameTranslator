@@ -16,14 +16,11 @@ namespace GameTranslator.App.Services;
 /// <summary>Uygulama denetleyicisinin gerçek dünya bağlantıları (PS5, PSN, TV, OCR, çeviri).</summary>
 public sealed class LiveServices : IAppServices
 {
-    public ITranslationModel Translation { get; } = new MarianModel();
+    public ITranslationModel Translation { get; } = new OnlineModel();
 
     public ITextTranslator? MakeOnlineTranslator(string key, ITextTranslator? fallback, string target) => new DeepLTranslator(key, fallback, target);
 
     public Task<OnlineKeyCheck> CheckOnlineKeyAsync(string key) => DeepLTranslator.CheckAsync(key);
-    public IDubbingModel? Dubbing { get; } = PocketDubbingModel.EngineBundled ? new PocketDubbingModel() : null;
-    public IDubbingModel? FastDubbing { get; } = WindowsVoiceModel.Available ? new WindowsVoiceModel() : null;
-    public IAudioOutput? Audio { get; } = new WindowsAudioOutput();
     public IUpdater? Updater { get; } = new Updater();
     public IFirewall? Firewall { get; } = new WindowsFirewall();
 
@@ -317,33 +314,17 @@ public sealed class LiveServices : IAppServices
         public void Reconnect() => keeper.Reconnect();
     }
 
-    /// <summary>OPUS-MT modelleri ve Google GTX çeviri motoru hibriti.</summary>
-    private sealed class MarianModel : ITranslationModel
+    /// <summary>Çeviri Google GTX ile yapılır: indirilecek model yoktur, her dil çifti hazırdır.</summary>
+    private sealed class OnlineModel : ITranslationModel
     {
-        private readonly ModelStore englishTurkish = new(Path.Combine(AppPaths.Models, "en-tr"));
-        private MarianTranslator? translator;
-
         public bool IsSupported(string source, string target) => true;
 
-        // Yerel Marian modeli indirilmemiş olsa bile dahili Google GTX motoru sıfır kurulumla hazırdır.
         public bool IsInstalled(string source, string target) => true;
 
         public Task DownloadAsync(string source, string target, IProgress<double> progress, CancellationToken cancellationToken) =>
-            englishTurkish.DownloadAsync(progress, cancellationToken);
+            Task.CompletedTask;
 
-        // Yerel model yalnız İngilizce→Türkçe çevirir: o çiftte ve indirilmişse Marian, diğer her durumda
-        // (ör. Arapça) Google GTX kullanılır.
-        public ITextTranslator Create(string source, string target)
-        {
-            if (source == "en" && target == "tr" && englishTurkish.IsInstalled)
-            {
-                if (translator is not null) return translator;
-                translator = new MarianTranslator(englishTurkish.InstallDirectory);
-                _ = translator.WarmUpAsync();
-                return translator;
-            }
-            return new GoogleGtxTranslator(source, target);
-        }
+        public ITextTranslator Create(string source, string target) => new GoogleGtxTranslator(source, target);
     }
 }
 

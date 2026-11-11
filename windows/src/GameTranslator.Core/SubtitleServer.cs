@@ -70,10 +70,6 @@ public sealed class SubtitleServer(int port = 8787) : ISubtitleSender, IDisposab
     private TcpListener? listener;
     private Timer? pingTimer;
     private SubtitleStyle? lastStyle;
-    /// <summary>GET ile verilen dosyalar: dublaj sesleri ve seslendirme modelinin ses örnekleri.</summary>
-    private readonly Dictionary<string, (byte[] Data, string Type)> files = new(StringComparer.Ordinal);
-    private readonly Queue<string> speechPaths = new();
-    private int speechNumber;
 
     /// <summary>Bağlı TV sayısı değişince çağrılır (iş parçacığı havuzunda).</summary>
     public event Action<int>? ClientsChanged;
@@ -187,32 +183,6 @@ public sealed class SubtitleServer(int port = 8787) : ISubtitleSender, IDisposab
         ["bottom"] = Round(b.Bottom), ["left"] = Round(b.Left), ["right"] = Round(b.Right), ["top"] = Round(b.Top),
     };
 
-    /// <summary>Dosyayı <paramref name="path"/> adresinden verir ("/voices/male_1.wav").</summary>
-    public void Publish(byte[] data, string path, string type = "audio/wav")
-    {
-        lock (gate) files[path] = (data, type);
-    }
-
-    /// <summary>
-    /// Dublaj sesini TV'ye gönderir: ses <c>/speech/&lt;n&gt;.wav</c> adresinden verilir, <c>speech</c> olayı adresi
-    /// bildirir. Son 16 ses tutulur.
-    /// </summary>
-    public void SendSpeech(byte[] wav, int durationMs)
-    {
-        string path;
-        lock (gate)
-        {
-            path = $"/speech/{++speechNumber}.wav";
-            files[path] = (wav, "audio/wav");
-            speechPaths.Enqueue(path);
-            while (speechPaths.Count > 16) files.Remove(speechPaths.Dequeue());
-        }
-        Broadcast(Frame("speech", new SortedDictionary<string, object> { ["duration"] = durationMs, ["url"] = path }));
-    }
-
-    /// <summary>TV'de çalan dublajı durdurur.</summary>
-    public void StopSpeech() => Broadcast(Frame("speech-stop", new SortedDictionary<string, object>()));
-
     public void SendStyle(SubtitleStyle style)
     {
         lock (gate) lastStyle = style;
@@ -249,7 +219,6 @@ public sealed class SubtitleServer(int port = 8787) : ISubtitleSender, IDisposab
             else if (method == "GET" && path == "/obs") await RespondAndClose(tcp, ObsOverlay, "text/html; charset=utf-8");
             // TV uygulaması ağdaki bilgisayarı bu yanıtla tanır.
             else if (method == "GET" && path == "/hello") await RespondAndClose(tcp, "200 OK", "{\"app\":\"gametranslator\"}");
-            else if (method == "GET" && FindFile(path) is { } file) await RespondAndClose(tcp, file.Data, file.Type);
             else await RespondAndClose(tcp, "404 Not Found");
         }
         catch
@@ -273,11 +242,6 @@ public sealed class SubtitleServer(int port = 8787) : ISubtitleSender, IDisposab
             if (end >= 0) return text[..text.IndexOf("\r\n", StringComparison.Ordinal)];
         }
         return null;
-    }
-
-    private (byte[] Data, string Type)? FindFile(string path)
-    {
-        lock (gate) return files.TryGetValue(path, out var file) ? file : null;
     }
 
     private static async Task RespondAndClose(TcpClient tcp, byte[] data, string type)

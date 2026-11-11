@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-using GameTranslator.Core.Dubbing;
 
 namespace GameTranslator.Core;
 
@@ -8,9 +7,6 @@ namespace GameTranslator.Core;
 public interface ITextTranslator
 {
     Task<string> TranslateAsync(string text, CancellationToken cancellationToken = default);
-
-    /// <summary>Son çevrilen altyazının seslendirilecek cümleleri (konuşmacısıyla); dublaj için.</summary>
-    IReadOnlyList<SpokenLine> SpokenLines(string text) => [];
 }
 
 public enum TranslatorStatus

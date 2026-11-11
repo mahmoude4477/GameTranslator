@@ -41,12 +41,6 @@ public sealed record UserSettings
     public string SourceLanguage { get; init; } = "en";
     /// <summary>Çevirinin dili. Arapça sağdan sola yazılır; TV ve OBS yönü metinden anlar.</summary>
     public string TargetLanguage { get; init; } = "ar";
-    public DubbingSettings Dubbing { get; init; } = new();
-    public bool DubbingEnabled
-    {
-        get => Dubbing.Enabled;
-        init => Dubbing = (Dubbing ?? new DubbingSettings()) with { Enabled = value };
-    }
     /// <summary>Anahtar girildiyse çeviri DeepL'le yapılır; kapalıysa ya da DeepL'e ulaşılamazsa cihaz üstü model.</summary>
     public bool OnlineTranslation { get; init; }
 
@@ -158,12 +152,6 @@ public interface IAppServices
     /// <summary>DeepL çevirmeni; <paramref name="fallback"/> DeepL'e ulaşılamayan satırları çevirir. Bu derlemede yoksa null.</summary>
     ITextTranslator? MakeOnlineTranslator(string key, ITextTranslator? fallback, string target) => null;
     Task<OnlineKeyCheck> CheckOnlineKeyAsync(string key) => Task.FromResult(new OnlineKeyCheck(OnlineKeyState.Unreachable));
-    /// <summary>Türkçe dublaj modeli; bu derlemede yoksa null.</summary>
-    IDubbingModel? Dubbing => null;
-    /// <summary>Hızlı dublaj: sistemin kendi Türkçe sesi (Windows'ta Microsoft Tolga); yoksa null.</summary>
-    IDubbingModel? FastDubbing => null;
-    /// <summary>Bilgisayardan ses çalma (dublaj).</summary>
-    IAudioOutput? Audio => null;
     /// <summary>Uygulama güncellemesi; geliştirici derlemesinde null.</summary>
     IUpdater? Updater => null;
     /// <summary>Windows Güvenlik Duvarı izni; Windows dışında ve testlerde null (hiçbir şey önerilmez).</summary>

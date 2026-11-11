@@ -10,8 +10,8 @@
   <ItemGroup>
     <!-- Mac uygulamasıyla ortak tek kaynaklar: tasarım değerleri ve metinler. -->
     <EmbeddedResource Include="..\..\..\design\tokens.json" LogicalName="tokens.json" />
-    <EmbeddedResource Include="..\..\..\core\Sources\GameTranslatorCore\Resources\obs-overlay.html" LogicalName="obs-overlay.html" />
-    <EmbeddedResource Include="..\..\..\mac\GameTranslator\Resources\Localizable.xcstrings" LogicalName="Localizable.xcstrings" />
+    <EmbeddedResource Include="Resources\obs-overlay.html" LogicalName="obs-overlay.html" />
+    <EmbeddedResource Include="Resources\Localizable.xcstrings" LogicalName="Localizable.xcstrings" />
   </ItemGroup>
 
   <ItemGroup>

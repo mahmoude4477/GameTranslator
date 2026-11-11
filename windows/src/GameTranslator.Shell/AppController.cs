@@ -6,7 +6,6 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using GameTranslator.Core;
-using GameTranslator.Core.Dubbing;
 using GameTranslator.Core.LgTv;
 using GameTranslator.RemotePlay;
 
@@ -66,14 +65,10 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
     /// <summary>Oyundaki altyazının son görüldüğü yer; deneme altyazısı TV'de oraya yerleşir.</summary>
     private TextBox? lastSubtitleBox;
     private int processing;
-    private Dubber? dubber;
     private string? updateVersion;
     private bool updating;
     private double updateProgress;
     private string? updateError;
-    private bool dubbingDownloading;
-    private double dubbingProgress;
-    private string? dubbingError;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -173,7 +168,6 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
             if (!Set(ref settings, value)) return;
             settingsStore.Save(value);
             server.SendStyle(value.Style);
-            if (old.Dubbing != value.Dubbing) DubbingSettingsChanged(old.Dubbing);
             if (isRunning && (old.SourceLanguage != value.SourceLanguage || old.TargetLanguage != value.TargetLanguage
                               || old.OnlineTranslation != value.OnlineTranslation))
             {
@@ -816,7 +810,6 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
             server.SendStyle(settings.Style);
             SubtitlesPaused = false;
             MakePipeline();
-            if (settings.Dubbing.Enabled && DubbingInstalled) MakeDubber()?.Prepare();
 
             var stream = services.MakeStream(console, accountId);
             stream.StateChanged += state => post(() => SessionStateChanged(state));
@@ -859,7 +852,6 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         screenShownUntil = default;
         SubtitlesPaused = false;
         ActiveSourceLanguage = null;
-        StopDubber();
         if (isRunning) sleep.End();
         IsRunning = false;
         SessionState = SessionState.Disconnected(DisconnectKind.Stopped);
@@ -932,7 +924,6 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         };
         // Model bu arada inmiş olabilir; her çeviri sonucu durumu günceller.
         built.TranslationResult += error => post(() => TranslatorStatus = error ?? TranslatorStatus.Ready);
-        built.SpeechReady += lines => post(() => Speak(lines));
         pipeline = built;
     }
 
@@ -952,9 +943,9 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         return translation.Create(source, target);
     }
 
-    /// <summary>DeepL yalnız İngilizceden Türkçeye ya da Arapçaya çeviride açılır.</summary>
+    /// <summary>DeepL yalnız İngilizce oyunlarda açılır.</summary>
     private bool OnlineTranslationActive =>
-        settings.OnlineTranslation && settings.SourceLanguage == "en" && settings.TargetLanguage is ("tr" or "ar") && HasDeepLKey;
+        settings.OnlineTranslation && settings.SourceLanguage == "en" && HasDeepLKey;
 
     /// <summary>Kayıtlı bir DeepL anahtarı var mı (anahtarın kendisi arayüze hiç dönmez).</summary>
     public bool HasDeepLKey => store.Load<string>(StoreKeys.DeepLKey) is { Length: > 0 };
@@ -1233,115 +1224,6 @@ public sealed class AppController : INotifyPropertyChanged, IDisposable
         {
             Updating = false;
         }
-    }
-
-    // --- Türkçe dublaj ---
-
-    /// <summary>Bu derlemede dublaj var mı (ses motoru uygulamayla geliyor mu).</summary>
-    public bool DubbingAvailable => services.Dubbing is not null || services.FastDubbing is not null;
-    public bool FastDubbingAvailable => services.FastDubbing is not null;
-    /// <summary>Ayarlarda seçili motor; hızlı ses yoksa doğal sese düşer.</summary>
-    private IDubbingModel? ActiveDubbing =>
-        settings.Dubbing.Engine == DubbingEngine.Fast && services.FastDubbing is { } fast ? fast : services.Dubbing;
-    public bool DubbingInstalled => ActiveDubbing?.IsInstalled == true;
-    public long DubbingDownloadBytes => services.Dubbing?.DownloadBytes ?? 0;
-    public bool DubbingDownloading { get => dubbingDownloading; private set => Set(ref dubbingDownloading, value); }
-    public double DubbingProgress { get => dubbingProgress; private set => Set(ref dubbingProgress, value); }
-    public string? DubbingError { get => dubbingError; private set => Set(ref dubbingError, value); }
-
-    /// <summary>Ses modelini indirir (ilk kullanımda bir kez, ~440 MB).</summary>
-    public async Task DownloadDubbingAsync()
-    {
-        if (services.Dubbing is not { } model || dubbingDownloading || model.IsInstalled) return;
-        DubbingDownloading = true;
-        DubbingError = null;
-        try
-        {
-            await Task.Run(() => model.DownloadAsync(new ImmediateProgress(value => post(() => DubbingProgress = value)), CancellationToken.None));
-            if (settings.Dubbing.Enabled && isRunning) MakeDubber()?.Prepare();
-        }
-        catch (Exception error) when (error is HttpRequestException or IOException or InvalidDataException or TaskCanceledException
-                                          or UnauthorizedAccessException)
-        {
-            DubbingError = error.Message;
-        }
-        finally
-        {
-            DubbingDownloading = false;
-            Changed(nameof(DubbingInstalled));
-        }
-    }
-
-    /// <summary>Ayarlardaki "Dinle": sesi bilgisayardan çalar.</summary>
-    public async Task PreviewVoiceAsync(DubbingVoice voice)
-    {
-        if (!DubbingInstalled) return;
-        DubbingError = null;
-        try { await StartServerAsync(); } catch (SocketException) { return; }
-        MakeDubber()?.Preview(voice);
-    }
-
-    public void AssignVoice(DubbingVoice voice, string name)
-    {
-        var cast = settings.Dubbing.Cast.Copy();
-        cast.Assign(voice, name);
-        Settings = settings with { Dubbing = settings.Dubbing with { Cast = cast } };
-    }
-
-    private Dubber? MakeDubber()
-    {
-        if (dubber is not null) return dubber;
-        if (ActiveDubbing is not { } model || services.Audio is not { } audio) return null;
-        var made = new Dubber(model, audio, () => server, () => ServerPort, post)
-        {
-            Cast = settings.Dubbing.Cast.Copy(),
-            Output = settings.Dubbing.Output,
-        };
-        made.CastChanged += cast => Settings = settings with { Dubbing = settings.Dubbing with { Cast = cast } };
-        made.Failed += message => DubbingError = message;
-        dubber = made;
-        return made;
-    }
-
-    private void Speak(IReadOnlyList<SpokenLine> lines)
-    {
-        // Sesler Türkçe konuşur; başka dildeki çeviriyi (ör. Arapça) okuyamaz.
-        if (settings.TargetLanguage != "tr") return;
-        if (!settings.Dubbing.Enabled || !DubbingInstalled) return;
-        MakeDubber()?.Speak(lines);
-    }
-
-    private void DubbingSettingsChanged(DubbingSettings old)
-    {
-        var now = settings.Dubbing;
-        if (now.Engine != old.Engine)
-        {
-            // Motor değişti: eski dublaj kapanır, yenisi hazırlanır.
-            StopDubber();
-            Changed(nameof(DubbingInstalled));
-            if (now.Enabled && isRunning && DubbingInstalled) MakeDubber()?.Prepare();
-            return;
-        }
-        if (dubber is null)
-        {
-            if (now.Enabled && !old.Enabled && isRunning && DubbingInstalled) MakeDubber()?.Prepare();
-            return;
-        }
-        // Dublajın kendi atadığı ses (CastChanged) zaten dublajda; kullanıcının seçimi kopyalanır.
-        if (!ReferenceEquals(now.Cast, old.Cast)) dubber.Cast = now.Cast.Copy();
-        if (now.Output != old.Output)
-        {
-            dubber.Stop();
-            dubber.Output = now.Output;
-        }
-        if (!now.Enabled) StopDubber();
-    }
-
-    private void StopDubber()
-    {
-        if (dubber is not { } stopping) return;
-        dubber = null;
-        _ = stopping.DisposeAsync().AsTask();
     }
 
     private AppException Error(AppError error) => new(error, AppException.Describe(error, text));

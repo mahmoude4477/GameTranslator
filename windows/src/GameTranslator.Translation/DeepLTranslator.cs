@@ -7,7 +7,6 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json.Serialization;
 using GameTranslator.Core;
-using GameTranslator.Core.Dubbing;
 
 namespace GameTranslator.Translation;
 
@@ -29,7 +28,6 @@ public sealed class DeepLTranslator : ITextTranslator
     private readonly ITextTranslator? _fallback;
     private readonly HttpClient _http;
     private readonly ConcurrentDictionary<string, string> _cache = new(StringComparer.Ordinal);
-    private readonly ConcurrentDictionary<string, IReadOnlyList<SpokenLine>> _speech = new(StringComparer.Ordinal);
     private readonly ConcurrentDictionary<string, byte> _names = new(StringComparer.Ordinal);
     private string? _previous;
     private DateTimeOffset _pausedUntil = DateTimeOffset.MinValue;
@@ -78,27 +76,15 @@ public sealed class DeepLTranslator : ITextTranslator
         }
 
         var builder = new StringBuilder();
-        var translations = new List<string?>(pieces.Count);
         var next = 0;
         foreach (var piece in pieces)
-        {
-            var sentence = piece.Translate ? translated[next++] : null;
-            builder.Append(sentence ?? piece.Text);
-            translations.Add(sentence);
-        }
-        if (_speech.Count >= 512) _speech.Clear();
-        _speech[text] = SpeechScript.Lines(pieces, translations);
+            builder.Append(piece.Translate ? translated[next++] : piece.Text);
         var result = builder.ToString();
         if (_cache.Count >= CacheLimit) _cache.Clear();
         _cache[text] = result;
         _previous = text;
         return result;
     }
-
-    public IReadOnlyList<SpokenLine> SpokenLines(string text) =>
-        _speech.TryGetValue(text, out var lines) ? lines
-        : _cache.TryGetValue(text, out var translation) ? [new SpokenLine(text, translation)]
-        : _fallback?.SpokenLines(text) ?? [];
 
     private async Task<string> FallbackAsync(string text, CancellationToken cancellationToken) =>
         _fallback is null ? throw new TranslatorException(TranslatorStatus.NeedsDownload)

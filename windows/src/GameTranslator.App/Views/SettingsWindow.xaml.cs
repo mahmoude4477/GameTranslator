@@ -45,7 +45,6 @@ public partial class SettingsWindow : Window
         // Num 8: oyunun o anki görüntüsü önizlemeye alınır.
         controller.SnapshotRequested += OnSnapshot;
         Closed += (_, _) => controller.SnapshotRequested -= OnSnapshot;
-        Dubbing.Attach(controller);
         ShowDeepL();
         if (controller.HasDeepLKey) _ = ShowDeepLUsageAsync();
         loading = false;

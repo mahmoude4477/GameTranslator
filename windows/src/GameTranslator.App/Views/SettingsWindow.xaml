@@ -77,8 +77,6 @@
                     </StackPanel>
                 </c:Card>
 
-                <local:DubbingCard x:Name="Dubbing" Margin="0,16,0,0" />
-
                 <c:Card x:Name="LanguageCard" Title="{t:T 'Language'}" Margin="0,16,0,0">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{t:T 'Game language'}" VerticalAlignment="Center" Margin="0,0,16,0" />
