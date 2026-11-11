@@ -1,8 +1,8 @@
 <!doctype html>
 <!-- SPDX-License-Identifier: AGPL-3.0-only -->
-<!-- GameTranslator OBS katmanı: OBS'de "Tarayıcı kaynağı" olarak eklenir, Türkçe altyazıyı şeffaf zemin üstünde gösterir.
-     Mac ve Windows uygulaması bu dosyayı /obs adresinden verir (aynı dosya). Adres parametreleri:
-     ?size=48 (yazı boyu, 1080p'de piksel), ?bottom=8 (alttan uzaklık, %), ?bg=60 (zemin koyuluğu, 0-100). -->
+<!-- طبقة GameTranslator في OBS: تُضاف في OBS كمصدر «متصفح» وتعرض الترجمة العربية على خلفية شفافة.
+     يقدّم تطبيق Windows هذا الملف على العنوان /obs. معاملات العنوان:
+     ?size=48 (حجم الخط بالبكسل على 1080p)، ?bottom=8 (البعد عن الأسفل، %)، ?bg=60 (دكنة الخلفية، 0-100). -->
 <html lang="ar">
 <head>
 <meta charset="utf-8">
@@ -20,7 +20,7 @@
     opacity: 0; transition: opacity 0.15s;
   }
   #line.on { opacity: 1; }
-  /* İngilizce altyazının yeri biliniyorsa çeviri onu örter (TV'deki "örtme" ile aynı). */
+  /* إن عُرف مكان السطر الإنجليزي غطّته الترجمة (كموضع «التغطية» على التلفزيون). */
   #line.cover { transform: translate(-50%, -50%); }
 </style>
 </head>
@@ -56,7 +56,7 @@
   function show(text, duration, box) {
     clearTimeout(timer);
     line.textContent = text;
-    // Arapça ve İbranice gibi diller sağdan sola dizilir (TV uygulamasıyla aynı kural).
+    // لغات مثل العربية تُرتَّب من اليمين إلى اليسار (القاعدة نفسها في تطبيق التلفزيون).
     line.setAttribute('dir', /[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFC]/.test(text || '') ? 'rtl' : 'ltr');
     var cover = box && placement === 'cover' && !fixed.bottom;
     if (cover) {
@@ -76,7 +76,7 @@
   }
 
   apply({});
-  // "obs" parametresi uygulamaya bunun TV olmadığını söyler; "TV bağlı" sayısına katılmaz.
+  // المعامل "obs" يخبر التطبيق أن هذا ليس تلفزيونًا؛ فلا يُحسب ضمن عدد التلفزيونات المتصلة.
   var events = new EventSource('/events?viewer=obs');
   events.addEventListener('style', function (e) { try { apply(JSON.parse(e.data)); } catch (err) {} });
   events.addEventListener('subtitle', function (e) {

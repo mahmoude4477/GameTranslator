@@ -27,7 +27,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * HDMI girişini TvView ile tam ekran gösterir; üstünde şeffaf WebView'de LG ve Samsung'la ortak arayüz çalışır.
+ * يعرض منفذ HDMI بملء الشاشة عبر TvView؛ وفوقه WebView شفاف تعمل فيه الواجهة المشتركة مع LG و Samsung.
  */
 public class MainActivity extends Activity {
     private TvView tvView;
@@ -61,13 +61,11 @@ public class MainActivity extends Activity {
         settings.setDomStorageEnabled(true);
         settings.setAllowFileAccess(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        // Türkçe dublaj: bilgisayardan gelen ses kumandaya basılmadan çalabilsin.
-        settings.setMediaPlaybackRequiresUserGesture(false);
-        // Sayfanın 1920 piksellik viewport'u kullanılır ve ekrana sığdırılır (bkz. index.html); yoksa yazılar iki kat büyük.
+        // يُستخدم عرض الصفحة 1920 بكسل ويُلاءَم مع الشاشة (انظر index.html)؛ وإلا ظهر النص بضعف حجمه.
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
         settings.setSupportZoom(false);
-        // Ölçek fiziksel piksel başına yüzde: 1920 CSS pikseli ekranın tam genişliğine sığar (1080p'de %100).
+        // المقياس نسبة مئوية لكل بكسل فعلي: 1920 بكسل CSS تملأ عرض الشاشة كله (100% على 1080p).
         webView.setInitialScale(fitScalePercent());
         webView.addJavascriptInterface(new Bridge(), "AndroidTV");
         root.addView(webView);
@@ -86,7 +84,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    /** Sayfanın 1920 CSS piksellik genişliğini ekranın fiziksel genişliğine sığdıran WebView ölçeği (yüzde). */
+    /** مقياس WebView (نسبة مئوية) الذي يلائم عرض الصفحة 1920 بكسل CSS مع العرض الفعلي للشاشة. */
     private int fitScalePercent() {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
@@ -99,7 +97,7 @@ public class MainActivity extends Activity {
         return params == null ? "" : params;
     }
 
-    /** Geri ve renk tuşlarını sayfaya bildirir; diğerleri WebView'e kendiliğinden gider. */
+    /** يبلّغ الصفحة بزر الرجوع وأزرار الألوان؛ بقية الأزرار تصل إلى WebView تلقائيًا. */
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         int code = pageKey(event.getKeyCode());
@@ -137,7 +135,7 @@ public class MainActivity extends Activity {
         return "\"" + text.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
     }
 
-    /** TV'nin HDMI girişleri, kimliğe göre sıralı. Girişin numarası sıradaki yeridir. */
+    /** مداخل HDMI في التلفزيون مرتبة بحسب المعرّف. رقم المدخل هو ترتيبه في القائمة. */
     private List<TvInputInfo> hdmiInputs() {
         List<TvInputInfo> inputs = new ArrayList<>();
         TvInputManager manager = (TvInputManager) getSystemService(TV_INPUT_SERVICE);
@@ -166,7 +164,7 @@ public class MainActivity extends Activity {
             });
         }
 
-        /** Tek bağlı HDMI girişi varsa onun numarası, yoksa 0. */
+        /** رقم مدخل HDMI الموصول إن كان واحدًا فقط، وإلا 0. */
         @JavascriptInterface
         public int consolePort() {
             TvInputManager manager = (TvInputManager) getSystemService(TV_INPUT_SERVICE);

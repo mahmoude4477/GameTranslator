@@ -4,7 +4,7 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  /* webOS HDMI görüntüyü sayfanın altındaki ayrı bir katmanda çizer; sayfa şeffaf kalmalı. */
+  /* يرسم webOS صورة HDMI في طبقة مستقلة تحت الصفحة؛ يجب أن تبقى الصفحة شفافة. */
   background: transparent;
   color: #fff;
   font-family: "LG Smart UI", "Museo Sans", Arial, sans-serif;
@@ -25,14 +25,14 @@ html, body {
   bottom: 7%;
   text-align: center;
   z-index: 10;
-  /* Yazı kendi katmanında kalır, opaklık geçişi yoktur: geçiş bitince HDMI katmanının altında kalma ihtimali kapanır. */
+  /* يبقى النص في طبقته بلا انتقال في الشفافية: بذلك لا يحتمل أن يصير تحت طبقة HDMI بعد انتهاء الانتقال. */
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
 }
 
 #subtitle.hidden { visibility: hidden; }
 
-/* "Üstünü örtsün" yerleşiminde oyundaki İngilizce altyazıyı kapatan zemin. */
+/* الخلفية التي تغطي سطر اللعبة الإنجليزي في موضع «التغطية». */
 #subtitle-cover {
   position: absolute;
   z-index: 9;
@@ -41,7 +41,7 @@ html, body {
 }
 #subtitle-cover.hidden { display: none; }
 
-/* "Ekranı çevir": her çeviri kendi İngilizce yazısının üstünde, onu örterek ve aynı boyda; altyazının altında kalır. */
+/* «ترجمة الشاشة»: كل ترجمة فوق نصها الإنجليزي تغطيه وبالحجم نفسه؛ وتبقى تحت طبقة الترجمة النصية. */
 #screen {
   position: absolute;
   top: 0;
@@ -56,7 +56,7 @@ html, body {
   box-sizing: border-box;
   padding: 2px 6px;
   border-radius: 6px;
-  /* Altındaki İngilizce yazı seçilmesin diye altyazı örtüsü kadar koyu. */
+  /* داكنة بقدر غطاء الترجمة حتى لا يُرى النص الإنجليزي تحتها. */
   background: rgba(0, 0, 0, 0.97);
   color: #fff;
   font-weight: 600;
@@ -68,7 +68,7 @@ html, body {
 }
 #screen .item.paragraphs { text-align: left; white-space: pre-line; }
 
-/* Hızlı konuşmada önceki satır kısa süre yeni satırın üstünde, daha soluk durur. */
+/* في الحوار السريع يبقى السطر السابق مدة قصيرة فوق السطر الجديد بلون أبهت. */
 #subtitle-prev { margin-bottom: 10px; opacity: 0.7; }
 #subtitle-prev.hidden { display: none; }
 
@@ -95,7 +95,7 @@ html, body {
 }
 
 
-/* Panel ve bekleme ekranı: design/tokens.json'un koyu tema renkleri (docs/TASARIM.md). */
+/* اللوحة وشاشة الانتظار: ألوان السمة الداكنة من design/tokens.json (انظر docs/DESIGN.md). */
 #panel {
   position: absolute;
   top: 48px;
@@ -115,11 +115,18 @@ html, body {
 #panel.hidden { display: none; }
 #panel .title { display: flex; align-items: center; font-size: 32px; font-weight: 600; margin-bottom: 18px; }
 #panel .title .logo { width: 48px; height: 48px; border-radius: 11px; margin-right: 16px; }
+/* في اللوحة العربية (من اليمين إلى اليسار) ينتقل هامش الشعار إلى الجهة الأخرى. */
+#panel[dir="rtl"] .title .logo { margin-right: 0; margin-left: 16px; }
+#panel .title .version { margin: 0 12px; font-weight: 400; }
+/* سطر التشخيص أرقام ورموز لاتينية؛ يبقى من اليسار إلى اليمين. */
+#st-diag, #st-server { direction: ltr; unicode-bidi: embed; }
 #panel .row { display: flex; padding: 6px 0; }
 #panel .label { width: 200px; color: #A9A59C; }
 #panel .keys { margin-top: 18px; padding-top: 16px; border-top: 2px solid #30333A; font-size: 22px; color: #A9A59C; }
 #panel .keys .key { padding: 3px 0; }
 #panel .keys .key b { display: inline-block; min-width: 150px; color: #F5B83D; font-weight: 600; }
+/* أسماء الأزرار (◀▶ و 1–4) تبقى بترتيبها من اليسار إلى اليمين داخل اللوحة العربية. */
+#panel[dir="rtl"] .keys .key b { direction: ltr; unicode-bidi: embed; text-align: right; }
 .muted { color: #A9A59C; }
 .ok { color: #62C990; }
 .bad { color: #F28B82; }
@@ -145,7 +152,7 @@ html, body {
 #waiting .waiting-title { font-size: 42px; font-weight: 600; line-height: 1.3; }
 #waiting .waiting-hint { margin-top: 16px; font-size: 28px; line-height: 1.4; color: #A9A59C; }
 
-/* Bekleme ekranındaki düğme; kumandayla seçili olduğu belli olsun diye sarı dolgu ve çerçeve. */
+/* زر شاشة الانتظار؛ تعبئة صفراء وإطار ليتضح أنه المحدد بالريموت. */
 #waiting .button {
   display: inline-block;
   margin-top: 36px;
@@ -159,7 +166,7 @@ html, body {
 }
 #waiting .button.focused { background: #F5B83D; border-color: #FFFFFF; color: #1A1A1A; }
 
-/* Demo sırasında sağ üstte ne gösterildiğini anlatan not. */
+/* ملاحظة في أعلى اليمين تشرح ما يُعرض أثناء العرض التجريبي. */
 #demo-badge {
   position: absolute;
   top: 48px;

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// GameTranslator TV uygulaması (webOS ve Tizen ortak).
-// HDMI girişini tam ekran gösterir, üstüne GameTranslator uygulamasından gelen altyazıyı basar.
-// TV'ye özgü işler platform.js'tedir. Eski TV tarayıcıları için ES5 ile yazıldı.
+// تطبيق GameTranslator للتلفزيون (مشترك بين webOS و Tizen و Android TV).
+// يعرض منفذ HDMI بملء الشاشة ويرسم فوقه الترجمة القادمة من تطبيق GameTranslator على الكمبيوتر.
+// ما يخص كل تلفزيون موجود في platform.js. كُتب بصيغة ES5 ليعمل على متصفحات التلفزيونات القديمة.
 (function () {
   'use strict';
 
-  // TV uygulamasının sürümü: appinfo.json, tv-tizen/config.xml ve tv-android/app/build.gradle ile aynı tutulur.
+  // إصدار تطبيق التلفزيون: يبقى مطابقًا لما في appinfo.json و tv/tizen/config.xml و tv/android/app/build.gradle.
   var APP_VERSION = '1.0.0';
   var t = window.t;
   var config = window.GAMETRANSLATOR_CONFIG || window.GAMETRANSLATOR_CONFIG || {};
@@ -14,19 +14,19 @@
 
   var server = null;
   var eventSource = null;
-  // Kumandayla seçilen port kayıtlıysa o kullanılır, yoksa PS5 otomatik aranır.
+  // إن كان هناك منفذ اختير بالريموت ومحفوظ فهو المستخدم، وإلا يُبحث عن PS5 تلقائيًا.
   var savedPort = Number(load('hdmi'));
   var hdmiPort = savedPort || 1;
 
   var bottomPercent = 7;
-  // Çevirinin yeri: oyundaki İngilizce altyazının üstünü örterek (cover), üstünde (above), altında (below)
-  // ya da sabit yükseklikte (fixed). Yeri bildirmeyen eski GameTranslator sürümlerinde sabit kalır.
+  // موضع الترجمة: تغطي سطر اللعبة الإنجليزي (cover)، أو فوقه (above)، أو تحته (below)،
+  // أو على ارتفاع ثابت (fixed). يبقى ثابتًا مع إصدارات GameTranslator القديمة التي لا ترسل الموضع.
   var PLACEMENTS = { cover: 1, above: 1, below: 1, fixed: 1 };
   var placement = 'fixed';
-  // Gösterilen satırın oyundaki İngilizce altyazının yeri (ekrana oranla), bilinmiyorsa null.
+  // مكان سطر اللعبة الإنجليزي للسطر المعروض (نسبةً إلى الشاشة)، أو null إن لم يُعرف.
   var currentBox = null;
 
-  // Önceki satır bu süreden kısa göründüyse okunamamış olabilir; yeni satırın üstünde bir süre daha kalır.
+  // إن ظهر السطر السابق أقل من هذه المدة فقد لا يكون قُرئ؛ يبقى قليلًا فوق السطر الجديد.
   var PREVIOUS_HOLD_MS = 2500;
   var shownAt = 0;
   var previousTimer = null;
@@ -34,15 +34,15 @@
   var hideTimer = null;
   var panelTimer = null;
 
-  // Bilgisayarın "temizle" olayı satırı bundan erken kaldırmaz: oyundaki satır çeviri gelirken kalkmışsa yazı TV'de
-  // bir an görünüp kayboluyordu. Süre, bilgisayarın okuma süresi kuralıyla aynıdır; üst sınırı daha kısadır.
+  // حدث «المسح» القادم من الكمبيوتر لا يزيل السطر قبل هذه المدة: إن اختفى سطر اللعبة أثناء وصول الترجمة كان النص
+  // يظهر على التلفزيون لحظة ثم يختفي. المدة بنفس قاعدة زمن القراءة في الكمبيوتر، وحدّها الأعلى أقصر.
   var HOLD_MAX_MS = 5000;
   var holdUntil = 0;
-  // Bağlantı bir an koptuğunda yazı silinmez; ancak bu süre içinde geri gelmezse silinir.
+  // عند انقطاع الاتصال للحظة لا يُمسح النص؛ يُمسح فقط إن لم يعد الاتصال خلال هذه المدة.
   var DROP_HIDE_MS = 6000;
   var dropTimer = null;
 
-  // Panelde görünen tanı bilgisi: "yazı TV'ye gelmiyor" bildirimlerinde sebebi buradan okuruz.
+  // معلومات التشخيص الظاهرة في اللوحة: منها نعرف السبب عند بلاغات «النص لا يصل إلى التلفزيون».
   var diag = { subtitles: 0, clears: 0, drops: 0, backgrounded: 0, lastHide: '-', place: '-', error: '' };
 
   function $(id) { return document.getElementById(id); }
@@ -85,7 +85,7 @@
     el.className = cls || '';
   }
 
-  // --- Başlatma parametreleri ---
+  // --- معاملات التشغيل ---
 
   function parseParams(raw) {
     if (!raw) return {};
@@ -93,7 +93,7 @@
     try { return JSON.parse(raw) || {}; } catch (e) { return {}; }
   }
 
-  // Parametrelerdeki sunucu ve HDMI tercihini uygular; sunucu değiştiyse yeniden bağlanır.
+  // يطبّق الخادم ومنفذ HDMI الواردين في المعاملات؛ وإن تغيّر الخادم يعيد الاتصال.
   function applyParams(params) {
     if (params.hdmi >= 1 && params.hdmi <= 4) {
       hdmiPort = Number(params.hdmi);
@@ -106,7 +106,7 @@
     }
   }
 
-  // --- HDMI görüntüsü ---
+  // --- صورة HDMI ---
 
   function showHdmi(port) {
     setStatus('st-hdmi', String(port));
@@ -133,10 +133,10 @@
     });
   }
 
-  // --- Altyazı ---
+  // --- الترجمة النصية ---
 
-  // Arapça ve İbranice gibi sağdan sola yazılan dillerde satır sağdan sola dizilir; yoksa noktalama ve konuşmacı adı
-  // satırın yanlış ucunda kalır. Yön metnin kendisinden anlaşılır: bilgisayardaki eski sürümlerle de çalışır.
+  // في اللغات المكتوبة من اليمين إلى اليسار كالعربية يُرتَّب السطر من اليمين إلى اليسار؛ وإلا بقيت علامات الترقيم
+  // واسم المتكلم في الطرف الخطأ. يُعرف الاتجاه من النص نفسه، فيعمل مع إصدارات الكمبيوتر القديمة أيضًا.
   var RTL_CHARS = /[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFC]/;
 
   function isRtl(text) { return RTL_CHARS.test(text || ''); }
@@ -147,7 +147,7 @@
     return rtl;
   }
 
-  // Kutunun sayıları geçerli mi (0–1 arası, sağ soldan, alt üstten büyük).
+  // هل أرقام المربّع صالحة (بين 0 و1، اليمين أكبر من اليسار، والأسفل أكبر من الأعلى).
   function validBox(box) {
     if (!box || typeof box !== 'object') return null;
     var left = Number(box.left), top = Number(box.top), right = Number(box.right), bottom = Number(box.bottom);
@@ -159,10 +159,10 @@
     return { left: left, top: top, right: right, bottom: bottom };
   }
 
-  // paragraphs: görev paneli gibi başlık ve maddeli yazılar satır satır, sola yaslı gösterilir.
+  // paragraphs: النصوص ذات العنوان والبنود (مثل لوحة المهام) تُعرض سطرًا سطرًا بمحاذاة بداية السطر.
   function showSubtitle(text, duration, box, paragraphs) {
-    // Önceki satır artık ayrıca gösterilmez: iki kutu üst üste binmiş gibi görünüyor, aynı cümlenin iki okunuşu
-    // da ikinci çeviri gibi duruyordu. Yeni satır eskisinin yerine geçer.
+    // لم يعد السطر السابق يُعرض منفصلًا: كان المربّعان يبدوان متراكبين، وقراءتان للجملة نفسها
+    // تبدوان كترجمة ثانية. السطر الجديد يحلّ محل القديم.
     hidePrevious();
     shownAt = Date.now();
     holdUntil = shownAt + Math.min(HOLD_MAX_MS, 2000 + text.length * 60);
@@ -177,12 +177,12 @@
     setDirection($('st-last'), text);
     notePlace();
     clearTimeout(hideTimer);
-    // Geçersiz ya da çok kısa süre yazıyı gösterir göstermez kaldırmasın.
+    // حتى لا تزيل مدةٌ غير صالحة أو قصيرة جدًا النص فور ظهوره.
     var ms = duration > 0 ? Math.max(1000, duration) : Math.min(8000, 2000 + text.length * 60);
     hideTimer = setTimeout(function () { hideSubtitle('timer'); }, ms);
   }
 
-  // Yazının ekrandaki gerçek yeri ve görünürlüğü (tanı için).
+  // المكان الفعلي للنص على الشاشة وهل هو ظاهر (للتشخيص).
   function notePlace() {
     var el = $('subtitle-text');
     var rect = el.getBoundingClientRect();
@@ -192,7 +192,7 @@
     renderDiag();
   }
 
-  // reason: yazıyı neyin kaldırdığı; panelde görünen süreyle birlikte sebebi gösterir.
+  // reason: ما الذي أزال النص؛ يظهر السبب في اللوحة مع مدة العرض.
   function hideSubtitle(reason) {
     clearTimeout(hideTimer);
     if ($('subtitle').className !== 'hidden') {
@@ -204,7 +204,7 @@
     hidePrevious();
   }
 
-  // Bilgisayardan gelen "temizle": yazı okunacak kadar görünmediyse kalan süre dolunca kaldırılır.
+  // «المسح» القادم من الكمبيوتر: إن لم يظهر النص مدة تكفي لقراءته يُزال بعد انقضاء المدة الباقية.
   function onClear() {
     diag.clears++;
     renderDiag();
@@ -227,9 +227,9 @@
     $('subtitle-prev').className = 'hidden';
   }
 
-  // --- Ekranı çevir ---
-  // Bilgisayar ekranın tamamını okuyup her yazı grubunun çevirisini yeriyle gönderir. Her çeviri kendi İngilizce
-  // yazısını örter; yazı boyu o yazının satır yüksekliğinden seçilir, Türkçe uzun gelirse sığana kadar küçülür.
+  // --- ترجمة الشاشة ---
+  // يقرأ الكمبيوتر الشاشة كلها ويرسل ترجمة كل مجموعة نص مع مكانها. كل ترجمة تغطي نصها الإنجليزي؛
+  // يُختار حجم الخط من ارتفاع سطر ذلك النص، وإن طالت الترجمة يصغر الخط حتى تتسع.
 
   var screenTimer = null;
   var SCREEN_PAD = 0.004;
@@ -237,7 +237,7 @@
 
   function showScreen(items, duration) {
     var host = $('screen');
-    // "Ekran çevriliyor…" yazısı sonuçların üstünde kalmasın.
+    // حتى لا تبقى عبارة «جارٍ ترجمة الشاشة…» فوق النتائج.
     hideSubtitle('screen');
     host.innerHTML = '';
     host.className = '';
@@ -250,7 +250,7 @@
       var el = document.createElement('div');
       el.className = item.paragraphs === true ? 'item paragraphs' : 'item';
       el.textContent = item.text;
-      // Sola yaslı maddeli yazı sağdan sola dillerde sağa yaslanır.
+      // النص ذو البنود يُحاذى إلى اليمين في اللغات المكتوبة من اليمين إلى اليسار.
       if (setDirection(el, item.text) && item.paragraphs === true) el.style.textAlign = 'right';
       var left = Math.max(0, box.left - SCREEN_PAD);
       var top = Math.max(0, box.top - SCREEN_PAD);
@@ -263,7 +263,7 @@
       var size = Math.max(SCREEN_MIN_FONT, Math.min(96, Math.round(line * 0.95)));
       el.style.fontSize = size + 'px';
       host.appendChild(el);
-      // Türkçe çoğu zaman İngilizceden uzundur: kutu biraz uzayabilir, daha fazlası için yazı küçülür.
+      // قد تكون الترجمة أطول من الإنجليزية: يُسمح للمربّع بأن يطول قليلًا، وما زاد يصغر له الخط.
       var limit = Math.max(boxHeight * 1.5, line * 2.6);
       while (el.scrollHeight > limit && size > SCREEN_MIN_FONT) {
         size -= 2;
@@ -280,14 +280,14 @@
     $('screen').innerHTML = '';
   }
 
-  // Konum hem GameTranslator uygulamasından hem kumandanın oklarıyla ayarlanır. Kumandayla
-  // seçilen konum, uygulamadaki ayar değişene kadar korunur (son değiştiren geçerlidir).
+  // يُضبط الموضع من تطبيق GameTranslator ومن أسهم الريموت معًا. الموضع المختار بالريموت
+  // يبقى حتى يتغيّر الإعداد في التطبيق (آخر تغيير هو المعتمد).
   function setBottom(percent) {
     bottomPercent = Math.max(0, Math.min(85, percent));
     layout();
   }
 
-  // Altyazıyı seçilen yerleşime göre konumlar. İngilizce altyazının yeri bilinmiyorsa sabit yükseklik kullanılır.
+  // يضع الترجمة بحسب الموضع المختار. إن لم يُعرف مكان السطر الإنجليزي يُستخدم الارتفاع الثابت.
   function layout() {
     var el = $('subtitle');
     var cover = $('subtitle-cover');
@@ -301,16 +301,16 @@
     el.style.webkitTransform = 'none';
     cover.className = 'hidden';
 
-    // Altyazı yokken veya kutu tanımlı değilken örtü tek başına kalmasın
+    // حتى لا يبقى الغطاء وحده حين لا توجد ترجمة أو لا يكون المربّع معرّفًا
     if (!box || el.className === 'hidden') return;
 
     var mode = placement;
-    // Ekranın kenarında yer yoksa öbür yana geçilir.
+    // إن لم يكن هناك مكان عند حافة الشاشة يُنتقل إلى الجهة الأخرى.
     if (mode === 'below' && box.bottom > 0.88) mode = 'above';
     if (mode === 'above' && box.top < 0.12) mode = 'below';
 
     if (mode === 'cover') {
-      // İngilizce altyazının tam üstünü örten koyu zemin
+      // خلفية داكنة تغطي السطر الإنجليزي تمامًا
       var padX = 0.02; // Yatayda %2 pay
       var padY = 0.015; // Dikeyde %1.5 pay
       var cLeft = Math.max(0.01, box.left - padX);
@@ -324,14 +324,14 @@
       cover.style.height = ((cBottom - cTop) * 100).toFixed(2) + '%';
       cover.className = '';
 
-      // Türkçe çeviri bu örtünün tam ortasına dikeyde oturur
+      // الترجمة تتوسط هذا الغطاء عموديًا
       var centerBottom = (1.0 - (box.top + box.bottom) / 2.0) * 100.0;
       el.style.top = 'auto';
       el.style.bottom = Math.max(2, Math.min(92, centerBottom)).toFixed(2) + '%';
       el.style.transform = 'translateY(50%)';
       el.style.webkitTransform = 'translateY(50%)';
     } else if (mode === 'above') {
-      // İngilizce yazının hemen üstünde (İngilizce yazıyı kapatmaz)
+      // فوق السطر الإنجليزي مباشرة (لا تغطيه)
       cover.className = 'hidden';
       var aboveBottom = (1.0 - box.top) * 100.0 + 1.5;
       el.style.top = 'auto';
@@ -339,7 +339,7 @@
       el.style.transform = 'none';
       el.style.webkitTransform = 'none';
     } else if (mode === 'below') {
-      // İngilizce yazının hemen altında
+      // تحت السطر الإنجليزي مباشرة
       cover.className = 'hidden';
       var belowTop = box.bottom * 100.0 + 1.5;
       el.style.bottom = 'auto';
@@ -349,7 +349,7 @@
     }
   }
 
-  // Bazı TV'lerde sabit konumun ekran dışına taşmasını engeller.
+  // يمنع خروج الموضع الثابت عن الشاشة في بعض التلفزيونات.
   function keepOnScreen(el, cover) {
     if (placement === 'fixed') {
       bottomPercent = Math.max(2, Math.min(85, bottomPercent));
@@ -385,15 +385,15 @@
   }
 
   function nudgeSubtitle(step) {
-    // Yer oyundaki altyazıya bağlıysa kumandayla taşınmaz.
+    // إن كان الموضع تابعًا لسطر اللعبة فلا يُحرَّك بالريموت.
     if (placement !== 'fixed') return;
     setBottom(bottomPercent + step);
     save('bottom', bottomPercent);
-    // Nereye gittiği görülsün diye yazı yoksa örnek gösterilir.
+    // إن لم يكن هناك نص يُعرض مثال ليُرى أين صار الموضع.
     if ($('subtitle').className === 'hidden') showSubtitle(t('positionPreview'), 2500);
   }
 
-  // --- Sunucu bağlantısı (Server-Sent Events) ---
+  // --- الاتصال بالخادم (Server-Sent Events) ---
 
   function onEvent(name, handler) {
     eventSource.addEventListener(name, function (e) {
@@ -431,7 +431,7 @@
       setStatus('st-conn', t('connected'), 'ok');
     };
     eventSource.onerror = function () {
-      // Bağlantı kısa süre içinde geri gelmezse eski altyazı ekranda asılı kalmasın. Bir anlık kopma yazıyı silmez.
+      // إن لم يعد الاتصال خلال مدة قصيرة فلا تبقى الترجمة القديمة معلّقة على الشاشة. الانقطاع اللحظي لا يمسح النص.
       diag.drops++;
       renderDiag();
       if (dropTimer === null) {
@@ -442,7 +442,7 @@
         }, DROP_HIDE_MS);
       }
       setStatus('st-conn', t('reconnecting'), 'bad');
-      // Bilgisayarın adresi değişmiş olabilir.
+      // قد يكون عنوان الكمبيوتر تغيّر.
       scheduleScan();
     };
     onEvent('subtitle', function (data) {
@@ -454,35 +454,10 @@
     onEvent('screen', function (data) { showScreen(data.items, data.duration); });
     onEvent('screen-clear', hideScreen);
     onEvent('style', applyStyle);
-    onEvent('speech', function (data) { if (data.url) playSpeech(server + data.url); });
-    onEvent('speech-stop', stopSpeech);
   }
 
-  // --- Türkçe dublaj ---
-  // Bilgisayar her cümleyi seslendirip adresini gönderir; TV oyunun sesiyle birlikte çalar. Bilgisayar sıradakini
-  // bu ses bitince gönderir; yine de üst üste gelirse eskisi kesilir.
-
-  var speech = null;
-
-  function playSpeech(url) {
-    stopSpeech();
-    try {
-      speech = new Audio(url);
-      var played = speech.play();
-      if (played && played.catch) played.catch(function () { speech = null; });
-    } catch (e) {
-      speech = null;
-    }
-  }
-
-  function stopSpeech() {
-    if (!speech) return;
-    try { speech.pause(); } catch (e) { /* yok */ }
-    speech = null;
-  }
-
-  // --- Bilgisayarı ağda bulma ---
-  // Bilgisayar TV uygulamasını açamıyorsa adres gelmez. Adresini söyleyebilen TV'lerde uygulama aynı ağı tarar.
+  // --- العثور على الكمبيوتر في الشبكة ---
+  // إن لم يستطع الكمبيوتر فتح تطبيق التلفزيون فلن يصل العنوان. في التلفزيونات التي تعرف عنوانها يفحص التطبيق الشبكة نفسها.
 
   var SERVER_PORT = 8787;
   var SCAN_PARALLEL = 24;
@@ -541,7 +516,7 @@
           if (!ok) return pump();
           found = true;
           scanning = false;
-          // Aynı bilgisayarsa EventSource zaten kendisi yeniden bağlanır.
+          // إن كان الكمبيوتر نفسه فإن EventSource يعيد الاتصال وحده.
           if (address !== server) {
             save('server', address);
             connect(address);
@@ -552,15 +527,15 @@
     });
   }
 
-  // --- Demo ---
-  // Mağaza incelemesi ve ilk kez açanlar için: PS5 ve bilgisayar olmadan örnek altyazılar gösterilir.
+  // --- العرض التجريبي ---
+  // لمراجعة المتجر ولمن يفتح التطبيق أول مرة: تُعرض ترجمات نموذجية بلا PS5 ولا كمبيوتر.
 
   var DEMO_LINES = [
-    'Buraya ayıracak vaktimiz yok.',
-    'MİRA: Kapı daha fazla dayanmayacak!',
-    'Yakın dur. İlerideki yol tehlikeli.',
-    'Bekle! Sen de kimsin?',
-    'Bu iş henüz bitmedi.'
+    'ليس لدينا وقت نضيعه هنا.',
+    'MIRA: الباب لن يصمد أكثر من ذلك!',
+    'ابقَ قريبًا. الطريق أمامنا خطر.',
+    'انتظر! من أنت؟',
+    'هذا الأمر لم ينتهِ بعد.'
   ];
   var DEMO_LINE_MS = 3200;
   var DEMO_GAP_MS = 700;
@@ -589,20 +564,20 @@
     demoTimer = null;
     hideSubtitle('demo');
     $('demo-badge').className = 'hidden';
-    // Uygulamaya bağlı değilse bekleme ekranına dönülür.
+    // إن لم يكن متصلًا بالتطبيق يعود إلى شاشة الانتظار.
     if (!server) $('waiting').className = '';
   }
 
-  // Geri tuşu: önce demo ya da panel kapanır; giriş ekranında TV'nin ana ekranına dönülür.
+  // زر الرجوع: يغلق العرض التجريبي أو اللوحة أولًا؛ ومن الشاشة الرئيسية للتطبيق يعود إلى شاشة التلفزيون الرئيسية.
   function goBack() {
     if (demoRunning()) return stopDemo();
     if ($('panel').className !== 'hidden') return hidePanel();
     platform.exit();
   }
 
-  // --- Panel ve kumanda ---
+  // --- اللوحة والريموت ---
 
-  // "1–4: HDMI girişi · 0: …" satırını tuş başına bir satıra böler; tuş adı vurgu renginde.
+  // يقسم سطر «1–4: منفذ HDMI · 0: …» إلى سطر لكل زر؛ واسم الزر بلون التمييز.
   function formatKeys() {
     var el = $('keys');
     var parts = el.textContent.split(' · ');
@@ -619,7 +594,7 @@
     }
   }
 
-  // Panel açıkken bekleme kutusu kapanır: ikisi üst üste binince yazılar okunmuyor.
+  // عند فتح اللوحة يُغلق مربّع الانتظار: إذا تراكبا تعذّرت قراءة النص.
   function showPanel(autoHide) {
     $('waiting').className = 'hidden';
     $('panel').className = '';
@@ -636,7 +611,7 @@
     if ($('panel').className === 'hidden') showPanel(false); else hidePanel();
   }
 
-  // Sayı tuşu olmayan kumandalar için: panel açıkken sol ve sağ HDMI girişini değiştirir.
+  // للريموت الذي لا أزرار أرقام فيه: واللوحة مفتوحة يغيّر زرا اليسار واليمين منفذ HDMI.
   function stepHdmi(step) {
     hdmiPort = (hdmiPort + step + 3) % 4 + 1;
     save('hdmi', hdmiPort);
@@ -646,7 +621,7 @@
 
   document.addEventListener('keydown', function (e) {
     var code = e.keyCode;
-    if (code === 48) { // 0: elle seçimi unut, konsolu yeniden ara
+    if (code === 48) { // 0: انسَ الاختيار اليدوي وابحث عن جهاز الألعاب من جديد
       save('hdmi', '');
       autoSelectConsole(function () {
         setStatus('st-hdmi', hdmiPort + ' (' + t('consoleNotFound') + ')', 'bad');
@@ -678,7 +653,7 @@
     }
   });
 
-  // Uygulama zaten açıkken yeniden başlatılırsa (ör. GameTranslator onu öne getirdiğinde) parametreler burada gelir.
+  // إن أُعيد تشغيل التطبيق وهو مفتوح (مثلًا حين يُحضره GameTranslator إلى الواجهة) تصل المعاملات هنا.
   platform.onRelaunch(function (raw) { applyParams(parseParams(raw)); });
 
   platform.init();
@@ -698,6 +673,6 @@
     if (address) connect(address); else $('waiting').className = '';
   }
   if (!server) scanForServer();
-  // Bekleme ekranı açıksa panel kendiliğinden açılmaz; yeşil tuşla açılabilir.
+  // إن كانت شاشة الانتظار ظاهرة فلا تُفتح اللوحة تلقائيًا؛ يمكن فتحها بالزر الأخضر.
   if (server) showPanel(true); else hidePanel();
 })();

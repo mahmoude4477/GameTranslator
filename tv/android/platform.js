@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// Android TV'ye özgü işler; asıl iş MainActivity.java'dadır. webOS karşılığı: tv-webos/platform.js
+// ما يخص Android TV؛ العمل الفعلي في MainActivity.java. مقابله في webOS: tv/webos/platform.js
 (function () {
   'use strict';
 
@@ -9,7 +9,7 @@
 
   window.__onHdmiStatus = function (kind) { hdmiStatus(kind); };
   window.__onRelaunch = function (raw) { relaunch(raw); };
-  // Kumanda tuşunu sayfaya iletir (Geri ve renk tuşları sayfaya kendiliğinden gelmez).
+  // يمرّر زر الريموت إلى الصفحة (زر الرجوع وأزرار الألوان لا تصل إلى الصفحة تلقائيًا).
   window.__onKey = function (code) {
     var event = new Event('keydown', { cancelable: true });
     event.keyCode = code;

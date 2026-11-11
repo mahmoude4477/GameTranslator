@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// Tizen'e (Samsung TV) özgü işler. webOS karşılığı: tv-webos/platform.js
-// HDMI görüntüsü resmî TVWindow API'siyle HTML katmanının arkasında gösterilir.
+// ما يخص Tizen (تلفزيونات Samsung). مقابله في webOS: tv/webos/platform.js
+// تُعرض صورة HDMI خلف طبقة HTML عبر واجهة TVWindow الرسمية.
 (function () {
   'use strict';
 
@@ -17,7 +17,7 @@
     }
   }
 
-  // GameTranslator uygulaması TV uygulamasını açarken parametreleri PAYLOAD içinde verir.
+  // تطبيق GameTranslator يمرّر المعاملات داخل PAYLOAD عند فتح تطبيق التلفزيون.
   function paramsOf(appControl) {
     var data = (appControl && appControl.data) || [];
     for (var i = 0; i < data.length; i++) {
@@ -44,12 +44,12 @@
     backKey: 10009,
 
     init: function () {
-      // Renk ve sayı tuşları istenmezse TV kendisi kullanır.
+      // أزرار الألوان والأرقام يستخدمها التلفزيون لنفسه إن لم تُطلب.
       for (var i = 0; i < KEYS.length; i++) {
         try { tizen.tvinputdevice.registerKey(KEYS[i]); } catch (e) {}
       }
-      // Oyun TV kumandasına dokunmadan oynanır; TV boşta sanıp ekran koruyucuyu açmasın (Samsung AppCommon API).
-      // Eski TV'lerde API yoksa sessizce geçilir.
+      // اللعب يكون دون لمس ريموت التلفزيون؛ حتى لا يظن التلفزيون أنه خامل فيشغّل شاشة التوقف (Samsung AppCommon API).
+      // في التلفزيونات القديمة التي لا تملك الواجهة يُتجاوز الأمر بصمت.
       try {
         webapis.appcommon.setScreenSaver(webapis.appcommon.AppCommonScreenSaverState.SCREEN_SAVER_OFF);
       } catch (e) {}
@@ -83,7 +83,7 @@
       });
     },
 
-    // TV'nin ağ adresi; bilgisayarı aramak için.
+    // عنوان التلفزيون على الشبكة؛ للبحث عن الكمبيوتر.
     localAddress: function (callback) {
       function read(property, otherwise) {
         try {
@@ -99,7 +99,7 @@
       });
     },
 
-    // Tek bağlı HDMI varsa odur; birden çoksa TV'nin o anki girişi tercih edilir.
+    // إن كان هناك منفذ HDMI واحد موصول فهو المطلوب؛ وإن تعددت يُفضَّل المدخل الحالي للتلفزيون.
     findConsolePort: function (callback) {
       hdmiSources(function (connected) {
         var pick = connected.length === 1 ? connected[0] : null;

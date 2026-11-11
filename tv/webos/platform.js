@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// webOS'a özgü işler. Tizen karşılığı: tv-tizen/platform.js
+// ما يخص webOS. مقابله في Tizen: tv/tizen/platform.js
 (function () {
   'use strict';
 
   window.GAMETRANSLATOR_PLATFORM = window.GAMETRANSLATOR_PLATFORM = {
     backKey: 461,
 
-    // Oyun kumandayla oynanır, TV kumandasına dokunulmaz; TV bunu boşta sanıp ekran koruyucuya ve sonra uykuya
-    // geçer. TV ekran koruyucuyu açmadan önce abonelere zaman damgalı bir istek yollar; ack:false yanıtı onu erteler
-    // (Kodi'nin webOS sürümünün yaptığı gibi). Servis yoksa ya da izin verilmezse sessizce geçilir.
+    // اللعب يكون بذراع التحكم ولا يُلمس ريموت التلفزيون؛ فيظن التلفزيون أنه خامل ويشغّل شاشة التوقف ثم ينام.
+    // قبل تشغيل شاشة التوقف يرسل التلفزيون للمشتركين طلبًا بطابع زمني؛ والرد ack:false يؤجله
+    // (كما تفعل نسخة Kodi على webOS). إن لم توجد الخدمة أو لم يُسمح بها يُتجاوز الأمر بصمت.
     init: function () {
       var CLIENT = 'com.gametranslator.tv';
       try {
@@ -17,7 +17,7 @@
           var request;
           try { request = JSON.parse(message); } catch (e) { return; }
           if (!request) return;
-          // Panelin tanı satırı için: servis izin vermediyse sebebi, verdiyse ertelenen istek sayısı.
+          // لسطر التشخيص في اللوحة: السبب إن رفضت الخدمة، وعدد الطلبات المؤجلة إن قبلت.
           if (request.returnValue === false) window.__screenSaverStatus = 'denied: ' + (request.errorText || request.errorCode);
           if (request.timestamp === undefined) return;
           window.__screenSaverCount = (window.__screenSaverCount || 0) + 1;
@@ -29,7 +29,7 @@
         };
         register.call('luna://com.webos.service.tvpower/power/registerScreenSaverRequest',
           JSON.stringify({ subscribe: true, clientName: CLIENT }));
-        // Köprü nesnesi çöpe gitmesin; abonelik uygulama açık kaldıkça sürer.
+        // حتى لا يُحذف كائن الجسر من الذاكرة؛ يبقى الاشتراك ما دام التطبيق مفتوحًا.
         window.__screenSaverBridge = register;
       } catch (e) {}
     },
@@ -62,8 +62,8 @@
       host.appendChild(video);
     },
 
-    // TV'nin giriş listesinden oyun konsolunun bağlı olduğu HDMI portunu bulur.
-    // Bulamazsa callback'i null ile çağırır.
+    // يبحث في قائمة مداخل التلفزيون عن منفذ HDMI الموصول به جهاز الألعاب.
+    // إن لم يجده يستدعي callback بالقيمة null.
     findConsolePort: function (callback) {
       var done = false;
       function finish(port, label) {
@@ -77,7 +77,7 @@
           var devices;
           try { devices = JSON.parse(msg).devices || []; } catch (e) { return finish(null); }
           var hdmi = devices.filter(function (d) { return /^HDMI_/.test(d.id); });
-          // Konsol dinlenme modundayken giriş etkin görünmez ama etiketi kalır; etkin olan tercih edilir.
+          // وجهاز الألعاب في وضع الراحة لا يظهر المدخل نشطًا لكن تسميته تبقى؛ يُفضَّل المدخل النشط.
           var consoles = hdmi.filter(function (d) {
             return d.spdSourceDeviceInfo === 'GAME' || /playstation|ps5/i.test((d.label || '') + ' ' + (d.spdProductDescription || ''));
           });
@@ -86,7 +86,7 @@
           finish(pick ? pick.port : null, pick ? pick.label : null);
         };
         bridge.call('luna://com.webos.service.eim/getAllInputStatus', '{}');
-        // Köprü nesnesi çöpe gitmesin diye geri çağrı gelene kadar tutulur.
+        // يُحتفظ بكائن الجسر حتى يصل الرد كي لا يُحذف من الذاكرة.
         window.__eimBridge = bridge;
         setTimeout(function () { finish(null); }, 3000);
       } catch (e) {

@@ -1,36 +1,36 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// TV uygulamasının metinleri. Dil TV'nin diline göre seçilir; Türkçe değilse İngilizce.
+// نصوص تطبيق التلفزيون. الواجهة عربية دائمًا؛ الإنجليزية تُستخدم فقط إن نقص مفتاح من العربية.
 (function () {
   'use strict';
 
   var TEXTS = {
-    tr: {
-      waiting: 'Bilgisayarınızda GameTranslator uygulamasını açın.',
-      waitingHint: 'Uygulama bu TV\'yi bulup altyazıları buraya gönderecek.',
+    ar: {
+      waiting: 'افتح تطبيق GameTranslator على الكمبيوتر.',
+      waitingHint: 'سيعثر التطبيق على هذا التلفزيون ويرسل الترجمة إليه.',
       panelTitle: 'GameTranslator',
       hdmi: 'HDMI',
-      lastSubtitle: 'Son altyazı',
-      diagnostics: 'Tanı',
-      server: 'Uygulama',
-      connection: 'Bağlantı',
-      loading: '(yükleniyor)',
-      videoReady: '(görüntü geldi)',
-      playing: '(oynatılıyor)',
-      inputError: '(hata: giriş açılamadı)',
-      sourceError: '(hata: kaynak desteklenmiyor)',
-      auto: 'otomatik',
-      consoleNotFound: 'konsol bulunamadı',
-      noEventSource: 'Bu TV desteklenmiyor (EventSource yok)',
-      connecting: 'bağlanıyor…',
-      connected: 'bağlı',
-      reconnecting: 'bağlantı yok, yeniden deneniyor…',
+      lastSubtitle: 'آخر ترجمة',
+      diagnostics: 'التشخيص',
+      server: 'التطبيق',
+      connection: 'الاتصال',
+      loading: '(جارٍ التحميل)',
+      videoReady: '(وصلت الصورة)',
+      playing: '(يعمل)',
+      inputError: '(خطأ: تعذّر فتح المنفذ)',
+      sourceError: '(خطأ: المصدر غير مدعوم)',
+      auto: 'تلقائي',
+      consoleNotFound: 'لم يُعثر على جهاز الألعاب',
+      noEventSource: 'هذا التلفزيون غير مدعوم (لا يوجد EventSource)',
+      connecting: 'جارٍ الاتصال…',
+      connected: 'متصل',
+      reconnecting: 'لا يوجد اتصال، جارٍ إعادة المحاولة…',
       none: '—',
-      keys: 'Tamam: bu panel · ◀▶: HDMI girişi (panel açıkken) · 1–4: HDMI girişi · 0: konsolu otomatik bul · ▲▼: altyazıyı yukarı/aşağı taşı · Kırmızı: test altyazısı · Mavi: demo · Yeşil: bu panel',
-      localTest: 'Test: bu yazı oyunun üstünde görünüyor mu?',
-      positionPreview: 'Altyazı burada görünecek',
-      demoButton: 'Demoyu izle',
-      demoBadge: 'DEMO',
-      demoHint: 'Örnek: oyunun İngilizce altyazısı Türkçe olarak burada görünür. Çıkmak için Geri.'
+      keys: 'موافق: هذه اللوحة · ◀▶: منفذ HDMI (واللوحة مفتوحة) · 1–4: منفذ HDMI · 0: البحث عن جهاز الألعاب تلقائيًا · ▲▼: تحريك الترجمة لأعلى/لأسفل · الأحمر: ترجمة تجريبية · الأزرق: عرض تجريبي · الأخضر: هذه اللوحة',
+      localTest: 'اختبار: هل يظهر هذا النص فوق اللعبة؟',
+      positionPreview: 'ستظهر الترجمة هنا',
+      demoButton: 'شاهد العرض التجريبي',
+      demoBadge: 'عرض تجريبي',
+      demoHint: 'مثال: تظهر ترجمة اللعبة الإنجليزية هنا بالعربية. اضغط «رجوع» للخروج.'
     },
     en: {
       waiting: 'Open the GameTranslator app on your computer.',
@@ -58,21 +58,26 @@
       positionPreview: 'Subtitles will appear here',
       demoButton: 'Watch the demo',
       demoBadge: 'DEMO',
-      demoHint: 'Example: the game\'s English subtitles appear here in Turkish. Press Back to exit.'
+      demoHint: 'Example: the game\'s English subtitles appear here in Arabic. Press Back to exit.'
     }
   };
 
-  var lang = (navigator.language || 'en').toLowerCase().indexOf('tr') === 0 ? 'tr' : 'en';
+  var lang = 'ar';
 
   window.t = function (key) {
     return (TEXTS[lang] && TEXTS[lang][key]) || TEXTS.en[key] || key;
   };
 
-  // data-i18n niteliği taşıyan öğelerin metnini doldurur.
+  // يملأ نص العناصر التي تحمل الخاصية data-i18n، ويجعل اللوحة ومربّع الانتظار والشارة من اليمين إلى اليسار.
   window.applyI18n = function () {
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
       nodes[i].textContent = window.t(nodes[i].getAttribute('data-i18n'));
+    }
+    var boxes = ['panel', 'waiting', 'demo-badge'];
+    for (var j = 0; j < boxes.length; j++) {
+      var box = document.getElementById(boxes[j]);
+      if (box) box.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
     }
   };
 })();

@@ -11,7 +11,7 @@ android {
         versionCode 100
         versionName '1.0.0'
     }
-    // Sürümde imza depo sırrından gelir; yoksa geliştirme anahtarıyla imzalanır.
+    // في الإصدار يأتي التوقيع من سرّ المستودع؛ وإن لم يوجد يُوقَّع بمفتاح التطوير.
     signingConfigs {
         release {
             def store = System.getenv('ANDROID_KEYSTORE_FILE')
@@ -36,10 +36,10 @@ android {
     sourceSets.main.assets.srcDirs += layout.buildDirectory.dir('generated/tv-assets')
 }
 
-// Arayüz LG ve Samsung'la ortaktır.
+// الواجهة مشتركة مع LG و Samsung.
 tasks.register('copyTvAssets', Copy) {
     into layout.buildDirectory.dir('generated/tv-assets/tv')
-    from('../../tv-webos') { include 'app.js', 'i18n.js', 'config.js', 'index.html', 'style.css', 'icon.png', 'largeIcon.png' }
+    from('../../webos') { include 'app.js', 'i18n.js', 'config.js', 'index.html', 'style.css', 'icon.png', 'largeIcon.png' }
     from('..') { include 'platform.js' }
 }
 preBuild.dependsOn 'copyTvAssets'
